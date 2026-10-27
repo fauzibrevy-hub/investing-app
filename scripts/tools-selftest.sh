@@ -103,6 +103,31 @@ post() {
 
 lines() { wc -l <"$1" | tr -d ' '; }
 
+# seed_f1 DIR: the rows behind parity.sh's by-id paths, written into F1 before the snapshot so F2
+# inherits them byte for byte. Two API seeds could not match: a claim's created_at and eval
+# evaluated_at, a journal entry's at and a draft's id and created_at come from each server's own
+# clock (src/research/api/r4.rs:234,471, src/thesis/mod.rs:216-219; the clock is injected only by
+# tests, src/research/engine.rs). Row shapes are what the API wrote on a scratch run.
+SEED_CLAIM=c-seed1
+SEED_JOURNAL=j-seed1
+SEED_DRAFT=draft_aaaa_1790000000_seed01
+seed_f1() {
+  local dir="$1" at=2026-10-27T00:00:00+00:00
+  sqlite3 -bail "$dir/research.sqlite" <<SQL || return 1
+INSERT INTO claims VALUES ('$SEED_CLAIM', 'AAAA', 'Ekuitas positif', 'core.total_equity', '>', 0.0, NULL, 'latest', '2027-03-31', 'holding', '$at', NULL);
+INSERT INTO claim_evals VALUES ('$SEED_CLAIM', '$at', 'holding', 260100000.0, '{"window":"latest","as_of":"2026-10-27","observations":[],"reason":null}');
+INSERT INTO documents VALUES ('d-seed1', 'AAAA', 'artikel', 'https://example.test/berita', NULL, NULL, '$at');
+INSERT INTO evidence VALUES ('$SEED_CLAIM', NULL, 'd-seed1');
+INSERT INTO journal VALUES ('$SEED_JOURNAL', 'AAAA', '$at', 'keputusan', 'Menambah posisi', NULL, NULL);
+SQL
+  cat >"$dir/thesis_drafts.json" <<JSON
+{"$SEED_DRAFT": {"id": "$SEED_DRAFT", "ticker": "AAAA", "title": "SEED", "thesis_statement": "x",
+  "thesis_type": "fundamental", "is_primary": false, "version": 1, "status": "draft",
+  "scenario_status": "Menunggu", "story_status": "Belum terkonfirmasi", "falsifiers": ["y"],
+  "triggers_add": [], "triggers_exit": [], "notes": "", "created_at": "$at", "updated_at": "$at"}}
+JSON
+}
+
 # 1. Release build and a scratch work dir.
 step 1 "cargo build --release --locked; W=\$(mktemp -d)"
 if cargo build --release --locked; then
@@ -128,8 +153,8 @@ mkdir -p "$W/f1/research/"{documents,structure,pdf-filings} "$W/home-A"
 if env -i PATH="$PATH" HOME="$W/home-A" INVESTING_DATA_DIR="$W/f1" \
   "$BIN" research-ingest --xbrl-dir tests/fixtures/research/xbrl --db "$W/f1/research.sqlite" &&
   cp tests/fixtures/macro/store.json "$W/f1/macro_store.json" &&
-  echo '{}' >"$W/f1/thesis_drafts.json" &&
-  : >"$W/f1/research-log.jsonl" && : >"$W/f1/research-idempotency.jsonl"; then
+  : >"$W/f1/research-log.jsonl" && : >"$W/f1/research-idempotency.jsonl" &&
+  seed_f1 "$W/f1"; then
   tickers="$(sqlite3 -readonly "file:$W/f1/research.sqlite?mode=ro&immutable=1" 'SELECT group_concat(ticker, " ") FROM (SELECT DISTINCT ticker FROM filings ORDER BY ticker)')"
   echo "filings tickers: $tickers"
   if [ "$tickers" = "AAAA BBBB CCCC" ]; then pass 2 "F1 holds AAAA BBBB CCCC"; else fail 2 "F1 tickers: $tickers"; fi
@@ -201,10 +226,18 @@ out="$(TICKERS=AAAA scripts/parity.sh)"
 rc=$?
 echo "$out"
 echo "exit=$rc"
-if [ "$rc" = 0 ] && ! printf '%s\n' "$out" | grep -q '^DIFF'; then
-  pass 6 "exit 0, no DIFF"
+# The five by-id paths must run on the seeded ids: ok, never SKIP (review L1b #4).
+byid_ok=1
+for pat in "^ok /api/research/facts/AAAA_2025_Q2/[^ ]*ctx=" \
+  "^ok /api/research/claims/$SEED_CLAIM/evidence\$" "^ok /api/research/claims/$SEED_CLAIM/evals\$" \
+  "^ok /api/research/journal/$SEED_JOURNAL\$" "^ok /api/thesis/drafts/$SEED_DRAFT\$"; do
+  printf '%s\n' "$out" | grep -q "$pat" || { echo "by-id path missing an ok line: $pat"; byid_ok=0; }
+done
+if [ "$rc" = 0 ] && ! printf '%s\n' "$out" | grep -q '^DIFF' && ! printf '%s\n' "$out" | grep -q '^SKIP' &&
+  [ "$byid_ok" = 1 ]; then
+  pass 6 "exit 0, no DIFF, no SKIP; the five by-id paths (facts, claims evidence/evals, journal, drafts) ok"
 else
-  fail 6 "expected exit 0 and no DIFF"
+  fail 6 "expected exit 0, no DIFF or SKIP, and ok on the five by-id paths"
 fi
 
 # 7. One extra claim on B only (research_claims.rs body): parity and counts must both see it.

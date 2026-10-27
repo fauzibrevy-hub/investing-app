@@ -200,8 +200,14 @@ done
 
 # By id, taken from A's list responses in this run.
 for t in "${TICKER_LIST[@]}"; do
-  fact="$(id_from "/api/research/$t/financials?view=annual" \
-    'first(.. | objects | select(.filing_id and .element)) | "\(.filing_id | @uri)/\(.element | @uri)"')"
+  # GET /facts/{filing_id}/{element} needs ?ctx= (and takes dims=); a fact ref in the financials
+  # response carries both. The annual view holds fact refs only when a ticker has an FY filing
+  # (the fixture's AAAA has only Q2), so the standalone view is the fallback.
+  fact=
+  for view in annual standalone; do
+    [ -n "$fact" ] || fact="$(id_from "/api/research/$t/financials?view=$view&periods=4" \
+      'first(.. | objects | select(.filing_id and .element)) | "\(.filing_id | @uri)/\(.element | @uri)?ctx=\((.ctx // "") | @uri)&dims=\((.dims // "") | @uri)"')"
+  done
   check_id "/api/research/facts/{filing_id}/{element} ($t)" \
     "${fact:+/api/research/facts/$fact}"
   claim="$(id_from "/api/research/$t/claims" '(.items[0].id // empty) | @uri')"
