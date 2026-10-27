@@ -6,8 +6,8 @@ import { UpdateBanner } from "./UpdateBanner";
 import { locationHash, navStore, owner, restoreScroll, TABS, tabTarget, type Tab } from "./navState";
 
 /**
- * Rule 5 of design.md §2.4: on every location change save the scroll of the hash being left, write the new hash to its
- * owner's memory, then on the next frame scroll to the new hash's saved position (0 if none). The position is tracked
+ * Rule 5 of design.md §2.4: on every location change save the scroll of the hash being left, write the new hash (and
+ * whose history entry it is, for rule 8) to its owner's memory, then on the next frame scroll to the new hash's saved position (0 if none). The position is tracked
  * from scroll events, because by the time the new route has rendered the document may already be shorter.
  */
 function useNavMemory(hash: string) {
@@ -29,7 +29,8 @@ function useNavMemory(hash: string) {
   useLayoutEffect(() => {
     const prev = current.current;
     if (prev && prev.hash !== hash) navStore.saveScroll(prev.hash, prev.y);
-    navStore.visit(hash);
+    const idx = (window.history.state as { idx?: unknown } | null)?.idx;
+    navStore.visit(hash, typeof idx === "number" ? idx : undefined);
     const target = restoreScroll(navStore, hash);
     current.current = { hash, y: target ?? window.scrollY };
     if (target === null) return;

@@ -1,11 +1,12 @@
 import { ChevronLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TAB_LABELS } from "./nav";
-import { backTarget, locationHash, owner, TAB_ROOTS } from "./navState";
+import { backTarget, locationHash, navStore, owner, TAB_ROOTS } from "./navState";
 
 /**
  * Back control of a pushed screen (design.md §2.1, §2.4 rules 8–9, §5): "‹ <owner tab>", 44 px, accessible name
- * "Kembali ke <owner tab>". Goes back one history entry when it is in this app, else to the owner tab's root.
+ * "Kembali ke <owner tab>". Goes back one history entry when that entry has the same owner tab, else replaces this
+ * entry with the owner tab's stored route (its root if none).
  */
 export function BackHeader() {
   const location = useLocation();
@@ -20,9 +21,9 @@ export function BackHeader() {
       onClick={(e) => {
         if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         e.preventDefault();
-        const target = backTarget(tab, window.history.state);
+        const target = backTarget(navStore, tab, window.history.state);
         if (target === -1) navigate(-1);
-        else navigate(target);
+        else navigate(target, { replace: true });
       }}
       className="-ml-2 inline-flex h-11 w-fit items-center gap-1 pl-1 pr-3 text-label font-bold text-accent"
     >
