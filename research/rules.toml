@@ -1,0 +1,33 @@
+# rules.toml: the canon valuation and calendar rules (research plan §4.6, design.md §4.4
+# "Rules card"). Edited by file in v1; `POST /api/research/packs/reload` re-reads it. Bump
+# `version` and add a changelog entry with every change: the valuation payload carries the
+# version so a changed discount-rate set is visible (prd.md A3.2). Percentages are percent
+# values (9.0 means 9 %), never fractions.
+
+version = "2026.10-r3"
+
+# Reverse DCF: discount rates shown side by side, terminal growth and horizon.
+discount_rates = [9.0, 11.0, 13.0]
+terminal_growth = 3.0
+horizon_years = 10
+
+# Cycle-adjusted multiples: average annual earnings over these windows (years); at least
+# `min_cycle_years` fiscal years must exist, otherwise the variant is a gap.
+cycle_windows = [5, 10]
+min_cycle_years = 3
+
+# Own-history percentiles over daily values; at least `percentile_min_years` of history.
+percentile_window_years = 10
+percentile_min_years = 3
+
+# POJK filing deadlines after the period end, in days (plan §4.2 `available_from` estimate).
+[pojk_offsets]
+q1 = 30
+q2 = 60
+q3 = 30
+fy = 90
+
+[[changelog]]
+version = "2026.10-r3"
+date = "2026-10-24"
+note = "Canon v1: discount rates 9/11/13, terminal growth 3, horizon 10 years, cycle windows 5 and 10 years, percentile window 10 years with 3 years minimum, POJK offsets 30/60/30/90."

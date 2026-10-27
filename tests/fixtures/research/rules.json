@@ -1,0 +1,274 @@
+{
+  "rules_version": "2026.10-2",
+  "rules": [
+    {
+      "id": "elig.quality.roe",
+      "group": "kualitas",
+      "text": "ROE TTM = laba bersih TTM / rata-rata ekuitas (awal dan akhir 4 kuartal). Kuat jika di atas ambang kuat, Lemah jika di bawah ambang cukup.",
+      "thresholds": {
+        "kuat_min": 0.15,
+        "cukup_min": 0.08
+      }
+    },
+    {
+      "id": "elig.quality.ocf_ni",
+      "group": "kualitas",
+      "text": "Turun satu tingkat bila arus kas operasi TTM / laba bersih TTM di bawah ambang (laba positif). Umum saja.",
+      "thresholds": {
+        "min": 0.5
+      }
+    },
+    {
+      "id": "elig.quality.margin_drop",
+      "group": "kualitas",
+      "text": "Turun satu tingkat bila margin operasi TTM turun lebih dari ambang (poin persentase) dibanding setahun lalu. Umum saja.",
+      "thresholds": {
+        "pp": 5.0
+      }
+    },
+    {
+      "id": "elig.quality.roa",
+      "group": "kualitas",
+      "text": "Bank dan asuransi: ROA TTM juga dinilai; diambil yang lebih buruk dari ROE dan ROA.",
+      "thresholds": {
+        "kuat_min": 0.015,
+        "lemah_di_bawah": 0.008
+      }
+    },
+    {
+      "id": "elig.growth.rev_cagr3",
+      "group": "pertumbuhan",
+      "text": "Kuat bila pertumbuhan tahunan pendapatan TTM 3 tahun mencapai ambang dan laba bersih TTM tidak turun YoY. Bank dan asuransi memakai laba bersih.",
+      "thresholds": {
+        "kuat_min": 0.08
+      }
+    },
+    {
+      "id": "elig.growth.rev_yoy",
+      "group": "pertumbuhan",
+      "text": "Lemah bila pendapatan TTM turun YoY lebih dari ambang.",
+      "thresholds": {
+        "lemah_di_bawah": -0.05
+      }
+    },
+    {
+      "id": "elig.growth.ni_yoy",
+      "group": "pertumbuhan",
+      "text": "Lemah bila laba bersih TTM turun YoY lebih dari ambang. Basis nol atau negatif tidak dihitung.",
+      "thresholds": {
+        "lemah_di_bawah": -0.15
+      }
+    },
+    {
+      "id": "elig.growth.ni_two_q",
+      "group": "pertumbuhan",
+      "text": "Lemah bila laba bersih TTM YoY negatif pada dua kuartal berturut-turut.",
+      "thresholds": {}
+    },
+    {
+      "id": "elig.growth.equity_yoy",
+      "group": "pertumbuhan",
+      "text": "Bank dan asuransi: Lemah bila ekuitas turun YoY lebih dari ambang.",
+      "thresholds": {
+        "lemah_di_bawah": -0.05
+      }
+    },
+    {
+      "id": "elig.balance.der",
+      "group": "neraca",
+      "text": "DER = pinjaman / ekuitas. Kuat jika tidak lebih dari ambang kuat, Cukup jika tidak lebih dari ambang cukup, selain itu Lemah.",
+      "thresholds": {
+        "kuat_maks": 0.5,
+        "cukup_maks": 1.5
+      }
+    },
+    {
+      "id": "elig.balance.current_ratio",
+      "group": "neraca",
+      "text": "Lemah bila rasio lancar di bawah ambang (bila datanya ada).",
+      "thresholds": {
+        "min": 1.0
+      }
+    },
+    {
+      "id": "elig.balance.equity_assets",
+      "group": "neraca",
+      "text": "Bank dan asuransi: ekuitas / aset. Kuat jika mencapai ambang kuat, Cukup jika mencapai ambang cukup.",
+      "thresholds": {
+        "kuat_min": 0.12,
+        "cukup_min": 0.08
+      }
+    },
+    {
+      "id": "elig.consistency.loss_q",
+      "group": "konsistensi",
+      "text": "Kuartal rugi dari 12 kuartal tunggal terakhir: 0 Kuat, sampai ambang Cukup, lebih Lemah. Perlu minimal 8 kuartal.",
+      "thresholds": {
+        "jendela": 12.0,
+        "cukup_maks": 2.0,
+        "kuartal_min": 8.0
+      }
+    },
+    {
+      "id": "elig.consistency.rev_decline_q",
+      "group": "konsistensi",
+      "text": "Lemah bila pendapatan TTM lebih rendah dari tahun lalu di sedikitnya ambang dari 8 kuartal terakhir. Umum saja.",
+      "thresholds": {
+        "jendela": 8.0,
+        "kuartal_min": 4.0
+      }
+    },
+    {
+      "id": "elig.dividend.years",
+      "group": "dividen",
+      "text": "Berapa dari 5 tahun terakhir ada dividen. Kuat bila sedikitnya ambang tahun dan payout tidak melewati ambang payout. Tidak pernah membayar berarti tanpa penilaian.",
+      "thresholds": {
+        "jendela_tahun": 5.0,
+        "kuat_tahun_min": 4.0,
+        "kuat_payout_maks": 0.9
+      }
+    },
+    {
+      "id": "elig.dividend.payout_over",
+      "group": "dividen",
+      "text": "Lemah bila payout (DPS / EPS) di atas ambang dua tahun berturut-turut.",
+      "thresholds": {
+        "payout": 1.0
+      }
+    },
+    {
+      "id": "flag.equity_nonpositive",
+      "group": "bendera_keras",
+      "text": "Ekuitas nol atau negatif: Tidak layak.",
+      "thresholds": {}
+    },
+    {
+      "id": "flag.ni_negative_2q",
+      "group": "bendera_keras",
+      "text": "Laba bersih TTM negatif dua kuartal berturut-turut: Tidak layak.",
+      "thresholds": {}
+    },
+    {
+      "id": "flag.ocf_negative_2q",
+      "group": "bendera_keras",
+      "text": "Arus kas operasi TTM negatif dua kuartal berturut-turut: Tidak layak. Umum saja.",
+      "thresholds": {}
+    },
+    {
+      "id": "flag.der_high",
+      "group": "bendera_keras",
+      "text": "DER di atas ambang: Tidak layak. Umum saja.",
+      "thresholds": {
+        "der": 3.0
+      }
+    },
+    {
+      "id": "flag.equity_assets_low",
+      "group": "bendera_keras",
+      "text": "Bank dan asuransi: ekuitas / aset di bawah ambang: Tidak layak.",
+      "thresholds": {
+        "min": 0.06
+      }
+    },
+    {
+      "id": "elig.agg",
+      "group": "agregasi",
+      "text": "Cakupan pilar inti (Kualitas, Pertumbuhan, Neraca, Konsistensi) kurang dari ambang: Data kurang. Bendera keras: Tidak layak. Pilar inti Lemah sebanyak ambang atau lebih: Waspada. Selain itu Layak, dengan 1 catatan bila tepat satu Lemah.",
+      "thresholds": {
+        "cakupan_min": 3.0,
+        "lemah_untuk_waspada": 2.0
+      }
+    },
+    {
+      "id": "val.method.pe",
+      "group": "nilai_wajar",
+      "text": "EPS TTM x median P/E harian 5 tahun (hanya hari EPS positif). Perlu EPS TTM positif dan riwayat sedikitnya 3 tahun.",
+      "thresholds": {
+        "jendela_tahun": 5.0,
+        "riwayat_hari_min": 1095.0
+      }
+    },
+    {
+      "id": "val.method.pb",
+      "group": "nilai_wajar",
+      "text": "BVPS x median P/B harian 5 tahun. Perlu BVPS positif dan riwayat sedikitnya 3 tahun.",
+      "thresholds": {
+        "jendela_tahun": 5.0,
+        "riwayat_hari_min": 1095.0
+      }
+    },
+    {
+      "id": "val.method.yield",
+      "group": "nilai_wajar",
+      "text": "DPS TTM / median yield harian 5 tahun. Perlu dividen di sedikitnya 3 dari 5 tahun dan DPS TTM positif.",
+      "thresholds": {
+        "tahun_min": 3.0
+      }
+    },
+    {
+      "id": "val.method.graham",
+      "group": "nilai_wajar",
+      "text": "Akar dari (22,5 x EPS TTM x BVPS). Umum saja; perlu EPS dan BVPS positif.",
+      "thresholds": {
+        "faktor": 22.5
+      }
+    },
+    {
+      "id": "val.fair",
+      "group": "nilai_wajar",
+      "text": "Nilai wajar tengah adalah median metode yang tersedia, rentang adalah min sampai maks. Perlu sedikitnya ambang metode, kurang dari itu zona Data kurang.",
+      "thresholds": {
+        "metode_min": 2.0
+      }
+    },
+    {
+      "id": "val.zone",
+      "group": "nilai_wajar",
+      "text": "r = harga / nilai wajar tengah. Murah bila r tidak lebih dari batas bawah, Mahal bila r di atas batas atas, selain itu Wajar.",
+      "thresholds": {
+        "murah_maks": 0.85,
+        "mahal_di_atas": 1.15
+      }
+    },
+    {
+      "id": "val.confidence",
+      "group": "nilai_wajar",
+      "text": "Tinggi: sedikitnya 3 metode, tinggi/rendah tidak lebih dari ambang pertama, dan sedikitnya 4 tahun riwayat. Sedang: tinggi/rendah tidak lebih dari ambang kedua. Selain itu Rendah.",
+      "thresholds": {
+        "metode_min": 3.0,
+        "sebaran_tinggi": 1.3,
+        "sebaran_sedang": 1.6,
+        "tahun_min": 4.0
+      }
+    },
+    {
+      "id": "val.guard",
+      "group": "kualitas_data",
+      "text": "Selisih harga terhadap nilai wajar di luar rentang ambang dengan harga yang bergerak tajam: ditampilkan sebagai guncangan harga. Tanpa guncangan: masukan dicurigai. P/B di luar rentang: skala tidak cocok. Dua yang terakhir menahan zona.",
+      "thresholds": {
+        "rasio_min": 0.5,
+        "rasio_maks": 2.0,
+        "guncangan_pct": 30.0,
+        "pb_min": 0.05,
+        "pb_maks": 30.0
+      }
+    },
+    {
+      "id": "trend.state",
+      "group": "tren",
+      "text": "Naik: harga di atas MA200 dan MA50 di atas MA200. Turun: keduanya di bawah. Selain itu Mendatar. Hanya informasi.",
+      "thresholds": {
+        "ma_pendek": 50.0,
+        "ma_panjang": 200.0
+      }
+    },
+    {
+      "id": "attention",
+      "group": "perhatian",
+      "text": "Perlu perhatian sejak berkas terakhir dibuka: kelayakan berubah, zona berubah, harga mencapai harga incaran, laporan keuangan baru, atau harga lebih dari ambang hari basi.",
+      "thresholds": {
+        "hari_basi": 4.0
+      }
+    }
+  ]
+}

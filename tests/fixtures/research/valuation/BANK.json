@@ -1,0 +1,242 @@
+{
+  "ticker": "BANK",
+  "as_of": "<dynamic>",
+  "rules_version": "2026.10-r3",
+  "currency": "IDR",
+  "fx_usd_idr": null,
+  "price": {
+    "close": 865.38,
+    "date": "2026-10-23"
+  },
+  "shares": {
+    "count": 1000000.0,
+    "source": {
+      "kind": "manual",
+      "as_of": "<dynamic>",
+      "source_note": "prospektus sintetis",
+      "after_date": false
+    },
+    "source_label": "manual"
+  },
+  "market_cap": 865380000.0,
+  "latest_quarter": {
+    "fy": 2026,
+    "q": 2,
+    "label": "2026Q2",
+    "available_from": "2026-08-29"
+  },
+  "history": {
+    "from": "2016-10-24",
+    "to": "2026-10-23",
+    "days": 2610
+  },
+  "reverse_dcf": {
+    "fcf_base": "ttm",
+    "fcf": null,
+    "fcf_ttm": null,
+    "fcf_avg5y": null,
+    "horizon_years": 10,
+    "terminal_growth": 3.0,
+    "rows": [
+      {
+        "discount_rate": 9.0,
+        "implied_growth": null
+      },
+      {
+        "discount_rate": 11.0,
+        "implied_growth": null
+      },
+      {
+        "discount_rate": 13.0,
+        "implied_growth": null
+      }
+    ],
+    "applicable": false,
+    "reason": "arus kas bebas belum tersedia"
+  },
+  "multiples": {
+    "pe": {
+      "ttm": {
+        "value": 95.0967,
+        "percentile": 37.218,
+        "median": 99.1597,
+        "min": 89.8141,
+        "max": 112.858,
+        "n": 931,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle5y": {
+        "value": 108.7982,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 410,
+        "caption": "riwayat < 3 th",
+        "cpi_adjusted": true
+      },
+      "cycle10y": {
+        "value": 108.7982,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 410,
+        "caption": "riwayat < 3 th",
+        "cpi_adjusted": true
+      }
+    },
+    "pb": {
+      "ttm": {
+        "value": 9.9469,
+        "percentile": 78.0769,
+        "median": 9.6128,
+        "min": 9.0336,
+        "max": 10.2463,
+        "n": 1170,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle5y": {
+        "value": 10.3085,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 410,
+        "caption": "riwayat < 3 th",
+        "cpi_adjusted": true
+      },
+      "cycle10y": {
+        "value": 10.3085,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 410,
+        "caption": "riwayat < 3 th",
+        "cpi_adjusted": true
+      }
+    },
+    "ev_ebitda": {
+      "ttm": {
+        "value": 75.1219,
+        "percentile": 38.2922,
+        "median": 77.6483,
+        "min": 70.6057,
+        "max": 87.9862,
+        "n": 931,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle5y": {
+        "value": 85.2887,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 410,
+        "caption": "riwayat < 3 th",
+        "cpi_adjusted": true
+      },
+      "cycle10y": {
+        "value": 85.2887,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 410,
+        "caption": "riwayat < 3 th",
+        "cpi_adjusted": true
+      }
+    },
+    "dividend_yield": {
+      "ttm": {
+        "value": 2.1956,
+        "percentile": 35.5128,
+        "median": 2.2231,
+        "min": 1.9708,
+        "max": 2.4199,
+        "n": 1170,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle5y": {
+        "value": 1.8489,
+        "percentile": 44.6581,
+        "median": 1.8613,
+        "min": 1.6892,
+        "max": 2.0414,
+        "n": 1170,
+        "caption": null,
+        "cpi_adjusted": false
+      },
+      "cycle10y": {
+        "value": 1.456,
+        "percentile": 22.1795,
+        "median": 1.4957,
+        "min": 1.4077,
+        "max": 1.6133,
+        "n": 1170,
+        "caption": null,
+        "cpi_adjusted": false
+      }
+    }
+  },
+  "earnings_yield": {
+    "earnings_yield": 1.0516,
+    "bond_yield": 6.34,
+    "bond_status": "tersedia",
+    "bond_driver": "sbn_10y",
+    "spread": -5.2884,
+    "spread_band": {
+      "value": -5.2884,
+      "percentile": null,
+      "median": null,
+      "min": null,
+      "max": null,
+      "n": 735,
+      "caption": "riwayat < 3 th",
+      "cpi_adjusted": null
+    }
+  },
+  "scenarios": {
+    "discount_rate": 11.0,
+    "rows": [
+      {
+        "name": "bear",
+        "growth": null,
+        "margin": null,
+        "exit_multiple": null,
+        "years": null,
+        "value_per_share": null,
+        "gap_pct": null,
+        "updated_at": null,
+        "action": "Isi skenario"
+      },
+      {
+        "name": "base",
+        "growth": null,
+        "margin": null,
+        "exit_multiple": null,
+        "years": null,
+        "value_per_share": null,
+        "gap_pct": null,
+        "updated_at": null,
+        "action": "Isi skenario"
+      },
+      {
+        "name": "bull",
+        "growth": null,
+        "margin": null,
+        "exit_multiple": null,
+        "years": null,
+        "value_per_share": null,
+        "gap_pct": null,
+        "updated_at": null,
+        "action": "Isi skenario"
+      }
+    ]
+  }
+}

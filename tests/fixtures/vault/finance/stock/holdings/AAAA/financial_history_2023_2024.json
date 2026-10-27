@@ -1,0 +1,9 @@
+{"metadata": {"coverage": "2023-2024 kuartalan", "missing_periods": ["2023-Q1", "Q2 2023 tidak terbit"], "notes": "Catatan tunggal"},
+ "rows": [
+  {"fiscal_year": 2024, "period": "Q1", "revenue": 0.1, "net_income": 10, "source_page": 3},
+  {"fiscal_year": 2024, "period": "Q2", "revenue": 0.2, "net_income": 20, "source_page": 4},
+  {"fiscal_year": 2024, "period": "Q3", "revenue": 0.3, "net_income": 30, "cumulative_revenue": 9},
+  {"fiscal_year": 2024, "period": "Q4", "revenue": 0.4, "net_income": "n/a"},
+  {"fiscal_year": 2024, "period": "FY", "revenue": 1.0, "net_income": 61, "source_page": 99, "cumulative_revenue": 1, "reporting_months": 12},
+  {"fiscal_year": 2023, "period": "FY", "revenue": 3.0}
+ ]}

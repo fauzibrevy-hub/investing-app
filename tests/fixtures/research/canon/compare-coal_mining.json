@@ -1,0 +1,907 @@
+{
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "pack": {
+    "id": "coal_mining",
+    "label": "Tambang batubara",
+    "version": "2026.10-1"
+  },
+  "tickers": [
+    {
+      "ticker": "COAL",
+      "name": "PT Batubara Contoh Tbk",
+      "role": "held",
+      "currency": "USD"
+    },
+    {
+      "ticker": "COPR",
+      "name": null,
+      "role": "peer",
+      "currency": "USD"
+    }
+  ],
+  "truncated": false,
+  "rows": [
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "revenue",
+        "label": "Pendapatan",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 154000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 154000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "gross_profit",
+        "label": "Laba kotor",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 57000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 57000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "operating_profit",
+        "label": "Laba usaha",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 28500000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 28500000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_income",
+        "label": "Laba bersih",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 21800000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 21800000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_margin",
+        "label": "Margin bersih",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 14.039735,
+          "period": "2026Q2",
+          "percentile": 96.666667,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 14.039735,
+          "period": "2026Q2",
+          "percentile": 96.666667,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "ebitda",
+        "label": "EBITDA (pendekatan)",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 39200000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 39200000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "operating_cash_flow",
+        "label": "Arus kas operasi",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 30500000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 30500000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "capex",
+        "label": "Belanja modal",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 10700000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 10700000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "free_cash_flow",
+        "label": "Arus kas bebas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 19800000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 19800000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "total_equity",
+        "label": "Total ekuitas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 385000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": {
+            "filing_id": "COAL_2026_Q2",
+            "element": "idx-cor:Equity",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-06-30"
+          },
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 385000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": {
+            "filing_id": "COPR_2026_Q2",
+            "element": "idx-cor:Equity",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-06-30"
+          },
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "cash",
+        "label": "Kas dan setara kas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 57000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": {
+            "filing_id": "COAL_2026_Q2",
+            "element": "idx-cor:CashAndCashEquivalents",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-06-30"
+          },
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 57000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": {
+            "filing_id": "COPR_2026_Q2",
+            "element": "idx-cor:CashAndCashEquivalents",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-06-30"
+          },
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "total_debt",
+        "label": "Total utang berbunga",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 143000000.0,
+          "period": "2026Q2",
+          "percentile": 56.25,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 143000000.0,
+          "period": "2026Q2",
+          "percentile": 56.25,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_debt",
+        "label": "Utang bersih",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 86000000.0,
+          "period": "2026Q2",
+          "percentile": 2.777778,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 86000000.0,
+          "period": "2026Q2",
+          "percentile": 2.777778,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "volume",
+      "group_label": "Volume",
+      "metric": {
+        "id": "production_mt",
+        "label": "Produksi",
+        "unit": "Mt",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 6.0,
+          "period": "2026Q2",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "volume",
+      "group_label": "Volume",
+      "metric": {
+        "id": "sales_mt",
+        "label": "Penjualan",
+        "unit": "Mt",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": null,
+          "period": "2026Q2",
+          "percentile": null,
+          "state": "unknown",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "harga",
+      "group_label": "Harga",
+      "metric": {
+        "id": "asp_usd_t",
+        "label": "Harga jual rata-rata",
+        "unit": "USD/t",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "biaya",
+      "group_label": "Biaya",
+      "metric": {
+        "id": "cash_cost_usd_t",
+        "label": "Biaya tunai",
+        "unit": "USD/t",
+        "layer": "kpi",
+        "direction": "lower",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "biaya",
+      "group_label": "Biaya",
+      "metric": {
+        "id": "stripping_ratio",
+        "label": "Nisbah kupas",
+        "unit": "bcm/t",
+        "layer": "kpi",
+        "direction": "lower",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "biaya",
+      "group_label": "Biaya",
+      "metric": {
+        "id": "mining_cost_ratio",
+        "label": "Biaya penambangan / pendapatan",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 41.324503,
+          "period": "2026Q2",
+          "percentile": 3.333333,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 41.324503,
+          "period": "2026Q2",
+          "percentile": 3.333333,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "biaya",
+      "group_label": "Biaya",
+      "metric": {
+        "id": "royalty_ratio",
+        "label": "Royalti ke pemerintah / pendapatan",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 10.0,
+          "period": "2026Q2",
+          "percentile": 50.0,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 10.0,
+          "period": "2026Q2",
+          "percentile": 50.0,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "kualitas_aset",
+      "group_label": "Kualitas aset",
+      "metric": {
+        "id": "deferred_stripping_vs_production",
+        "label": "Pertumbuhan biaya pengupasan tangguhan vs produksi",
+        "unit": "pp",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Production tidak ada untuk 2026Q1 (kuartal)",
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Production tidak ada untuk 2026Q2 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "neraca",
+      "group_label": "Neraca",
+      "metric": {
+        "id": "reclamation_provisions",
+        "label": "Provisi reklamasi dan penutupan tambang",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 32100000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 32100000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "neraca",
+      "group_label": "Neraca",
+      "metric": {
+        "id": "net_debt_to_ebitda",
+        "label": "Utang bersih / EBITDA",
+        "unit": "x",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": 0.561358,
+          "period": "2026Q2",
+          "percentile": 3.333333,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": 0.561358,
+          "period": "2026Q2",
+          "percentile": 3.333333,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "cadangan",
+      "group_label": "Cadangan",
+      "metric": {
+        "id": "reserves_mt",
+        "label": "Cadangan terbukti dan terkira",
+        "unit": "Mt",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "cadangan",
+      "group_label": "Cadangan",
+      "metric": {
+        "id": "mine_life_years",
+        "label": "Umur tambang tersirat",
+        "unit": "tahun",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "COAL",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Reserves tidak ada untuk 2026Q2 (posisi)",
+          "flags": []
+        },
+        {
+          "ticker": "COPR",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Reserves tidak ada untuk 2026Q2 (posisi)",
+          "flags": []
+        }
+      ]
+    }
+  ]
+}

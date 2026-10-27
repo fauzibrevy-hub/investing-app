@@ -1,0 +1,990 @@
+{
+  "ticker": "COAL",
+  "view": "annual",
+  "rules_version": "2026.10-r4",
+  "currency": "USD",
+  "rounding": "Jutaan",
+  "taxonomy": "general",
+  "periods": [
+    {
+      "fy": 2022,
+      "q": 4,
+      "label": "2022",
+      "end": "2022-12-31",
+      "filing_id": "COAL_2022_FY",
+      "source_kind": "xbrl",
+      "audited": true,
+      "derived_fy": false
+    },
+    {
+      "fy": 2023,
+      "q": 4,
+      "label": "2023",
+      "end": "2023-12-31",
+      "filing_id": "COAL_2023_FY",
+      "source_kind": "xbrl",
+      "audited": true,
+      "derived_fy": false
+    },
+    {
+      "fy": 2024,
+      "q": 4,
+      "label": "2024",
+      "end": "2024-12-31",
+      "filing_id": "COAL_2024_FY",
+      "source_kind": "xbrl",
+      "audited": true,
+      "derived_fy": false
+    },
+    {
+      "fy": 2025,
+      "q": 4,
+      "label": "2025",
+      "end": "2025-12-31",
+      "filing_id": "COAL_2025_FY",
+      "source_kind": "xbrl",
+      "audited": true,
+      "derived_fy": false
+    }
+  ],
+  "groups": [
+    {
+      "id": "laba_rugi",
+      "label": "Laba rugi",
+      "rows": [
+        {
+          "id": "revenue",
+          "label": "Pendapatan",
+          "element": "idx-cor:SalesAndRevenue",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 492000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:SalesAndRevenue",
+                "ctx_kind": "duration",
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-01-01_2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 524000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:SalesAndRevenue",
+                "ctx_kind": "duration",
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-01-01_2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 556000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:SalesAndRevenue",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 588000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:SalesAndRevenue",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "gross_profit",
+          "label": "Laba kotor",
+          "element": "idx-cor:GrossProfit",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 166000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:GrossProfit",
+                "ctx_kind": "duration",
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-01-01_2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 182000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:GrossProfit",
+                "ctx_kind": "duration",
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-01-01_2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 198000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:GrossProfit",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 214000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:GrossProfit",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "operating_profit",
+          "label": "Laba usaha",
+          "element": "idx-cor:ProfitLossBeforeIncomeTax",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 83000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:ProfitLossBeforeIncomeTax",
+                "ctx_kind": "duration",
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-01-01_2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 91000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:ProfitLossBeforeIncomeTax",
+                "ctx_kind": "duration",
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-01-01_2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 99000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:ProfitLossBeforeIncomeTax",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 107000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:ProfitLossBeforeIncomeTax",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "net_income",
+          "label": "Laba bersih",
+          "element": "idx-cor:ProfitLoss",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 62400000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:ProfitLoss",
+                "ctx_kind": "duration",
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-01-01_2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 68800000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:ProfitLoss",
+                "ctx_kind": "duration",
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-01-01_2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 75200000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:ProfitLoss",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 81600000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:ProfitLoss",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arus_kas",
+      "label": "Arus kas",
+      "rows": [
+        {
+          "id": "operating_cash_flow",
+          "label": "Arus kas operasi",
+          "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 91000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                "ctx_kind": "duration",
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-01-01_2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 99000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                "ctx_kind": "duration",
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-01-01_2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 107000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 115000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "capex",
+          "label": "Belanja modal",
+          "element": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 36600000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                "ctx_kind": "duration",
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-01-01_2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 38200000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                "ctx_kind": "duration",
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-01-01_2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 39800000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 41400000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "depreciation",
+          "label": "Penyusutan",
+          "element": "idx-cor:Depreciation",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 32600000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:Depreciation",
+                "ctx_kind": "duration",
+                "start": "2022-01-01",
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-01-01_2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 34200000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:Depreciation",
+                "ctx_kind": "duration",
+                "start": "2023-01-01",
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-01-01_2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 35800000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:Depreciation",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 37400000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:Depreciation",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neraca",
+      "label": "Neraca",
+      "rows": [
+        {
+          "id": "cash",
+          "label": "Kas dan setara kas",
+          "element": "idx-cor:CashAndCashEquivalents",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 43000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:CashAndCashEquivalents",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 47000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:CashAndCashEquivalents",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 51000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:CashAndCashEquivalents",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 55000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:CashAndCashEquivalents",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "assets",
+          "label": "Total aset",
+          "element": "idx-cor:Assets",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 618000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:Assets",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 642000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:Assets",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 666000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:Assets",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 690000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:Assets",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "equity",
+          "label": "Total ekuitas",
+          "element": "idx-cor:Equity",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 315000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:Equity",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 335000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:Equity",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 355000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:Equity",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 375000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:Equity",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "debt_long",
+          "label": "Pinjaman bank jangka panjang",
+          "element": "idx-cor:LongTermBankLoans",
+          "unit": "USD",
+          "cells": [
+            {
+              "value": 97000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2022_FY",
+                "element": "idx-cor:LongTermBankLoans",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2022-12-31",
+                "dims": "",
+                "ctx": "2022-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 93000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2023_FY",
+                "element": "idx-cor:LongTermBankLoans",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2023-12-31",
+                "dims": "",
+                "ctx": "2023-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 89000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2024_FY",
+                "element": "idx-cor:LongTermBankLoans",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 85000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "COAL_2025_FY",
+                "element": "idx-cor:LongTermBankLoans",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "shares": [
+    {
+      "shares": 500000000.0,
+      "source_label": "manual",
+      "source": {
+        "kind": "manual",
+        "as_of": "2026-06-30",
+        "source_note": "data sintetis",
+        "after_date": true
+      }
+    },
+    {
+      "shares": 500000000.0,
+      "source_label": "manual",
+      "source": {
+        "kind": "manual",
+        "as_of": "2026-06-30",
+        "source_note": "data sintetis",
+        "after_date": true
+      }
+    },
+    {
+      "shares": 500000000.0,
+      "source_label": "manual",
+      "source": {
+        "kind": "manual",
+        "as_of": "2026-06-30",
+        "source_note": "data sintetis",
+        "after_date": true
+      }
+    },
+    {
+      "shares": 500000000.0,
+      "source_label": "manual",
+      "source": {
+        "kind": "manual",
+        "as_of": "2026-06-30",
+        "source_note": "data sintetis",
+        "after_date": true
+      }
+    }
+  ],
+  "filings": [
+    {
+      "id": "COAL_2025_FY",
+      "ticker": "COAL",
+      "fy": 2025,
+      "period": "FY",
+      "taxonomy": "general",
+      "industry_code": "A121",
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "audited": true,
+      "rounding": "Jutaan",
+      "currency": "USD",
+      "filed_at": null,
+      "available_from": "2026-03-31",
+      "available_source": "estimated",
+      "source_path": "<tmp>/XBRL/2025/FY/COAL_2025_FY.xbrl",
+      "file_hash": "0d6633b1eab8e62d30b5af039386abe4c6573ec626ad8cd287d679498799e076",
+      "source_kind": "xbrl",
+      "ingested_at": "2026-10-24T09:00:00+00:00",
+      "fact_count": 20
+    },
+    {
+      "id": "COAL_2024_FY",
+      "ticker": "COAL",
+      "fy": 2024,
+      "period": "FY",
+      "taxonomy": "general",
+      "industry_code": "A121",
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "audited": true,
+      "rounding": "Jutaan",
+      "currency": "USD",
+      "filed_at": null,
+      "available_from": "2025-03-31",
+      "available_source": "estimated",
+      "source_path": "<tmp>/XBRL/2024/FY/COAL_2024_FY.xbrl",
+      "file_hash": "90abf3a90d9310030a5b8114b529dc0b55fe5cefdf6273f695d22abf3d01504d",
+      "source_kind": "xbrl",
+      "ingested_at": "2026-10-24T09:00:00+00:00",
+      "fact_count": 20
+    },
+    {
+      "id": "COAL_2023_FY",
+      "ticker": "COAL",
+      "fy": 2023,
+      "period": "FY",
+      "taxonomy": "general",
+      "industry_code": "A121",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-31",
+      "audited": true,
+      "rounding": "Jutaan",
+      "currency": "USD",
+      "filed_at": null,
+      "available_from": "2024-03-30",
+      "available_source": "estimated",
+      "source_path": "<tmp>/XBRL/2023/FY/COAL_2023_FY.xbrl",
+      "file_hash": "384117229ed#c5ef0e6fc388467f096848ccca355690d6aa77c71d2",
+      "source_kind": "xbrl",
+      "ingested_at": "2026-10-24T09:00:00+00:00",
+      "fact_count": 20
+    },
+    {
+      "id": "COAL_2022_FY",
+      "ticker": "COAL",
+      "fy": 2022,
+      "period": "FY",
+      "taxonomy": "general",
+      "industry_code": "A121",
+      "period_start": "2022-01-01",
+      "period_end": "2022-12-31",
+      "audited": true,
+      "rounding": "Jutaan",
+      "currency": "USD",
+      "filed_at": null,
+      "available_from": "2023-03-31",
+      "available_source": "estimated",
+      "source_path": "<tmp>/XBRL/2022/FY/COAL_2022_FY.xbrl",
+      "file_hash": "35da2af0cbccf10a19109dfae825b7b09d9c9943426d287c2222001ffbb9c49b",
+      "source_kind": "xbrl",
+      "ingested_at": "2026-10-24T09:00:00+00:00",
+      "fact_count": 20
+    }
+  ]
+}

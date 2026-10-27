@@ -1,0 +1,107 @@
+{
+ "alasan_masuk": null,
+ "archive": {
+  "last_retrieved_at": null,
+  "pdf": 0,
+  "sidecars": 0,
+  "years": {}
+ },
+ "archive_detail": {},
+ "articles": {
+  "latest_date": "2026-01-05",
+  "mentions_approx": 1,
+  "recent": [
+   {
+    "date": "2026-01-05",
+    "name": "2026-01-05-alfa.md"
+   }
+  ]
+ },
+ "axes": {
+  "fundamental_status": null,
+  "growth_status": null,
+  "narrative_status": "hype"
+ },
+ "bayar_risiko": null,
+ "chain": [],
+ "company": "PT Beta",
+ "complete": false,
+ "coverage": null,
+ "doc_evidence": [],
+ "errors": [
+  "10-fundamental.md tidak ditemukan",
+  "00-lens.md tidak ditemukan",
+  "review-log.md tidak ditemukan"
+ ],
+ "evidence": {
+  "doc_quoted": 0,
+  "missing": 0,
+  "resolved": 0,
+  "total": 0
+ },
+ "falsifier_items": [
+  {
+   "dates": [
+    "2001-02-03"
+   ],
+   "n": 1,
+   "text": "Gagal sebelum 2001-02-03."
+  }
+ ],
+ "falsifiers": {
+  "count": 1,
+  "dated_count": 1,
+  "nearest": null,
+  "past_count": 1
+ },
+ "fundamental_status": null,
+ "growth_status": null,
+ "harga_acuan": null,
+ "history_source": null,
+ "integrity": {
+  "checked": 0,
+  "max_abs_diff": null,
+  "status": "n/a"
+ },
+ "lens": {
+  "approved_at": null,
+  "locked": null,
+  "metrics": []
+ },
+ "missing_files": [
+  "00-lens.md",
+  "10-fundamental.md",
+  "thesis.md",
+  "review-log.md"
+ ],
+ "missing_periods": [],
+ "narrative_status": "hype",
+ "needs_source": [],
+ "notes": [],
+ "predictions": [],
+ "review": {
+  "days_ago": null,
+  "due": false,
+  "last_date": null,
+  "new_evidence_count": 0,
+  "open_followups": 0
+ },
+ "review_log": [],
+ "series": {},
+ "status": "watchlist",
+ "status_since": null,
+ "tahap": null,
+ "tahap_alasan": null,
+ "ticker": "BBBB",
+ "timeline": [
+  {
+   "date": "2026-01-05",
+   "label": "2026-01-05-alfa.md",
+   "type": "article"
+  }
+ ],
+ "trigger_buang": [],
+ "trigger_tambah": [],
+ "verdict": "hype",
+ "verdict_text": "Hanya narasi."
+}

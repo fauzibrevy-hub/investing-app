@@ -1,0 +1,206 @@
+{
+  "format": "pdf-filing/1",
+  "ticker": "BUMI",
+  "fy": 2024,
+  "period": "Q1",
+  "period_start": "2024-01-01",
+  "period_end": "2024-03-31",
+  "currency": "USD",
+  "rounding": "Satuan Penuh",
+  "audited": false,
+  "taxonomy": "general",
+  "industry_code": "A121",
+  "document_date": "2024-04-23",
+  "source": {
+    "file": "BUMI_2024_Q1.pdf",
+    "sha256": "d49109e3aef2452205b0277cc4cb70dc09319692663918570862ebc1b51d280c"
+  },
+  "facts": [
+    {
+      "element": "idx-cor:SalesAndRevenue",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 311015873,
+      "page": 7,
+      "label": "PENDAPATAN / REVENUES"
+    },
+    {
+      "element": "idx-cor:GrossProfit",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 22137915,
+      "page": 7,
+      "label": "LABA BRUTO / GROSS PROFIT"
+    },
+    {
+      "element": "idx-cor:ProfitLossBeforeIncomeTax",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 31763785,
+      "page": 7,
+      "label": "LABA SEBELUM PAJAK PENGHASILAN / PROFIT BEFORE INCOME TAX (hal. 7), setelah BAGI HASIL / PROFIT SHARING (hal. 7)",
+      "components": [
+        {
+          "page": 7,
+          "label": "LABA SEBELUM PAJAK PENGHASILAN / PROFIT BEFORE INCOME TAX",
+          "value": 32443569
+        },
+        {
+          "page": 7,
+          "label": "BAGI HASIL / PROFIT SHARING",
+          "value": -679784
+        }
+      ],
+      "note": "IDX tags profit before tax after the profit-sharing line (H1 2024: 62,628,531 - 999,452 = 61,629,079 in BUMI_2024_Q2.xbrl)."
+    },
+    {
+      "element": "idx-cor:ProfitLoss",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 72720833,
+      "page": 7,
+      "label": "LABA PERIODE BERJALAN - NETO / PROFIT FOR THE PERIOD - NET"
+    },
+    {
+      "element": "idx-cor:MiningCost",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 210849064,
+      "page": 87,
+      "label": "Pengupasan dan Penambangan / Stripping and Mining (Catatan 31)"
+    },
+    {
+      "element": "idx-cor:RoyaltiesToGovernment",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 69956076,
+      "page": 87,
+      "label": "Royalti / Royalty (Catatan 31)"
+    },
+    {
+      "element": "idx-cor:Depreciation",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 1077935,
+      "page": 87,
+      "label": "Penyusutan / Depreciation (Catatan 31, beban pokok pendapatan)"
+    },
+    {
+      "element": "idx-cor:Amortization",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 2592967,
+      "page": 87,
+      "label": "Amortisasi / Amortization (Catatan 31, beban pokok pendapatan)"
+    },
+    {
+      "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": -19137793,
+      "page": 9,
+      "label": "Arus Kas Neto Digunakan untuk Aktivitas Operasi / Net Cash Flows Used in Operating Activities"
+    },
+    {
+      "element": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+      "ctx_kind": "duration",
+      "start": "2024-01-01",
+      "end": "2024-03-31",
+      "value": 2011884,
+      "page": 9,
+      "label": "Pembelian Aset Tetap / Acquisitions of Fixed Assets (dicetak negatif, dibaca sebagai besaran)"
+    },
+    {
+      "element": "idx-cor:CashAndCashEquivalents",
+      "ctx_kind": "instant",
+      "end": "2024-03-31",
+      "value": 60821988,
+      "page": 5,
+      "label": "Kas dan Setara Kas / Cash and Cash Equivalents"
+    },
+    {
+      "element": "idx-cor:Equity",
+      "ctx_kind": "instant",
+      "end": "2024-03-31",
+      "value": 2845548053,
+      "page": 6,
+      "label": "Ekuitas - Neto / Equity - Net"
+    },
+    {
+      "element": "idx-cor:ShortTermBankLoans",
+      "ctx_kind": "instant",
+      "end": "2024-03-31",
+      "value": 82639389,
+      "page": 6,
+      "label": "Pinjaman Jangka Pendek / Short-Term Loan",
+      "note": "Note 18 (page 74) describes one lender only, PT Bank Rakyat Indonesia; no non-bank short-term loan to remove."
+    },
+    {
+      "element": "idx-cor:CurrentMaturitiesOfBankLoans",
+      "ctx_kind": "instant",
+      "end": "2024-03-31",
+      "value": 24530720,
+      "page": 6,
+      "label": "Pinjaman Jangka Panjang yang jatuh tempo dalam waktu satu tahun / Long-Term Loans, current maturities (hal. 6), tanpa PT Indomobil Finance IMFI (hal. 80)",
+      "components": [
+        {
+          "page": 6,
+          "label": "Pinjaman Jangka Panjang yang jatuh tempo dalam waktu satu tahun / Long-Term Loans",
+          "value": 37348766
+        },
+        {
+          "page": 80,
+          "label": "PT Indomobil Finance IMFI",
+          "value": -12818046
+        }
+      ],
+      "note": "IDX tags bank loans only. The IMFI loan matures on 8 March 2025 (page 81), within a year of the balance date, so all of it is in the current portion."
+    },
+    {
+      "element": "idx-cor:LongTermBankLoans",
+      "ctx_kind": "instant",
+      "end": "2024-03-31",
+      "value": 27224265,
+      "page": 6,
+      "label": "Pinjaman Jangka Panjang setelah dikurangi bagian jatuh tempo / Long-Term Loans, net of current maturities (hal. 6), tanpa PT Artha Tunggal Mandiri (hal. 80)",
+      "components": [
+        {
+          "page": 6,
+          "label": "Pinjaman Jangka Panjang setelah dikurangi bagian jatuh tempo / Long-Term Loans",
+          "value": 39914374
+        },
+        {
+          "page": 80,
+          "label": "PT Artha Tunggal Mandiri",
+          "value": -12690109
+        }
+      ],
+      "note": "IDX tags bank loans only. The PT Artha Tunggal Mandiri loan matures on 3 November 2025 (page 81): all long-term. The IMFI loan is wholly current, so none of it is in this line."
+    },
+    {
+      "element": "idx-cor:CurrentProvisionsForRestorationAndRehabilitation",
+      "ctx_kind": "instant",
+      "end": "2024-03-31",
+      "value": 11676220,
+      "page": 6,
+      "label": "Estimasi Liabilitas untuk Restorasi dan Rehabilitasi (jatuh tempo dalam satu tahun) / Estimated Liability for Restoration and Rehabilitation (current)"
+    },
+    {
+      "element": "idx-cor:NonCurrentProvisionsForRestorationAndRehabilitation",
+      "ctx_kind": "instant",
+      "end": "2024-03-31",
+      "value": 189840220,
+      "page": 6,
+      "label": "Estimasi Liabilitas untuk Restorasi dan Rehabilitasi (jangka panjang) / Estimated Liability for Restoration and Rehabilitation (non-current)"
+    }
+  ]
+}

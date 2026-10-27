@@ -1,0 +1,974 @@
+{
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "inbox": [
+    {
+      "id": "level_crossed-f66630f56318c5e0",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "level_crossed",
+      "group": "level",
+      "section": "price",
+      "text": "Harga 1.290 turun melewati level 1.300 (\"Harga incaran\")",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "level_id": "j-aba40be3fe26119f",
+        "level": 1300.0,
+        "text": "Harga incaran",
+        "direction": "down",
+        "from": 1310.0,
+        "to": 1290.0,
+        "date": "2026-10-27"
+      }
+    },
+    {
+      "id": "level_crossed-2d5c66978cd0068b",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "level_crossed",
+      "group": "level",
+      "section": "price",
+      "text": "Harga 1.310 naik melewati level 1.300 (\"Harga incaran\")",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "level_id": "j-aba40be3fe26119f",
+        "level": 1300.0,
+        "text": "Harga incaran",
+        "direction": "up",
+        "from": 1277.0,
+        "to": 1310.0,
+        "date": "2026-10-26"
+      }
+    },
+    {
+      "id": "kpi_due-da939539eaf91019",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "COPR",
+      "kind": "kpi_due",
+      "group": "kpi",
+      "section": "pack",
+      "text": "KPI Q2 26 belum diisi: Produksi, Penjualan, Harga jual rata-rata dan 2 lagi",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "due": "2026-09-12",
+        "missing": [
+          "Produksi",
+          "Penjualan",
+          "Harga jual rata-rata",
+          "Biaya tunai",
+          "Nisbah kupas"
+        ]
+      }
+    },
+    {
+      "id": "kpi_due-9ec2b#",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "BANK",
+      "kind": "kpi_due",
+      "group": "kpi",
+      "section": "pack",
+      "text": "KPI Q2 26 belum diisi: CAR (KPMM), Modal inti (Tier 1)",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "due": "2026-09-12",
+        "missing": [
+          "CAR (KPMM)",
+          "Modal inti (Tier 1)"
+        ]
+      }
+    },
+    {
+      "id": "kpi_due-374cb73d3ac5b41e",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "REST",
+      "kind": "kpi_due",
+      "group": "kpi",
+      "section": "pack",
+      "text": "KPI Q4 25 belum diisi: Unit Komatsu terjual, Pemindahan lapisan penutup, Batubara ditambang untuk klien dan 13 lagi",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "label": "2025Q4",
+        "fy": 2025,
+        "q": 4,
+        "due": "2026-04-14",
+        "missing": [
+          "Unit Komatsu terjual",
+          "Pemindahan lapisan penutup",
+          "Batubara ditambang untuk klien",
+          "Penjualan batubara sendiri",
+          "Harga jual rata-rata batubara",
+          "Emas terjual",
+          "Biaya penopang menyeluruh emas (AISC)",
+          "Suku cadang dan jasa / pendapatan mesin",
+          "Pendapatan segmen mesin",
+          "Pendapatan segmen kontraktor",
+          "Pendapatan segmen batubara",
+          "Pendapatan segmen emas",
+          "Margin segmen mesin",
+          "Margin segmen kontraktor",
+          "Margin segmen batubara",
+          "Margin segmen emas"
+        ]
+      }
+    },
+    {
+      "id": "kpi_due-13ccb64ee40f489e",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "BUST",
+      "kind": "kpi_due",
+      "group": "kpi",
+      "section": "pack",
+      "text": "KPI Q4 25 belum diisi: Unit Komatsu terjual, Pemindahan lapisan penutup, Batubara ditambang untuk klien dan 13 lagi",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "label": "2025Q4",
+        "fy": 2025,
+        "q": 4,
+        "due": "2026-04-14",
+        "missing": [
+          "Unit Komatsu terjual",
+          "Pemindahan lapisan penutup",
+          "Batubara ditambang untuk klien",
+          "Penjualan batubara sendiri",
+          "Harga jual rata-rata batubara",
+          "Emas terjual",
+          "Biaya penopang menyeluruh emas (AISC)",
+          "Suku cadang dan jasa / pendapatan mesin",
+          "Pendapatan segmen mesin",
+          "Pendapatan segmen kontraktor",
+          "Pendapatan segmen batubara",
+          "Pendapatan segmen emas",
+          "Margin segmen mesin",
+          "Margin segmen kontraktor",
+          "Margin segmen batubara",
+          "Margin segmen emas"
+        ]
+      }
+    },
+    {
+      "id": "accounting_flag-17fbc05afa1c54a4",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "BUST",
+      "kind": "accounting_flag",
+      "group": "bendera",
+      "section": "financials",
+      "text": "Rugi bersih dua kuartal berturut-turut: Q3 25 −8 juta rupiah, Q4 25 −10 juta rupiah",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "flag": "two_loss_quarters",
+        "quarter": "2025Q4",
+        "currency": "IDR",
+        "quarters": [
+          {
+            "quarter": "2025Q3",
+            "value": -8000000.0
+          },
+          {
+            "quarter": "2025Q4",
+            "value": -10000000.0
+          }
+        ]
+      }
+    },
+    {
+      "id": "accounting_flag-079ec871edc4b6ff",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "BUST",
+      "kind": "accounting_flag",
+      "group": "bendera",
+      "section": "financials",
+      "text": "Ekuitas negatif pada Q4 25: −40 juta rupiah",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "flag": "negative_equity",
+        "quarter": "2025Q4",
+        "value": -40000000.0,
+        "currency": "IDR"
+      }
+    },
+    {
+      "id": "restatement-f9b717193285e943",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "REST",
+      "kind": "restatement",
+      "group": "data",
+      "section": "financials",
+      "text": "SalesAndRevenue 2024-03-31 disajikan kembali: 100 juta → 105 juta",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "element": "SalesAndRevenue",
+        "element_full": "idx-cor:SalesAndRevenue",
+        "period_end": "2024-03-31",
+        "dims": "",
+        "original": 100000000.0,
+        "original_filing": "REST_2024_Q1",
+        "restated": 105000000.0,
+        "restated_filing": "REST_2025_Q1",
+        "delta_pct": 5.0
+      }
+    },
+    {
+      "id": "kpi_due-5fa233d806c8f05b",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "kpi_due",
+      "group": "kpi",
+      "section": "pack",
+      "text": "KPI Q2 26 belum diisi: Harga jual rata-rata, Biaya tunai, Nisbah kupas",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "due": "2026-09-12",
+        "missing": [
+          "Harga jual rata-rata",
+          "Biaya tunai",
+          "Nisbah kupas"
+        ]
+      }
+    },
+    {
+      "id": "filing_new-faff3e2b30184421",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "REST",
+      "kind": "filing_new",
+      "group": "laporan",
+      "section": "financials",
+      "text": "Laporan Q4 25 masuk (diaudit)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "filing_id": "REST_2025_FY",
+        "label": "2025Q4",
+        "fy": 2025,
+        "q": 4,
+        "audited": true,
+        "available_from": "2026-03-31"
+      }
+    },
+    {
+      "id": "filing_new-c6630d9139cbea05",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "filing_new",
+      "group": "laporan",
+      "section": "financials",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "filing_id": "COAL_2026_Q2",
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "audited": false,
+        "available_from": "2026-08-29"
+      }
+    },
+    {
+      "id": "filing_new-b2bac258f3118948",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "BANK",
+      "kind": "filing_new",
+      "group": "laporan",
+      "section": "financials",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "filing_id": "BANK_2026_Q2",
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "audited": false,
+        "available_from": "2026-08-29"
+      }
+    },
+    {
+      "id": "filing_new-717085302d5d63db",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "BUST",
+      "kind": "filing_new",
+      "group": "laporan",
+      "section": "financials",
+      "text": "Laporan Q4 25 masuk (diaudit)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "filing_id": "BUST_2025_FY",
+        "label": "2025Q4",
+        "fy": 2025,
+        "q": 4,
+        "audited": true,
+        "available_from": "2026-03-31"
+      }
+    },
+    {
+      "id": "filing_new-478ec58a357aa8de",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "NONE",
+      "kind": "filing_new",
+      "group": "laporan",
+      "section": "financials",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "filing_id": "NONE_2026_Q2",
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "audited": false,
+        "available_from": "2026-08-29"
+      }
+    },
+    {
+      "id": "filing_new-062ac39be47538e2",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "COPR",
+      "kind": "filing_new",
+      "group": "laporan",
+      "section": "financials",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "filing_id": "COPR_2026_Q2",
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "audited": false,
+        "available_from": "2026-08-29"
+      }
+    },
+    {
+      "id": "claim_status-518fa203b890c5c4",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "claim_status",
+      "group": "klaim",
+      "section": "claims",
+      "text": "Klaim \"Produksi minimal lima juta ton\": Belum teruji → Berlaku (nilai 6)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "claim_id": "c-2fcedc885cd0b4b9",
+        "statement": "Produksi minimal lima juta ton",
+        "from": "not_testable",
+        "to": "holding",
+        "from_label": "Belum teruji",
+        "to_label": "Berlaku",
+        "value": 6.0
+      }
+    }
+  ],
+  "inbox_total": 17,
+  "filters": [
+    {
+      "group": "semua",
+      "label": "Semua",
+      "count": 17
+    },
+    {
+      "group": "laporan",
+      "label": "Laporan baru",
+      "count": 6
+    },
+    {
+      "group": "klaim",
+      "label": "Klaim",
+      "count": 1
+    },
+    {
+      "group": "kpi",
+      "label": "KPI",
+      "count": 5
+    },
+    {
+      "group": "level",
+      "label": "Level",
+      "count": 2
+    },
+    {
+      "group": "bendera",
+      "label": "Bendera",
+      "count": 2
+    },
+    {
+      "group": "data",
+      "label": "Data",
+      "count": 1
+    }
+  ],
+  "coverage": [
+    {
+      "ticker": "BANK",
+      "role": "held",
+      "peer_of": null,
+      "business_note": null,
+      "pack": {
+        "id": "bank_sharia",
+        "label": "Bank syariah",
+        "source": "filing",
+        "action": null
+      },
+      "last_seen": null,
+      "claims": {
+        "holding": 1,
+        "broken": 0,
+        "not_testable": 0,
+        "expired": 0
+      },
+      "xbrl": {
+        "populated": 27,
+        "total": 30,
+        "pct": 90.0
+      },
+      "kpi": {
+        "entered": 0,
+        "unknown": 0,
+        "expected": 8,
+        "missing": [
+          "car 2025Q3",
+          "car 2025Q4",
+          "car 2026Q1",
+          "car 2026Q2",
+          "tier1 2025Q3",
+          "tier1 2025Q4",
+          "tier1 2026Q1",
+          "tier1 2026Q2"
+        ]
+      },
+      "next_report": {
+        "label": "2026Q3",
+        "deadline": "2026-10-30",
+        "overdue": false
+      },
+      "data": {
+        "state": "sebagian",
+        "label": "Sebagian",
+        "reasons": [],
+        "has_pack": true
+      }
+    },
+    {
+      "ticker": "COAL",
+      "role": "held",
+      "peer_of": null,
+      "business_note": null,
+      "pack": {
+        "id": "coal_mining",
+        "label": "Tambang batubara",
+        "source": "filing",
+        "action": null
+      },
+      "last_seen": "2026-10-24T09:00:00+00:00",
+      "claims": {
+        "holding": 2,
+        "broken": 1,
+        "not_testable": 1,
+        "expired": 1
+      },
+      "xbrl": {
+        "populated": 17,
+        "total": 19,
+        "pct": 89.4737
+      },
+      "kpi": {
+        "entered": 1,
+        "unknown": 1,
+        "expected": 21,
+        "missing": [
+          "production_mt 2025Q3",
+          "production_mt 2025Q4",
+          "production_mt 2026Q1",
+          "sales_mt 2025Q3",
+          "sales_mt 2025Q4",
+          "sales_mt 2026Q1",
+          "asp_usd_t 2025Q3",
+          "asp_usd_t 2025Q4",
+          "asp_usd_t 2026Q1",
+          "asp_usd_t 2026Q2",
+          "cash_cost_usd_t 2025Q3",
+          "cash_cost_usd_t 2025Q4",
+          "cash_cost_usd_t 2026Q1",
+          "cash_cost_usd_t 2026Q2",
+          "stripping_ratio 2025Q3",
+          "stripping_ratio 2025Q4",
+          "stripping_ratio 2026Q1",
+          "stripping_ratio 2026Q2",
+          "reserves_mt 2025Q4"
+        ]
+      },
+      "next_report": {
+        "label": "2026Q3",
+        "deadline": "2026-10-30",
+        "overdue": false
+      },
+      "data": {
+        "state": "sebagian",
+        "label": "Sebagian",
+        "reasons": [],
+        "has_pack": true
+      }
+    },
+    {
+      "ticker": "NONE",
+      "role": "held",
+      "peer_of": null,
+      "business_note": null,
+      "pack": {
+        "id": null,
+        "label": null,
+        "source": "none",
+        "action": "Tentukan paket"
+      },
+      "last_seen": null,
+      "claims": {
+        "holding": 0,
+        "broken": 0,
+        "not_testable": 0,
+        "expired": 0
+      },
+      "xbrl": {
+        "populated": 13,
+        "total": 13,
+        "pct": 100.0
+      },
+      "kpi": {
+        "entered": 0,
+        "unknown": 0,
+        "expected": 0,
+        "missing": []
+      },
+      "next_report": {
+        "label": "2026Q3",
+        "deadline": "2026-10-30",
+        "overdue": false
+      },
+      "data": {
+        "state": "lengkap",
+        "label": "Lengkap",
+        "reasons": [],
+        "has_pack": false
+      }
+    },
+    {
+      "ticker": "BUST",
+      "role": "manual",
+      "peer_of": null,
+      "business_note": null,
+      "pack": {
+        "id": "heavy_equipment_contracting",
+        "label": "Alat berat dan kontraktor tambang",
+        "source": "filing",
+        "action": null
+      },
+      "last_seen": null,
+      "claims": {
+        "holding": 0,
+        "broken": 0,
+        "not_testable": 0,
+        "expired": 0
+      },
+      "xbrl": {
+        "populated": 6,
+        "total": 15,
+        "pct": 40.0
+      },
+      "kpi": {
+        "entered": 0,
+        "unknown": 0,
+        "expected": 64,
+        "missing": [
+          "komatsu_units 2025Q1",
+          "komatsu_units 2025Q2",
+          "komatsu_units 2025Q3",
+          "komatsu_units 2025Q4",
+          "overburden_mbcm 2025Q1",
+          "overburden_mbcm 2025Q2",
+          "overburden_mbcm 2025Q3",
+          "overburden_mbcm 2025Q4",
+          "coal_extracted_mt 2025Q1",
+          "coal_extracted_mt 2025Q2",
+          "coal_extracted_mt 2025Q3",
+          "coal_extracted_mt 2025Q4",
+          "coal_sales_mt 2025Q1",
+          "coal_sales_mt 2025Q2",
+          "coal_sales_mt 2025Q3",
+          "coal_sales_mt 2025Q4",
+          "coal_asp_usd_t 2025Q1",
+          "coal_asp_usd_t 2025Q2",
+          "coal_asp_usd_t 2025Q3",
+          "coal_asp_usd_t 2025Q4",
+          "gold_oz_sold 2025Q1",
+          "gold_oz_sold 2025Q2",
+          "gold_oz_sold 2025Q3",
+          "gold_oz_sold 2025Q4",
+          "gold_aisc_usd_oz 2025Q1",
+          "gold_aisc_usd_oz 2025Q2",
+          "gold_aisc_usd_oz 2025Q3",
+          "gold_aisc_usd_oz 2025Q4",
+          "parts_service_ratio 2025Q1",
+          "parts_service_ratio 2025Q2",
+          "parts_service_ratio 2025Q3",
+          "parts_service_ratio 2025Q4",
+          "seg_rev_machinery 2025Q1",
+          "seg_rev_machinery 2025Q2",
+          "seg_rev_machinery 2025Q3",
+          "seg_rev_machinery 2025Q4",
+          "seg_rev_contracting 2025Q1",
+          "seg_rev_contracting 2025Q2",
+          "seg_rev_contracting 2025Q3",
+          "seg_rev_contracting 2025Q4",
+          "seg_rev_coal 2025Q1",
+          "seg_rev_coal 2025Q2",
+          "seg_rev_coal 2025Q3",
+          "seg_rev_coal 2025Q4",
+          "seg_rev_gold 2025Q1",
+          "seg_rev_gold 2025Q2",
+          "seg_rev_gold 2025Q3",
+          "seg_rev_gold 2025Q4",
+          "seg_margin_machinery 2025Q1",
+          "seg_margin_machinery 2025Q2",
+          "seg_margin_machinery 2025Q3",
+          "seg_margin_machinery 2025Q4",
+          "seg_margin_contracting 2025Q1",
+          "seg_margin_contracting 2025Q2",
+          "seg_margin_contracting 2025Q3",
+          "seg_margin_contracting 2025Q4",
+          "seg_margin_coal 2025Q1",
+          "seg_margin_coal 2025Q2",
+          "seg_margin_coal 2025Q3",
+          "seg_margin_coal 2025Q4",
+          "seg_margin_gold 2025Q1",
+          "seg_margin_gold 2025Q2",
+          "seg_margin_gold 2025Q3",
+          "seg_margin_gold 2025Q4"
+        ]
+      },
+      "next_report": {
+        "label": "2026Q1",
+        "deadline": "2026-04-30",
+        "overdue": true
+      },
+      "data": {
+        "state": "sebagian",
+        "label": "Sebagian",
+        "reasons": [],
+        "has_pack": true
+      }
+    },
+    {
+      "ticker": "REST",
+      "role": "manual",
+      "peer_of": null,
+      "business_note": null,
+      "pack": {
+        "id": "heavy_equipment_contracting",
+        "label": "Alat berat dan kontraktor tambang",
+        "source": "filing",
+        "action": null
+      },
+      "last_seen": null,
+      "claims": {
+        "holding": 0,
+        "broken": 0,
+        "not_testable": 0,
+        "expired": 0
+      },
+      "xbrl": {
+        "populated": 6,
+        "total": 15,
+        "pct": 40.0
+      },
+      "kpi": {
+        "entered": 0,
+        "unknown": 0,
+        "expected": 64,
+        "missing": [
+          "komatsu_units 2025Q1",
+          "komatsu_units 2025Q2",
+          "komatsu_units 2025Q3",
+          "komatsu_units 2025Q4",
+          "overburden_mbcm 2025Q1",
+          "overburden_mbcm 2025Q2",
+          "overburden_mbcm 2025Q3",
+          "overburden_mbcm 2025Q4",
+          "coal_extracted_mt 2025Q1",
+          "coal_extracted_mt 2025Q2",
+          "coal_extracted_mt 2025Q3",
+          "coal_extracted_mt 2025Q4",
+          "coal_sales_mt 2025Q1",
+          "coal_sales_mt 2025Q2",
+          "coal_sales_mt 2025Q3",
+          "coal_sales_mt 2025Q4",
+          "coal_asp_usd_t 2025Q1",
+          "coal_asp_usd_t 2025Q2",
+          "coal_asp_usd_t 2025Q3",
+          "coal_asp_usd_t 2025Q4",
+          "gold_oz_sold 2025Q1",
+          "gold_oz_sold 2025Q2",
+          "gold_oz_sold 2025Q3",
+          "gold_oz_sold 2025Q4",
+          "gold_aisc_usd_oz 2025Q1",
+          "gold_aisc_usd_oz 2025Q2",
+          "gold_aisc_usd_oz 2025Q3",
+          "gold_aisc_usd_oz 2025Q4",
+          "parts_service_ratio 2025Q1",
+          "parts_service_ratio 2025Q2",
+          "parts_service_ratio 2025Q3",
+          "parts_service_ratio 2025Q4",
+          "seg_rev_machinery 2025Q1",
+          "seg_rev_machinery 2025Q2",
+          "seg_rev_machinery 2025Q3",
+          "seg_rev_machinery 2025Q4",
+          "seg_rev_contracting 2025Q1",
+          "seg_rev_contracting 2025Q2",
+          "seg_rev_contracting 2025Q3",
+          "seg_rev_contracting 2025Q4",
+          "seg_rev_coal 2025Q1",
+          "seg_rev_coal 2025Q2",
+          "seg_rev_coal 2025Q3",
+          "seg_rev_coal 2025Q4",
+          "seg_rev_gold 2025Q1",
+          "seg_rev_gold 2025Q2",
+          "seg_rev_gold 2025Q3",
+          "seg_rev_gold 2025Q4",
+          "seg_margin_machinery 2025Q1",
+          "seg_margin_machinery 2025Q2",
+          "seg_margin_machinery 2025Q3",
+          "seg_margin_machinery 2025Q4",
+          "seg_margin_contracting 2025Q1",
+          "seg_margin_contracting 2025Q2",
+          "seg_margin_contracting 2025Q3",
+          "seg_margin_contracting 2025Q4",
+          "seg_margin_coal 2025Q1",
+          "seg_margin_coal 2025Q2",
+          "seg_margin_coal 2025Q3",
+          "seg_margin_coal 2025Q4",
+          "seg_margin_gold 2025Q1",
+          "seg_margin_gold 2025Q2",
+          "seg_margin_gold 2025Q3",
+          "seg_margin_gold 2025Q4"
+        ]
+      },
+      "next_report": {
+        "label": "2026Q1",
+        "deadline": "2026-04-30",
+        "overdue": true
+      },
+      "data": {
+        "state": "basi",
+        "label": "Basi",
+        "reasons": [
+          "harga 57 hari"
+        ],
+        "has_pack": true
+      }
+    },
+    {
+      "ticker": "COPR",
+      "role": "peer",
+      "peer_of": "COAL",
+      "business_note": null,
+      "pack": {
+        "id": "coal_mining",
+        "label": "Tambang batubara",
+        "source": "filing",
+        "action": null
+      },
+      "last_seen": null,
+      "claims": {
+        "holding": 0,
+        "broken": 0,
+        "not_testable": 0,
+        "expired": 0
+      },
+      "xbrl": {
+        "populated": 17,
+        "total": 19,
+        "pct": 89.4737
+      },
+      "kpi": {
+        "entered": 0,
+        "unknown": 0,
+        "expected": 21,
+        "missing": [
+          "production_mt 2025Q3",
+          "production_mt 2025Q4",
+          "production_mt 2026Q1",
+          "production_mt 2026Q2",
+          "sales_mt 2025Q3",
+          "sales_mt 2025Q4",
+          "sales_mt 2026Q1",
+          "sales_mt 2026Q2",
+          "asp_usd_t 2025Q3",
+          "asp_usd_t 2025Q4",
+          "asp_usd_t 2026Q1",
+          "asp_usd_t 2026Q2",
+          "cash_cost_usd_t 2025Q3",
+          "cash_cost_usd_t 2025Q4",
+          "cash_cost_usd_t 2026Q1",
+          "cash_cost_usd_t 2026Q2",
+          "stripping_ratio 2025Q3",
+          "stripping_ratio 2025Q4",
+          "stripping_ratio 2026Q1",
+          "stripping_ratio 2026Q2",
+          "reserves_mt 2025Q4"
+        ]
+      },
+      "next_report": {
+        "label": "2026Q3",
+        "deadline": "2026-10-30",
+        "overdue": false
+      },
+      "data": {
+        "state": "sebagian",
+        "label": "Sebagian",
+        "reasons": [],
+        "has_pack": true
+      }
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2026-10-30",
+      "ticker": "BANK",
+      "kind": "pojk",
+      "label": "Batas laporan 2026Q3",
+      "source": "pojk",
+      "window": {
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      },
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": null
+    },
+    {
+      "date": "2026-10-30",
+      "ticker": "BUST",
+      "kind": "pojk",
+      "label": "Batas laporan 2026Q3",
+      "source": "pojk",
+      "window": {
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      },
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": null
+    },
+    {
+      "date": "2026-10-30",
+      "ticker": "COAL",
+      "kind": "pojk",
+      "label": "Batas laporan 2026Q3",
+      "source": "pojk",
+      "window": {
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      },
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": null
+    },
+    {
+      "date": "2026-10-30",
+      "ticker": "COPR",
+      "kind": "pojk",
+      "label": "Batas laporan 2026Q3",
+      "source": "pojk",
+      "window": {
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      },
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": null
+    },
+    {
+      "date": "2026-10-30",
+      "ticker": "NONE",
+      "kind": "pojk",
+      "label": "Batas laporan 2026Q3",
+      "source": "pojk",
+      "window": {
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      },
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": null
+    },
+    {
+      "date": "2026-10-30",
+      "ticker": "REST",
+      "kind": "pojk",
+      "label": "Batas laporan 2026Q3",
+      "source": "pojk",
+      "window": {
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      },
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": null
+    },
+    {
+      "date": "2026-11-15",
+      "ticker": "COAL",
+      "kind": "rups",
+      "label": "RUPS",
+      "source": "manual",
+      "window": null,
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": "RUPS luar biasa"
+    }
+  ],
+  "ages": {
+    "prices": {
+      "BANK": 5,
+      "COAL": 1,
+      "NONE": 5,
+      "BUST": null,
+      "REST": 57,
+      "COPR": 5
+    },
+    "filings": {
+      "BANK": 60,
+      "COAL": 60,
+      "NONE": 60,
+      "BUST": 211,
+      "REST": 211,
+      "COPR": 60
+    },
+    "drivers": {},
+    "driver_labels": {}
+  }
+}

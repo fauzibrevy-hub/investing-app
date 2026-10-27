@@ -1,0 +1,54 @@
+{
+  "ticker": "COAL",
+  "items": [
+    {
+      "id": "j-fea3445a73066b4d",
+      "ticker": "COAL",
+      "at": "2026-10-24T09:00:00+00:00",
+      "kind": "keputusan",
+      "text": "Menambah posisi",
+      "price_at": 1277.0,
+      "level": null,
+      "annotations": []
+    },
+    {
+      "id": "j-aba40be3fe26119f",
+      "ticker": "COAL",
+      "at": "2026-10-24T09:00:00+00:00",
+      "kind": "level",
+      "text": "Harga incaran",
+      "price_at": 1277.0,
+      "level": 1300.0,
+      "annotations": [
+        {
+          "id": "a-b8f83b8ceae1c059",
+          "at": "2026-10-24T09:00:00+00:00",
+          "text": "Level digeser setelah laporan kuartal 2"
+        }
+      ]
+    },
+    {
+      "id": "j-18572ae732d8f700",
+      "ticker": "COAL",
+      "at": "2026-10-24T09:00:00+00:00",
+      "kind": "catatan",
+      "text": "Manajemen menaikkan target produksi",
+      "price_at": 1277.0,
+      "level": null,
+      "annotations": []
+    },
+    {
+      "id": "j-old",
+      "ticker": "COAL",
+      "at": "2026-08-20T01:00:00+00:00",
+      "kind": "level",
+      "text": "Level lama",
+      "price_at": 1000.0,
+      "level": 1100.0,
+      "annotations": []
+    }
+  ],
+  "total": 4,
+  "limit": 20,
+  "offset": 0
+}

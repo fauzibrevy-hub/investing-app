@@ -1,0 +1,104 @@
+{
+ "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2": {
+  "status": 200,
+  "headers": {
+   "content-type": "text/plain"
+  },
+  "body": "observation_date,DGS2\n2026-10-16,3.88\n2026-10-19,3.92\n"
+ },
+ "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10": {
+  "status": 200,
+  "headers": {
+   "content-type": "text/plain"
+  },
+  "body": "observation_date,DGS10\n2026-10-15,4.30\n2026-10-16,.\n2026-10-19,4.315\n"
+ },
+ "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y2Y": {
+  "status": 200,
+  "headers": {
+   "content-type": "text/plain"
+  },
+  "body": "observation_date,T10Y2Y\n2026-10-16,0.41\n2026-10-19,-0.051\n"
+ },
+ "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10": {
+  "status": 500,
+  "headers": {},
+  "body": "oops"
+ },
+ "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2": {
+  "status": 200,
+  "headers": {
+   "content-type": "text/plain"
+  },
+  "body": "observation_date,BAMLH0A0HYM2\n2026-10-16,3.02\n"
+ },
+ "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPILFESL": {
+  "status": 200,
+  "headers": {
+   "content-type": "text/plain"
+  },
+  "body": "observation_date,CPILFESL\n2025-08-01,329.700\n2025-09-01,330.123\n2026-08-01,337.765\n2026-09-01,338.456\n"
+ },
+ "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFEDTARU": {
+  "status": 200,
+  "headers": {
+   "content-type": "text/plain"
+  },
+  "body": "observation_date,DFEDTARU\n2026-10-19,.\n"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BZ=F?range=1mo&interval=1d": {
+  "status": 200,
+  "headers": {
+   "content-type": "application/json"
+  },
+  "body": "{\"chart\": {\"result\": [{\"timestamp\": [1792137600, 1792224000, 1792396800], \"indicators\": {\"quote\": [{\"close\": [91.111, null, 93.455]}]}, \"meta\": {\"regularMarketPrice\": 93.456, \"regularMarketTime\": 1792466800}}], \"error\": null}}"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/BZJ27.NYM?range=1mo&interval=1d": {
+  "status": 404,
+  "headers": {},
+  "body": "nf"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/CL=F?range=1mo&interval=1d": {
+  "status": 200,
+  "headers": {
+   "content-type": "application/json"
+  },
+  "body": "{\"chart\": {\"result\": [{\"timestamp\": [], \"indicators\": {\"quote\": [{\"close\": []}]}}], \"error\": null}}"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/^VIX?range=1mo&interval=1d": {
+  "status": 200,
+  "headers": {
+   "content-type": "application/json"
+  },
+  "body": "{\"chart\": {\"result\": [{\"timestamp\": [1792396800], \"indicators\": {\"quote\": [{\"close\": [18.125]}]}, \"meta\": {\"regularMarketPrice\": 18.125, \"regularMarketTime\": 1792456800}}], \"error\": null}}"
+ },
+ "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?range=1mo&interval=1d": {
+  "status": 200,
+  "headers": {
+   "content-type": "text/html"
+  },
+  "body": "<html>blocked</html>"
+ },
+ "https://open.er-api.com/v6/latest/USD": {
+  "status": 200,
+  "headers": {
+   "content-type": "application/json"
+  },
+  "body": "{\"result\": \"success\", \"rates\": {\"IDR\": 16311.987}}"
+ },
+ "https://www.bi.go.id/biweb/api/Inflasi/GetInflasi": {
+  "status": 302,
+  "reason": "Moved Temporarily",
+  "headers": {
+   "location": "https://www.bi.go.id/id/e404.aspx"
+  },
+  "body": ""
+ },
+ "https://www.stats.gov.cn/sj/zxfb/pmi": {
+  "status": 200,
+  "headers": {
+   "content-type": "application/json"
+  },
+  "body": "{\"Data\": [{\"Period\": \"2026-08-31\", \"PMI\": \"49.4\"}, {\"period\": \"2026-09-30T00:00:00\", \"pmi\": 49.9}, {\"period\": \"bad\", \"pmi\": 1}]}"
+ }
+}

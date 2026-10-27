@@ -1,0 +1,307 @@
+[
+  {
+    "metric_id": "brent_front_month",
+    "name": "Brent Crude Front-Month",
+    "pillar": "Energy/Oil",
+    "primary_series": "ICE:B",
+    "unit": "USD/barel",
+    "tier": "reputable_secondary",
+    "source_id": "YAHOO_FINANCE",
+    "source_name": "Yahoo Finance (ICE Brent Futures Mirror BZ=F)",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "ICE",
+    "release_schedule": "Daily post-settlement (London close ~19:30 UTC)",
+    "cross_checks": [
+      "brent_curve",
+      "wti_spot",
+      "china_pmi_primary",
+      "us_core_cpi",
+      "dxy"
+    ],
+    "threshold_id": "energy.brent_front_month"
+  },
+  {
+    "metric_id": "brent_curve",
+    "name": "Brent Futures Curve (M1-M6)",
+    "pillar": "Energy/Oil",
+    "primary_series": "ICE:B_M1_M6",
+    "unit": "USD/barel",
+    "tier": "proxy",
+    "source_id": "YAHOO_FINANCE",
+    "source_name": "Yahoo Finance (Derived Spread M1-M6)",
+    "basis": "derived",
+    "frequency": "daily",
+    "venue_calendar": "ICE",
+    "release_schedule": "Daily post-settlement (London close ~19:30 UTC)",
+    "cross_checks": [
+      "brent_front_month",
+      "china_pmi_primary",
+      "wti_spot"
+    ],
+    "threshold_id": "energy.brent_curve"
+  },
+  {
+    "metric_id": "wti_spot",
+    "name": "WTI Crude Spot",
+    "pillar": "Energy/Oil",
+    "primary_series": "CME:CL",
+    "unit": "USD/barel",
+    "tier": "reputable_secondary",
+    "source_id": "YAHOO_FINANCE",
+    "source_name": "Yahoo Finance (CME WTI Spot Mirror CL=F)",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "CME",
+    "release_schedule": "Daily post-settlement (14:30 CT)",
+    "cross_checks": [
+      "brent_front_month",
+      "brent_curve"
+    ],
+    "threshold_id": "energy.wti_spot"
+  },
+  {
+    "metric_id": "ust_2y",
+    "name": "UST 2-Year Yield",
+    "pillar": "UST/Rates",
+    "primary_series": "DGS2",
+    "unit": "percent",
+    "tier": "reputable_secondary",
+    "source_id": "FRED",
+    "source_name": "Federal Reserve Bank of St. Louis / U.S. Treasury",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "SIFMA/NYSE",
+    "release_schedule": "Daily at ~16:15 ET (business days)",
+    "cross_checks": [
+      "fed_funds_path",
+      "us_core_cpi",
+      "ust_10y",
+      "china_pmi_primary"
+    ],
+    "threshold_id": "rates.ust_2y"
+  },
+  {
+    "metric_id": "ust_10y",
+    "name": "UST 10-Year Yield",
+    "pillar": "UST/Rates",
+    "primary_series": "DGS10",
+    "unit": "percent",
+    "tier": "reputable_secondary",
+    "source_id": "FRED",
+    "source_name": "Federal Reserve Bank of St. Louis / U.S. Treasury",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "SIFMA/NYSE",
+    "release_schedule": "Daily at ~16:15 ET (business days)",
+    "cross_checks": [
+      "ust_2y",
+      "ust_10y_2y_spread",
+      "ust_10y_real_yield",
+      "china_pmi_primary"
+    ],
+    "threshold_id": "rates.ust_10y"
+  },
+  {
+    "metric_id": "ust_10y_2y_spread",
+    "name": "UST 10Y–2Y Spread",
+    "pillar": "UST/Rates",
+    "primary_series": "T10Y2Y",
+    "unit": "bps",
+    "tier": "proxy",
+    "source_id": "FRED",
+    "source_name": "FRED Derived (DGS10 − DGS2)",
+    "basis": "derived",
+    "frequency": "daily",
+    "venue_calendar": "SIFMA/NYSE",
+    "release_schedule": "Daily at ~16:15 ET (business days)",
+    "cross_checks": [
+      "ust_2y",
+      "ust_10y",
+      "china_pmi_primary",
+      "vix"
+    ],
+    "threshold_id": "rates.ust_10y_2y_spread"
+  },
+  {
+    "metric_id": "ust_10y_real_yield",
+    "name": "U.S. 10Y Real Yield (TIPS)",
+    "pillar": "UST/Rates",
+    "primary_series": "DFII10",
+    "unit": "percent",
+    "tier": "reputable_secondary",
+    "source_id": "FRED",
+    "source_name": "Federal Reserve Bank of St. Louis / U.S. Treasury",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "SIFMA/NYSE",
+    "release_schedule": "Daily at ~16:15 ET (business days)",
+    "cross_checks": [
+      "ust_10y",
+      "dxy",
+      "brent_front_month"
+    ],
+    "threshold_id": "rates.ust_10y_real_yield"
+  },
+  {
+    "metric_id": "dxy",
+    "name": "U.S. Dollar Index",
+    "pillar": "USD/ID transmission",
+    "primary_series": "USDX",
+    "unit": "index_points",
+    "tier": "reputable_secondary",
+    "source_id": "YAHOO_FINANCE",
+    "source_name": "Yahoo Finance (ICE USDX Mirror DX-Y.NYB)",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "ICE",
+    "release_schedule": "Daily trading session close (17:00 ET)",
+    "cross_checks": [
+      "ust_10y_real_yield",
+      "ust_10y",
+      "usd_idr",
+      "vix"
+    ],
+    "threshold_id": "usd_id.dxy"
+  },
+  {
+    "metric_id": "usd_idr",
+    "name": "USD / IDR Spot Exchange (JISDOR)",
+    "pillar": "USD/ID transmission",
+    "primary_series": "USD_IDR_JISDOR",
+    "unit": "IDR/USD",
+    "tier": "reputable_secondary",
+    "source_id": "OPEN_EXCHANGE_RATES",
+    "source_name": "Open Exchange Rates (open.er-api.com USD/IDR Spot)",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "Bank Indonesia / IDX",
+    "release_schedule": "Daily at 16:15 WIB (business days)",
+    "cross_checks": [
+      "dxy",
+      "ust_10y",
+      "id_core_cpi"
+    ],
+    "threshold_id": "usd_id.usd_idr"
+  },
+  {
+    "metric_id": "fed_funds_path",
+    "name": "Fed Funds Target Range & Path",
+    "pillar": "Inflation/CB",
+    "primary_series": "FED_FUNDS_TARGET",
+    "unit": "percent",
+    "tier": "reputable_secondary",
+    "source_id": "FRED",
+    "source_name": "Federal Reserve Bank of St. Louis (DFEDTARU / FOMC Target)",
+    "basis": "actual",
+    "frequency": "meeting_step",
+    "venue_calendar": "Federal Reserve FOMC Calendar",
+    "release_schedule": "Post-FOMC meeting statement (14:00 ET Wednesdays of meeting)",
+    "cross_checks": [
+      "ust_2y",
+      "us_core_cpi",
+      "china_pmi_primary"
+    ],
+    "threshold_id": "inflation_cb.fed_funds"
+  },
+  {
+    "metric_id": "us_core_cpi",
+    "name": "U.S. Core CPI Inflation",
+    "pillar": "Inflation/CB",
+    "primary_series": "CPILFESL",
+    "unit": "percent_yoy",
+    "tier": "reputable_secondary",
+    "source_id": "FRED",
+    "source_name": "Federal Reserve Bank of St. Louis / BLS (CPILFESL)",
+    "basis": "actual",
+    "frequency": "monthly",
+    "venue_calendar": "U.S. BLS Release Calendar",
+    "release_schedule": "Monthly at 08:30 ET (~middle of month)",
+    "cross_checks": [
+      "fed_funds_path",
+      "ust_2y",
+      "ust_10y",
+      "brent_front_month"
+    ],
+    "threshold_id": "inflation_cb.us_core_cpi"
+  },
+  {
+    "metric_id": "id_core_cpi",
+    "name": "Indonesia Core CPI",
+    "pillar": "Inflation/CB",
+    "primary_series": "ID_CORE_CPI",
+    "unit": "percent_yoy",
+    "tier": "official_primary",
+    "source_id": "BPS",
+    "source_name": "Badan Pusat Statistik (BPS Indonesia)",
+    "basis": "actual",
+    "frequency": "monthly",
+    "venue_calendar": "BPS Release Calendar",
+    "release_schedule": "Monthly on the 1st business day at 11:00 WIB",
+    "cross_checks": [
+      "usd_idr",
+      "fed_funds_path",
+      "brent_front_month"
+    ],
+    "threshold_id": "inflation_cb.id_core_cpi"
+  },
+  {
+    "metric_id": "china_pmi_primary",
+    "name": "China Mfg PMI (Primary) / ID PMI Supporting",
+    "pillar": "Growth/credit",
+    "primary_series": "CHINA_NBS_MFG_PMI",
+    "unit": "index_points",
+    "tier": "official_primary",
+    "source_id": "NBS_CHINA",
+    "source_name": "National Bureau of Statistics of China",
+    "basis": "actual",
+    "frequency": "monthly",
+    "venue_calendar": "NBS China / S&P Global",
+    "release_schedule": "Monthly on the 31st / 1st at 09:30 CST",
+    "cross_checks": [
+      "brent_front_month",
+      "brent_curve",
+      "ID_SP_MFG_PMI"
+    ],
+    "threshold_id": "growth.china_mfg_pmi"
+  },
+  {
+    "metric_id": "vix",
+    "name": "Cboe Volatility Index",
+    "pillar": "Liquidity/risk",
+    "primary_series": "VIX",
+    "unit": "index_points",
+    "tier": "reputable_secondary",
+    "source_id": "YAHOO_FINANCE",
+    "source_name": "Yahoo Finance (Cboe VIX Mirror ^VIX)",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "Cboe",
+    "release_schedule": "Daily post-market close (16:15 CT)",
+    "cross_checks": [
+      "us_hy_oas",
+      "ust_10y",
+      "dxy"
+    ],
+    "threshold_id": "liquidity.vix_stress"
+  },
+  {
+    "metric_id": "us_hy_oas",
+    "name": "US High Yield OAS",
+    "pillar": "Liquidity/risk",
+    "primary_series": "BAMLH0A0HYM2",
+    "unit": "percent",
+    "tier": "reputable_secondary",
+    "source_id": "FRED",
+    "source_name": "ICE Data Indices, LLC / Federal Reserve Bank of St. Louis",
+    "basis": "actual",
+    "frequency": "daily",
+    "venue_calendar": "ICE / FRED",
+    "release_schedule": "Daily at ~16:15 ET with 1-business-day publication lag",
+    "cross_checks": [
+      "vix",
+      "ust_10y"
+    ],
+    "threshold_id": "liquidity.hy_oas_stress"
+  }
+]

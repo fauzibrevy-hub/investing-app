@@ -1,0 +1,96 @@
+{
+  "ticker": "COPR",
+  "name": null,
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "role": "peer",
+  "peer_of": "COAL",
+  "avg_price": null,
+  "pack": {
+    "id": "coal_mining",
+    "label": "Tambang batubara",
+    "version": "2026.10-1",
+    "source": "filing",
+    "action": null
+  },
+  "business_note": null,
+  "latest_filing": {
+    "id": "COPR_2026_Q2",
+    "fy": 2026,
+    "period": "Q2",
+    "available_from": "2026-08-29",
+    "age_days": 60,
+    "audited": false,
+    "taxonomy": "general"
+  },
+  "latest_close": {
+    "date": "2026-10-23",
+    "close": 777.0,
+    "age_days": 5
+  },
+  "seen_at": null,
+  "claims": {
+    "holding": 0,
+    "broken": 0,
+    "not_testable": 0,
+    "expired": 0
+  },
+  "coverage": {
+    "has_pack": true,
+    "latest": {
+      "fy": 2026,
+      "q": 2
+    },
+    "xbrl": {
+      "populated": 17,
+      "total": 19,
+      "pct": 89.473684
+    },
+    "kpi": {
+      "entered": 0,
+      "unknown": 0,
+      "expected": 21,
+      "missing": [
+        "production_mt 2025Q3",
+        "production_mt 2025Q4",
+        "production_mt 2026Q1",
+        "production_mt 2026Q2",
+        "sales_mt 2025Q3",
+        "sales_mt 2025Q4",
+        "sales_mt 2026Q1",
+        "sales_mt 2026Q2",
+        "asp_usd_t 2025Q3",
+        "asp_usd_t 2025Q4",
+        "asp_usd_t 2026Q1",
+        "asp_usd_t 2026Q2",
+        "cash_cost_usd_t 2025Q3",
+        "cash_cost_usd_t 2025Q4",
+        "cash_cost_usd_t 2026Q1",
+        "cash_cost_usd_t 2026Q2",
+        "stripping_ratio 2025Q3",
+        "stripping_ratio 2025Q4",
+        "stripping_ratio 2026Q1",
+        "stripping_ratio 2026Q2",
+        "reserves_mt 2025Q4"
+      ]
+    },
+    "state": "sebagian"
+  },
+  "changes": [
+    {
+      "id": "kpi_due-da939539eaf91019",
+      "kind": "kpi_due",
+      "at": "2026-10-28T03:00:00+00:00",
+      "text": "KPI Q2 26 belum diisi: Produksi, Penjualan, Harga jual rata-rata dan 2 lagi",
+      "section": "pack",
+      "dismissed": false
+    },
+    {
+      "id": "filing_new-062ac39be47538e2",
+      "kind": "filing_new",
+      "at": "2026-10-24T09:00:00+00:00",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "section": "financials",
+      "dismissed": false
+    }
+  ]
+}

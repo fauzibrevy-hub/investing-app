@@ -1,0 +1,126 @@
+{
+ "brent_front_month": {
+  "observed_at": "2026-10-19",
+  "value": 92.4,
+  "release_at": "2026-10-19T19:30:00Z",
+  "fetched_at": "2026-10-19T20:00:00.5+00:00",
+  "upstream_ok": true,
+  "quality_note": "Verified from upstream feed (YAHOO_FINANCE)",
+  "history": [
+   {
+    "date": "2026-10-16",
+    "value": 91.0
+   },
+   {
+    "date": "2026-10-19",
+    "value": 92.4
+   }
+  ]
+ },
+ "brent_curve": {
+  "observed_at": "2026-10-19",
+  "value": 1.35,
+  "release_at": "2026-10-19T19:30:00Z",
+  "fetched_at": "2026-10-19T20:00:00+00:00",
+  "upstream_ok": true,
+  "quality_note": "x",
+  "history": []
+ },
+ "wti_spot": {
+  "observed_at": "2026-10-16",
+  "value": 86,
+  "release_at": "2026-10-16T14:30:00-05:00",
+  "fetched_at": "2026-10-16T20:00:00+00:00",
+  "upstream_ok": true,
+  "quality_note": "",
+  "history": [
+   {
+    "date": "2026-10-16",
+    "value": "bad"
+   },
+   {
+    "date": "2026-10-15",
+    "value": 85.5
+   }
+  ]
+ },
+ "ust_2y": {
+  "observed_at": "2026-10-19",
+  "value": 3.9,
+  "release_at": "2026-10-19T16:15:00Z",
+  "fetched_at": "2026-10-20T01:00:00+00:00",
+  "upstream_ok": true,
+  "quality_note": "Verified from FRED (DGS2)",
+  "history": []
+ },
+ "ust_10y": {
+  "observed_at": "2026-10-19",
+  "value": 4.31,
+  "upstream_ok": true
+ },
+ "ust_10y_2y_spread": {
+  "observed_at": "2026-10-19",
+  "value": 41.0,
+  "release_at": "2026-10-19T16:15:00Z",
+  "fetched_at": "2026-10-20T01:00:00+00:00",
+  "upstream_ok": true,
+  "quality_note": "Verified from FRED (T10Y2Y ×100: +41.0 bps)"
+ },
+ "ust_10y_real_yield": {
+  "observed_at": "2026-10-19",
+  "value": 1.95,
+  "upstream_ok": true,
+  "quality_note": "Verified from FRED (DFII10)"
+ },
+ "dxy": {
+  "observed_at": "2026-10-20",
+  "value": 99.2,
+  "upstream_ok": true
+ },
+ "usd_idr": {
+  "observed_at": "2026-10-20",
+  "value": 16234.57,
+  "release_at": "2026-10-20T16:15:00+07:00",
+  "fetched_at": "2026-10-20T07:00:00+00:00",
+  "upstream_ok": true,
+  "quality_note": "Verified from upstream feed (OPEN_EXCHANGE_RATES)",
+  "history": [
+   {
+    "date": "2026-10-17",
+    "value": 16200.0
+   }
+  ]
+ },
+ "fed_funds_path": {
+  "observed_at": "2026-07-29",
+  "value": 4.0,
+  "upstream_ok": true
+ },
+ "us_core_cpi": {
+  "observed_at": "2026-08-01",
+  "value": 2.45,
+  "release_at": "2026-08-01T16:15:00Z",
+  "upstream_ok": true
+ },
+ "id_core_cpi": {
+  "observed_at": "2026-06-30",
+  "value": 2.12,
+  "upstream_ok": false,
+  "quality_note": "Upstream BPS feed unreachable (HTTPStatusError); using last verified observation, not refreshed"
+ },
+ "china_pmi_primary": {
+  "observed_at": "2026-09-30",
+  "value": 49.8,
+  "upstream_ok": true
+ },
+ "vix": {
+  "observed_at": "2026-10-19",
+  "value": 17.3,
+  "upstream_ok": true
+ },
+ "us_hy_oas": {
+  "observed_at": "2026-10-16",
+  "value": 3.02,
+  "upstream_ok": true
+ }
+}

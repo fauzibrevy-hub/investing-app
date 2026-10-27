@@ -1,0 +1,191 @@
+# coal_mining.toml: Tambang batubara (design.md §3.3; BUMI, IDX code A121, taxonomy
+# General). Element names were read from the general-taxonomy filings on disk (names only).
+# Deferred stripping is tagged but nil in the filings checked, so that metric shows a gap
+# until a filing carries it; the row stays visible. Operating volumes and prices are
+# manual KPIs from the quarterly operational update.
+
+id = "coal_mining"
+version = "2026.10-1"
+label = "Tambang batubara"
+industry_codes = ["A121"]
+taxonomies = ["general"]
+
+[[dimension]]
+id = "volume"
+label = "Volume"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "production_mt"
+  label = "Produksi"
+  layer = "kpi"
+  unit = "Mt"
+  direction = "higher"
+  why = "Volume yang ditambang per kuartal; dasar semua angka per ton."
+  cadence = "quarterly"
+  extract_aliases = ["coal production", "production volume", "produksi batubara"]
+
+  [[dimension.metric]]
+  id = "sales_mt"
+  label = "Penjualan"
+  layer = "kpi"
+  unit = "Mt"
+  direction = "higher"
+  why = "Volume yang terjual; selisih dengan produksi menunjukkan penumpukan atau pengurasan stok."
+  cadence = "quarterly"
+  extract_aliases = ["sales volume", "coal sales", "penjualan batubara"]
+
+[[dimension]]
+id = "harga"
+label = "Harga"
+kind = "pricing"
+
+  [[dimension.metric]]
+  id = "asp_usd_t"
+  label = "Harga jual rata-rata"
+  layer = "kpi"
+  unit = "USD/t"
+  direction = "higher"
+  why = "Harga yang benar-benar diterima per ton, setelah diskon kalori dan kontrak; dibandingkan dengan Newcastle dan HBA."
+  cadence = "quarterly"
+  extract_aliases = ["average selling price", "ASP", "coal ASP"]
+
+[[dimension]]
+id = "biaya"
+label = "Biaya"
+kind = "cost"
+
+  [[dimension.metric]]
+  id = "cash_cost_usd_t"
+  label = "Biaya tunai"
+  layer = "kpi"
+  unit = "USD/t"
+  direction = "lower"
+  why = "Biaya tunai per ton; selisihnya dengan harga jual adalah margin tunai per ton."
+  cadence = "quarterly"
+  extract_aliases = ["cash cost", "cash cost per tonne", "biaya tunai per ton"]
+
+  [[dimension.metric]]
+  id = "stripping_ratio"
+  label = "Nisbah kupas"
+  layer = "kpi"
+  unit = "bcm/t"
+  direction = "lower"
+  why = "Lapisan penutup yang harus dipindahkan per ton batubara; naik berarti biaya naik dan tambang menua."
+  cadence = "quarterly"
+  extract_aliases = ["stripping ratio"]
+
+  [[dimension.metric]]
+  id = "mining_cost_ratio"
+  label = "Biaya penambangan / pendapatan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Bagian pendapatan yang habis untuk biaya penambangan (kontraktor, bahan bakar, pengupasan)."
+  period = "ttm"
+  formula = "100 * ttm(MiningCost) / ttm(Revenue)"
+  elements.MiningCost = ["idx-cor:MiningCost"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "royalty_ratio"
+  label = "Royalti ke pemerintah / pendapatan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Beban royalti relatif terhadap pendapatan; berubah dengan tarif dan dengan jenis izin."
+  period = "ttm"
+  formula = "100 * ttm(Royalties) / ttm(Revenue)"
+  elements.Royalties = ["idx-cor:RoyaltiesToGovernment"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+[[dimension]]
+id = "kualitas_aset"
+label = "Kualitas aset"
+kind = "quality"
+
+  [[dimension.metric]]
+  id = "deferred_stripping_vs_production"
+  label = "Pertumbuhan biaya pengupasan tangguhan vs produksi"
+  layer = "xbrl"
+  unit = "pp"
+  direction = "lower"
+  why = "Selisih pertumbuhan tahunan aset pengupasan tangguhan dan pertumbuhan produksi; bila aset tumbuh jauh lebih cepat, biaya sedang ditunda ke neraca."
+  period = "instant"
+  formula = "100 * yoy(CurrentStripping + NonCurrentStripping) - 100 * yoy(ttm(Production))"
+  elements.CurrentStripping = ["idx-cor:CurrentDeferredStrippingCosts", "0"]
+  elements.NonCurrentStripping = ["idx-cor:NonCurrentDeferredStrippingCosts"]
+  elements.Production = ["kpi:production_mt"]
+
+[[dimension]]
+id = "neraca"
+label = "Neraca"
+kind = "balance"
+
+  [[dimension.metric]]
+  id = "reclamation_provisions"
+  label = "Provisi reklamasi dan penutupan tambang"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "neutral"
+  why = "Kewajiban memulihkan lahan; kecil dibanding cadangan bisa berarti belum cukup dicadangkan."
+  period = "instant"
+  formula = "CurrentProvision + NonCurrentProvision"
+  elements.CurrentProvision = ["idx-cor:CurrentProvisionsForRestorationAndRehabilitation", "0"]
+  elements.NonCurrentProvision = ["idx-cor:NonCurrentProvisionsForRestorationAndRehabilitation", "idx-cor:MineReclamationAndClosureCosts"]
+
+  [[dimension.metric]]
+  id = "net_debt_to_ebitda"
+  label = "Utang bersih / EBITDA"
+  layer = "xbrl"
+  unit = "x"
+  direction = "lower"
+  why = "Berapa tahun EBITDA untuk melunasi utang bersih; batubara siklikal, jadi angka ini harus dibaca pada harga rendah."
+  period = "instant"
+  formula = "NetDebt / ttm(Ebitda)"
+  elements.NetDebt = ["metric:core.net_debt"]
+  elements.Ebitda = ["metric:core.ebitda"]
+
+[[dimension]]
+id = "cadangan"
+label = "Cadangan"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "reserves_mt"
+  label = "Cadangan terbukti dan terkira"
+  layer = "kpi"
+  unit = "Mt"
+  direction = "higher"
+  why = "Batubara yang masih bisa ditambang secara ekonomis; dari laporan tahunan atau pernyataan cadangan."
+  cadence = "annual"
+  extract_aliases = ["coal reserves", "proven and probable reserves", "cadangan batubara"]
+
+  [[dimension.metric]]
+  id = "mine_life_years"
+  label = "Umur tambang tersirat"
+  layer = "xbrl"
+  unit = "tahun"
+  direction = "higher"
+  why = "Cadangan dibagi produksi setahun terakhir; horizon usaha pada laju tambang sekarang."
+  period = "instant"
+  formula = "Reserves / ttm(Production)"
+  elements.Reserves = ["kpi:reserves_mt"]
+  elements.Production = ["kpi:production_mt"]
+
+[[driver]]
+id = "newcastle"
+label = "Batubara Newcastle"
+source = "FRED PCOALAUUSDM (IMF PCPS)"   # monthly average
+compare_metric = "asp_usd_t"              # Harga block: driver vs realised ASP per quarter
+
+[[driver]]
+id = "hba"
+label = "HBA"
+source = "TBD"                           # decree PDFs only (spike-r3-drivers.md); Newcastle shown as the labelled proxy
+proxy = "newcastle"
+
+[[driver]]
+id = "usd_idr"
+label = "USD/IDR"
+source = "Yahoo IDR=X"

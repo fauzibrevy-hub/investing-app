@@ -1,0 +1,241 @@
+# heavy_equipment_contracting.toml: Alat berat dan kontraktor tambang (design.md §3.3; UNTR,
+# IDX code C141, taxonomy General). Modelled as one ticker with segment-level KPIs
+# (prd.md §9 open question stays open; decide after one quarter of manual entry). Segment
+# revenue and margin come from the PDF notes, since the XBRL segment note is a text block.
+
+id = "heavy_equipment_contracting"
+version = "2026.10-1"
+label = "Alat berat dan kontraktor tambang"
+industry_codes = ["C141"]
+taxonomies = ["general"]
+
+[[dimension]]
+id = "mesin"
+label = "Mesin konstruksi"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "komatsu_units"
+  label = "Unit Komatsu terjual"
+  layer = "kpi"
+  unit = "unit"
+  direction = "higher"
+  why = "Permintaan alat berat mengikuti siklus tambang dan konstruksi; unit terjual adalah indikator paling awal."
+  cadence = "quarterly"
+  extract_aliases = ["Komatsu unit sales", "Komatsu units sold", "penjualan unit Komatsu"]
+
+[[dimension]]
+id = "kontraktor"
+label = "Kontraktor tambang"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "overburden_mbcm"
+  label = "Pemindahan lapisan penutup"
+  layer = "kpi"
+  unit = "Mbcm"
+  direction = "higher"
+  why = "Volume kerja kontraktor; pendapatan jasa penambangan mengikuti angka ini."
+  cadence = "quarterly"
+  extract_aliases = ["overburden removal", "overburden volume", "pemindahan overburden"]
+
+  [[dimension.metric]]
+  id = "coal_extracted_mt"
+  label = "Batubara ditambang untuk klien"
+  layer = "kpi"
+  unit = "Mt"
+  direction = "higher"
+  why = "Produksi batubara atas nama klien; rasio dengan lapisan penutup menunjukkan nisbah kupas kontrak."
+  cadence = "quarterly"
+  extract_aliases = ["coal mined", "coal extracted", "coal mining volume"]
+
+[[dimension]]
+id = "harga"
+label = "Harga"
+kind = "pricing"
+
+  [[dimension.metric]]
+  id = "coal_sales_mt"
+  label = "Penjualan batubara sendiri"
+  layer = "kpi"
+  unit = "Mt"
+  direction = "higher"
+  why = "Volume dari tambang milik sendiri; segmen yang paling terpapar harga batubara."
+  cadence = "quarterly"
+  extract_aliases = ["own coal sales", "coal sales volume"]
+
+  [[dimension.metric]]
+  id = "coal_asp_usd_t"
+  label = "Harga jual rata-rata batubara"
+  layer = "kpi"
+  unit = "USD/t"
+  direction = "higher"
+  why = "Harga yang diterima per ton dari tambang sendiri; dibandingkan dengan Newcastle."
+  cadence = "quarterly"
+  extract_aliases = ["coal average selling price", "coal ASP"]
+
+  [[dimension.metric]]
+  id = "gold_oz_sold"
+  label = "Emas terjual"
+  layer = "kpi"
+  unit = "oz"
+  direction = "higher"
+  why = "Volume segmen emas; bersama harga emas menentukan pendapatan segmen."
+  cadence = "quarterly"
+  extract_aliases = ["gold sold", "gold sales volume", "penjualan emas"]
+
+[[dimension]]
+id = "biaya"
+label = "Biaya"
+kind = "cost"
+
+  [[dimension.metric]]
+  id = "gold_aisc_usd_oz"
+  label = "Biaya penopang menyeluruh emas (AISC)"
+  layer = "kpi"
+  unit = "USD/oz"
+  direction = "lower"
+  why = "Biaya penuh per ons; selisihnya dengan harga emas adalah margin segmen emas."
+  cadence = "quarterly"
+  extract_aliases = ["AISC", "all-in sustaining cost"]
+
+  [[dimension.metric]]
+  id = "parts_service_ratio"
+  label = "Suku cadang dan jasa / pendapatan mesin"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Pendapatan purnajual lebih stabil dan bermargin lebih tinggi daripada penjualan unit; bantalan saat unit turun."
+  cadence = "quarterly"
+  extract_aliases = ["parts and service share", "parts and service ratio"]
+  range = [0, 100]
+
+[[dimension]]
+id = "segmen"
+label = "Segmen"
+kind = "quality"
+
+  [[dimension.metric]]
+  id = "seg_rev_machinery"
+  label = "Pendapatan segmen mesin"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Dari catatan segmen di laporan keuangan; memisahkan bisnis yang siklusnya berbeda."
+  cadence = "quarterly"
+  extract_aliases = ["construction machinery revenue", "machinery segment revenue"]
+
+  [[dimension.metric]]
+  id = "seg_rev_contracting"
+  label = "Pendapatan segmen kontraktor"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Dari catatan segmen; mengikuti volume lapisan penutup dan tarif kontrak."
+  cadence = "quarterly"
+  extract_aliases = ["mining contracting revenue", "contracting segment revenue"]
+
+  [[dimension.metric]]
+  id = "seg_rev_coal"
+  label = "Pendapatan segmen batubara"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Dari catatan segmen; segmen yang paling tergantung harga batubara."
+  cadence = "quarterly"
+  extract_aliases = ["coal mining revenue", "coal segment revenue"]
+
+  [[dimension.metric]]
+  id = "seg_rev_gold"
+  label = "Pendapatan segmen emas"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Dari catatan segmen; segmen yang tergantung harga emas dan cadangan tambang."
+  cadence = "quarterly"
+  extract_aliases = ["gold mining revenue", "gold segment revenue"]
+
+  [[dimension.metric]]
+  id = "seg_margin_machinery"
+  label = "Margin segmen mesin"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Laba segmen dibagi pendapatan segmen; menunjukkan daya tawar harga unit dan purnajual."
+  cadence = "quarterly"
+  extract_aliases = ["machinery segment margin", "construction machinery margin"]
+
+  [[dimension.metric]]
+  id = "seg_margin_contracting"
+  label = "Margin segmen kontraktor"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Laba segmen dibagi pendapatan segmen; tertekan bila bahan bakar naik dan tarif kontrak tidak menyesuaikan."
+  cadence = "quarterly"
+  extract_aliases = ["contracting segment margin", "mining contracting margin"]
+
+  [[dimension.metric]]
+  id = "seg_margin_coal"
+  label = "Margin segmen batubara"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Laba segmen dibagi pendapatan segmen; paling berayun dengan harga batubara."
+  cadence = "quarterly"
+  extract_aliases = ["coal segment margin", "coal mining margin"]
+
+  [[dimension.metric]]
+  id = "seg_margin_gold"
+  label = "Margin segmen emas"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Laba segmen dibagi pendapatan segmen; mengikuti harga emas dikurangi AISC."
+  cadence = "quarterly"
+  extract_aliases = ["gold segment margin", "gold mining margin"]
+
+[[dimension]]
+id = "neraca"
+label = "Neraca"
+kind = "balance"
+
+  [[dimension.metric]]
+  id = "capex_to_depreciation"
+  label = "Belanja modal / penyusutan"
+  layer = "xbrl"
+  unit = "x"
+  direction = "neutral"
+  why = "Di atas 1 berarti armada dan kapasitas bertambah; di bawah 1 berarti aset menua."
+  period = "ttm"
+  formula = "ttm(Capex) / ttm(Depreciation)"
+  elements.Capex = ["abs:idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment", "abs:idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment"]
+  elements.Depreciation = ["idx-cor:Depreciation", "idx-cor:DepreciationOfPropertyPlantAndEquipment"]
+
+  [[dimension.metric]]
+  id = "net_cash"
+  label = "Kas bersih"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Kas dikurangi utang berbunga; ruang untuk akuisisi dan dividen tanpa tambahan utang."
+  period = "instant"
+  formula = "Cash - TotalDebt"
+  elements.Cash = ["idx-cor:CashAndCashEquivalents"]
+  elements.TotalDebt = ["metric:core.total_debt"]
+
+[[driver]]
+id = "newcastle"
+label = "Batubara Newcastle"
+source = "FRED PCOALAUUSDM (IMF PCPS)"
+compare_metric = "coal_asp_usd_t"
+
+[[driver]]
+id = "gold"
+label = "Harga emas"
+source = "Yahoo GC=F"
+
+[[driver]]
+id = "usd_idr"
+label = "USD/IDR"
+source = "Yahoo IDR=X"

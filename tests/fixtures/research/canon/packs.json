@@ -1,0 +1,2879 @@
+{
+  "status": {
+    "source": "embedded",
+    "dir": "",
+    "files": 0,
+    "loaded": 7,
+    "invalid": [],
+    "embedded_ids": [
+      "core",
+      "bank_sharia",
+      "coal_mining",
+      "heavy_equipment_contracting",
+      "shipping",
+      "shipping_tanker",
+      "it_distribution"
+    ],
+    "loaded_at": "",
+    "ok": true
+  },
+  "packs": [
+    {
+      "id": "bank_sharia",
+      "version": "2026.10-1",
+      "label": "Bank syariah",
+      "industry_codes": [
+        "G111"
+      ],
+      "taxonomies": [
+        "financial_sharia"
+      ],
+      "members": [
+        "BANK"
+      ],
+      "dimensions": [
+        {
+          "id": "pendanaan",
+          "label": "Pendanaan",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "third_party_funds",
+              "label": "Dana pihak ketiga",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Seluruh simpanan nasabah: giro dan tabungan wadiah, giro, tabungan, dan deposito mudharabah.",
+              "note": null,
+              "formula": "WadiahDemand + WadiahSavings + MudharabahCurrent + MudharabahSavings + MudharabahTime",
+              "bindings": {
+                "MudharabahCurrent": [
+                  "idx-cor:MudharabahCurrentAccount",
+                  "0"
+                ],
+                "MudharabahSavings": [
+                  "idx-cor:MudharabahSavingsDeposits"
+                ],
+                "MudharabahTime": [
+                  "idx-cor:TotalMudharabahTimeDeposits",
+                  "idx-cor:MudharabahTimeDeposits"
+                ],
+                "WadiahDemand": [
+                  "idx-cor:WadiahDemandDeposits"
+                ],
+                "WadiahSavings": [
+                  "idx-cor:WadiahSavingsDeposits",
+                  "0"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "casa_ratio",
+              "label": "Rasio CASA",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Dana murah (giro dan tabungan) menentukan biaya dana dan daya tahan margin saat suku bunga naik.",
+              "note": null,
+              "formula": "100 * (WadiahDemand + WadiahSavings + MudharabahCurrent + MudharabahSavings) / ThirdPartyFunds",
+              "bindings": {
+                "MudharabahCurrent": [
+                  "idx-cor:MudharabahCurrentAccount",
+                  "0"
+                ],
+                "MudharabahSavings": [
+                  "idx-cor:MudharabahSavingsDeposits"
+                ],
+                "ThirdPartyFunds": [
+                  "metric:third_party_funds"
+                ],
+                "WadiahDemand": [
+                  "idx-cor:WadiahDemandDeposits"
+                ],
+                "WadiahSavings": [
+                  "idx-cor:WadiahSavingsDeposits",
+                  "0"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "cost_of_funds",
+              "label": "Biaya dana",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Bagi hasil untuk pemilik dana dibagi rata-rata dana pihak ketiga; naik bila nasabah pindah ke deposito.",
+              "note": null,
+              "formula": "100 * ttm(ProfitSharingExpense) / avg4q(ThirdPartyFunds)",
+              "bindings": {
+                "ProfitSharingExpense": [
+                  "idx-cor:ThirdPartiesShareOnReturnOfTemporarySyirkahFunds",
+                  "idx-cor:SubtotalShariaExpense"
+                ],
+                "ThirdPartyFunds": [
+                  "metric:third_party_funds"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "pembiayaan",
+          "label": "Pembiayaan",
+          "kind": "pricing",
+          "metrics": [
+            {
+              "id": "total_financing",
+              "label": "Total pembiayaan",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Piutang murabahah dan istishna, pembiayaan musyarakah dan mudharabah, ijarah, dan qardh, pihak ketiga dan berelasi.",
+              "note": null,
+              "formula": "MurabahahTp + MurabahahRp + MusyarakahTp + MusyarakahRp + MudharabahTp + MudharabahRp + IjarahTp + IjarahRp + QardhTp + QardhRp + IstishnaTp + IstishnaRp",
+              "bindings": {
+                "IjarahRp": [
+                  "idx-cor:IjarahReceivablesRelatedParties",
+                  "0"
+                ],
+                "IjarahTp": [
+                  "idx-cor:IjarahReceivablesThirdParties",
+                  "0"
+                ],
+                "IstishnaRp": [
+                  "idx-cor:IstishnaReceivablesRelatedParties",
+                  "0"
+                ],
+                "IstishnaTp": [
+                  "idx-cor:IstishnaReceivablesThirdParties",
+                  "0"
+                ],
+                "MudharabahRp": [
+                  "idx-cor:MudharabahFinancingRelatedParties",
+                  "0"
+                ],
+                "MudharabahTp": [
+                  "idx-cor:MudharabahFinancingThirdParties",
+                  "0"
+                ],
+                "MurabahahRp": [
+                  "idx-cor:MurabahahReceivablesRelatedParties",
+                  "0"
+                ],
+                "MurabahahTp": [
+                  "idx-cor:MurabahahReceivablesThirdParties"
+                ],
+                "MusyarakahRp": [
+                  "idx-cor:MusyarakahFinancingRelatedParties",
+                  "0"
+                ],
+                "MusyarakahTp": [
+                  "idx-cor:MusyarakahFinancingThirdParties"
+                ],
+                "QardhRp": [
+                  "idx-cor:QardhFundsRelatedParties",
+                  "0"
+                ],
+                "QardhTp": [
+                  "idx-cor:QardhFundsThirdParties",
+                  "0"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "fdr",
+              "label": "Rasio pembiayaan terhadap dana (FDR)",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Seberapa jauh dana pihak ketiga sudah disalurkan; terlalu tinggi menekan likuiditas, terlalu rendah menekan margin.",
+              "note": null,
+              "formula": "100 * Financing / ThirdPartyFunds",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "ThirdPartyFunds": [
+                  "metric:third_party_funds"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "financing_yield",
+              "label": "Imbal hasil pembiayaan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Pendapatan margin dan bagi hasil setahun dibagi rata-rata pembiayaan; harga yang diterima bank atas pembiayaannya.",
+              "note": null,
+              "formula": "100 * ttm(MurabahahIncome + MudharabahShare + MusyarakahShare + IjarahIncome + QardhUjrah) / avg4q(Financing)",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "IjarahIncome": [
+                  "idx-cor:IjarahIncome",
+                  "0"
+                ],
+                "MudharabahShare": [
+                  "idx-cor:MudharabahProfitSharing",
+                  "0"
+                ],
+                "MurabahahIncome": [
+                  "idx-cor:MurabahahAndIstishnaIncome"
+                ],
+                "MusyarakahShare": [
+                  "idx-cor:MusyrakahProfitSharing",
+                  "idx-cor:MusyarakahProfitSharing",
+                  "0"
+                ],
+                "QardhUjrah": [
+                  "idx-cor:UjrahIncomeFromQardhFinancing",
+                  "0"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "mix_murabahah",
+              "label": "Porsi murabahah",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Bagian pembiayaan jual beli bermargin tetap; profil risiko dan sensitivitas margin berbeda dari bagi hasil.",
+              "note": null,
+              "formula": "100 * (MurabahahTp + MurabahahRp) / Financing",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "MurabahahRp": [
+                  "idx-cor:MurabahahReceivablesRelatedParties",
+                  "0"
+                ],
+                "MurabahahTp": [
+                  "idx-cor:MurabahahReceivablesThirdParties"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "mix_musyarakah",
+              "label": "Porsi musyarakah",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Bagian pembiayaan bagi hasil kemitraan; hasilnya ikut naik turun dengan usaha nasabah.",
+              "note": null,
+              "formula": "100 * (MusyarakahTp + MusyarakahRp) / Financing",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "MusyarakahRp": [
+                  "idx-cor:MusyarakahFinancingRelatedParties",
+                  "0"
+                ],
+                "MusyarakahTp": [
+                  "idx-cor:MusyarakahFinancingThirdParties"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "mix_mudharabah",
+              "label": "Porsi mudharabah",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Bagian pembiayaan bagi hasil penuh dari bank; risiko usaha nasabah paling banyak ditanggung bank.",
+              "note": null,
+              "formula": "100 * (MudharabahTp + MudharabahRp) / Financing",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "MudharabahRp": [
+                  "idx-cor:MudharabahFinancingRelatedParties",
+                  "0"
+                ],
+                "MudharabahTp": [
+                  "idx-cor:MudharabahFinancingThirdParties",
+                  "0"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "mix_ijarah",
+              "label": "Porsi ijarah",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Bagian pembiayaan sewa; pendapatan lebih stabil tetapi membawa risiko nilai aset.",
+              "note": null,
+              "formula": "100 * (IjarahTp + IjarahRp) / Financing",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "IjarahRp": [
+                  "idx-cor:IjarahReceivablesRelatedParties",
+                  "0"
+                ],
+                "IjarahTp": [
+                  "idx-cor:IjarahReceivablesThirdParties",
+                  "0"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "mix_qardh",
+              "label": "Porsi qardh",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Bagian pinjaman kebajikan tanpa margin (termasuk gadai emas); pendapatannya berupa ujrah.",
+              "note": null,
+              "formula": "100 * (QardhTp + QardhRp) / Financing",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "QardhRp": [
+                  "idx-cor:QardhFundsRelatedParties",
+                  "0"
+                ],
+                "QardhTp": [
+                  "idx-cor:QardhFundsThirdParties",
+                  "0"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            }
+          ]
+        },
+        {
+          "id": "kualitas_aset",
+          "label": "Kualitas aset",
+          "kind": "quality",
+          "metrics": [
+            {
+              "id": "npf_gross",
+              "label": "NPF bruto",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Pembiayaan bermasalah sebelum cadangan; tag rasio, nilai di luar 0 sampai 100 ditandai sebagai salah skala.",
+              "note": null,
+              "formula": "NpfGross",
+              "bindings": {
+                "NpfGross": [
+                  "idx-cor:NonPerformingFinancingGross"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "npf_net",
+              "label": "NPF neto",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Pembiayaan bermasalah setelah cadangan; selisihnya dengan NPF bruto menunjukkan seberapa tebal cadangan.",
+              "note": null,
+              "formula": "NpfNet",
+              "bindings": {
+                "NpfNet": [
+                  "idx-cor:NonPerformingFinancingNet"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "coverage",
+              "label": "Cakupan cadangan atas NPF",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Cadangan kerugian dibagi nilai pembiayaan bermasalah (NPF bruto dikali total pembiayaan); di bawah 100 berarti kerugian belum sepenuhnya dicadangkan.",
+              "note": null,
+              "formula": "100 * Allowance / (NpfGross / 100 * Financing)",
+              "bindings": {
+                "Allowance": [
+                  "idx-cor:AllowanceForImpairmentLossesForShariaReceivables"
+                ],
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "NpfGross": [
+                  "idx-cor:NonPerformingFinancingGross"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "provision_cost",
+              "label": "Beban cadangan / rata-rata pembiayaan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Biaya kredit setahun relatif terhadap buku pembiayaan; lonjakan di sini mendahului kenaikan NPF.",
+              "note": null,
+              "formula": "100 * ttm(Provision) / avg4q(Financing)",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "Provision": [
+                  "idx-cor:AllowancesForImpairmentLossesOnEarningsAssets",
+                  "idx-cor:ProvisionDuringTheYearOfAllowanceForImpairmentLossesOnShariaReceivables"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "profitabilitas",
+          "label": "Profitabilitas",
+          "kind": "cost",
+          "metrics": [
+            {
+              "id": "net_margin_earning_assets",
+              "label": "Margin bersih atas aset produktif",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Pendapatan pengelolaan dana dikurangi bagi hasil, dibagi rata-rata aset produktif (pembiayaan, surat berharga, penempatan); inti laba bank.",
+              "note": null,
+              "formula": "100 * ttm(FundIncome - ProfitSharingExpense) / avg4q(Financing + Securities + Placements)",
+              "bindings": {
+                "Financing": [
+                  "metric:total_financing"
+                ],
+                "FundIncome": [
+                  "idx-cor:RevenueFromFundManagementAsMudharib",
+                  "idx-cor:TotalInterestAndShariaIncome"
+                ],
+                "Placements": [
+                  "idx-cor:PlacementsWithBankIndonesiaAndOtherBanksThirdParties",
+                  "0"
+                ],
+                "ProfitSharingExpense": [
+                  "idx-cor:ThirdPartiesShareOnReturnOfTemporarySyirkahFunds",
+                  "idx-cor:SubtotalShariaExpense"
+                ],
+                "Securities": [
+                  "idx-cor:MarketableSecuritiesThirdParties",
+                  "0"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "cost_to_income",
+              "label": "Rasio biaya terhadap pendapatan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Beban umum, administrasi, dan operasional lain dibagi pendapatan bersih (pengelolaan dana setelah bagi hasil plus pendapatan operasional lain); efisiensi bank.",
+              "note": null,
+              "formula": "100 * ttm(Gna + OtherOpex) / ttm(FundIncome - ProfitSharingExpense + OtherOpIncome)",
+              "bindings": {
+                "FundIncome": [
+                  "idx-cor:RevenueFromFundManagementAsMudharib",
+                  "idx-cor:TotalInterestAndShariaIncome"
+                ],
+                "Gna": [
+                  "idx-cor:GeneralAndAdministrativeExpenses"
+                ],
+                "OtherOpIncome": [
+                  "idx-cor:OtherOperatingIncome",
+                  "0"
+                ],
+                "OtherOpex": [
+                  "idx-cor:OtherOperatingExpenses",
+                  "0"
+                ],
+                "ProfitSharingExpense": [
+                  "idx-cor:ThirdPartiesShareOnReturnOfTemporarySyirkahFunds",
+                  "idx-cor:SubtotalShariaExpense"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "permodalan",
+          "label": "Permodalan",
+          "kind": "balance",
+          "metrics": [
+            {
+              "id": "car",
+              "label": "CAR (KPMM)",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Batas regulasi; menentukan ruang pertumbuhan pembiayaan dan dividen. Sumber: Laporan Publikasi Triwulan (OJK), dimasukkan manual.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "tier1",
+              "label": "Modal inti (Tier 1)",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Modal berkualitas tertinggi relatif terhadap aset tertimbang risiko; penyangga pertama saat kerugian. Sumber: Laporan Publikasi Triwulan (OJK), dimasukkan manual.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            }
+          ]
+        }
+      ],
+      "drivers": [
+        {
+          "id": "bi_rate",
+          "label": "BI rate",
+          "source": "BIS SDMX WS_CBPOL M.ID",
+          "compare_metric": "financing_yield",
+          "status": "belum diambil",
+          "unit": "%",
+          "cadence": "bulanan",
+          "note": "Sejak 2016-08-19 BI 7-day reverse repo rate; sebelumnya BI rate (ganti instrumen, bukan pemangkasan).",
+          "series": null,
+          "proxy": null
+        },
+        {
+          "id": "sbn_10y",
+          "label": "Imbal hasil SBN 10 tahun",
+          "source": "TBD",
+          "compare_metric": null,
+          "status": "TBD",
+          "unit": "%",
+          "cadence": "harian",
+          "note": "Tidak ada riwayat gratis: FRED dan Yahoo tidak punya, OECD berhenti 2024-12. Snapshot harian PHEI menunggu tinjauan syarat pakai.",
+          "series": null,
+          "proxy": null
+        }
+      ]
+    },
+    {
+      "id": "coal_mining",
+      "version": "2026.10-1",
+      "label": "Tambang batubara",
+      "industry_codes": [
+        "A121"
+      ],
+      "taxonomies": [
+        "general"
+      ],
+      "members": [
+        "COAL",
+        "COPR"
+      ],
+      "dimensions": [
+        {
+          "id": "volume",
+          "label": "Volume",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "production_mt",
+              "label": "Produksi",
+              "layer": "kpi",
+              "unit": "Mt",
+              "direction": "higher",
+              "why": "Volume yang ditambang per kuartal; dasar semua angka per ton.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "sales_mt",
+              "label": "Penjualan",
+              "layer": "kpi",
+              "unit": "Mt",
+              "direction": "higher",
+              "why": "Volume yang terjual; selisih dengan produksi menunjukkan penumpukan atau pengurasan stok.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "harga",
+          "label": "Harga",
+          "kind": "pricing",
+          "metrics": [
+            {
+              "id": "asp_usd_t",
+              "label": "Harga jual rata-rata",
+              "layer": "kpi",
+              "unit": "USD/t",
+              "direction": "higher",
+              "why": "Harga yang benar-benar diterima per ton, setelah diskon kalori dan kontrak; dibandingkan dengan Newcastle dan HBA.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "biaya",
+          "label": "Biaya",
+          "kind": "cost",
+          "metrics": [
+            {
+              "id": "cash_cost_usd_t",
+              "label": "Biaya tunai",
+              "layer": "kpi",
+              "unit": "USD/t",
+              "direction": "lower",
+              "why": "Biaya tunai per ton; selisihnya dengan harga jual adalah margin tunai per ton.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "stripping_ratio",
+              "label": "Nisbah kupas",
+              "layer": "kpi",
+              "unit": "bcm/t",
+              "direction": "lower",
+              "why": "Lapisan penutup yang harus dipindahkan per ton batubara; naik berarti biaya naik dan tambang menua.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "mining_cost_ratio",
+              "label": "Biaya penambangan / pendapatan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Bagian pendapatan yang habis untuk biaya penambangan (kontraktor, bahan bakar, pengupasan).",
+              "note": null,
+              "formula": "100 * ttm(MiningCost) / ttm(Revenue)",
+              "bindings": {
+                "MiningCost": [
+                  "idx-cor:MiningCost"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "royalty_ratio",
+              "label": "Royalti ke pemerintah / pendapatan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Beban royalti relatif terhadap pendapatan; berubah dengan tarif dan dengan jenis izin.",
+              "note": null,
+              "formula": "100 * ttm(Royalties) / ttm(Revenue)",
+              "bindings": {
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ],
+                "Royalties": [
+                  "idx-cor:RoyaltiesToGovernment"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "kualitas_aset",
+          "label": "Kualitas aset",
+          "kind": "quality",
+          "metrics": [
+            {
+              "id": "deferred_stripping_vs_production",
+              "label": "Pertumbuhan biaya pengupasan tangguhan vs produksi",
+              "layer": "xbrl",
+              "unit": "pp",
+              "direction": "lower",
+              "why": "Selisih pertumbuhan tahunan aset pengupasan tangguhan dan pertumbuhan produksi; bila aset tumbuh jauh lebih cepat, biaya sedang ditunda ke neraca.",
+              "note": null,
+              "formula": "100 * yoy(CurrentStripping + NonCurrentStripping) - 100 * yoy(ttm(Production))",
+              "bindings": {
+                "CurrentStripping": [
+                  "idx-cor:CurrentDeferredStrippingCosts",
+                  "0"
+                ],
+                "NonCurrentStripping": [
+                  "idx-cor:NonCurrentDeferredStrippingCosts"
+                ],
+                "Production": [
+                  "kpi:production_mt"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "neraca",
+          "label": "Neraca",
+          "kind": "balance",
+          "metrics": [
+            {
+              "id": "reclamation_provisions",
+              "label": "Provisi reklamasi dan penutupan tambang",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "neutral",
+              "why": "Kewajiban memulihkan lahan; kecil dibanding cadangan bisa berarti belum cukup dicadangkan.",
+              "note": null,
+              "formula": "CurrentProvision + NonCurrentProvision",
+              "bindings": {
+                "CurrentProvision": [
+                  "idx-cor:CurrentProvisionsForRestorationAndRehabilitation",
+                  "0"
+                ],
+                "NonCurrentProvision": [
+                  "idx-cor:NonCurrentProvisionsForRestorationAndRehabilitation",
+                  "idx-cor:MineReclamationAndClosureCosts"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "net_debt_to_ebitda",
+              "label": "Utang bersih / EBITDA",
+              "layer": "xbrl",
+              "unit": "x",
+              "direction": "lower",
+              "why": "Berapa tahun EBITDA untuk melunasi utang bersih; batubara siklikal, jadi angka ini harus dibaca pada harga rendah.",
+              "note": null,
+              "formula": "NetDebt / ttm(Ebitda)",
+              "bindings": {
+                "Ebitda": [
+                  "metric:core.ebitda"
+                ],
+                "NetDebt": [
+                  "metric:core.net_debt"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "cadangan",
+          "label": "Cadangan",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "reserves_mt",
+              "label": "Cadangan terbukti dan terkira",
+              "layer": "kpi",
+              "unit": "Mt",
+              "direction": "higher",
+              "why": "Batubara yang masih bisa ditambang secara ekonomis; dari laporan tahunan atau pernyataan cadangan.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "annual",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "mine_life_years",
+              "label": "Umur tambang tersirat",
+              "layer": "xbrl",
+              "unit": "tahun",
+              "direction": "higher",
+              "why": "Cadangan dibagi produksi setahun terakhir; horizon usaha pada laju tambang sekarang.",
+              "note": null,
+              "formula": "Reserves / ttm(Production)",
+              "bindings": {
+                "Production": [
+                  "kpi:production_mt"
+                ],
+                "Reserves": [
+                  "kpi:reserves_mt"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        }
+      ],
+      "drivers": [
+        {
+          "id": "newcastle",
+          "label": "Batubara Newcastle",
+          "source": "FRED PCOALAUUSDM (IMF PCPS)",
+          "compare_metric": "asp_usd_t",
+          "status": "belum diambil",
+          "unit": "USD/t",
+          "cadence": "bulanan",
+          "note": "Rata-rata bulanan IMF; berbeda sekitar 5% dari Pink Sheet Bank Dunia (metode lain, tidak dicampur).",
+          "series": null,
+          "proxy": null
+        },
+        {
+          "id": "hba",
+          "label": "HBA",
+          "source": "TBD",
+          "compare_metric": null,
+          "status": "TBD",
+          "unit": "USD/t",
+          "cadence": "bulanan",
+          "note": "Hanya PDF Kepmen ESDM dan berita; laman harga acuan Minerba sedang dalam perbaikan. Newcastle tampil sebagai proksi berlabel.",
+          "series": null,
+          "proxy": {
+            "id": "newcastle",
+            "label": "Batubara Newcastle",
+            "source": "FRED PCOALAUUSDM (IMF PCPS)",
+            "unit": "USD/t",
+            "cadence": "bulanan",
+            "note": "Rata-rata bulanan IMF; berbeda sekitar 5% dari Pink Sheet Bank Dunia (metode lain, tidak dicampur).",
+            "proxy": true,
+            "status": "belum diambil",
+            "series": null
+          }
+        },
+        {
+          "id": "usd_idr",
+          "label": "USD/IDR",
+          "source": "Yahoo IDR=X",
+          "compare_metric": null,
+          "status": "belum diambil",
+          "unit": "IDR",
+          "cadence": "harian",
+          "note": "Kurs pasar Yahoo, bukan JISDOR.",
+          "series": null,
+          "proxy": null
+        }
+      ]
+    },
+    {
+      "id": "core",
+      "version": "2026.10-1",
+      "label": "Inti",
+      "industry_codes": [],
+      "taxonomies": [],
+      "members": [
+        "BANK",
+        "BUST",
+        "COAL",
+        "COPR",
+        "NONE",
+        "REST"
+      ],
+      "dimensions": [
+        {
+          "id": "laba_rugi",
+          "label": "Laba rugi",
+          "kind": "core",
+          "metrics": [
+            {
+              "id": "revenue",
+              "label": "Pendapatan",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Skala usaha; hampir semua rasio lain dibaca relatif terhadap angka ini.",
+              "note": null,
+              "formula": "Revenue",
+              "bindings": {
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue",
+                  "idx-cor:RevenueFromFundManagementAsMudharib",
+                  "idx-cor:InterestIncome"
+                ]
+              },
+              "period": "standalone",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "gross_profit",
+              "label": "Laba kotor",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Selisih harga jual dan biaya langsung sebelum beban usaha.",
+              "note": null,
+              "formula": "GrossProfit",
+              "bindings": {
+                "GrossProfit": [
+                  "idx-cor:GrossProfit"
+                ]
+              },
+              "period": "standalone",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "operating_profit",
+              "label": "Laba usaha",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Laba dari operasi inti sebelum bunga dan pajak; untuk bank dan emiten tanpa tag laba usaha dipakai laba sebelum pajak.",
+              "note": null,
+              "formula": "OperatingProfit",
+              "bindings": {
+                "OperatingProfit": [
+                  "idx-cor:ProfitLossFromOperatingActivities",
+                  "idx-cor:ProfitFromOperation",
+                  "idx-cor:ProfitLossBeforeIncomeTax"
+                ]
+              },
+              "period": "standalone",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "net_income",
+              "label": "Laba bersih",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Hasil akhir untuk seluruh pemegang saham setelah pajak.",
+              "note": null,
+              "formula": "NetIncome",
+              "bindings": {
+                "NetIncome": [
+                  "idx-cor:ProfitLoss"
+                ]
+              },
+              "period": "standalone",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "net_margin",
+              "label": "Margin bersih",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Berapa rupiah laba per rupiah pendapatan; perubahan margin sering mendahului perubahan laba.",
+              "note": null,
+              "formula": "100 * ttm(NetIncome) / ttm(Revenue)",
+              "bindings": {
+                "NetIncome": [
+                  "idx-cor:ProfitLoss"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue",
+                  "idx-cor:RevenueFromFundManagementAsMudharib",
+                  "idx-cor:InterestIncome"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "ebitda",
+              "label": "EBITDA (pendekatan)",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Laba usaha ditambah penyusutan dan amortisasi; basis untuk rasio utang. Pendekatan: memakai laba sebelum pajak bila tag laba usaha tidak ada.",
+              "note": null,
+              "formula": "OperatingProfit + Depreciation + Amortization",
+              "bindings": {
+                "Amortization": [
+                  "idx-cor:Amortization",
+                  "idx-cor:AmortisationOfIntangibleAssets",
+                  "0"
+                ],
+                "Depreciation": [
+                  "idx-cor:Depreciation",
+                  "idx-cor:DepreciationOfPropertyPlantAndEquipment",
+                  "0"
+                ],
+                "OperatingProfit": [
+                  "idx-cor:ProfitLossFromOperatingActivities",
+                  "idx-cor:ProfitFromOperation",
+                  "idx-cor:ProfitLossBeforeIncomeTax"
+                ]
+              },
+              "period": "standalone",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "arus_kas",
+          "label": "Arus kas",
+          "kind": "core",
+          "metrics": [
+            {
+              "id": "operating_cash_flow",
+              "label": "Arus kas operasi",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Kas yang benar-benar masuk dari operasi; pembanding kualitas laba.",
+              "note": null,
+              "formula": "Ocf",
+              "bindings": {
+                "Ocf": [
+                  "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"
+                ]
+              },
+              "period": "standalone",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "capex",
+              "label": "Belanja modal",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "neutral",
+              "why": "Investasi pada aset tetap; dibandingkan dengan penyusutan menunjukkan ekspansi atau penyusutan armada dan pabrik.",
+              "note": null,
+              "formula": "Capex",
+              "bindings": {
+                "Capex": [
+                  "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment",
+                  "idx-cor:AcquisitionOfPropertyPlantAndEquipment"
+                ]
+              },
+              "period": "standalone",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "free_cash_flow",
+              "label": "Arus kas bebas",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Arus kas operasi dikurangi belanja modal: kas yang tersisa untuk utang, dividen, dan pertumbuhan.",
+              "note": null,
+              "formula": "Ocf - Capex",
+              "bindings": {
+                "Capex": [
+                  "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment",
+                  "idx-cor:AcquisitionOfPropertyPlantAndEquipment"
+                ],
+                "Ocf": [
+                  "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"
+                ]
+              },
+              "period": "standalone",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "neraca",
+          "label": "Neraca",
+          "kind": "core",
+          "metrics": [
+            {
+              "id": "total_equity",
+              "label": "Total ekuitas",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Modal pemegang saham; penyebut untuk imbal hasil ekuitas dan nilai buku.",
+              "note": null,
+              "formula": "Equity",
+              "bindings": {
+                "Equity": [
+                  "idx-cor:Equity"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "cash",
+              "label": "Kas dan setara kas",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Likuiditas yang tersedia tanpa menjual aset.",
+              "note": null,
+              "formula": "Cash",
+              "bindings": {
+                "Cash": [
+                  "idx-cor:CashAndCashEquivalents",
+                  "idx-cor:Cash"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "total_debt",
+              "label": "Total utang berbunga",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "lower",
+              "why": "Pinjaman bank, obligasi, dan pinjaman lain yang berbunga; komponen yang tidak dilaporkan dihitung nol secara eksplisit.",
+              "note": null,
+              "formula": "ShortTermBank + LongTermBank + CurrentBank + Bonds + CurrentBonds + OtherLong + OtherCurrent",
+              "bindings": {
+                "Bonds": [
+                  "idx-cor:LongTermBondsPayable",
+                  "idx-cor:BondsPayable",
+                  "0"
+                ],
+                "CurrentBank": [
+                  "idx-cor:CurrentMaturitiesOfBankLoans",
+                  "0"
+                ],
+                "CurrentBonds": [
+                  "idx-cor:CurrentMaturitiesOfBondsPayable",
+                  "0"
+                ],
+                "LongTermBank": [
+                  "idx-cor:LongTermBankLoans",
+                  "0"
+                ],
+                "OtherCurrent": [
+                  "idx-cor:CurrentMaturitiesOfOtherBorrowings",
+                  "0"
+                ],
+                "OtherLong": [
+                  "idx-cor:LongTermOtherBorrowings",
+                  "0"
+                ],
+                "ShortTermBank": [
+                  "idx-cor:ShortTermBankLoans",
+                  "0"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "net_debt",
+              "label": "Utang bersih",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "lower",
+              "why": "Utang berbunga dikurangi kas; negatif berarti kas bersih.",
+              "note": null,
+              "formula": "TotalDebt - Cash",
+              "bindings": {
+                "Cash": [
+                  "idx-cor:CashAndCashEquivalents",
+                  "idx-cor:Cash"
+                ],
+                "TotalDebt": [
+                  "metric:total_debt"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        }
+      ],
+      "drivers": []
+    },
+    {
+      "id": "heavy_equipment_contracting",
+      "version": "2026.10-1",
+      "label": "Alat berat dan kontraktor tambang",
+      "industry_codes": [
+        "C141"
+      ],
+      "taxonomies": [
+        "general"
+      ],
+      "members": [
+        "BUST",
+        "REST"
+      ],
+      "dimensions": [
+        {
+          "id": "mesin",
+          "label": "Mesin konstruksi",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "komatsu_units",
+              "label": "Unit Komatsu terjual",
+              "layer": "kpi",
+              "unit": "unit",
+              "direction": "higher",
+              "why": "Permintaan alat berat mengikuti siklus tambang dan konstruksi; unit terjual adalah indikator paling awal.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "kontraktor",
+          "label": "Kontraktor tambang",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "overburden_mbcm",
+              "label": "Pemindahan lapisan penutup",
+              "layer": "kpi",
+              "unit": "Mbcm",
+              "direction": "higher",
+              "why": "Volume kerja kontraktor; pendapatan jasa penambangan mengikuti angka ini.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "coal_extracted_mt",
+              "label": "Batubara ditambang untuk klien",
+              "layer": "kpi",
+              "unit": "Mt",
+              "direction": "higher",
+              "why": "Produksi batubara atas nama klien; rasio dengan lapisan penutup menunjukkan nisbah kupas kontrak.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "harga",
+          "label": "Harga",
+          "kind": "pricing",
+          "metrics": [
+            {
+              "id": "coal_sales_mt",
+              "label": "Penjualan batubara sendiri",
+              "layer": "kpi",
+              "unit": "Mt",
+              "direction": "higher",
+              "why": "Volume dari tambang milik sendiri; segmen yang paling terpapar harga batubara.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "coal_asp_usd_t",
+              "label": "Harga jual rata-rata batubara",
+              "layer": "kpi",
+              "unit": "USD/t",
+              "direction": "higher",
+              "why": "Harga yang diterima per ton dari tambang sendiri; dibandingkan dengan Newcastle.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "gold_oz_sold",
+              "label": "Emas terjual",
+              "layer": "kpi",
+              "unit": "oz",
+              "direction": "higher",
+              "why": "Volume segmen emas; bersama harga emas menentukan pendapatan segmen.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "biaya",
+          "label": "Biaya",
+          "kind": "cost",
+          "metrics": [
+            {
+              "id": "gold_aisc_usd_oz",
+              "label": "Biaya penopang menyeluruh emas (AISC)",
+              "layer": "kpi",
+              "unit": "USD/oz",
+              "direction": "lower",
+              "why": "Biaya penuh per ons; selisihnya dengan harga emas adalah margin segmen emas.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "parts_service_ratio",
+              "label": "Suku cadang dan jasa / pendapatan mesin",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Pendapatan purnajual lebih stabil dan bermargin lebih tinggi daripada penjualan unit; bantalan saat unit turun.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            }
+          ]
+        },
+        {
+          "id": "segmen",
+          "label": "Segmen",
+          "kind": "quality",
+          "metrics": [
+            {
+              "id": "seg_rev_machinery",
+              "label": "Pendapatan segmen mesin",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Dari catatan segmen di laporan keuangan; memisahkan bisnis yang siklusnya berbeda.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "seg_rev_contracting",
+              "label": "Pendapatan segmen kontraktor",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Dari catatan segmen; mengikuti volume lapisan penutup dan tarif kontrak.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "seg_rev_coal",
+              "label": "Pendapatan segmen batubara",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Dari catatan segmen; segmen yang paling tergantung harga batubara.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "seg_rev_gold",
+              "label": "Pendapatan segmen emas",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Dari catatan segmen; segmen yang tergantung harga emas dan cadangan tambang.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "seg_margin_machinery",
+              "label": "Margin segmen mesin",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Laba segmen dibagi pendapatan segmen; menunjukkan daya tawar harga unit dan purnajual.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "seg_margin_contracting",
+              "label": "Margin segmen kontraktor",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Laba segmen dibagi pendapatan segmen; tertekan bila bahan bakar naik dan tarif kontrak tidak menyesuaikan.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "seg_margin_coal",
+              "label": "Margin segmen batubara",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Laba segmen dibagi pendapatan segmen; paling berayun dengan harga batubara.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "seg_margin_gold",
+              "label": "Margin segmen emas",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Laba segmen dibagi pendapatan segmen; mengikuti harga emas dikurangi AISC.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "neraca",
+          "label": "Neraca",
+          "kind": "balance",
+          "metrics": [
+            {
+              "id": "capex_to_depreciation",
+              "label": "Belanja modal / penyusutan",
+              "layer": "xbrl",
+              "unit": "x",
+              "direction": "neutral",
+              "why": "Di atas 1 berarti armada dan kapasitas bertambah; di bawah 1 berarti aset menua.",
+              "note": null,
+              "formula": "ttm(Capex) / ttm(Depreciation)",
+              "bindings": {
+                "Capex": [
+                  "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment"
+                ],
+                "Depreciation": [
+                  "idx-cor:Depreciation",
+                  "idx-cor:DepreciationOfPropertyPlantAndEquipment"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "net_cash",
+              "label": "Kas bersih",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Kas dikurangi utang berbunga; ruang untuk akuisisi dan dividen tanpa tambahan utang.",
+              "note": null,
+              "formula": "Cash - TotalDebt",
+              "bindings": {
+                "Cash": [
+                  "idx-cor:CashAndCashEquivalents"
+                ],
+                "TotalDebt": [
+                  "metric:core.total_debt"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        }
+      ],
+      "drivers": [
+        {
+          "id": "newcastle",
+          "label": "Batubara Newcastle",
+          "source": "FRED PCOALAUUSDM (IMF PCPS)",
+          "compare_metric": "coal_asp_usd_t",
+          "status": "belum diambil",
+          "unit": "USD/t",
+          "cadence": "bulanan",
+          "note": "Rata-rata bulanan IMF; berbeda sekitar 5% dari Pink Sheet Bank Dunia (metode lain, tidak dicampur).",
+          "series": null,
+          "proxy": null
+        },
+        {
+          "id": "gold",
+          "label": "Harga emas",
+          "source": "Yahoo GC=F",
+          "compare_metric": null,
+          "status": "belum diambil",
+          "unit": "USD/oz",
+          "cadence": "harian",
+          "note": "Kontrak COMEX bulan terdekat.",
+          "series": null,
+          "proxy": null
+        },
+        {
+          "id": "usd_idr",
+          "label": "USD/IDR",
+          "source": "Yahoo IDR=X",
+          "compare_metric": null,
+          "status": "belum diambil",
+          "unit": "IDR",
+          "cadence": "harian",
+          "note": "Kurs pasar Yahoo, bukan JISDOR.",
+          "series": null,
+          "proxy": null
+        }
+      ]
+    },
+    {
+      "id": "it_distribution",
+      "version": "2026.10-1",
+      "label": "Distribusi TI",
+      "industry_codes": [
+        "I211"
+      ],
+      "taxonomies": [
+        "general"
+      ],
+      "members": [],
+      "dimensions": [
+        {
+          "id": "bauran",
+          "label": "Bauran pendapatan",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "top_vendor_share_pct",
+              "label": "Porsi vendor terbesar",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Ketergantungan pada satu prinsipal; kontrak distribusi bisa berpindah.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "hardware_share_pct",
+              "label": "Porsi perangkat keras (vs jasa)",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Perangkat keras bermargin tipis dan padat modal kerja; jasa bermargin lebih tebal.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "recurring_share_pct",
+              "label": "Porsi pendapatan berulang",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Langganan dan kontrak pemeliharaan lebih dapat diprediksi daripada proyek.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            }
+          ]
+        },
+        {
+          "id": "margin",
+          "label": "Margin",
+          "kind": "pricing",
+          "metrics": [
+            {
+              "id": "gross_margin",
+              "label": "Margin kotor",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Daya tawar terhadap vendor dan pelanggan; distributor hidup dari beberapa poin persen.",
+              "note": null,
+              "formula": "100 * ttm(GrossProfit) / ttm(Revenue)",
+              "bindings": {
+                "GrossProfit": [
+                  "idx-cor:GrossProfit"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "operating_margin",
+              "label": "Margin usaha",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Margin setelah beban penjualan dan administrasi; menunjukkan skala dan disiplin biaya.",
+              "note": null,
+              "formula": "100 * ttm(OperatingProfit) / ttm(Revenue)",
+              "bindings": {
+                "OperatingProfit": [
+                  "idx-cor:ProfitLossFromOperatingActivities",
+                  "idx-cor:ProfitFromOperation",
+                  "idx-cor:ProfitLossBeforeIncomeTax"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "modal_kerja",
+          "label": "Modal kerja",
+          "kind": "quality",
+          "metrics": [
+            {
+              "id": "receivable_days",
+              "label": "Hari piutang",
+              "layer": "xbrl",
+              "unit": "hari",
+              "direction": "lower",
+              "why": "Berapa lama pelanggan membayar; naik berarti kas tertahan atau pelanggan melemah.",
+              "note": null,
+              "formula": "365 * avg4q(ReceivablesTp + ReceivablesRp) / ttm(Revenue)",
+              "bindings": {
+                "ReceivablesRp": [
+                  "idx-cor:TradeReceivablesRelatedParties",
+                  "0"
+                ],
+                "ReceivablesTp": [
+                  "idx-cor:TradeReceivablesThirdParties",
+                  "idx-cor:TradeReceivablesNet"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "inventory_days",
+              "label": "Hari persediaan",
+              "layer": "xbrl",
+              "unit": "hari",
+              "direction": "lower",
+              "why": "Berapa lama barang tersimpan; perangkat TI cepat usang, jadi hari persediaan panjang berarti risiko penurunan nilai.",
+              "note": null,
+              "formula": "365 * avg4q(Inventories) / ttm(CostOfRevenue)",
+              "bindings": {
+                "CostOfRevenue": [
+                  "idx-cor:CostOfSalesAndRevenue"
+                ],
+                "Inventories": [
+                  "idx-cor:Inventories",
+                  "idx-cor:CurrentInventories"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "payable_days",
+              "label": "Hari utang usaha",
+              "layer": "xbrl",
+              "unit": "hari",
+              "direction": "higher",
+              "why": "Berapa lama vendor memberi tempo; pendanaan gratis dari prinsipal.",
+              "note": null,
+              "formula": "365 * avg4q(PayablesTp + PayablesRp) / ttm(CostOfRevenue)",
+              "bindings": {
+                "CostOfRevenue": [
+                  "idx-cor:CostOfSalesAndRevenue"
+                ],
+                "PayablesRp": [
+                  "idx-cor:TradePayablesRelatedParties",
+                  "0"
+                ],
+                "PayablesTp": [
+                  "idx-cor:TradePayablesThirdParties",
+                  "idx-cor:TradePayables"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "cash_conversion_cycle",
+              "label": "Siklus konversi kas",
+              "layer": "xbrl",
+              "unit": "hari",
+              "direction": "lower",
+              "why": "Hari piutang ditambah hari persediaan dikurangi hari utang usaha; berapa lama kas terikat per putaran.",
+              "note": null,
+              "formula": "ReceivableDays + InventoryDays - PayableDays",
+              "bindings": {
+                "InventoryDays": [
+                  "metric:inventory_days"
+                ],
+                "PayableDays": [
+                  "metric:payable_days"
+                ],
+                "ReceivableDays": [
+                  "metric:receivable_days"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "konsentrasi",
+          "label": "Konsentrasi",
+          "kind": "cost",
+          "metrics": [
+            {
+              "id": "customers_over_10pct_share",
+              "label": "Pendapatan dari pelanggan di atas 10%",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Bagian pendapatan dari pelanggan besar (tag pengungkapan di atas 10%); kehilangan satu pelanggan berarti kehilangan bagian ini.",
+              "note": null,
+              "formula": "100 * ttm(Over10) / ttm(Revenue)",
+              "bindings": {
+                "Over10": [
+                  "idx-cor:SalesAndRevenueMoreThan10Percent"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pipeline",
+          "label": "Pipeline",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "backlog_idr_b",
+              "label": "Nilai kontrak tersisa (backlog)",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Pesanan yang sudah ditandatangani tetapi belum diakui; pandangan ke depan satu sampai dua kuartal.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "neraca",
+          "label": "Neraca",
+          "kind": "balance",
+          "metrics": [
+            {
+              "id": "net_cash",
+              "label": "Kas bersih",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Kas dikurangi utang berbunga; distributor memakai utang untuk modal kerja, jadi kas bersih menunjukkan disiplin.",
+              "note": null,
+              "formula": "Cash - TotalDebt",
+              "bindings": {
+                "Cash": [
+                  "idx-cor:CashAndCashEquivalents"
+                ],
+                "TotalDebt": [
+                  "metric:core.total_debt"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        }
+      ],
+      "drivers": [
+        {
+          "id": "usd_idr",
+          "label": "USD/IDR",
+          "source": "Yahoo IDR=X",
+          "compare_metric": null,
+          "status": "belum diambil",
+          "unit": "IDR",
+          "cadence": "harian",
+          "note": "Kurs pasar Yahoo, bukan JISDOR.",
+          "series": null,
+          "proxy": null
+        }
+      ]
+    },
+    {
+      "id": "shipping",
+      "version": "2026.10-1",
+      "label": "Pelayaran",
+      "industry_codes": [
+        "A112"
+      ],
+      "taxonomies": [
+        "general",
+        "infrastructure"
+      ],
+      "members": [],
+      "dimensions": [
+        {
+          "id": "armada",
+          "label": "Armada",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "vessel_count",
+              "label": "Jumlah kapal",
+              "layer": "kpi",
+              "unit": "kapal",
+              "direction": "neutral",
+              "why": "Kapasitas yang menghasilkan pendapatan; semua angka per kapal dibagi dengan ini.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "fleet_age_years",
+              "label": "Usia armada rata-rata",
+              "layer": "kpi",
+              "unit": "tahun",
+              "direction": "lower",
+              "why": "Armada tua berarti biaya perawatan dan pengedokan naik serta tarif sewa tertekan.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "utilization_pct",
+              "label": "Utilisasi armada",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Hari kapal bekerja dibagi hari tersedia; kapal menganggur tetap menanggung biaya tetap.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            }
+          ]
+        },
+        {
+          "id": "kontrak",
+          "label": "Kontrak",
+          "kind": "pricing",
+          "metrics": [
+            {
+              "id": "time_charter_share_pct",
+              "label": "Porsi sewa berjangka (vs spot)",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Sewa berjangka mengunci pendapatan, spot mengikuti pasar; menentukan seberapa cepat tarif pasar sampai ke laba.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "backlog_usd_m",
+              "label": "Nilai kontrak tersisa (backlog)",
+              "layer": "kpi",
+              "unit": "USD juta",
+              "direction": "higher",
+              "why": "Pendapatan yang sudah terikat kontrak; penyangga saat pasar spot lemah.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "backlog_tenor_years",
+              "label": "Sisa tenor kontrak rata-rata",
+              "layer": "kpi",
+              "unit": "tahun",
+              "direction": "higher",
+              "why": "Berapa lama backlog bertahan; tenor pendek berarti risiko negosiasi ulang segera.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "day_rate_usd",
+              "label": "Tarif harian rata-rata",
+              "layer": "kpi",
+              "unit": "USD/hari",
+              "direction": "higher",
+              "why": "Harga sewa per kapal per hari; bersama utilisasi menentukan pendapatan per kapal.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "ekonomi_unit",
+          "label": "Ekonomi per kapal",
+          "kind": "quality",
+          "metrics": [
+            {
+              "id": "revenue_per_vessel",
+              "label": "Pendapatan per kapal",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Pendapatan setahun dibagi jumlah kapal pada akhir kuartal; menyaring efek pertumbuhan armada dari efek tarif.",
+              "note": null,
+              "formula": "ttm(Revenue) / VesselCount",
+              "bindings": {
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ],
+                "VesselCount": [
+                  "kpi:vessel_count"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "ebitda_per_vessel",
+              "label": "EBITDA per kapal",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Laba tunai setahun per kapal pada akhir kuartal; dasar menilai harga kapal di neraca dan di pasar.",
+              "note": null,
+              "formula": "ttm(Ebitda) / VesselCount",
+              "bindings": {
+                "Ebitda": [
+                  "metric:core.ebitda"
+                ],
+                "VesselCount": [
+                  "kpi:vessel_count"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "biaya",
+          "label": "Biaya",
+          "kind": "cost",
+          "metrics": [
+            {
+              "id": "freight_handling_ratio",
+              "label": "Biaya angkut dan bongkar muat / pendapatan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Biaya operasi pelayaran langsung relatif terhadap pendapatan; naik saat bahan bakar dan pelabuhan mahal.",
+              "note": null,
+              "formula": "100 * ttm(Freight) / ttm(Revenue)",
+              "bindings": {
+                "Freight": [
+                  "idx-cor:FreightAndHandlingCosts"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "cost_of_revenue_ratio",
+              "label": "Beban pokok / pendapatan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Seluruh beban pokok pendapatan (awak, bahan bakar, penyusutan kapal) relatif terhadap pendapatan.",
+              "note": null,
+              "formula": "100 * ttm(CostOfRevenue) / ttm(Revenue)",
+              "bindings": {
+                "CostOfRevenue": [
+                  "idx-cor:CostOfSalesAndRevenue"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "drydock_next_12m",
+              "label": "Kapal masuk dok 12 bulan ke depan",
+              "layer": "kpi",
+              "unit": "kapal",
+              "direction": "lower",
+              "why": "Pengedokan berarti kapal berhenti menghasilkan dan biaya naik; jadwal dari laporan operasional.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "neraca",
+          "label": "Neraca",
+          "kind": "balance",
+          "metrics": [
+            {
+              "id": "vessels_gross",
+              "label": "Kapal dalam aset tetap (nilai perolehan)",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "neutral",
+              "why": "Harga perolehan kapal milik sendiri; dibandingkan dengan EBITDA per kapal dan harga pasar kapal bekas.",
+              "note": null,
+              "formula": "VesselsGross",
+              "bindings": {
+                "VesselsGross": [
+                  "idx-cor:PropertyPlantAndEquipment[idx-cor:CarryingAmountPropertyPlantEquipmentAxis=idx-cor:CarryingAmountGrossMember;idx-cor:ClassesPropertyPlantEquipmentAxis=idx-cor:VesselsDirectlyOwnedMember]"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "vessels_accumulated_depreciation",
+              "label": "Akumulasi penyusutan kapal",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "neutral",
+              "why": "Seberapa jauh kapal sudah disusutkan; mendekati nilai perolehan berarti armada menua di buku.",
+              "note": null,
+              "formula": "VesselsAccDep",
+              "bindings": {
+                "VesselsAccDep": [
+                  "idx-cor:PropertyPlantAndEquipment[idx-cor:CarryingAmountPropertyPlantEquipmentAxis=idx-cor:CarryingAmountAccumulatedDepreciationMember;idx-cor:ClassesPropertyPlantEquipmentAxis=idx-cor:VesselsDirectlyOwnedMember]"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "capex_to_depreciation",
+              "label": "Belanja modal / penyusutan",
+              "layer": "xbrl",
+              "unit": "x",
+              "direction": "neutral",
+              "why": "Di atas 1 berarti armada bertambah atau diremajakan; di bawah 1 berarti armada menua.",
+              "note": null,
+              "formula": "ttm(Capex) / ttm(Depreciation)",
+              "bindings": {
+                "Capex": [
+                  "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment"
+                ],
+                "Depreciation": [
+                  "idx-cor:Depreciation",
+                  "idx-cor:DepreciationOfPropertyPlantAndEquipment"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "net_debt_to_ebitda",
+              "label": "Utang bersih / EBITDA",
+              "layer": "xbrl",
+              "unit": "x",
+              "direction": "lower",
+              "why": "Kapal dibiayai utang; angka ini menentukan ruang untuk kapal baru dan ketahanan saat tarif turun.",
+              "note": null,
+              "formula": "NetDebt / ttm(Ebitda)",
+              "bindings": {
+                "Ebitda": [
+                  "metric:core.ebitda"
+                ],
+                "NetDebt": [
+                  "metric:core.net_debt"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        }
+      ],
+      "drivers": [
+        {
+          "id": "charter_index",
+          "label": "Indeks sewa tanker dan OSV regional",
+          "source": "TBD",
+          "compare_metric": "day_rate_usd",
+          "status": "TBD",
+          "unit": null,
+          "cadence": null,
+          "note": null,
+          "series": null,
+          "proxy": {
+            "id": "bwet",
+            "label": "BWET (proksi sewa tanker)",
+            "source": "Yahoo BWET",
+            "unit": "USD",
+            "cadence": "harian",
+            "note": "ETF futures sewa tanker global, sejak 2023-05; bukan indeks regional dan bukan OSV.",
+            "proxy": true,
+            "status": "belum diambil",
+            "series": null
+          }
+        },
+        {
+          "id": "bunker",
+          "label": "Harga bahan bakar kapal",
+          "source": "TBD",
+          "compare_metric": null,
+          "status": "TBD",
+          "unit": null,
+          "cadence": null,
+          "note": null,
+          "series": null,
+          "proxy": {
+            "id": "brent",
+            "label": "Minyak Brent (proksi bunker)",
+            "source": "Yahoo BZ=F",
+            "unit": "USD/bbl",
+            "cadence": "harian",
+            "note": "Proksi untuk harga bahan bakar kapal (VLSFO Singapura tidak punya sumber gratis).",
+            "proxy": true,
+            "status": "belum diambil",
+            "series": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "shipping_tanker",
+      "version": "2026.10-1",
+      "label": "Pelayaran tanker",
+      "industry_codes": [],
+      "taxonomies": [
+        "general",
+        "infrastructure"
+      ],
+      "members": [],
+      "dimensions": [
+        {
+          "id": "armada",
+          "label": "Armada",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "vessel_count",
+              "label": "Jumlah kapal",
+              "layer": "kpi",
+              "unit": "kapal",
+              "direction": "neutral",
+              "why": "Kapasitas yang menghasilkan pendapatan; semua angka per kapal dibagi dengan ini.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "utilization_pct",
+              "label": "Utilisasi armada",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Hari kapal bekerja dibagi hari tersedia; kapal menganggur tetap menanggung biaya tetap; dimasukkan sebagai basis year-to-date sesuai laporan.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "fleet_capacity_mdwt",
+              "label": "Kapasitas armada",
+              "layer": "kpi",
+              "unit": "juta DWT",
+              "direction": "higher",
+              "why": "Total daya angkut armada; tanker besar menambah kapasitas tanpa menambah jumlah kapal.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "annual",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "galangan",
+          "label": "Galangan kapal",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "shipyard_vessels_serviced",
+              "label": "Kapal ditangani galangan",
+              "layer": "kpi",
+              "unit": "kapal",
+              "direction": "higher",
+              "why": "Kapal yang diperbaiki atau dirawat di galangan sendiri; pendapatan di luar sewa dan penghemat biaya pengedokan armada.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "annual",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "kontrak",
+          "label": "Kontrak",
+          "kind": "pricing",
+          "metrics": [
+            {
+              "id": "time_charter_share_pct",
+              "label": "Porsi sewa berjangka (vs spot)",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "neutral",
+              "why": "Sewa berjangka mengunci pendapatan, spot mengikuti pasar; menentukan seberapa cepat tarif pasar sampai ke laba.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ekonomi_unit",
+          "label": "Ekonomi per kapal",
+          "kind": "quality",
+          "metrics": [
+            {
+              "id": "revenue_per_vessel",
+              "label": "Pendapatan per kapal",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Pendapatan setahun dibagi jumlah kapal pada akhir kuartal; menyaring efek pertumbuhan armada dari efek tarif.",
+              "note": null,
+              "formula": "ttm(Revenue) / VesselCount",
+              "bindings": {
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ],
+                "VesselCount": [
+                  "kpi:vessel_count"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "ebitda_per_vessel",
+              "label": "EBITDA per kapal",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "higher",
+              "why": "Laba tunai setahun per kapal pada akhir kuartal; dasar menilai harga kapal di neraca dan di pasar.",
+              "note": null,
+              "formula": "ttm(Ebitda) / VesselCount",
+              "bindings": {
+                "Ebitda": [
+                  "metric:core.ebitda"
+                ],
+                "VesselCount": [
+                  "kpi:vessel_count"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "biaya",
+          "label": "Biaya",
+          "kind": "cost",
+          "metrics": [
+            {
+              "id": "cost_of_revenue_ratio",
+              "label": "Beban pokok / pendapatan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Seluruh beban pokok pendapatan (awak, bahan bakar, penyusutan kapal) relatif terhadap pendapatan.",
+              "note": null,
+              "formula": "100 * ttm(CostOfRevenue) / ttm(Revenue)",
+              "bindings": {
+                "CostOfRevenue": [
+                  "idx-cor:CostOfSalesAndRevenue"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "neraca",
+          "label": "Neraca",
+          "kind": "balance",
+          "metrics": [
+            {
+              "id": "vessels_gross",
+              "label": "Kapal dalam aset tetap (nilai perolehan)",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "neutral",
+              "why": "Harga perolehan kapal milik sendiri; dibandingkan dengan EBITDA per kapal dan harga pasar kapal bekas.",
+              "note": null,
+              "formula": "VesselsGross",
+              "bindings": {
+                "VesselsGross": [
+                  "idx-cor:PropertyPlantAndEquipment[idx-cor:CarryingAmountPropertyPlantEquipmentAxis=idx-cor:CarryingAmountGrossMember;idx-cor:ClassesPropertyPlantEquipmentAxis=idx-cor:VesselsDirectlyOwnedMember]"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "vessels_accumulated_depreciation",
+              "label": "Akumulasi penyusutan kapal",
+              "layer": "xbrl",
+              "unit": "ccy",
+              "direction": "neutral",
+              "why": "Seberapa jauh kapal sudah disusutkan; mendekati nilai perolehan berarti armada menua di buku.",
+              "note": null,
+              "formula": "VesselsAccDep",
+              "bindings": {
+                "VesselsAccDep": [
+                  "idx-cor:PropertyPlantAndEquipment[idx-cor:CarryingAmountPropertyPlantEquipmentAxis=idx-cor:CarryingAmountAccumulatedDepreciationMember;idx-cor:ClassesPropertyPlantEquipmentAxis=idx-cor:VesselsDirectlyOwnedMember]"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "capex_to_depreciation",
+              "label": "Belanja modal / penyusutan",
+              "layer": "xbrl",
+              "unit": "x",
+              "direction": "neutral",
+              "why": "Di atas 1 berarti armada bertambah atau diremajakan; di bawah 1 berarti armada menua.",
+              "note": null,
+              "formula": "ttm(Capex) / ttm(Depreciation)",
+              "bindings": {
+                "Capex": [
+                  "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment"
+                ],
+                "Depreciation": [
+                  "idx-cor:Depreciation",
+                  "idx-cor:DepreciationOfPropertyPlantAndEquipment"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "net_debt_to_ebitda",
+              "label": "Utang bersih / EBITDA",
+              "layer": "xbrl",
+              "unit": "x",
+              "direction": "lower",
+              "why": "Kapal dibiayai utang; angka ini menentukan ruang untuk kapal baru dan ketahanan saat tarif turun.",
+              "note": null,
+              "formula": "NetDebt / ttm(Ebitda)",
+              "bindings": {
+                "Ebitda": [
+                  "metric:core.ebitda"
+                ],
+                "NetDebt": [
+                  "metric:core.net_debt"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        }
+      ],
+      "drivers": [
+        {
+          "id": "charter_index",
+          "label": "Indeks sewa tanker dan OSV regional",
+          "source": "TBD",
+          "compare_metric": "revenue_per_vessel",
+          "status": "TBD",
+          "unit": null,
+          "cadence": null,
+          "note": null,
+          "series": null,
+          "proxy": {
+            "id": "bwet",
+            "label": "BWET (proksi sewa tanker)",
+            "source": "Yahoo BWET",
+            "unit": "USD",
+            "cadence": "harian",
+            "note": "ETF futures sewa tanker global, sejak 2023-05; bukan indeks regional dan bukan OSV.",
+            "proxy": true,
+            "status": "belum diambil",
+            "series": null
+          }
+        },
+        {
+          "id": "bunker",
+          "label": "Harga bahan bakar kapal",
+          "source": "TBD",
+          "compare_metric": null,
+          "status": "TBD",
+          "unit": null,
+          "cadence": null,
+          "note": null,
+          "series": null,
+          "proxy": {
+            "id": "brent",
+            "label": "Minyak Brent (proksi bunker)",
+            "source": "Yahoo BZ=F",
+            "unit": "USD/bbl",
+            "cadence": "harian",
+            "note": "Proksi untuk harga bahan bakar kapal (VLSFO Singapura tidak punya sumber gratis).",
+            "proxy": true,
+            "status": "belum diambil",
+            "series": null
+          }
+        }
+      ]
+    }
+  ],
+  "driver_catalogue": [
+    {
+      "id": "bi_rate",
+      "label": "BI rate",
+      "unit": "%",
+      "cadence": "bulanan",
+      "source": "BIS SDMX WS_CBPOL M.ID",
+      "proxy_for": null,
+      "note": "Sejak 2016-08-19 BI 7-day reverse repo rate; sebelumnya BI rate (ganti instrumen, bukan pemangkasan).",
+      "status": "belum diambil"
+    },
+    {
+      "id": "sbn_10y",
+      "label": "Imbal hasil SBN 10 tahun",
+      "unit": "%",
+      "cadence": "harian",
+      "source": null,
+      "proxy_for": null,
+      "note": "Tidak ada riwayat gratis: FRED dan Yahoo tidak punya, OECD berhenti 2024-12. Snapshot harian PHEI menunggu tinjauan syarat pakai.",
+      "status": "TBD"
+    },
+    {
+      "id": "newcastle",
+      "label": "Batubara Newcastle",
+      "unit": "USD/t",
+      "cadence": "bulanan",
+      "source": "FRED PCOALAUUSDM (IMF PCPS)",
+      "proxy_for": null,
+      "note": "Rata-rata bulanan IMF; berbeda sekitar 5% dari Pink Sheet Bank Dunia (metode lain, tidak dicampur).",
+      "status": "belum diambil"
+    },
+    {
+      "id": "hba",
+      "label": "HBA",
+      "unit": "USD/t",
+      "cadence": "bulanan",
+      "source": null,
+      "proxy_for": null,
+      "note": "Hanya PDF Kepmen ESDM dan berita; laman harga acuan Minerba sedang dalam perbaikan. Newcastle tampil sebagai proksi berlabel.",
+      "status": "TBD"
+    },
+    {
+      "id": "usd_idr",
+      "label": "USD/IDR",
+      "unit": "IDR",
+      "cadence": "harian",
+      "source": "Yahoo IDR=X",
+      "proxy_for": null,
+      "note": "Kurs pasar Yahoo, bukan JISDOR.",
+      "status": "belum diambil"
+    },
+    {
+      "id": "gold",
+      "label": "Harga emas",
+      "unit": "USD/oz",
+      "cadence": "harian",
+      "source": "Yahoo GC=F",
+      "proxy_for": null,
+      "note": "Kontrak COMEX bulan terdekat.",
+      "status": "belum diambil"
+    },
+    {
+      "id": "cpi",
+      "label": "IHK Indonesia",
+      "unit": "indeks (2015 = 100)",
+      "cadence": "bulanan",
+      "source": "OECD SDMX DF_PRICES_ALL IDN",
+      "proxy_for": null,
+      "note": "Dipakai untuk penyesuaian siklus kelipatan; tertinggal sekitar satu bulan.",
+      "status": "belum diambil"
+    },
+    {
+      "id": "brent",
+      "label": "Minyak Brent (proksi bunker)",
+      "unit": "USD/bbl",
+      "cadence": "harian",
+      "source": "Yahoo BZ=F",
+      "proxy_for": "bunker",
+      "note": "Proksi untuk harga bahan bakar kapal (VLSFO Singapura tidak punya sumber gratis).",
+      "status": "belum diambil"
+    },
+    {
+      "id": "bwet",
+      "label": "BWET (proksi sewa tanker)",
+      "unit": "USD",
+      "cadence": "harian",
+      "source": "Yahoo BWET",
+      "proxy_for": "charter_index",
+      "note": "ETF futures sewa tanker global, sejak 2023-05; bukan indeks regional dan bukan OSV.",
+      "status": "belum diambil"
+    }
+  ]
+}

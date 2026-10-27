@@ -1,0 +1,35 @@
+{
+  "rules_version": "2026.10-r3",
+  "derive_rules_version": "2026.10-r4",
+  "discount_rates": [
+    9.0,
+    11.0,
+    13.0
+  ],
+  "terminal_growth": 3.0,
+  "horizon_years": 10,
+  "cycle_windows": [
+    5,
+    10
+  ],
+  "min_cycle_years": 3,
+  "percentile_window_years": 10,
+  "percentile_min_years": 3,
+  "pojk_offsets": {
+    "q1": 30,
+    "q2": 60,
+    "q3": 30,
+    "fy": 90
+  },
+  "changelog": [
+    {
+      "version": "2026.10-r3",
+      "date": "2026-10-24",
+      "note": "Canon v1: discount rates 9/11/13, terminal growth 3, horizon 10 years, cycle windows 5 and 10 years, percentile window 10 years with 3 years minimum, POJK offsets 30/60/30/90."
+    }
+  ],
+  "source": "embedded",
+  "file": "rules.toml",
+  "error": null,
+  "loaded_at": "2026-10-24T09:00:00+00:00"
+}

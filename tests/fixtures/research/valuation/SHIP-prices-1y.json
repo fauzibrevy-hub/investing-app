@@ -1,0 +1,131 @@
+{
+  "ticker": "SHIP",
+  "as_of": "<dynamic>",
+  "range": "1y",
+  "from": "2025-10-24",
+  "to": "2026-10-23",
+  "pack": "shipping",
+  "price": [
+    [
+      "2025-10-27",
+      3049.08
+    ],
+    [
+      "2025-10-28",
+      3050.6
+    ],
+    [
+      "2025-10-29",
+      3052.14
+    ]
+  ],
+  "ma200": [
+    [
+      "2025-10-27",
+      3000.6993
+    ],
+    [
+      "2025-10-28",
+      3000.7213
+    ],
+    [
+      "2025-10-29",
+      3000.7565
+    ]
+  ],
+  "drivers": [
+    {
+      "unit": null,
+      "cadence": null,
+      "note": null,
+      "status": "TBD",
+      "last": null,
+      "id": "charter_index",
+      "label": "Indeks sewa tanker dan OSV regional",
+      "source": "TBD",
+      "compare_metric": "day_rate_usd",
+      "series": [],
+      "proxy": {
+        "unit": "USD",
+        "cadence": "harian",
+        "note": "ETF futures sewa tanker global, sejak 2023-05; bukan indeks regional dan bukan OSV.",
+        "status": "belum diambil",
+        "last": null,
+        "id": "bwet",
+        "label": "BWET (proksi sewa tanker)",
+        "source": "Yahoo BWET",
+        "proxy": true,
+        "proxy_for": "charter_index",
+        "series": []
+      }
+    },
+    {
+      "unit": null,
+      "cadence": null,
+      "note": null,
+      "status": "TBD",
+      "last": null,
+      "id": "bunker",
+      "label": "Harga bahan bakar kapal",
+      "source": "TBD",
+      "compare_metric": null,
+      "series": [],
+      "proxy": {
+        "unit": "USD/bbl",
+        "cadence": "harian",
+        "note": "Proksi untuk harga bahan bakar kapal (VLSFO Singapura tidak punya sumber gratis).",
+        "status": "belum diambil",
+        "last": null,
+        "id": "brent",
+        "label": "Minyak Brent (proksi bunker)",
+        "source": "Yahoo BZ=F",
+        "proxy": true,
+        "proxy_for": "bunker",
+        "series": []
+      }
+    }
+  ],
+  "drivers_plotted": 0,
+  "index_relative": [
+    [
+      "2025-10-27",
+      100.0
+    ],
+    [
+      "2025-10-28",
+      99.9999
+    ],
+    [
+      "2025-10-29",
+      100.0
+    ]
+  ],
+  "index_symbol": "^JKSE",
+  "levels": [],
+  "events": [
+    {
+      "date": "2026-05-15",
+      "kind": "dividend",
+      "amount": 49.0
+    }
+  ],
+  "stats": {
+    "close": {
+      "value": 3461.52,
+      "date": "2026-10-23"
+    },
+    "high_52w": {
+      "value": 3461.52,
+      "date": "2026-10-23",
+      "drawdown_pct": 0.0
+    },
+    "volatility_1y_pct": 0.2869,
+    "vs_index_6m_pct": 0.0002,
+    "dividend_yield_ttm_pct": 1.4156,
+    "avg_cost": {
+      "value": 1000.0,
+      "gap_pct": 246.152
+    }
+  },
+  "empty": false
+}

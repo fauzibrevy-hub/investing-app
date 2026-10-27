@@ -1,0 +1,145 @@
+{
+  "ticker": "COAL",
+  "as_of": "<dynamic>",
+  "range": "1y",
+  "from": "2025-10-24",
+  "to": "2026-10-23",
+  "pack": "coal_mining",
+  "price": [
+    [
+      "2025-10-27",
+      1524.54
+    ],
+    [
+      "2025-10-28",
+      1525.3
+    ],
+    [
+      "2025-10-29",
+      1526.07
+    ]
+  ],
+  "ma200": [
+    [
+      "2025-10-27",
+      1500.3498
+    ],
+    [
+      "2025-10-28",
+      1500.3608
+    ],
+    [
+      "2025-10-29",
+      1500.3785
+    ]
+  ],
+  "drivers": [
+    {
+      "unit": "USD/t",
+      "cadence": "bulanan",
+      "note": "Rata-rata bulanan IMF; berbeda sekitar 5% dari Pink Sheet Bank Dunia (metode lain, tidak dicampur).",
+      "status": "belum diambil",
+      "last": null,
+      "id": "newcastle",
+      "label": "Batubara Newcastle",
+      "source": "FRED PCOALAUUSDM (IMF PCPS)",
+      "compare_metric": "asp_usd_t",
+      "series": [],
+      "proxy": null
+    },
+    {
+      "unit": "USD/t",
+      "cadence": "bulanan",
+      "note": "Hanya PDF Kepmen ESDM dan berita; laman harga acuan Minerba sedang dalam perbaikan. Newcastle tampil sebagai proksi berlabel.",
+      "status": "TBD",
+      "last": null,
+      "id": "hba",
+      "label": "HBA",
+      "source": "TBD",
+      "compare_metric": null,
+      "series": [],
+      "proxy": {
+        "unit": "USD/t",
+        "cadence": "bulanan",
+        "note": "Rata-rata bulanan IMF; berbeda sekitar 5% dari Pink Sheet Bank Dunia (metode lain, tidak dicampur).",
+        "status": "belum diambil",
+        "last": null,
+        "id": "newcastle",
+        "label": "Batubara Newcastle",
+        "source": "FRED PCOALAUUSDM (IMF PCPS)",
+        "proxy": true,
+        "proxy_for": null,
+        "series": []
+      }
+    },
+    {
+      "unit": "IDR",
+      "cadence": "harian",
+      "note": "Kurs pasar Yahoo, bukan JISDOR.",
+      "status": "tersedia",
+      "last": "2026-10-01",
+      "id": "usd_idr",
+      "label": "USD/IDR",
+      "source": "Yahoo IDR=X",
+      "compare_metric": null,
+      "series": [
+        [
+          "2025-11-01",
+          17360.0
+        ],
+        [
+          "2025-12-01",
+          17400.0
+        ],
+        [
+          "2026-01-01",
+          17440.0
+        ]
+      ],
+      "proxy": null
+    }
+  ],
+  "drivers_plotted": 1,
+  "index_relative": [
+    [
+      "2025-10-27",
+      100.0
+    ],
+    [
+      "2025-10-28",
+      99.9999
+    ],
+    [
+      "2025-10-29",
+      100.0
+    ]
+  ],
+  "index_symbol": "^JKSE",
+  "levels": [],
+  "events": [
+    {
+      "date": "2026-05-15",
+      "kind": "dividend",
+      "amount": 29.0
+    }
+  ],
+  "stats": {
+    "close": {
+      "value": 1730.76,
+      "date": "2026-10-23"
+    },
+    "high_52w": {
+      "value": 1730.76,
+      "date": "2026-10-23",
+      "drawdown_pct": 0.0
+    },
+    "volatility_1y_pct": 0.2869,
+    "vs_index_6m_pct": -0.0001,
+    "dividend_yield_ttm_pct": 1.6756,
+    "avg_cost": {
+      "value": 1000.0,
+      "gap_pct": 73.076
+    }
+  },
+  "empty": false
+}

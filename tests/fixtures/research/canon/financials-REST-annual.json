@@ -1,0 +1,361 @@
+{
+  "ticker": "REST",
+  "view": "annual",
+  "rules_version": "2026.10-r4",
+  "currency": "IDR",
+  "rounding": "Jutaan",
+  "taxonomy": "general",
+  "periods": [
+    {
+      "fy": 2024,
+      "q": 4,
+      "label": "2024",
+      "end": "2024-12-31",
+      "filing_id": "REST_2024_FY",
+      "source_kind": "xbrl",
+      "audited": true,
+      "derived_fy": false
+    },
+    {
+      "fy": 2025,
+      "q": 4,
+      "label": "2025",
+      "end": "2025-12-31",
+      "filing_id": "REST_2025_FY",
+      "source_kind": "xbrl",
+      "audited": true,
+      "derived_fy": false
+    }
+  ],
+  "groups": [
+    {
+      "id": "laba_rugi",
+      "label": "Laba rugi",
+      "rows": [
+        {
+          "id": "revenue",
+          "label": "Pendapatan",
+          "element": "idx-cor:SalesAndRevenue",
+          "unit": "IDR",
+          "cells": [
+            {
+              "value": 500000000.0,
+              "flags": [
+                "from_comparative",
+                "gap"
+              ],
+              "fact": {
+                "filing_id": "REST_2024_FY",
+                "element": "idx-cor:SalesAndRevenue",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 560000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "REST_2025_FY",
+                "element": "idx-cor:SalesAndRevenue",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "net_income",
+          "label": "Laba bersih",
+          "element": "idx-cor:ProfitLoss",
+          "unit": "IDR",
+          "cells": [
+            {
+              "value": 50000000.0,
+              "flags": [
+                "from_comparative",
+                "gap"
+              ],
+              "fact": {
+                "filing_id": "REST_2024_FY",
+                "element": "idx-cor:ProfitLoss",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 56000000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "REST_2025_FY",
+                "element": "idx-cor:ProfitLoss",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "eps_basic",
+          "label": "Laba per saham dasar",
+          "element": "idx-cor:BasicEarningsLossPerShareFromContinuingOperations",
+          "unit": "IDR/shares/shares",
+          "cells": [
+            {
+              "value": 5.0,
+              "flags": [
+                "gap"
+              ],
+              "fact": {
+                "filing_id": "REST_2024_FY",
+                "element": "idx-cor:BasicEarningsLossPerShareFromContinuingOperations",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 5.6,
+              "flags": [
+                "derived_fy",
+                "per_share_approx"
+              ],
+              "fact": {
+                "filing_id": "REST_2025_FY",
+                "element": "idx-cor:BasicEarningsLossPerShareFromContinuingOperations",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arus_kas",
+      "label": "Arus kas",
+      "rows": [
+        {
+          "id": "operating_cash_flow",
+          "label": "Arus kas operasi",
+          "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+          "unit": "IDR",
+          "cells": [
+            {
+              "value": 60000000.0,
+              "flags": [
+                "gap"
+              ],
+              "fact": {
+                "filing_id": "REST_2024_FY",
+                "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                "ctx_kind": "duration",
+                "start": "2024-01-01",
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-01-01_2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 67200000.0,
+              "flags": [
+                "derived_fy"
+              ],
+              "fact": {
+                "filing_id": "REST_2025_FY",
+                "element": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                "ctx_kind": "duration",
+                "start": "2025-01-01",
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-01-01_2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neraca",
+      "label": "Neraca",
+      "rows": [
+        {
+          "id": "assets",
+          "label": "Total aset",
+          "element": "idx-cor:Assets",
+          "unit": "IDR",
+          "cells": [
+            {
+              "value": 880000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "REST_2024_FY",
+                "element": "idx-cor:Assets",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 980000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "REST_2025_FY",
+                "element": "idx-cor:Assets",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        },
+        {
+          "id": "equity",
+          "label": "Total ekuitas",
+          "element": "idx-cor:Equity",
+          "unit": "IDR",
+          "cells": [
+            {
+              "value": 440000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "REST_2024_FY",
+                "element": "idx-cor:Equity",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2024-12-31",
+                "dims": "",
+                "ctx": "2024-12-31"
+              },
+              "inputs": 1
+            },
+            {
+              "value": 490000000.0,
+              "flags": [
+                "instant"
+              ],
+              "fact": {
+                "filing_id": "REST_2025_FY",
+                "element": "idx-cor:Equity",
+                "ctx_kind": "instant",
+                "start": null,
+                "end": "2025-12-31",
+                "dims": "",
+                "ctx": "2025-12-31"
+              },
+              "inputs": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "shares": [
+    {
+      "shares": 10000000.0,
+      "source_label": "turunan (laba ÷ LPS)",
+      "source": {
+        "kind": "derived",
+        "filing_id": "REST_2024_FY",
+        "period_end": "2024-12-31",
+        "numerator_element": "idx-cor:ProfitLoss",
+        "eps_element": "idx-cor:BasicEarningsLossPerShareFromContinuingOperations"
+      }
+    },
+    {
+      "shares": 10000000.0,
+      "source_label": "turunan (laba ÷ LPS)",
+      "source": {
+        "kind": "derived",
+        "filing_id": "REST_2025_FY",
+        "period_end": "2025-12-31",
+        "numerator_element": "idx-cor:ProfitLoss",
+        "eps_element": "idx-cor:BasicEarningsLossPerShareFromContinuingOperations"
+      }
+    }
+  ],
+  "filings": [
+    {
+      "id": "REST_2025_FY",
+      "ticker": "REST",
+      "fy": 2025,
+      "period": "FY",
+      "taxonomy": "general",
+      "industry_code": "C141",
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "audited": true,
+      "rounding": "Jutaan",
+      "currency": "IDR",
+      "filed_at": null,
+      "available_from": "2026-03-31",
+      "available_source": "estimated",
+      "source_path": "<tmp>/XBRL/2025/FY/REST_2025_FY.xbrl",
+      "file_hash": "9c3905dda26251bdfe3ad66cf19b8995afaed15fc9e8aa9e725dbba9422b58e4",
+      "source_kind": "xbrl",
+      "ingested_at": "2026-10-24T09:00:00+00:00",
+      "fact_count": 10
+    },
+    {
+      "id": "REST_2024_FY",
+      "ticker": "REST",
+      "fy": 2024,
+      "period": "FY",
+      "taxonomy": "general",
+      "industry_code": "C141",
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "audited": true,
+      "rounding": "Jutaan",
+      "currency": "IDR",
+      "filed_at": null,
+      "available_from": "2025-03-31",
+      "available_source": "estimated",
+      "source_path": "<tmp>/XBRL/2024/FY/REST_2024_FY.xbrl",
+      "file_hash": "33711470f1965a9692b9707757c3a256d768dbfb66f45ab1c0eae7cdd0a9f7d6",
+      "source_kind": "xbrl",
+      "ingested_at": "2026-10-24T09:00:00+00:00",
+      "fact_count": 6
+    }
+  ]
+}

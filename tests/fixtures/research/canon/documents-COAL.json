@@ -1,0 +1,63 @@
+{
+  "ticker": "COAL",
+  "items": [
+    {
+      "id": "d-470610facaf8ac6c",
+      "ticker": "COAL",
+      "kind": "update_operasional",
+      "kind_label": "Update operasional",
+      "url": "https://example.test/ops",
+      "text": null,
+      "doc_date": "2026-10-20",
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "evidence": [
+        {
+          "claim_id": "c-2fcedc885cd0b4b9",
+          "kpi_key": null
+        }
+      ]
+    },
+    {
+      "id": "d-f8bdb211ba12e678",
+      "ticker": "COAL",
+      "kind": "catatan",
+      "kind_label": "Catatan",
+      "url": null,
+      "text": "Manajemen menyebut stripping ratio turun",
+      "doc_date": "2026-09-30",
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "evidence": [
+        {
+          "claim_id": null,
+          "kpi_key": "production_mt:2026Q2"
+        }
+      ]
+    }
+  ],
+  "kinds": [
+    {
+      "id": "presentasi",
+      "label": "Presentasi"
+    },
+    {
+      "id": "update_operasional",
+      "label": "Update operasional"
+    },
+    {
+      "id": "laporan",
+      "label": "Laporan"
+    },
+    {
+      "id": "artikel",
+      "label": "Artikel"
+    },
+    {
+      "id": "catatan",
+      "label": "Catatan"
+    },
+    {
+      "id": "lainnya",
+      "label": "Lainnya"
+    }
+  ]
+}

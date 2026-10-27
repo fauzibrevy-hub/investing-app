@@ -1,0 +1,312 @@
+# bank_sharia.toml: Bank syariah (design.md §3.3; BRIS, IDX code G111, taxonomy Financial
+# and Sharia). Element names were read from the sharia-taxonomy filings on disk (names only).
+# NPF ratio tags are reported as percentages (ASUMSI R2.1, OJK convention); the `range`
+# flags a value outside 0 to 100 instead of hiding it, which is the "validate scale" check.
+# CAR and Tier 1 are manual quarterly KPIs: the OJK publication report has no free
+# machine-readable form (docs/research/spike-r2-ojk.md).
+
+id = "bank_sharia"
+version = "2026.10-1"
+label = "Bank syariah"
+industry_codes = ["G111"]
+taxonomies = ["financial_sharia"]
+
+[[dimension]]
+id = "pendanaan"
+label = "Pendanaan"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "third_party_funds"
+  label = "Dana pihak ketiga"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Seluruh simpanan nasabah: giro dan tabungan wadiah, giro, tabungan, dan deposito mudharabah."
+  period = "instant"
+  formula = "WadiahDemand + WadiahSavings + MudharabahCurrent + MudharabahSavings + MudharabahTime"
+  elements.WadiahDemand = ["idx-cor:WadiahDemandDeposits"]
+  elements.WadiahSavings = ["idx-cor:WadiahSavingsDeposits", "0"]
+  elements.MudharabahCurrent = ["idx-cor:MudharabahCurrentAccount", "0"]
+  elements.MudharabahSavings = ["idx-cor:MudharabahSavingsDeposits"]
+  elements.MudharabahTime = ["idx-cor:TotalMudharabahTimeDeposits", "idx-cor:MudharabahTimeDeposits"]
+
+  [[dimension.metric]]
+  id = "casa_ratio"
+  label = "Rasio CASA"
+  layer = "xbrl"
+  unit = "%"
+  direction = "higher"
+  why = "Dana murah (giro dan tabungan) menentukan biaya dana dan daya tahan margin saat suku bunga naik."
+  period = "instant"
+  formula = "100 * (WadiahDemand + WadiahSavings + MudharabahCurrent + MudharabahSavings) / ThirdPartyFunds"
+  elements.WadiahDemand = ["idx-cor:WadiahDemandDeposits"]
+  elements.WadiahSavings = ["idx-cor:WadiahSavingsDeposits", "0"]
+  elements.MudharabahCurrent = ["idx-cor:MudharabahCurrentAccount", "0"]
+  elements.MudharabahSavings = ["idx-cor:MudharabahSavingsDeposits"]
+  elements.ThirdPartyFunds = ["metric:third_party_funds"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "cost_of_funds"
+  label = "Biaya dana"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Bagi hasil untuk pemilik dana dibagi rata-rata dana pihak ketiga; naik bila nasabah pindah ke deposito."
+  period = "ttm"
+  formula = "100 * ttm(ProfitSharingExpense) / avg4q(ThirdPartyFunds)"
+  elements.ProfitSharingExpense = ["abs:idx-cor:ThirdPartiesShareOnReturnOfTemporarySyirkahFunds", "abs:idx-cor:SubtotalShariaExpense"]
+  elements.ThirdPartyFunds = ["metric:third_party_funds"]
+
+[[dimension]]
+id = "pembiayaan"
+label = "Pembiayaan"
+kind = "pricing"
+
+  [[dimension.metric]]
+  id = "total_financing"
+  label = "Total pembiayaan"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Piutang murabahah dan istishna, pembiayaan musyarakah dan mudharabah, ijarah, dan qardh, pihak ketiga dan berelasi."
+  period = "instant"
+  formula = "MurabahahTp + MurabahahRp + MusyarakahTp + MusyarakahRp + MudharabahTp + MudharabahRp + IjarahTp + IjarahRp + QardhTp + QardhRp + IstishnaTp + IstishnaRp"
+  elements.MurabahahTp = ["idx-cor:MurabahahReceivablesThirdParties"]
+  elements.MurabahahRp = ["idx-cor:MurabahahReceivablesRelatedParties", "0"]
+  elements.MusyarakahTp = ["idx-cor:MusyarakahFinancingThirdParties"]
+  elements.MusyarakahRp = ["idx-cor:MusyarakahFinancingRelatedParties", "0"]
+  elements.MudharabahTp = ["idx-cor:MudharabahFinancingThirdParties", "0"]
+  elements.MudharabahRp = ["idx-cor:MudharabahFinancingRelatedParties", "0"]
+  elements.IjarahTp = ["idx-cor:IjarahReceivablesThirdParties", "0"]
+  elements.IjarahRp = ["idx-cor:IjarahReceivablesRelatedParties", "0"]
+  elements.QardhTp = ["idx-cor:QardhFundsThirdParties", "0"]
+  elements.QardhRp = ["idx-cor:QardhFundsRelatedParties", "0"]
+  elements.IstishnaTp = ["idx-cor:IstishnaReceivablesThirdParties", "0"]
+  elements.IstishnaRp = ["idx-cor:IstishnaReceivablesRelatedParties", "0"]
+
+  [[dimension.metric]]
+  id = "fdr"
+  label = "Rasio pembiayaan terhadap dana (FDR)"
+  layer = "xbrl"
+  unit = "%"
+  direction = "neutral"
+  why = "Seberapa jauh dana pihak ketiga sudah disalurkan; terlalu tinggi menekan likuiditas, terlalu rendah menekan margin."
+  period = "instant"
+  formula = "100 * Financing / ThirdPartyFunds"
+  elements.Financing = ["metric:total_financing"]
+  elements.ThirdPartyFunds = ["metric:third_party_funds"]
+
+  [[dimension.metric]]
+  id = "financing_yield"
+  label = "Imbal hasil pembiayaan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "higher"
+  why = "Pendapatan margin dan bagi hasil setahun dibagi rata-rata pembiayaan; harga yang diterima bank atas pembiayaannya."
+  period = "ttm"
+  formula = "100 * ttm(MurabahahIncome + MudharabahShare + MusyarakahShare + IjarahIncome + QardhUjrah) / avg4q(Financing)"
+  elements.MurabahahIncome = ["idx-cor:MurabahahAndIstishnaIncome"]
+  elements.MudharabahShare = ["idx-cor:MudharabahProfitSharing", "0"]
+  elements.MusyarakahShare = ["idx-cor:MusyrakahProfitSharing", "idx-cor:MusyarakahProfitSharing", "0"]
+  elements.IjarahIncome = ["idx-cor:IjarahIncome", "0"]
+  elements.QardhUjrah = ["idx-cor:UjrahIncomeFromQardhFinancing", "0"]
+  elements.Financing = ["metric:total_financing"]
+
+  [[dimension.metric]]
+  id = "mix_murabahah"
+  label = "Porsi murabahah"
+  layer = "xbrl"
+  unit = "%"
+  direction = "neutral"
+  why = "Bagian pembiayaan jual beli bermargin tetap; profil risiko dan sensitivitas margin berbeda dari bagi hasil."
+  period = "instant"
+  formula = "100 * (MurabahahTp + MurabahahRp) / Financing"
+  elements.MurabahahTp = ["idx-cor:MurabahahReceivablesThirdParties"]
+  elements.MurabahahRp = ["idx-cor:MurabahahReceivablesRelatedParties", "0"]
+  elements.Financing = ["metric:total_financing"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "mix_musyarakah"
+  label = "Porsi musyarakah"
+  layer = "xbrl"
+  unit = "%"
+  direction = "neutral"
+  why = "Bagian pembiayaan bagi hasil kemitraan; hasilnya ikut naik turun dengan usaha nasabah."
+  period = "instant"
+  formula = "100 * (MusyarakahTp + MusyarakahRp) / Financing"
+  elements.MusyarakahTp = ["idx-cor:MusyarakahFinancingThirdParties"]
+  elements.MusyarakahRp = ["idx-cor:MusyarakahFinancingRelatedParties", "0"]
+  elements.Financing = ["metric:total_financing"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "mix_mudharabah"
+  label = "Porsi mudharabah"
+  layer = "xbrl"
+  unit = "%"
+  direction = "neutral"
+  why = "Bagian pembiayaan bagi hasil penuh dari bank; risiko usaha nasabah paling banyak ditanggung bank."
+  period = "instant"
+  formula = "100 * (MudharabahTp + MudharabahRp) / Financing"
+  elements.MudharabahTp = ["idx-cor:MudharabahFinancingThirdParties", "0"]
+  elements.MudharabahRp = ["idx-cor:MudharabahFinancingRelatedParties", "0"]
+  elements.Financing = ["metric:total_financing"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "mix_ijarah"
+  label = "Porsi ijarah"
+  layer = "xbrl"
+  unit = "%"
+  direction = "neutral"
+  why = "Bagian pembiayaan sewa; pendapatan lebih stabil tetapi membawa risiko nilai aset."
+  period = "instant"
+  formula = "100 * (IjarahTp + IjarahRp) / Financing"
+  elements.IjarahTp = ["idx-cor:IjarahReceivablesThirdParties", "0"]
+  elements.IjarahRp = ["idx-cor:IjarahReceivablesRelatedParties", "0"]
+  elements.Financing = ["metric:total_financing"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "mix_qardh"
+  label = "Porsi qardh"
+  layer = "xbrl"
+  unit = "%"
+  direction = "neutral"
+  why = "Bagian pinjaman kebajikan tanpa margin (termasuk gadai emas); pendapatannya berupa ujrah."
+  period = "instant"
+  formula = "100 * (QardhTp + QardhRp) / Financing"
+  elements.QardhTp = ["idx-cor:QardhFundsThirdParties", "0"]
+  elements.QardhRp = ["idx-cor:QardhFundsRelatedParties", "0"]
+  elements.Financing = ["metric:total_financing"]
+  range = [0, 100]
+
+[[dimension]]
+id = "kualitas_aset"
+label = "Kualitas aset"
+kind = "quality"
+
+  [[dimension.metric]]
+  id = "npf_gross"
+  label = "NPF bruto"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Pembiayaan bermasalah sebelum cadangan; tag rasio, nilai di luar 0 sampai 100 ditandai sebagai salah skala."
+  period = "instant"
+  formula = "NpfGross"
+  elements.NpfGross = ["idx-cor:NonPerformingFinancingGross"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "npf_net"
+  label = "NPF neto"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Pembiayaan bermasalah setelah cadangan; selisihnya dengan NPF bruto menunjukkan seberapa tebal cadangan."
+  period = "instant"
+  formula = "NpfNet"
+  elements.NpfNet = ["idx-cor:NonPerformingFinancingNet"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "coverage"
+  label = "Cakupan cadangan atas NPF"
+  layer = "xbrl"
+  unit = "%"
+  direction = "higher"
+  why = "Cadangan kerugian dibagi nilai pembiayaan bermasalah (NPF bruto dikali total pembiayaan); di bawah 100 berarti kerugian belum sepenuhnya dicadangkan."
+  period = "instant"
+  formula = "100 * Allowance / (NpfGross / 100 * Financing)"
+  elements.Allowance = ["idx-cor:AllowanceForImpairmentLossesForShariaReceivables"]
+  elements.NpfGross = ["idx-cor:NonPerformingFinancingGross"]
+  elements.Financing = ["metric:total_financing"]
+
+  [[dimension.metric]]
+  id = "provision_cost"
+  label = "Beban cadangan / rata-rata pembiayaan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Biaya kredit setahun relatif terhadap buku pembiayaan; lonjakan di sini mendahului kenaikan NPF."
+  period = "ttm"
+  formula = "100 * ttm(Provision) / avg4q(Financing)"
+  elements.Provision = ["idx-cor:AllowancesForImpairmentLossesOnEarningsAssets", "idx-cor:ProvisionDuringTheYearOfAllowanceForImpairmentLossesOnShariaReceivables"]
+  elements.Financing = ["metric:total_financing"]
+
+[[dimension]]
+id = "profitabilitas"
+label = "Profitabilitas"
+kind = "cost"
+
+  [[dimension.metric]]
+  id = "net_margin_earning_assets"
+  label = "Margin bersih atas aset produktif"
+  layer = "xbrl"
+  unit = "%"
+  direction = "higher"
+  why = "Pendapatan pengelolaan dana dikurangi bagi hasil, dibagi rata-rata aset produktif (pembiayaan, surat berharga, penempatan); inti laba bank."
+  period = "ttm"
+  formula = "100 * ttm(FundIncome - ProfitSharingExpense) / avg4q(Financing + Securities + Placements)"
+  elements.FundIncome = ["idx-cor:RevenueFromFundManagementAsMudharib", "idx-cor:TotalInterestAndShariaIncome"]
+  elements.ProfitSharingExpense = ["abs:idx-cor:ThirdPartiesShareOnReturnOfTemporarySyirkahFunds", "abs:idx-cor:SubtotalShariaExpense"]
+  elements.Financing = ["metric:total_financing"]
+  elements.Securities = ["idx-cor:MarketableSecuritiesThirdParties", "0"]
+  elements.Placements = ["idx-cor:PlacementsWithBankIndonesiaAndOtherBanksThirdParties", "0"]
+
+  [[dimension.metric]]
+  id = "cost_to_income"
+  label = "Rasio biaya terhadap pendapatan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Beban umum, administrasi, dan operasional lain dibagi pendapatan bersih (pengelolaan dana setelah bagi hasil plus pendapatan operasional lain); efisiensi bank."
+  period = "ttm"
+  formula = "100 * ttm(Gna + OtherOpex) / ttm(FundIncome - ProfitSharingExpense + OtherOpIncome)"
+  elements.Gna = ["idx-cor:GeneralAndAdministrativeExpenses"]
+  elements.OtherOpex = ["idx-cor:OtherOperatingExpenses", "0"]
+  elements.FundIncome = ["idx-cor:RevenueFromFundManagementAsMudharib", "idx-cor:TotalInterestAndShariaIncome"]
+  elements.ProfitSharingExpense = ["abs:idx-cor:ThirdPartiesShareOnReturnOfTemporarySyirkahFunds", "abs:idx-cor:SubtotalShariaExpense"]
+  elements.OtherOpIncome = ["idx-cor:OtherOperatingIncome", "0"]
+
+[[dimension]]
+id = "permodalan"
+label = "Permodalan"
+kind = "balance"
+
+  [[dimension.metric]]
+  id = "car"
+  label = "CAR (KPMM)"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Batas regulasi; menentukan ruang pertumbuhan pembiayaan dan dividen. Sumber: Laporan Publikasi Triwulan (OJK), dimasukkan manual."
+  cadence = "quarterly"
+  extract_aliases = ["CAR", "KPMM", "capital adequacy ratio", "rasio kecukupan modal"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "tier1"
+  label = "Modal inti (Tier 1)"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Modal berkualitas tertinggi relatif terhadap aset tertimbang risiko; penyangga pertama saat kerugian. Sumber: Laporan Publikasi Triwulan (OJK), dimasukkan manual."
+  cadence = "quarterly"
+  extract_aliases = ["Tier 1", "Tier 1 capital", "modal inti"]
+  range = [0, 100]
+
+[[driver]]
+id = "bi_rate"
+label = "BI rate"
+source = "BIS SDMX WS_CBPOL M.ID"        # monthly; adapter in src/research/prices/drivers.rs
+compare_metric = "financing_yield"
+
+[[driver]]
+id = "sbn_10y"
+label = "Imbal hasil SBN 10 tahun"
+source = "TBD"                           # no free history (spike-r3-drivers.md); PHEI snapshot pending terms review

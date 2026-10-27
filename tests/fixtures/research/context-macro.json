@@ -1,0 +1,24 @@
+{
+  "regime": "netral",
+  "score": 0.12,
+  "coverage": 88,
+  "movers": [
+    {
+      "pillar": "inflasi",
+      "score": 0.41
+    },
+    {
+      "pillar": "kurs",
+      "score": -0.33
+    },
+    {
+      "pillar": "suku_bunga",
+      "score": 0.2
+    },
+    {
+      "pillar": "komoditas",
+      "score": -0.1
+    }
+  ],
+  "as_of": "2026-10-22T09:00:00+00:00"
+}

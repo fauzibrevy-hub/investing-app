@@ -1,0 +1,1095 @@
+{
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "pack": {
+    "id": "heavy_equipment_contracting",
+    "label": "Alat berat dan kontraktor tambang",
+    "version": "2026.10-1"
+  },
+  "tickers": [
+    {
+      "ticker": "BUST",
+      "name": null,
+      "role": "manual",
+      "currency": "IDR"
+    },
+    {
+      "ticker": "REST",
+      "name": "PT Mesin Contoh Tbk",
+      "role": "manual",
+      "currency": "IDR"
+    }
+  ],
+  "truncated": false,
+  "rows": [
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "revenue",
+        "label": "Pendapatan",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": 20000000.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": 170000000.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "gross_profit",
+        "label": "Laba kotor",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "GrossProfit tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "GrossProfit tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "operating_profit",
+        "label": "Laba usaha",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "OperatingProfit tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "OperatingProfit tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_income",
+        "label": "Laba bersih",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": -10000000.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": 17000000.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_margin",
+        "label": "Margin bersih",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": -33.333333,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": 10.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "ebitda",
+        "label": "EBITDA (pendekatan)",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "OperatingProfit tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "OperatingProfit tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "operating_cash_flow",
+        "label": "Arus kas operasi",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": -12000000.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": 20400000.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "capex",
+        "label": "Belanja modal",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Capex tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Capex tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "free_cash_flow",
+        "label": "Arus kas bebas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Capex tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Capex tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "total_equity",
+        "label": "Total ekuitas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": -40000000.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": {
+            "filing_id": "BUST_2025_FY",
+            "element": "idx-cor:Equity",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2025-12-31",
+            "dims": "",
+            "ctx": "2025-12-31"
+          },
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": 490000000.0,
+          "period": "2025Q4",
+          "percentile": null,
+          "state": "value",
+          "fact": {
+            "filing_id": "REST_2025_FY",
+            "element": "idx-cor:Equity",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2025-12-31",
+            "dims": "",
+            "ctx": "2025-12-31"
+          },
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "cash",
+        "label": "Kas dan setara kas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Cash tidak ada untuk 2025Q4 (posisi)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Cash tidak ada untuk 2025Q4 (posisi)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "total_debt",
+        "label": "Total utang berbunga",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": 0.0,
+          "period": "2025Q4",
+          "percentile": 50.0,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": 0.0,
+          "period": "2025Q4",
+          "percentile": 50.0,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_debt",
+        "label": "Utang bersih",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Cash tidak ada untuk 2025Q4 (posisi)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Cash tidak ada untuk 2025Q4 (posisi)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "mesin",
+      "group_label": "Mesin konstruksi",
+      "metric": {
+        "id": "komatsu_units",
+        "label": "Unit Komatsu terjual",
+        "unit": "unit",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "kontraktor",
+      "group_label": "Kontraktor tambang",
+      "metric": {
+        "id": "overburden_mbcm",
+        "label": "Pemindahan lapisan penutup",
+        "unit": "Mbcm",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "kontraktor",
+      "group_label": "Kontraktor tambang",
+      "metric": {
+        "id": "coal_extracted_mt",
+        "label": "Batubara ditambang untuk klien",
+        "unit": "Mt",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "harga",
+      "group_label": "Harga",
+      "metric": {
+        "id": "coal_sales_mt",
+        "label": "Penjualan batubara sendiri",
+        "unit": "Mt",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "harga",
+      "group_label": "Harga",
+      "metric": {
+        "id": "coal_asp_usd_t",
+        "label": "Harga jual rata-rata batubara",
+        "unit": "USD/t",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "harga",
+      "group_label": "Harga",
+      "metric": {
+        "id": "gold_oz_sold",
+        "label": "Emas terjual",
+        "unit": "oz",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "biaya",
+      "group_label": "Biaya",
+      "metric": {
+        "id": "gold_aisc_usd_oz",
+        "label": "Biaya penopang menyeluruh emas (AISC)",
+        "unit": "USD/oz",
+        "layer": "kpi",
+        "direction": "lower",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "biaya",
+      "group_label": "Biaya",
+      "metric": {
+        "id": "parts_service_ratio",
+        "label": "Suku cadang dan jasa / pendapatan mesin",
+        "unit": "%",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "segmen",
+      "group_label": "Segmen",
+      "metric": {
+        "id": "seg_rev_machinery",
+        "label": "Pendapatan segmen mesin",
+        "unit": "IDR miliar",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "segmen",
+      "group_label": "Segmen",
+      "metric": {
+        "id": "seg_rev_contracting",
+        "label": "Pendapatan segmen kontraktor",
+        "unit": "IDR miliar",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "segmen",
+      "group_label": "Segmen",
+      "metric": {
+        "id": "seg_rev_coal",
+        "label": "Pendapatan segmen batubara",
+        "unit": "IDR miliar",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "segmen",
+      "group_label": "Segmen",
+      "metric": {
+        "id": "seg_rev_gold",
+        "label": "Pendapatan segmen emas",
+        "unit": "IDR miliar",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "segmen",
+      "group_label": "Segmen",
+      "metric": {
+        "id": "seg_margin_machinery",
+        "label": "Margin segmen mesin",
+        "unit": "%",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "segmen",
+      "group_label": "Segmen",
+      "metric": {
+        "id": "seg_margin_contracting",
+        "label": "Margin segmen kontraktor",
+        "unit": "%",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "segmen",
+      "group_label": "Segmen",
+      "metric": {
+        "id": "seg_margin_coal",
+        "label": "Margin segmen batubara",
+        "unit": "%",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "segmen",
+      "group_label": "Segmen",
+      "metric": {
+        "id": "seg_margin_gold",
+        "label": "Margin segmen emas",
+        "unit": "%",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "neraca",
+      "group_label": "Neraca",
+      "metric": {
+        "id": "capex_to_depreciation",
+        "label": "Belanja modal / penyusutan",
+        "unit": "x",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Capex tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Capex tidak ada untuk 2025Q4 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "neraca",
+      "group_label": "Neraca",
+      "metric": {
+        "id": "net_cash",
+        "label": "Kas bersih",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BUST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Cash tidak ada untuk 2025Q4 (posisi)",
+          "flags": []
+        },
+        {
+          "ticker": "REST",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Cash tidak ada untuk 2025Q4 (posisi)",
+          "flags": []
+        }
+      ]
+    }
+  ]
+}

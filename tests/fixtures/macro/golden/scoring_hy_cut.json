@@ -1,0 +1,177 @@
+{
+ "blocking_feeds": [
+  "us_hy_oas"
+ ],
+ "composite_score": null,
+ "composite_score_rounded": null,
+ "configured_pillar_weights": {
+  "energy": 15.0,
+  "growth": 20.0,
+  "inflation_cb": 15.0,
+  "liquidity": 15.0,
+  "usd_id": 15.0,
+  "ust_rates": 20.0
+ },
+ "coverage_state": "insufficient_evidence",
+ "cross_pillar_confirmation": false,
+ "effective_valid_weight": 70.0,
+ "effective_valid_weight_integer": 70,
+ "excluded_pillar_ids": [
+  "inflation_cb",
+  "liquidity"
+ ],
+ "excluded_pillar_reasons": {
+  "inflation_cb": "Internal weight capacity insufficient for inflation_cb",
+  "liquidity": "Coverage 50/100 below 70/100 threshold; missing feed: us_hy_oas"
+ },
+ "pillar_coverage": {
+  "energy": 100,
+  "growth": 100,
+  "inflation_cb": 70,
+  "liquidity": 50,
+  "usd_id": 100,
+  "ust_rates": 100
+ },
+ "pillar_details": {
+  "energy": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.15,
+   "coverage_pct": 100,
+   "effective_internal_weights": {
+    "brent_curve": 0.3,
+    "brent_front_month": 0.4,
+    "wti_spot": 0.3
+   },
+   "exclusion_reason": null,
+   "is_valid": true,
+   "missing_metrics": [],
+   "name": "Energy",
+   "pillar_id": "energy",
+   "raw_contribution": 15.0,
+   "score": 100.0,
+   "valid_metrics": [
+    "brent_front_month",
+    "brent_curve",
+    "wti_spot"
+   ]
+  },
+  "growth": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.2,
+   "coverage_pct": 100,
+   "effective_internal_weights": {
+    "china_pmi_primary": 1.0
+   },
+   "exclusion_reason": null,
+   "is_valid": true,
+   "missing_metrics": [],
+   "name": "Growth",
+   "pillar_id": "growth",
+   "raw_contribution": -10.0,
+   "score": -50.0,
+   "valid_metrics": [
+    "china_pmi_primary"
+   ]
+  },
+  "inflation_cb": {
+   "capacity_gate_passed": false,
+   "configured_weight": 0.15,
+   "coverage_pct": 70,
+   "effective_internal_weights": {},
+   "exclusion_reason": "Internal weight capacity insufficient for inflation_cb",
+   "is_valid": false,
+   "missing_metrics": [
+    "id_core_cpi"
+   ],
+   "name": "Inflation Cb",
+   "pillar_id": "inflation_cb",
+   "raw_contribution": null,
+   "score": null,
+   "valid_metrics": [
+    "fed_funds_path",
+    "us_core_cpi"
+   ]
+  },
+  "liquidity": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.15,
+   "coverage_pct": 50,
+   "effective_internal_weights": {},
+   "exclusion_reason": "Coverage 50/100 below 70/100 threshold; missing feed: us_hy_oas",
+   "is_valid": false,
+   "missing_metrics": [
+    "us_hy_oas"
+   ],
+   "name": "Liquidity",
+   "pillar_id": "liquidity",
+   "raw_contribution": null,
+   "score": null,
+   "valid_metrics": [
+    "vix"
+   ]
+  },
+  "usd_id": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.15,
+   "coverage_pct": 100,
+   "effective_internal_weights": {
+    "dxy": 0.5,
+    "usd_idr": 0.5
+   },
+   "exclusion_reason": null,
+   "is_valid": true,
+   "missing_metrics": [],
+   "name": "Usd Id",
+   "pillar_id": "usd_id",
+   "raw_contribution": -3.75,
+   "score": -25.0,
+   "valid_metrics": [
+    "dxy",
+    "usd_idr"
+   ]
+  },
+  "ust_rates": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.2,
+   "coverage_pct": 100,
+   "effective_internal_weights": {
+    "ust_10y": 0.25,
+    "ust_10y_2y_spread": 0.25,
+    "ust_10y_real_yield": 0.25,
+    "ust_2y": 0.25
+   },
+   "exclusion_reason": null,
+   "is_valid": true,
+   "missing_metrics": [],
+   "name": "Ust Rates",
+   "pillar_id": "ust_rates",
+   "raw_contribution": -5.0,
+   "score": -25.0,
+   "valid_metrics": [
+    "ust_2y",
+    "ust_10y",
+    "ust_10y_2y_spread",
+    "ust_10y_real_yield"
+   ]
+  }
+ },
+ "pillar_scores": {
+  "energy": 100.0,
+  "growth": -50.0,
+  "inflation_cb": null,
+  "liquidity": null,
+  "usd_id": -25.0,
+  "ust_rates": -25.0
+ },
+ "regime_candidate": null,
+ "regime_final": "insufficient evidence",
+ "score_vintage": "2026-10-20T08:00:00.123456+00:00",
+ "scoring_configuration_version": "2026.09-scoring-final",
+ "supporting_pillar_count": 0,
+ "valid_pillar_ids": [
+  "energy",
+  "ust_rates",
+  "usd_id",
+  "growth"
+ ]
+}

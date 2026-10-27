@@ -1,0 +1,375 @@
+{
+  "ticker": "COAL",
+  "items": [
+    {
+      "id": "c-f5f974cc89d66fb8",
+      "ticker": "COAL",
+      "statement": "Laba bersih kuartal 2 di bawah nol",
+      "metric": "core.net_income",
+      "metric_label": "Laba bersih",
+      "unit": "ccy",
+      "comparator": "<",
+      "threshold": 0.0,
+      "threshold_hi": null,
+      "window": "quarter:2026Q2",
+      "due": "2026-12-31",
+      "status": "broken",
+      "status_label": "Patah",
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "closed_at": null,
+      "preview": "Akan dievaluasi saat laporan 2026Q2 tersedia: Laba bersih < 0 ccy.",
+      "last_eval": {
+        "evaluated_at": "2026-10-24T09:00:00+00:00",
+        "status": "broken",
+        "status_label": "Patah",
+        "value": 21800000.0
+      },
+      "evidence_count": 0
+    },
+    {
+      "id": "c-bb979796a2d4c6e2",
+      "ticker": "COAL",
+      "statement": "Laba bersih kuartal 3 positif",
+      "metric": "core.net_income",
+      "metric_label": "Laba bersih",
+      "unit": "ccy",
+      "comparator": ">",
+      "threshold": 0.0,
+      "threshold_hi": null,
+      "window": "quarter:2026Q3",
+      "due": "2026-12-31",
+      "status": "not_testable",
+      "status_label": "Belum teruji",
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "closed_at": null,
+      "preview": "Akan dievaluasi saat laporan 2026Q3 tersedia: Laba bersih > 0 ccy.",
+      "last_eval": {
+        "evaluated_at": "2026-10-24T09:00:00+00:00",
+        "status": "not_testable",
+        "status_label": "Belum teruji",
+        "value": null
+      },
+      "evidence_count": 0
+    },
+    {
+      "id": "c-2fcedc885cd0b4b9",
+      "ticker": "COAL",
+      "statement": "Produksi minimal lima juta ton",
+      "metric": "coal_mining.production_mt",
+      "metric_label": "Produksi",
+      "unit": "Mt",
+      "comparator": ">=",
+      "threshold": 5.0,
+      "threshold_hi": null,
+      "window": "latest",
+      "due": "2026-12-31",
+      "status": "holding",
+      "status_label": "Berlaku",
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "closed_at": null,
+      "preview": "Akan dievaluasi setiap ada data baru: Produksi terbaru >= 5 Mt.",
+      "last_eval": {
+        "evaluated_at": "2026-10-24T09:00:00.001+00:00",
+        "status": "holding",
+        "status_label": "Berlaku",
+        "value": 6.0
+      },
+      "evidence_count": 1
+    },
+    {
+      "id": "c-e904edb8bb5c5152",
+      "ticker": "COAL",
+      "statement": "Laba bersih kuartal 2 positif",
+      "metric": "core.net_income",
+      "metric_label": "Laba bersih",
+      "unit": "ccy",
+      "comparator": ">",
+      "threshold": 0.0,
+      "threshold_hi": null,
+      "window": "quarter:2026Q2",
+      "due": "2026-12-31",
+      "status": "holding",
+      "status_label": "Berlaku",
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "closed_at": null,
+      "preview": "Akan dievaluasi saat laporan 2026Q2 tersedia: Laba bersih > 0 ccy.",
+      "last_eval": {
+        "evaluated_at": "2026-10-24T09:00:00+00:00",
+        "status": "holding",
+        "status_label": "Berlaku",
+        "value": 21800000.0
+      },
+      "evidence_count": 0
+    },
+    {
+      "id": "c-5afaaf16c0247011",
+      "ticker": "COAL",
+      "statement": "Laba bersih kuartal 3 di atas lima",
+      "metric": "core.net_income",
+      "metric_label": "Laba bersih",
+      "unit": "ccy",
+      "comparator": ">",
+      "threshold": 5.0,
+      "threshold_hi": null,
+      "window": "quarter:2026Q3",
+      "due": "2026-10-25",
+      "status": "expired",
+      "status_label": "Kedaluwarsa",
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "closed_at": null,
+      "preview": "Akan dievaluasi saat laporan 2026Q3 tersedia: Laba bersih > 5 ccy.",
+      "last_eval": {
+        "evaluated_at": "2026-10-28T03:00:00+00:00",
+        "status": "expired",
+        "status_label": "Kedaluwarsa",
+        "value": null
+      },
+      "evidence_count": 0
+    }
+  ],
+  "counts": {
+    "holding": 2,
+    "broken": 1,
+    "not_testable": 1,
+    "expired": 1
+  },
+  "metrics": [
+    {
+      "id": "core.revenue",
+      "label": "Pendapatan",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.gross_profit",
+      "label": "Laba kotor",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.operating_profit",
+      "label": "Laba usaha",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.net_income",
+      "label": "Laba bersih",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.net_margin",
+      "label": "Margin bersih",
+      "unit": "%",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.ebitda",
+      "label": "EBITDA (pendekatan)",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.operating_cash_flow",
+      "label": "Arus kas operasi",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.capex",
+      "label": "Belanja modal",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.free_cash_flow",
+      "label": "Arus kas bebas",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.total_equity",
+      "label": "Total ekuitas",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.cash",
+      "label": "Kas dan setara kas",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.total_debt",
+      "label": "Total utang berbunga",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "core.net_debt",
+      "label": "Utang bersih",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "core",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.production_mt",
+      "label": "Produksi",
+      "unit": "Mt",
+      "layer": "kpi",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.sales_mt",
+      "label": "Penjualan",
+      "unit": "Mt",
+      "layer": "kpi",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.asp_usd_t",
+      "label": "Harga jual rata-rata",
+      "unit": "USD/t",
+      "layer": "kpi",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.cash_cost_usd_t",
+      "label": "Biaya tunai",
+      "unit": "USD/t",
+      "layer": "kpi",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.stripping_ratio",
+      "label": "Nisbah kupas",
+      "unit": "bcm/t",
+      "layer": "kpi",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.mining_cost_ratio",
+      "label": "Biaya penambangan / pendapatan",
+      "unit": "%",
+      "layer": "xbrl",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.royalty_ratio",
+      "label": "Royalti ke pemerintah / pendapatan",
+      "unit": "%",
+      "layer": "xbrl",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.deferred_stripping_vs_production",
+      "label": "Pertumbuhan biaya pengupasan tangguhan vs produksi",
+      "unit": "pp",
+      "layer": "xbrl",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.reclamation_provisions",
+      "label": "Provisi reklamasi dan penutupan tambang",
+      "unit": "ccy",
+      "layer": "xbrl",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.net_debt_to_ebitda",
+      "label": "Utang bersih / EBITDA",
+      "unit": "x",
+      "layer": "xbrl",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.reserves_mt",
+      "label": "Cadangan terbukti dan terkira",
+      "unit": "Mt",
+      "layer": "kpi",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "coal_mining.mine_life_years",
+      "label": "Umur tambang tersirat",
+      "unit": "tahun",
+      "layer": "xbrl",
+      "pack": "coal_mining",
+      "quarterly": true
+    },
+    {
+      "id": "price.close",
+      "label": "Harga penutupan",
+      "unit": "IDR",
+      "layer": "price",
+      "pack": null,
+      "quarterly": false
+    },
+    {
+      "id": "price.ma200",
+      "label": "MA200",
+      "unit": "IDR",
+      "layer": "price",
+      "pack": null,
+      "quarterly": false
+    },
+    {
+      "id": "price.vs_ma200_pct",
+      "label": "Harga terhadap MA200",
+      "unit": "%",
+      "layer": "price",
+      "pack": null,
+      "quarterly": false
+    }
+  ],
+  "windows": [
+    "latest",
+    "at_due",
+    "every_quarter",
+    "quarter:<FY>Q<n>"
+  ],
+  "comparators": [
+    "<",
+    "<=",
+    ">",
+    ">=",
+    "between"
+  ]
+}

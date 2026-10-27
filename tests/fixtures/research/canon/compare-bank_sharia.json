@@ -1,0 +1,819 @@
+{
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "pack": {
+    "id": "bank_sharia",
+    "label": "Bank syariah",
+    "version": "2026.10-1"
+  },
+  "tickers": [
+    {
+      "ticker": "BANK",
+      "name": "PT Bank Syariah Contoh Tbk",
+      "role": "held",
+      "currency": "IDR"
+    }
+  ],
+  "truncated": false,
+  "rows": [
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "revenue",
+        "label": "Pendapatan",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 9550000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "gross_profit",
+        "label": "Laba kotor",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "GrossProfit tidak ada untuk 2026Q2 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "operating_profit",
+        "label": "Laba usaha",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 2920000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_income",
+        "label": "Laba bersih",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 2350000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_margin",
+        "label": "Margin bersih",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 24.396783,
+          "period": "2026Q2",
+          "percentile": 96.666667,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "ebitda",
+        "label": "EBITDA (pendekatan)",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 2920000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "operating_cash_flow",
+        "label": "Arus kas operasi",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 1850000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "capex",
+        "label": "Belanja modal",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Capex tidak ada untuk 2026Q2 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "free_cash_flow",
+        "label": "Arus kas bebas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "standalone"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "Capex tidak ada untuk 2026Q2 (kuartal)",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "total_equity",
+        "label": "Total ekuitas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 87000000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": {
+            "filing_id": "BANK_2026_Q2",
+            "element": "idx-cor:Equity",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-06-30"
+          },
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "cash",
+        "label": "Kas dan setara kas",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 15000000.0,
+          "period": "2026Q2",
+          "percentile": 50.0,
+          "state": "value",
+          "fact": {
+            "filing_id": "BANK_2026_Q2",
+            "element": "idx-cor:CashAndCashEquivalents",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-06-30"
+          },
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "total_debt",
+        "label": "Total utang berbunga",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 0.0,
+          "period": "2026Q2",
+          "percentile": 50.0,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "core",
+      "group_label": "Inti",
+      "metric": {
+        "id": "net_debt",
+        "label": "Utang bersih",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": -15000000.0,
+          "period": "2026Q2",
+          "percentile": 50.0,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pendanaan",
+      "group_label": "Pendanaan",
+      "metric": {
+        "id": "third_party_funds",
+        "label": "Dana pihak ketiga",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 313500000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pendanaan",
+      "group_label": "Pendanaan",
+      "metric": {
+        "id": "casa_ratio",
+        "label": "Rasio CASA",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 63.636364,
+          "period": "2026Q2",
+          "percentile": 50.0,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pendanaan",
+      "group_label": "Pendanaan",
+      "metric": {
+        "id": "cost_of_funds",
+        "label": "Biaya dana",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 3.464463,
+          "period": "2026Q2",
+          "percentile": 3.571429,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pembiayaan",
+      "group_label": "Pembiayaan",
+      "metric": {
+        "id": "total_financing",
+        "label": "Total pembiayaan",
+        "unit": "ccy",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 227200000.0,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pembiayaan",
+      "group_label": "Pembiayaan",
+      "metric": {
+        "id": "fdr",
+        "label": "Rasio pembiayaan terhadap dana (FDR)",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 72.472089,
+          "period": "2026Q2",
+          "percentile": 2.777778,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pembiayaan",
+      "group_label": "Pembiayaan",
+      "metric": {
+        "id": "financing_yield",
+        "label": "Imbal hasil pembiayaan",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 15.954545,
+          "period": "2026Q2",
+          "percentile": 96.428571,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pembiayaan",
+      "group_label": "Pembiayaan",
+      "metric": {
+        "id": "mix_murabahah",
+        "label": "Porsi murabahah",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 55.457746,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pembiayaan",
+      "group_label": "Pembiayaan",
+      "metric": {
+        "id": "mix_musyarakah",
+        "label": "Porsi musyarakah",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 38.072183,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pembiayaan",
+      "group_label": "Pembiayaan",
+      "metric": {
+        "id": "mix_mudharabah",
+        "label": "Porsi mudharabah",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 2.948944,
+          "period": "2026Q2",
+          "percentile": 2.777778,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pembiayaan",
+      "group_label": "Pembiayaan",
+      "metric": {
+        "id": "mix_ijarah",
+        "label": "Porsi ijarah",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 1.320423,
+          "period": "2026Q2",
+          "percentile": 2.777778,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "pembiayaan",
+      "group_label": "Pembiayaan",
+      "metric": {
+        "id": "mix_qardh",
+        "label": "Porsi qardh",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "neutral",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 1.760563,
+          "period": "2026Q2",
+          "percentile": 2.777778,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "kualitas_aset",
+      "group_label": "Kualitas aset",
+      "metric": {
+        "id": "npf_gross",
+        "label": "NPF bruto",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 2.06,
+          "period": "2026Q2",
+          "percentile": 2.777778,
+          "state": "value",
+          "fact": {
+            "filing_id": "BANK_2026_Q2",
+            "element": "idx-cor:NonPerformingFinancingGross",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-06-30"
+          },
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "kualitas_aset",
+      "group_label": "Kualitas aset",
+      "metric": {
+        "id": "npf_net",
+        "label": "NPF neto",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 0.73,
+          "period": "2026Q2",
+          "percentile": 2.777778,
+          "state": "value",
+          "fact": {
+            "filing_id": "BANK_2026_Q2",
+            "element": "idx-cor:NonPerformingFinancingNet",
+            "ctx_kind": "instant",
+            "start": null,
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-06-30"
+          },
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "kualitas_aset",
+      "group_label": "Kualitas aset",
+      "metric": {
+        "id": "coverage",
+        "label": "Cakupan cadangan atas NPF",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "instant"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 164.518665,
+          "period": "2026Q2",
+          "percentile": 97.222222,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "kualitas_aset",
+      "group_label": "Kualitas aset",
+      "metric": {
+        "id": "provision_cost",
+        "label": "Beban cadangan / rata-rata pembiayaan",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 1.190909,
+          "period": "2026Q2",
+          "percentile": 3.571429,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "profitabilitas",
+      "group_label": "Profitabilitas",
+      "metric": {
+        "id": "net_margin_earning_assets",
+        "label": "Margin bersih atas aset produktif",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "higher",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 10.026168,
+          "period": "2026Q2",
+          "percentile": 96.428571,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "profitabilitas",
+      "group_label": "Profitabilitas",
+      "metric": {
+        "id": "cost_to_income",
+        "label": "Rasio biaya terhadap pendapatan",
+        "unit": "%",
+        "layer": "xbrl",
+        "direction": "lower",
+        "period": "ttm"
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": 36.084453,
+          "period": "2026Q2",
+          "percentile": 3.333333,
+          "state": "value",
+          "fact": null,
+          "reason": null,
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "permodalan",
+      "group_label": "Permodalan",
+      "metric": {
+        "id": "car",
+        "label": "CAR (KPMM)",
+        "unit": "%",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    },
+    {
+      "group": "permodalan",
+      "group_label": "Permodalan",
+      "metric": {
+        "id": "tier1",
+        "label": "Modal inti (Tier 1)",
+        "unit": "%",
+        "layer": "kpi",
+        "direction": "higher",
+        "period": null
+      },
+      "cells": [
+        {
+          "ticker": "BANK",
+          "value": null,
+          "period": null,
+          "percentile": null,
+          "state": "gap",
+          "fact": null,
+          "reason": "not_entered",
+          "flags": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+ "alasan_masuk": null,
+ "archive": {
+  "last_retrieved_at": null,
+  "pdf": 0,
+  "sidecars": 0,
+  "years": {}
+ },
+ "archive_detail": {},
+ "articles": {
+  "latest_date": "2026-10-01",
+  "mentions_approx": 2,
+  "recent": [
+   {
+    "date": "2026-10-01",
+    "name": "2026/okt/2026-10-01-pasar.md"
+   }
+  ]
+ },
+ "axes": {
+  "fundamental_status": null,
+  "growth_status": null,
+  "narrative_status": null
+ },
+ "bayar_risiko": null,
+ "chain": [],
+ "company": null,
+ "complete": false,
+ "coverage": null,
+ "doc_evidence": [],
+ "errors": [
+  "20-naratif.md tidak ditemukan",
+  "10-fundamental.md tidak ditemukan",
+  "00-lens.md tidak ditemukan",
+  "review-log.md tidak ditemukan"
+ ],
+ "evidence": {
+  "doc_quoted": 0,
+  "missing": 0,
+  "resolved": 0,
+  "total": 0
+ },
+ "falsifier_items": [],
+ "falsifiers": {
+  "count": 0,
+  "dated_count": 0,
+  "nearest": null,
+  "past_count": 0
+ },
+ "fundamental_status": null,
+ "growth_status": null,
+ "harga_acuan": null,
+ "history_source": null,
+ "integrity": {
+  "checked": 0,
+  "max_abs_diff": null,
+  "status": "n/a"
+ },
+ "lens": {
+  "approved_at": null,
+  "locked": null,
+  "metrics": []
+ },
+ "missing_files": [
+  "00-lens.md",
+  "10-fundamental.md",
+  "20-naratif.md",
+  "review-log.md"
+ ],
+ "missing_periods": [],
+ "narrative_status": null,
+ "needs_source": [],
+ "notes": [],
+ "predictions": [],
+ "review": {
+  "days_ago": null,
+  "due": false,
+  "last_date": null,
+  "new_evidence_count": 0,
+  "open_followups": 0
+ },
+ "review_log": [],
+ "series": {},
+ "status": "archived",
+ "status_since": null,
+ "tahap": "gugur",
+ "tahap_alasan": "dijual",
+ "ticker": "CCCC",
+ "timeline": [
+  {
+   "date": "2026-10-01",
+   "label": "2026/okt/2026-10-01-pasar.md",
+   "type": "article"
+  }
+ ],
+ "trigger_buang": [],
+ "trigger_tambah": [],
+ "verdict": null,
+ "verdict_text": null
+}

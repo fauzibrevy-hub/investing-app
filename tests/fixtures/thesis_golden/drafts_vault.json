@@ -1,0 +1,112 @@
+{
+ "is_readonly": true,
+ "total": 2,
+ "vault_drafts": [
+  {
+   "blok_1": {
+    "parameters": [
+     {
+      "Nilai": "turun",
+      "Parameter": "Supply"
+     }
+    ],
+    "title": "Blok 1 — Supply–demand global (bukan harga saja)"
+   },
+   "blok_2": {
+    "parameters": [],
+    "title": "Blok 2 — Cadangan dan buffer (SPR ≠ stok pasar)"
+   },
+   "blok_3": {
+    "bacaan_jujur": "hulu terbukti, hilir belum.",
+    "gaps": "Gap berlabel `belum terverifikasi`: margin hilir\nbelum ada data.",
+    "label": "jasa-terbukti / eksplorasi-belum",
+    "layers": [
+     {
+      "Emiten": "AAAA",
+      "Layer": "Hulu"
+     }
+    ],
+    "observasi": [
+     {
+      "Observasi": "Volume",
+      "Status": "naik"
+     }
+    ],
+    "title": "Blok 3 — Transmisi Indonesia → emiten (universe layer disetujui)"
+   },
+   "causal_chain": "OPEC → supply → harga",
+   "evidence_label": "unproven",
+   "falsifiers": [
+    {
+     "#": "1",
+     "Batas": "2026-12",
+     "Falsifier": "Brent < 60"
+    }
+   ],
+   "file_info": {
+    "name": "t01-minyak.md",
+    "path": "finance/thesis/t01-minyak.md",
+    "size_bytes": 855
+   },
+   "guards": [
+    "satu",
+    "dua"
+   ],
+   "has_exploration_claim": false,
+   "id": "T01",
+   "is_active": false,
+   "is_readonly": true,
+   "kamus_status": "Menunggu / Berjalan / Melemah / Gugur / Tercapai",
+   "relation": "T1",
+   "riwayat": [
+    "2026-10-01 dibuat"
+   ],
+   "status_lifecycle": "Berjalan",
+   "tahap": "Menunggu",
+   "thesis_statement": "Harga minyak naik karena supply.",
+   "title": "Minyak naik",
+   "tugas_tertunda": [
+    "cari data hilir"
+   ]
+  },
+  {
+   "blok_1": {
+    "parameters": [],
+    "title": "Blok 1 — Supply–demand global (bukan harga saja)"
+   },
+   "blok_2": {
+    "parameters": [],
+    "title": "Blok 2 — Cadangan dan buffer (SPR ≠ stok pasar)"
+   },
+   "blok_3": {
+    "bacaan_jujur": "",
+    "gaps": "",
+    "label": "jasa-terbukti / eksplorasi-belum",
+    "layers": [],
+    "observasi": [],
+    "title": "Blok 3 — Transmisi Indonesia → emiten (universe layer disetujui)"
+   },
+   "causal_chain": "",
+   "evidence_label": "unproven",
+   "falsifiers": [],
+   "file_info": {
+    "name": "t02-kosong.md",
+    "path": "finance/thesis/t02-kosong.md",
+    "size_bytes": 17
+   },
+   "guards": [],
+   "has_exploration_claim": false,
+   "id": "t02-kosong",
+   "is_active": false,
+   "is_readonly": true,
+   "kamus_status": "Menunggu / Berjalan / Melemah / Gugur / Tercapai",
+   "relation": "",
+   "riwayat": [],
+   "status_lifecycle": "Menunggu (HOLD)",
+   "tahap": "Menunggu",
+   "thesis_statement": "",
+   "title": "t02-kosong",
+   "tugas_tertunda": []
+  }
+ ]
+}

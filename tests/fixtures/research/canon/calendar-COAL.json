@@ -1,0 +1,33 @@
+{
+  "ticker": "COAL",
+  "days": 90,
+  "items": [
+    {
+      "date": "2026-10-30",
+      "ticker": "COAL",
+      "kind": "pojk",
+      "label": "Batas laporan 2026Q3",
+      "source": "pojk",
+      "window": {
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      },
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": null
+    },
+    {
+      "date": "2026-11-15",
+      "ticker": "COAL",
+      "kind": "rups",
+      "label": "RUPS",
+      "source": "manual",
+      "window": null,
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": "RUPS luar biasa"
+    }
+  ]
+}

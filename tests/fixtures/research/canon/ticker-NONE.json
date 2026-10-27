@@ -1,0 +1,66 @@
+{
+  "ticker": "NONE",
+  "name": null,
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "role": "held",
+  "peer_of": null,
+  "avg_price": 1000.0,
+  "pack": {
+    "id": null,
+    "label": null,
+    "version": null,
+    "source": "none",
+    "action": "Tentukan paket"
+  },
+  "business_note": null,
+  "latest_filing": {
+    "id": "NONE_2026_Q2",
+    "fy": 2026,
+    "period": "Q2",
+    "available_from": "2026-08-29",
+    "age_days": 60,
+    "audited": false,
+    "taxonomy": "general"
+  },
+  "latest_close": {
+    "date": "2026-10-23",
+    "close": 1277.0,
+    "age_days": 5
+  },
+  "seen_at": null,
+  "claims": {
+    "holding": 0,
+    "broken": 0,
+    "not_testable": 0,
+    "expired": 0
+  },
+  "coverage": {
+    "has_pack": false,
+    "latest": {
+      "fy": 2026,
+      "q": 2
+    },
+    "xbrl": {
+      "populated": 13,
+      "total": 13,
+      "pct": 100.0
+    },
+    "kpi": {
+      "entered": 0,
+      "unknown": 0,
+      "expected": 0,
+      "missing": []
+    },
+    "state": "lengkap"
+  },
+  "changes": [
+    {
+      "id": "filing_new-478ec58a357aa8de",
+      "kind": "filing_new",
+      "at": "2026-10-24T09:00:00+00:00",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "section": "financials",
+      "dismissed": false
+    }
+  ]
+}

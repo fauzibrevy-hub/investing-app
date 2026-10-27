@@ -1,0 +1,155 @@
+{
+  "ticker": "REST",
+  "name": "PT Mesin Contoh Tbk",
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "role": "manual",
+  "peer_of": null,
+  "avg_price": null,
+  "pack": {
+    "id": "heavy_equipment_contracting",
+    "label": "Alat berat dan kontraktor tambang",
+    "version": "2026.10-1",
+    "source": "filing",
+    "action": null
+  },
+  "business_note": null,
+  "latest_filing": {
+    "id": "REST_2025_FY",
+    "fy": 2025,
+    "period": "FY",
+    "available_from": "2026-03-31",
+    "age_days": 211,
+    "audited": true,
+    "taxonomy": "general"
+  },
+  "latest_close": {
+    "date": "2026-09-01",
+    "close": 1039.0,
+    "age_days": 57
+  },
+  "seen_at": null,
+  "claims": {
+    "holding": 0,
+    "broken": 0,
+    "not_testable": 0,
+    "expired": 0
+  },
+  "coverage": {
+    "has_pack": true,
+    "latest": {
+      "fy": 2025,
+      "q": 4
+    },
+    "xbrl": {
+      "populated": 6,
+      "total": 15,
+      "pct": 40.0
+    },
+    "kpi": {
+      "entered": 0,
+      "unknown": 0,
+      "expected": 64,
+      "missing": [
+        "komatsu_units 2025Q1",
+        "komatsu_units 2025Q2",
+        "komatsu_units 2025Q3",
+        "komatsu_units 2025Q4",
+        "overburden_mbcm 2025Q1",
+        "overburden_mbcm 2025Q2",
+        "overburden_mbcm 2025Q3",
+        "overburden_mbcm 2025Q4",
+        "coal_extracted_mt 2025Q1",
+        "coal_extracted_mt 2025Q2",
+        "coal_extracted_mt 2025Q3",
+        "coal_extracted_mt 2025Q4",
+        "coal_sales_mt 2025Q1",
+        "coal_sales_mt 2025Q2",
+        "coal_sales_mt 2025Q3",
+        "coal_sales_mt 2025Q4",
+        "coal_asp_usd_t 2025Q1",
+        "coal_asp_usd_t 2025Q2",
+        "coal_asp_usd_t 2025Q3",
+        "coal_asp_usd_t 2025Q4",
+        "gold_oz_sold 2025Q1",
+        "gold_oz_sold 2025Q2",
+        "gold_oz_sold 2025Q3",
+        "gold_oz_sold 2025Q4",
+        "gold_aisc_usd_oz 2025Q1",
+        "gold_aisc_usd_oz 2025Q2",
+        "gold_aisc_usd_oz 2025Q3",
+        "gold_aisc_usd_oz 2025Q4",
+        "parts_service_ratio 2025Q1",
+        "parts_service_ratio 2025Q2",
+        "parts_service_ratio 2025Q3",
+        "parts_service_ratio 2025Q4",
+        "seg_rev_machinery 2025Q1",
+        "seg_rev_machinery 2025Q2",
+        "seg_rev_machinery 2025Q3",
+        "seg_rev_machinery 2025Q4",
+        "seg_rev_contracting 2025Q1",
+        "seg_rev_contracting 2025Q2",
+        "seg_rev_contracting 2025Q3",
+        "seg_rev_contracting 2025Q4",
+        "seg_rev_coal 2025Q1",
+        "seg_rev_coal 2025Q2",
+        "seg_rev_coal 2025Q3",
+        "seg_rev_coal 2025Q4",
+        "seg_rev_gold 2025Q1",
+        "seg_rev_gold 2025Q2",
+        "seg_rev_gold 2025Q3",
+        "seg_rev_gold 2025Q4",
+        "seg_margin_machinery 2025Q1",
+        "seg_margin_machinery 2025Q2",
+        "seg_margin_machinery 2025Q3",
+        "seg_margin_machinery 2025Q4",
+        "seg_margin_contracting 2025Q1",
+        "seg_margin_contracting 2025Q2",
+        "seg_margin_contracting 2025Q3",
+        "seg_margin_contracting 2025Q4",
+        "seg_margin_coal 2025Q1",
+        "seg_margin_coal 2025Q2",
+        "seg_margin_coal 2025Q3",
+        "seg_margin_coal 2025Q4",
+        "seg_margin_gold 2025Q1",
+        "seg_margin_gold 2025Q2",
+        "seg_margin_gold 2025Q3",
+        "seg_margin_gold 2025Q4"
+      ]
+    },
+    "state": "sebagian"
+  },
+  "changes": [
+    {
+      "id": "stale_data-2a60e05d4ed8e47c",
+      "kind": "stale_data",
+      "at": "2026-10-28T03:00:00+00:00",
+      "text": "Harga terakhir 2026-09-01, 57 hari lalu",
+      "section": "price",
+      "dismissed": true
+    },
+    {
+      "id": "kpi_due-374cb73d3ac5b41e",
+      "kind": "kpi_due",
+      "at": "2026-10-28T03:00:00+00:00",
+      "text": "KPI Q4 25 belum diisi: Unit Komatsu terjual, Pemindahan lapisan penutup, Batubara ditambang untuk klien dan 13 lagi",
+      "section": "pack",
+      "dismissed": false
+    },
+    {
+      "id": "restatement-f9b717193285e943",
+      "kind": "restatement",
+      "at": "2026-10-24T09:00:00+00:00",
+      "text": "SalesAndRevenue 2024-03-31 disajikan kembali: 100 juta → 105 juta",
+      "section": "financials",
+      "dismissed": false
+    },
+    {
+      "id": "filing_new-faff3e2b30184421",
+      "kind": "filing_new",
+      "at": "2026-10-24T09:00:00+00:00",
+      "text": "Laporan Q4 25 masuk (diaudit)",
+      "section": "financials",
+      "dismissed": false
+    }
+  ]
+}

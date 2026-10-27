@@ -1,0 +1,22 @@
+{
+  "claim_id": "c-2fcedc885cd0b4b9",
+  "ticker": "COAL",
+  "items": [
+    {
+      "id": "d-470610facaf8ac6c",
+      "ticker": "COAL",
+      "kind": "update_operasional",
+      "kind_label": "Update operasional",
+      "url": "https://example.test/ops",
+      "text": null,
+      "doc_date": "2026-10-20",
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "evidence": [
+        {
+          "claim_id": "c-2fcedc885cd0b4b9",
+          "kpi_key": null
+        }
+      ]
+    }
+  ]
+}
