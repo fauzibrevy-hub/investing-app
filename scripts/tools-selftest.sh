@@ -155,10 +155,17 @@ out="$(scripts/counts.sh "$W/f1" "$W/f2")"
 rc=$?
 echo "$out"
 echo "exit=$rc"
-if [ "$rc" = 0 ] && [ "$(printf '%s\n' "$out" | tail -n 1)" = "counts: 0 differences" ]; then
-  pass 4 "exit 0, counts: 0 differences"
+# Negative: a malformed drafts file on one side is exit 2, not a 0 count (review L1b #2).
+cp -R "$W/f2" "$W/f2-bad"
+echo '[' >"$W/f2-bad/thesis_drafts.json"
+scripts/counts.sh "$W/f1" "$W/f2-bad"
+crc=$?
+echo "malformed drafts on B: exit=$crc"
+rm -rf "$W/f2-bad"
+if [ "$rc" = 0 ] && [ "$(printf '%s\n' "$out" | tail -n 1)" = "counts: 0 differences" ] && [ "$crc" = 2 ]; then
+  pass 4 "exit 0, counts: 0 differences; a malformed drafts file exits 2"
 else
-  fail 4 "expected exit 0 and 'counts: 0 differences'"
+  fail 4 "expected exit 0 and 'counts: 0 differences', and exit 2 on a malformed drafts file"
 fi
 
 # 5. A on F1, B on F2 (sandbox); AAAA as a manual ticker on both (research_universe_api.rs:
