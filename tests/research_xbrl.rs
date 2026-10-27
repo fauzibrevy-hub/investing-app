@@ -5,7 +5,7 @@
 use std::path::{Path, PathBuf};
 
 use chrono::NaiveDate;
-use finance_app::research::xbrl::{self, AvailableSource, CtxKind, Fact, Period};
+use investing_app::research::xbrl::{self, AvailableSource, CtxKind, Fact, Period};
 
 fn fixtures() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/research/xbrl")
@@ -575,7 +575,7 @@ fn a_ratio_typed_as_money_is_stored_as_percent_points_under_pure() {
 
 #[test]
 fn reingest_rebuilds_filings_that_the_plain_pass_skips_as_unchanged() {
-    use finance_app::research::store::Store;
+    use investing_app::research::store::Store;
     let dir = tempfile::tempdir().unwrap();
     let xbrl_dir = dir.path().join("xbrl");
     std::fs::create_dir(&xbrl_dir).unwrap();
@@ -622,11 +622,11 @@ fn an_unreadable_file_is_an_error_not_an_empty_filing() {
 }
 
 /// Read-only smoke run over a real directory; prints counts only, never values.
-/// `FINANCE_IDX_XBRL_DIR=... cargo test --test research_xbrl -- --ignored --nocapture`.
+/// `INVESTING_IDX_XBRL_DIR=... cargo test --test research_xbrl -- --ignored --nocapture`.
 #[test]
 #[ignore]
 fn smoke_real_directory() {
-    let Some(dir) = std::env::var_os("FINANCE_IDX_XBRL_DIR") else {
+    let Some(dir) = std::env::var_os("INVESTING_IDX_XBRL_DIR") else {
         return;
     };
     let mut files = Vec::new();

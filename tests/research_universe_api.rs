@@ -7,8 +7,8 @@ mod common;
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode};
 use common::{json_of, TestApp};
-use finance_app::research::store::Store;
-use finance_app::research::universe::{sync, HeldPosition};
+use investing_app::research::store::Store;
+use investing_app::research::universe::{sync, HeldPosition};
 use serde_json::{json, Value};
 
 fn app() -> TestApp {

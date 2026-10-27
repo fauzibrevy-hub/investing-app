@@ -1,15 +1,14 @@
-//! Finance App backend: one axum binary serving `/api/*` and the built UI
-//! (`web/dist`) on `127.0.0.1:8787`.
+//! Investing App backend: one axum binary serving `/api/*` and the built UI
+//! (`web/dist`) on `INVESTING_BIND` (default in `config.rs`).
 
 pub mod auth;
 pub mod config;
 pub mod error;
-pub mod finance;
 pub mod health;
 pub mod http;
 pub mod idempotency;
-pub mod idx;
 pub mod macro_watch;
+pub mod portfolio;
 pub mod py;
 pub mod query;
 pub mod research;
@@ -64,9 +63,8 @@ pub fn build_app(cfg: Config) -> Router {
     let api = Router::new()
         .merge(health::router(cfg.clone()))
         .merge(auth::router(auth.clone()))
-        .merge(finance::router(cfg.clone()))
+        .merge(portfolio::router(cfg.clone()))
         .merge(thesis::router(cfg.clone()))
-        .merge(idx::router(cfg.clone()))
         .merge(macro_watch::router(cfg.clone()))
         .merge(research::router(cfg.clone()))
         .route("/api/{*rest}", axum::routing::any(api_not_found));

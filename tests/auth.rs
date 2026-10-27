@@ -2,7 +2,7 @@ mod common;
 
 use axum::body::Body;
 use axum::http::{header, Request, StatusCode};
-use common::{json_of, test_app};
+use common::{json_of, test_app, test_app_with};
 use serde_json::json;
 
 #[tokio::test]
@@ -15,6 +15,32 @@ async fn health_is_public() {
     .await;
     assert_eq!(status, StatusCode::OK);
     assert_eq!(body, json!({"status": "ok"}));
+}
+
+#[tokio::test]
+async fn health_has_no_sandbox_key_by_default() {
+    let t = test_app();
+    for uri in ["/api/health", "/api/health?deep=1"] {
+        let (status, body) = t.get(uri).await;
+        assert_eq!(status, StatusCode::OK, "{uri}");
+        assert!(body.get("sandbox").is_none(), "{uri}: {body}");
+    }
+}
+
+#[tokio::test]
+async fn health_reports_sandbox_while_set() {
+    let t = test_app_with(|c| c.sandbox = true);
+    let (status, body) = json_of(
+        t.send(Request::get("/api/health").body(Body::empty()).unwrap())
+            .await,
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(body, json!({"status": "ok", "sandbox": true}));
+    let (status, body) = t.get("/api/health?deep=1").await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(body["sandbox"], true);
+    assert!(body["sources"].is_object());
 }
 
 #[tokio::test]
@@ -114,14 +140,14 @@ async fn session_cookie_flow() {
     assert_eq!(
         write.status(),
         StatusCode::FORBIDDEN,
-        "cookie write needs X-Finance-Client"
+        "cookie write needs X-Investing-Client"
     );
 
     let write = t
         .send(
             Request::post("/api/nope")
                 .header("cookie", &cookie)
-                .header("x-finance-client", "web")
+                .header("x-investing-client", "web")
                 .body(Body::empty())
                 .unwrap(),
         )
@@ -150,15 +176,15 @@ async fn get_session_reports_cookie_validity() {
     // No cookie, or a forged/foreign one → 401.
     assert_eq!(t.send(check(None)).await.status(), StatusCode::UNAUTHORIZED);
     assert_eq!(
-        t.send(check(Some("finance_session=v1.1.deadbeef")))
+        t.send(check(Some("investing_session=v1.1.deadbeef")))
             .await
             .status(),
         StatusCode::UNAUTHORIZED
     );
-    let other =
-        finance_app::auth::Auth::new(&"z".repeat(32)).issue_session(finance_app::auth::now_secs());
+    let other = investing_app::auth::Auth::new(&"z".repeat(32))
+        .issue_session(investing_app::auth::now_secs());
     assert_eq!(
-        t.send(check(Some(&format!("finance_session={other}"))))
+        t.send(check(Some(&format!("investing_session={other}"))))
             .await
             .status(),
         StatusCode::UNAUTHORIZED

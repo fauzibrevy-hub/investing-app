@@ -7,9 +7,9 @@ mod common;
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode};
 use common::{json_of, TestApp};
-use finance_app::research::packs::Packs;
-use finance_app::research::store::{Store, LOG_FILE};
-use finance_app::research::universe::{sync, update, HeldPosition, Patch};
+use investing_app::research::packs::Packs;
+use investing_app::research::store::{Store, LOG_FILE};
+use investing_app::research::universe::{sync, update, HeldPosition, Patch};
 use serde_json::{json, Value};
 
 /// A held coal miner (pack by override, since no filing is on disk) and a manual bank.
@@ -37,10 +37,10 @@ fn app() -> TestApp {
         "2026-10-22T00:00:00Z",
     )
     .unwrap();
-    finance_app::research::universe::add(
+    investing_app::research::universe::add(
         &store,
         &packs,
-        &finance_app::research::universe::AddRequest {
+        &investing_app::research::universe::AddRequest {
             ticker: "NOPK".into(),
             ..Default::default()
         },

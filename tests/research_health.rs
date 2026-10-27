@@ -9,9 +9,9 @@ use std::process::Command;
 
 use chrono::{DateTime, Duration, Local, SecondsFormat, TimeZone, Utc};
 use common::{test_app_with, TestApp};
-use finance_app::research::health::{last_scheduled_run, scraper_job_entry_at};
-use finance_app::research::kpi::KpiValue;
-use finance_app::research::store::{SourceRun, Store};
+use investing_app::research::health::{last_scheduled_run, scraper_job_entry_at};
+use investing_app::research::kpi::KpiValue;
+use investing_app::research::store::{SourceRun, Store};
 use serde_json::{json, Value};
 
 fn ago(d: Duration) -> String {
@@ -162,10 +162,12 @@ fn run_script(data: &Path, scraper: &Path) -> i32 {
     let script = Path::new(env!("CARGO_MANIFEST_DIR")).join("deploy/scraper.sh");
     Command::new("bash")
         .arg(script)
-        .env("FINANCE_DATA_DIR", data)
-        .env("FINANCE_IDX_SCRAPER_DIR", scraper)
+        // HOME too: any default the script falls back to stays in the test dir.
+        .env("HOME", data)
+        .env("INVESTING_DATA_DIR", data)
+        .env("INVESTING_IDX_SCRAPER_DIR", scraper)
         .env("PYTHON", "python3")
-        .env_remove("FINANCE_RESEARCH_WATCHLIST")
+        .env_remove("INVESTING_RESEARCH_WATCHLIST")
         .output()
         .unwrap()
         .status
@@ -274,9 +276,9 @@ async fn every_research_source_reports_status_and_age_as_data() {
 #[test]
 fn without_a_store_the_age_fields_exist_and_are_null() {
     let dir = tempfile::tempdir().unwrap();
-    let mut cfg = finance_app::config::Config::for_tests(dir.path());
+    let mut cfg = investing_app::config::Config::for_tests(dir.path());
     cfg.research_db_path = dir.path().join("missing.sqlite");
-    let src = finance_app::research::health::sources(&cfg);
+    let src = investing_app::research::health::sources(&cfg);
     for key in [
         "research_store",
         "research_prices",
@@ -328,13 +330,14 @@ impl Rig {
     fn command(&self) -> Command {
         let mut c = Command::new("bash");
         c.arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("deploy/scraper.sh"))
-            .env("FINANCE_DATA_DIR", self.t.dir.path())
-            .env("FINANCE_IDX_SCRAPER_DIR", &self.scr)
+            .env("HOME", self.t.dir.path())
+            .env("INVESTING_DATA_DIR", self.t.dir.path())
+            .env("INVESTING_IDX_SCRAPER_DIR", &self.scr)
             .env("PYTHON", "python3")
             .env("PIDFILE", self.t.dir.path().join("stub.pid"))
             .env("GATE", self.t.dir.path().join("gate"))
-            .env_remove("FINANCE_RESEARCH_WATCHLIST")
-            .env_remove("FINANCE_IDX_XBRL_DIR")
+            .env_remove("INVESTING_RESEARCH_WATCHLIST")
+            .env_remove("INVESTING_IDX_XBRL_DIR")
             .stdout(Stdio::null())
             .stderr(Stdio::piped());
         c
@@ -572,7 +575,7 @@ fn ok_run(at: DateTime<Local>) -> String {
 #[test]
 fn the_schedule_constants_match_the_plist_and_the_slot_is_sunday_0300_local() {
     let plist = std::fs::read_to_string(
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("deploy/com.menganto.finance.scraper.plist"),
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("deploy/com.menganto.investing.scraper.plist"),
     )
     .unwrap();
     let squashed: String = plist.split_whitespace().collect();

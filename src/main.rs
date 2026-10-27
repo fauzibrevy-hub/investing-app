@@ -1,10 +1,10 @@
-use finance_app::config::{self, Config};
-use finance_app::research::store::Store;
-use finance_app::research::xbrl;
+use investing_app::config::{self, Config};
+use investing_app::research::store::Store;
+use investing_app::research::xbrl;
 
-/// `finance research-ingest --xbrl-dir DIR [--pdf-dir DIR] [--db PATH] [--reingest]` (research
+/// `investing research-ingest --xbrl-dir DIR [--pdf-dir DIR] [--db PATH] [--reingest]` (research
 /// plan §4.2, R1 exit check). Ingests every new or changed `.xbrl` file under DIR, and every
-/// original-filing `.json` file under `--pdf-dir` (default: `FINANCE_PDF_FILINGS_DIR`, else
+/// original-filing `.json` file under `--pdf-dir` (default: `INVESTING_PDF_FILINGS_DIR`, else
 /// `<data dir>/research/pdf-filings`; a missing directory is skipped), into the research store
 /// at PATH (default: the configured store) and prints what happened: filings on file, newly
 /// ingested, unreadable files with their error, and every reconciliation failure with a
@@ -24,7 +24,7 @@ fn research_ingest(args: &[String]) -> i32 {
                 match args.get(i) {
                     Some(p) => dir = Some(p.into()),
                     None => {
-                        eprintln!("finance research-ingest: --xbrl-dir needs a path");
+                        eprintln!("investing research-ingest: --xbrl-dir needs a path");
                         return 2;
                     }
                 }
@@ -34,7 +34,7 @@ fn research_ingest(args: &[String]) -> i32 {
                 match args.get(i) {
                     Some(p) => pdf_dir = Some(p.into()),
                     None => {
-                        eprintln!("finance research-ingest: --pdf-dir needs a path");
+                        eprintln!("investing research-ingest: --pdf-dir needs a path");
                         return 2;
                     }
                 }
@@ -44,26 +44,26 @@ fn research_ingest(args: &[String]) -> i32 {
                 match args.get(i) {
                     Some(p) => db = Some(p.into()),
                     None => {
-                        eprintln!("finance research-ingest: --db needs a path");
+                        eprintln!("investing research-ingest: --db needs a path");
                         return 2;
                     }
                 }
             }
             "--reingest" => reingest = true,
             other => {
-                eprintln!("finance research-ingest: unknown argument: {other}");
+                eprintln!("investing research-ingest: unknown argument: {other}");
                 return 2;
             }
         }
         i += 1;
     }
     let Some(dir) = dir else {
-        eprintln!("finance research-ingest: --xbrl-dir is required");
+        eprintln!("investing research-ingest: --xbrl-dir is required");
         return 2;
     };
     if !dir.is_dir() {
         eprintln!(
-            "finance research-ingest: {} is not a directory",
+            "investing research-ingest: {} is not a directory",
             dir.display()
         );
         return 2;
@@ -72,7 +72,10 @@ fn research_ingest(args: &[String]) -> i32 {
     let store = match Store::open(&db) {
         Ok(s) => s,
         Err(e) => {
-            eprintln!("finance research-ingest: cannot open {}: {e}", db.display());
+            eprintln!(
+                "investing research-ingest: cannot open {}: {e}",
+                db.display()
+            );
             return 1;
         }
     };
@@ -80,11 +83,11 @@ fn research_ingest(args: &[String]) -> i32 {
     // A directory the owner named (flag or variable) must exist: a typo would otherwise read
     // as an empty source. Only the default location is optional.
     let named = pdf_dir.is_some()
-        || std::env::var("FINANCE_PDF_FILINGS_DIR").is_ok_and(|v| !v.trim().is_empty());
+        || std::env::var("INVESTING_PDF_FILINGS_DIR").is_ok_and(|v| !v.trim().is_empty());
     let pdf_dir = pdf_dir.unwrap_or_else(|| config::pdf_filings_dir(|k| std::env::var(k).ok()));
     if named && !pdf_dir.is_dir() {
         eprintln!(
-            "finance research-ingest: {} is not a directory (--pdf-dir or FINANCE_PDF_FILINGS_DIR)",
+            "investing research-ingest: {} is not a directory (--pdf-dir or INVESTING_PDF_FILINGS_DIR)",
             pdf_dir.display()
         );
         return 2;
@@ -97,7 +100,7 @@ fn research_ingest(args: &[String]) -> i32 {
     let report = match ingested {
         Ok(r) => r,
         Err(e) => {
-            eprintln!("finance research-ingest: {e}");
+            eprintln!("investing research-ingest: {e}");
             return 1;
         }
     };
@@ -133,7 +136,7 @@ fn research_ingest(args: &[String]) -> i32 {
     }
     println!(
         "rules {}: re-derived {} stale ticker(s), {} reconciliation failure(s) among them",
-        finance_app::research::derive::RULES_VERSION,
+        investing_app::research::derive::RULES_VERSION,
         rederived.tickers.len(),
         rederived.reconciliation_failures.len()
     );
@@ -200,8 +203,8 @@ async fn main() {
     // The text extractor child (see `research::extract::isolated`): first thing, before `.env`
     // and the server config, so a hostile upload is parsed by a process with an empty
     // environment.
-    if argv.len() >= 2 && argv[1] == finance_app::research::extract::isolated::SUBCOMMAND {
-        std::process::exit(finance_app::research::extract::isolated::child_main(
+    if argv.len() >= 2 && argv[1] == investing_app::research::extract::isolated::SUBCOMMAND {
+        std::process::exit(investing_app::research::extract::isolated::child_main(
             &argv[2..],
         ));
     }
@@ -213,23 +216,23 @@ async fn main() {
     tracing_subscriber::fmt()
         .with_env_filter(
             tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "finance_app=info,tower_http=info".into()),
+                .unwrap_or_else(|_| "investing_app=info,tower_http=info".into()),
         )
         .init();
 
     let cfg = match Config::from_env() {
         Ok(cfg) => cfg,
         Err(e) => {
-            eprintln!("finance-app: refusing to start: {e}");
+            eprintln!("investing-app: refusing to start: {e}");
             std::process::exit(2);
         }
     };
     let bind = cfg.bind;
-    let app = finance_app::build_app(cfg);
+    let app = investing_app::build_app(cfg);
     let listener = match tokio::net::TcpListener::bind(bind).await {
         Ok(l) => l,
         Err(e) => {
-            eprintln!("finance-app: cannot bind {bind}: {e}");
+            eprintln!("investing-app: cannot bind {bind}: {e}");
             std::process::exit(1);
         }
     };

@@ -1,9 +1,9 @@
 //! Research store: schema, idempotent migrations, JSONL log and rebuild (plan §6.1, M1 #1, #6).
 
-use finance_app::research::store::{
+use investing_app::research::store::{
     latest_version, ManualShares, PriceBar, Store, StoreError, LOG_FILE,
 };
-use finance_app::research::universe::{Role, UniverseEntry};
+use investing_app::research::universe::{Role, UniverseEntry};
 
 const AT: &str = "2026-10-22T09:00:00+07:00";
 

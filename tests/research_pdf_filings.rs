@@ -12,14 +12,14 @@ use std::path::{Path, PathBuf};
 
 use axum::http::StatusCode;
 use chrono::{TimeZone, Utc};
-use finance_app::research::derive::Flag;
-use finance_app::research::prices::yahoo::YahooSource;
-use finance_app::research::scheduler::{Clock, Scheduler};
-use finance_app::research::sources::portfolio::HeldProvider;
-use finance_app::research::sources::SourceError;
-use finance_app::research::store::{latest_version, Store};
-use finance_app::research::universe::{sync, HeldPosition};
-use finance_app::research::xbrl::{self, pdf, CtxKind, Period, SourceKind};
+use investing_app::research::derive::Flag;
+use investing_app::research::prices::yahoo::YahooSource;
+use investing_app::research::scheduler::{Clock, Scheduler};
+use investing_app::research::sources::portfolio::HeldProvider;
+use investing_app::research::sources::SourceError;
+use investing_app::research::store::{latest_version, Store};
+use investing_app::research::universe::{sync, HeldPosition};
+use investing_app::research::xbrl::{self, pdf, CtxKind, Period, SourceKind};
 use serde_json::{json, Value};
 use std::sync::Arc;
 use xbrl_fixture::{Spec, F};
@@ -147,7 +147,11 @@ fn write_bumi_xbrl(dir: &Path) {
     xbrl_fixture::write(dir, &bumi_spec("Q3", m9));
 }
 
-fn derived_cell(store: &Store, element: &str, q: u32) -> finance_app::research::store::DerivedRow {
+fn derived_cell(
+    store: &Store,
+    element: &str,
+    q: u32,
+) -> investing_app::research::store::DerivedRow {
     store
         .derived("BUMI", Some(element))
         .unwrap()

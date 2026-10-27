@@ -2,7 +2,7 @@
 //! ported from MC `backend/api/macro.py` and `backend/services/macro_ingestion.py` /
 //! `macro_scoring.py`. (`macro` is a reserved word in Rust, hence `macro_watch`.)
 //!
-//! The store (`FINANCE_MACRO_STORE_PATH`) is app-owned: a derived cache rebuilt
+//! The store (`INVESTING_MACRO_STORE_PATH`) is app-owned: a derived cache rebuilt
 //! from the same public upstreams MC uses (FRED, Yahoo Finance, open.er-api,
 //! BI, stats.gov.cn). A background watcher re-ingests every 60 s like MC's
 //! `run_macro_release_watcher`. `/api/thesis/macro` lives in `crate::thesis`.

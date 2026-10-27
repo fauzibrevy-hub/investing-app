@@ -9,14 +9,14 @@ use std::path::Path;
 use std::sync::Arc;
 
 use chrono::Utc;
-use finance_app::research::packs::Packs;
-use finance_app::research::prices::yahoo::YahooSource;
-use finance_app::research::scheduler::{Clock, Scheduler};
-use finance_app::research::sources::portfolio::HeldProvider;
-use finance_app::research::sources::SourceError;
-use finance_app::research::store::{ClaimRow, Store};
-use finance_app::research::universe::{add, AddRequest, HeldPosition};
-use finance_app::research::xbrl;
+use investing_app::research::packs::Packs;
+use investing_app::research::prices::yahoo::YahooSource;
+use investing_app::research::scheduler::{Clock, Scheduler};
+use investing_app::research::sources::portfolio::HeldProvider;
+use investing_app::research::sources::SourceError;
+use investing_app::research::store::{ClaimRow, Store};
+use investing_app::research::universe::{add, AddRequest, HeldPosition};
+use investing_app::research::xbrl;
 use xbrl_fixture::{general_year, Year};
 
 struct NoHeld;
@@ -183,5 +183,5 @@ async fn startup_pass_rederives_a_store_stamped_under_an_older_rules_version() {
     assert!(!rows.is_empty());
     assert!(rows
         .iter()
-        .all(|r| r.rules_version == finance_app::research::derive::RULES_VERSION));
+        .all(|r| r.rules_version == investing_app::research::derive::RULES_VERSION));
 }

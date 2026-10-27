@@ -11,8 +11,8 @@ mod r4_env;
 mod xbrl_fixture;
 
 use axum::http::{Method, StatusCode};
-use finance_app::research::claims::source::reevaluate;
-use finance_app::research::store::PriceBar;
+use investing_app::research::claims::source::reevaluate;
+use investing_app::research::store::PriceBar;
 use r4_env::{call, closes, env, Env};
 use serde_json::{json, Value};
 
@@ -38,7 +38,7 @@ async fn create(e: &Env, ticker: &str, key: &str, body: Value) -> Value {
     v
 }
 
-fn rerun(e: &Env) -> Vec<finance_app::research::claims::source::StatusChange> {
+fn rerun(e: &Env) -> Vec<investing_app::research::claims::source::StatusChange> {
     reevaluate(&e.store, &e.pack_set(), e.now(), e.today(), None).unwrap()
 }
 
@@ -546,7 +546,7 @@ async fn rebuild_restores_claims_and_their_evaluations_from_the_log() {
 
 #[tokio::test]
 async fn price_thresholds_follow_a_split_that_came_after_the_claim() {
-    use finance_app::research::store::{CorpEventRow, EventKind};
+    use investing_app::research::store::{CorpEventRow, EventKind};
     let e = env();
     let ok = create(
         &e,

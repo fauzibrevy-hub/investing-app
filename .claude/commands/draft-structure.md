@@ -7,7 +7,7 @@ argument-hint: <TICKER> <path to the PDF or PPTX>
 
 Arguments: `$ARGUMENTS` = `<TICKER> <path to the uploaded annual report or presentation>`.
 
-Write `<data_dir>/research/structure/<TICKER>.draft.json`, where `<data_dir>` is `$FINANCE_DATA_DIR` (default `~/finance-app-data`). Create the folder if it is missing. Write nothing else, call no API, and never touch `research.sqlite`, `research-log.jsonl` or any token. The app loads the file when the owner taps **Muat draf** on the company page, validates it whole, and shows every node as an *usulan* the owner accepts, edits or rejects. Only accepted nodes become the map.
+Write `<data_dir>/research/structure/<TICKER>.draft.json`, where `<data_dir>` is `$INVESTING_DATA_DIR` (default `~/investing-app-data`). Create the folder if it is missing. Write nothing else, call no API, and never touch `research.sqlite`, `research-log.jsonl` or any token. The app loads the file when the owner taps **Muat draf** on the company page, validates it whole, and shows every node as an *usulan* the owner accepts, edits or rejects. Only accepted nodes become the map.
 
 Run this once per company per year, or when the business changes. A later import replaces the owner's unaccepted nodes and keeps accepted ones, so a re-run may draft the whole map again.
 

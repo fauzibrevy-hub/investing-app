@@ -1,5 +1,5 @@
 //! Durable `Idempotency-Key` store (prd.md §6.1, plan.md R2): key → response
-//! for 24 hours in `FINANCE_DATA_DIR/idempotency.jsonl`, surviving restarts.
+//! for 24 hours in `INVESTING_DATA_DIR/idempotency.jsonl`, surviving restarts.
 //!
 //! Each write is journaled twice: `pending` (with the target sheet row)
 //! before touching Sheets, then `done` (with the response) or `failed`.

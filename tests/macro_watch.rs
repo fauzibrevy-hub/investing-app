@@ -15,11 +15,11 @@ use axum::http::{HeaderName, HeaderValue, Request, Response, StatusCode};
 use axum::Router;
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use common::{json_of, test_app_with};
-use finance_app::config::Config;
-use finance_app::macro_watch::observe::{self, Store};
-use finance_app::macro_watch::upstream::Endpoints;
-use finance_app::macro_watch::{router_with, scoring, MacroState};
 use futures::StreamExt;
+use investing_app::config::Config;
+use investing_app::macro_watch::observe::{self, Store};
+use investing_app::macro_watch::upstream::Endpoints;
+use investing_app::macro_watch::{router_with, scoring, MacroState};
 use serde_json::{json, Value};
 use tower::ServiceExt;
 

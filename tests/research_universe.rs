@@ -2,9 +2,9 @@
 //! portfolio, manual adds, peers up to three per ticker, pack override next to the
 //! filing-derived default, held cannot be removed, watchlist.csv with peers, log replay.
 
-use finance_app::research::packs::Packs;
-use finance_app::research::store::Store;
-use finance_app::research::universe::{
+use investing_app::research::packs::Packs;
+use investing_app::research::store::Store;
+use investing_app::research::universe::{
     add, held_from_portfolio, is_valid_ticker, normalize_ticker, pack_choice, peer_map, remove,
     sync, update, write_watchlist, AddRequest, HeldPosition, Patch, Role, UniverseEntry,
     UniverseError,
@@ -48,7 +48,7 @@ fn peer(ticker: &str, of: &str) -> AddRequest {
     }
 }
 
-fn packs() -> finance_app::research::packs::PackSet {
+fn packs() -> investing_app::research::packs::PackSet {
     (*Packs::embedded().set()).clone()
 }
 

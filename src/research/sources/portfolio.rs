@@ -4,7 +4,7 @@
 use std::future::Future;
 
 use super::SourceError;
-use crate::finance::portfolio::{parse_portfolio, PORTFOLIO_RANGE};
+use crate::portfolio::{parse_portfolio, PORTFOLIO_RANGE};
 use crate::research::universe::{held_from_portfolio, HeldPosition};
 use crate::sheets::SheetsClient;
 

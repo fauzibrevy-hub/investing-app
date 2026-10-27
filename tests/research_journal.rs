@@ -11,7 +11,7 @@ mod r4_env;
 mod xbrl_fixture;
 
 use axum::http::{Method, StatusCode};
-use finance_app::research::store::{JournalRow, PriceBar};
+use investing_app::research::store::{JournalRow, PriceBar};
 use r4_env::{call, env, Env};
 use serde_json::{json, Value};
 

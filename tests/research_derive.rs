@@ -5,8 +5,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use chrono::{Datelike, NaiveDate};
-use finance_app::research::derive::{derive, FactIn, Flag};
-use finance_app::research::xbrl::CtxKind;
+use investing_app::research::derive::{derive, FactIn, Flag};
+use investing_app::research::xbrl::CtxKind;
 use proptest::prelude::*;
 
 fn d(s: &str) -> NaiveDate {

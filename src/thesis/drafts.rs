@@ -1,4 +1,4 @@
-//! Thesis drafts: the app-owned JSON store (`FINANCE_THESIS_DRAFTS_PATH`, same
+//! Thesis drafts: the app-owned JSON store (`INVESTING_THESIS_DRAFTS_PATH`, same
 //! file format as MC `data/thesis_drafts.json`) plus read-only vault theses
 //! from `finance/thesis/*.md`. Ported from MC `thesis_bank.py`.
 

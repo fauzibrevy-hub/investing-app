@@ -1,5 +1,5 @@
 //! `/api/research/*` (plan §7, §8.1 B13). Auth is applied by the app-wide middleware; every
-//! write needs an `Idempotency-Key` (cookie sessions also need `X-Finance-Client`, which the
+//! write needs an `Idempotency-Key` (cookie sessions also need `X-Investing-Client`, which the
 //! same middleware enforces). A key seen before with the same request replays the stored
 //! response; the same key with a different request is a 409. The journal is durable, so a
 //! retry after a restart does not repeat the effect.

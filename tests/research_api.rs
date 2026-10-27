@@ -16,10 +16,10 @@ use std::sync::Arc;
 
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode};
-use finance_app::research::api::{self, ApiState, Options};
-use finance_app::research::engine::Engine;
-use finance_app::research::packs::Packs;
-use finance_app::research::store::{Store, LOG_FILE};
+use investing_app::research::api::{self, ApiState, Options};
+use investing_app::research::engine::Engine;
+use investing_app::research::packs::Packs;
+use investing_app::research::store::{Store, LOG_FILE};
 use r4_env::{call, env, Env};
 use serde_json::json;
 use tokio::sync::mpsc;
@@ -56,7 +56,7 @@ fn app_with(
 
 #[tokio::test]
 async fn store_unavailable_is_503() {
-    let app = finance_app::research::router_with(None);
+    let app = investing_app::research::router_with(None);
     for uri in ["/api/research/universe", "/api/research/COAL"] {
         let (s, _, _) = call(&app, Method::GET, uri, None, None).await;
         assert_eq!(s, StatusCode::SERVICE_UNAVAILABLE, "{uri}");

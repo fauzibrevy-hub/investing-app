@@ -3,8 +3,8 @@
 use axum::body::Body;
 use axum::http::{Request, Response, StatusCode};
 use axum::Router;
-use finance_app::config::Config;
 use http_body_util::BodyExt;
+use investing_app::config::Config;
 use serde_json::Value;
 use tower::ServiceExt;
 
@@ -23,7 +23,7 @@ pub fn test_app_with(tweak: impl FnOnce(&mut Config)) -> TestApp {
     let mut cfg = Config::for_tests(dir.path());
     tweak(&mut cfg);
     TestApp {
-        app: finance_app::build_app(cfg.clone()),
+        app: investing_app::build_app(cfg.clone()),
         cfg,
         dir,
     }
