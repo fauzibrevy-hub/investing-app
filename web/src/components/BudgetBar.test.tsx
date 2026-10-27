@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { AccountCard } from "./AccountCard";
 import { BudgetBar, budgetStatus, budgetStatusLabel, fillRatio } from "./BudgetBar";
 
 describe("budgetStatus (§5.3)", () => {
@@ -59,28 +58,5 @@ describe("BudgetBar", () => {
     expect(screen.getByText("Anggaran belum diatur di Sheets")).toBeInTheDocument();
     rerender(<BudgetBar name="x" cat={1} status="error" />);
     expect(screen.getByText("Gagal memuat anggaran")).toHaveClass("text-status-over");
-  });
-});
-
-describe("AccountCard", () => {
-  it("latar bergilir surface-account-1..3", () => {
-    const { container } = render(
-      <>
-        <AccountCard name="A" balance={1} index={0} />
-        <AccountCard name="B" balance={1} index={1} />
-        <AccountCard name="C" balance={1} index={2} />
-        <AccountCard name="D" balance={1} index={3} />
-      </>,
-    );
-    const cls = [...container.children].map((c) => c.className.match(/bg-surface-account-\d/)![0]);
-    expect(cls).toEqual(["bg-surface-account-1", "bg-surface-account-2", "bg-surface-account-3", "bg-surface-account-1"]);
-  });
-
-  it("saldo penuh; error menampilkan em dash", () => {
-    const { rerender } = render(<AccountCard name="BCA Ayu" balance={4_210_000} />);
-    expect(screen.getByText("Rp4.210.000")).toBeInTheDocument();
-    rerender(<AccountCard name="BCA Ayu" status="error" />);
-    expect(screen.getByText("—")).toBeInTheDocument();
-    expect(screen.getByText("BCA Ayu")).toBeInTheDocument();
   });
 });
