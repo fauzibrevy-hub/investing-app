@@ -46,7 +46,7 @@ export default defineConfig({
   server: {
     // Hanya untuk `npm run dev`: backend lokal (prd.md §6.3). UI sendiri selalu memanggil path relatif /api/...
     proxy: {
-      "/api": { target: "http://127.0.0.1:8787", changeOrigin: false },
+      "/api": { target: "http://127.0.0.1:8789", changeOrigin: false },
     },
   },
   test: {
