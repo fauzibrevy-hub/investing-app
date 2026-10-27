@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(git *push * main)",
+      "Bash(git *push * main *)",
+      "Bash(git *push *:main)",
+      "Bash(git *push *:main *)",
+      "Bash(git *push *refs/heads/main*)",
+      "Bash(*--no-verify*)",
+      "Bash(git *commit -n*)",
+      "Bash(git config*)",
+      "Bash(git -C * config*)"
+    ]
+  }
+}
