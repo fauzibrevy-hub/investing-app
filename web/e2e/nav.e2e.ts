@@ -28,8 +28,21 @@ async function push(page: Page, hash: string) {
   await expect.poll(() => hashOf(page)).toBe(`#${hash}`);
 }
 
+/**
+ * A user's scroll: resolves once the `scroll` event is delivered, as it is long before a finger can tap. The shell
+ * tracks the position from that event (rule 5), and WebKit delivers it on the next frame, so a `push` in the same
+ * frame as `window.scrollTo` would save the old position.
+ */
 const scrollTo = async (page: Page, y: number) => {
-  await page.evaluate((to) => window.scrollTo(0, to), y);
+  await page.evaluate(
+    (to) =>
+      new Promise<void>((resolve) => {
+        if (Math.round(window.scrollY) === to) return resolve();
+        window.addEventListener("scroll", () => resolve(), { once: true });
+        window.scrollTo(0, to);
+      }),
+    y,
+  );
   await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(y);
 };
 const scrollY = (page: Page) => page.evaluate(() => Math.round(window.scrollY));
@@ -167,6 +180,22 @@ test.describe("tombol kembali (aturan 8, 9)", () => {
     await back(page, "Alat").click();
     await expect.poll(() => hashOf(page)).toBe("#/alat");
     expect(await page.evaluate(() => window.history.length), "tidak menambah entri").toBe(before);
+  });
+
+  test("kembali lewat memori tab setelah pindah tab: ‹ Perusahaan ke akar Perusahaan, bukan ke tab lain (aturan 8)", async ({ page }) => {
+    await open(page, "/perusahaan");
+    await scrollTo(page, 500);
+    await push(page, "/perusahaan/COAL");
+    await tab(page, "Alat").click();
+    await expect.poll(() => hashOf(page)).toBe("#/alat");
+    await tab(page, "Perusahaan").click();
+    await expect.poll(() => hashOf(page)).toBe("#/perusahaan/COAL");
+    const before = await page.evaluate(() => window.history.length);
+    await back(page, "Perusahaan").click();
+    await expect.poll(() => hashOf(page), "entri sebelumnya milik Alat: tidak navigate(-1)").toBe("#/perusahaan");
+    await expect.poll(() => scrollY(page), "scroll akar Perusahaan pulih lewat aturan 5").toBe(500);
+    expect(await page.evaluate(() => window.history.length), "replace, bukan push").toBe(before);
+    await expect(page.locator(`${NAV} a[aria-current="page"]`)).toHaveText("Perusahaan");
   });
 
   test("tautan dalam yang dibuka dingin dari Perusahaan: ‹ Perusahaan ke akarnya (aturan 9)", async ({ page }) => {
