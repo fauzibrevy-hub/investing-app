@@ -68,17 +68,8 @@ drop_for() {
       echo 'del(.as_of, .items[].added_at, .items[].synced_at)' ;;
     /api/research/lookup\?q=*)
       echo 'del(.as_of)' ;;
-    # Request time (src/research/valuation.rs:882).
-    /api/research/*/valuation)
-      echo 'del(.as_of)' ;;
-    # NEW (same): request time (src/research/api/r5.rs:129 for /{T},
-    # src/research/packs/payload.rs:705 for /pack, src/research/prices/payload.rs:403 for /prices).
-    /api/research/*/pack | /api/research/*/prices)
-      echo 'del(.as_of)' ;;
     /api/research/compare | /api/research/filings)
       echo '' ;;
-    /api/research/[!/]*)
-      echo 'del(.as_of)' ;;
     # Request time (finance-app scripts/parity.sh:68).
     /api/finance/stock-portfolio)
       echo 'del(.summary.updated_at)' ;;
@@ -93,7 +84,17 @@ drop_for() {
     /api/macro/scoring)
       echo 'del(.as_of, .score_vintage)' ;;
     *)
-      echo '' ;;
+      # Per-ticker paths. A case glob's `*` also matches `/`, so these are regexes with one
+      # segment per `[^/?#]+`: every other /api/research path keeps its as_of.
+      # Request time (src/research/valuation.rs:882 for /{T}/valuation).
+      # NEW (not in plan.md's table; owner OK needed in the L1b PR): request time
+      # (src/research/api/r5.rs:129 for /{T}, src/research/packs/payload.rs:705 for /pack,
+      # src/research/prices/payload.rs:403 for /prices).
+      if [[ "$1" =~ ^/api/research/[^/?#]+(/(valuation|pack|prices))?$ ]]; then
+        echo 'del(.as_of)'
+      else
+        echo ''
+      fi ;;
   esac
 }
 
