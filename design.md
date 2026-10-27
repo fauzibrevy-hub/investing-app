@@ -160,7 +160,7 @@ Blocks 0–10 exactly as finance-app `ui-slicing.md` §1 (Header, Struktur bisni
 
 - Header back control per §2.4 ("‹ <owner tab>").
 - `FactDrawer` uses its phone variant at every width; its `≥ 1024 px` branch is deleted (D13).
-- **New block "Tesis"**, between Jurnal (7) and Harga (8), **lipat**:
+- **New block "Tesis"**, between Jurnal (7) and Harga (8), **lipat**, block id `tesis` (`?section=tesis`, alias `thesis`, opens it and scrolls to it; plan §3.3):
   - Dossier from the vault, read-only: thesis statement, then Lens, Falsifiers, Review log, Evidence as sub-sections (markdown rendered, lens as label–value rows), "diperbarui <tanggal>".
   - Drafts for this ticker (rows of `GET /api/thesis/drafts` whose `ticker` is T) as 2-line rows (title; type · story status · date). Tap → draft detail in a `Sheet` with **Hapus draf** (ghost, `status-over`, confirmation dialog).
   - **Tulis draf tesis** opens the draft editor in a full-height `Sheet` (fields as finance-app `design.md` §3.4; unsent text kept in `localStorage` per ticker; sticky **Simpan draf** 52 px above the keyboard).

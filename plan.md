@@ -40,7 +40,7 @@ L1 → L2 → L3a/L3b/L3c (parallel lanes, stacked on L2) → L4 → L5 → L6. 
 
 ### 3.2 L2 Web shell
 
-Branch `slice/L2-web-shell` from `main`. depends_on: L1 merged (Vitest `components/charts/driverGeometry.test.ts` and the e2e mocks read `tests/fixtures/research/**`; the thesis mocks read `tests/fixtures/thesis_golden/`). Rollback: close the PR. Decisions D1, D7 (prd.md §9) and D8, D13, D15, D16 (design.md, decisions table) apply.
+Branch `slice/l2-web-shell` from `main`. depends_on: L1 merged (Vitest `components/charts/driverGeometry.test.ts` and the e2e mocks read `tests/fixtures/research/**`; the thesis mocks read `tests/fixtures/thesis_golden/`). Rollback: close the PR. Decisions D1, D7 (prd.md §9) and D8, D13, D15, D16 (design.md, decisions table) apply.
 
 **Copy** finance-app `web/` at the L1 source commit, minus the "Not copied" list. Trial on `4ef2dd9` (2026-10-27, scratch copy with finance-app `tests/fixtures/research/` beside it as L1 leaves it): this tree plus edits 1, 2, 3 (without the new `navState`/`BackHeader`), 4, 6, 7 and 8 below passes `npx tsc -b`, `npm test` (15 files, 216 tests) and `npm run build`; `npm run icons` with the "I" glyph of edit 9 writes the four PNGs.
 
@@ -85,15 +85,27 @@ No widths in the checklist: layout at 393 px is the automated floor's job.
 
 ### 3.3 L3 Screens
 
-**Order** (D14, D17). L3a branches from `main` after L2 merges. L3b and L3c branch from `main` after L3a merges and run in parallel. Every PR is a draft into `main`; no stacked bases. Branches `slice/L3a-beranda-alat`, `slice/L3b-perusahaan`, `slice/L3c-portofolio`. L3b depends_on L3a (merged); L3c depends_on L3a (merged). Rollback: close the PR.
+**Order** (D14, D17). L3a branches from `main` after L2 merges. L3b and L3c branch from `main` after L3a merges and run in parallel. Every PR is a draft into `main`; no stacked bases. Branches `slice/l3a-beranda-alat`, `slice/l3b-perusahaan`, `slice/l3c-portofolio`. L3b depends_on L3a (merged); L3c depends_on L3a (merged). Rollback: close the PR.
 
 **Copy rule.** Start from the entry files of each lane and copy what they import, following relative imports (type-only included), CSS `url()` and `import.meta.glob`, with the exceptions below. Files L2 already carries (`components/`, `lib/`, `shell/`, `pwa/`) are not copied again. Measured on `4ef2dd9` with the exceptions applied: L3a reaches 26 files under `features/`, L3b 73, L3c none (`PortfolioScreen.tsx` alone).
 
 | Lane | Entry files (finance-app `web/src/`) | Builds |
 |---|---|---|
 | L3a | `features/riset/screens/{Landing,Compare,Calibration,Packs}.tsx`, `features/research/desk/{MacroContextCard.tsx,useMacro.ts,useInbox.ts}` | Beranda (design.md §3.1, new `MacroGrid`), Alat list (new `ToolRow`) and the three tools (§3.5); `Landing.tsx` split into `features/beranda/Beranda.tsx` (Kotak masuk, Kalender, Makro) and `features/perusahaan/CoverageList.tsx` (the "Perusahaan saya" rows and groups, exported, not routed) |
-| L3b | `features/riset/CompanyPage.tsx`, `features/riset/screens/Add.tsx`, `screens/thesis/ThesisScreen.tsx` | Perusahaan screen on `CoverageList` + "Tesis lain" + `VaultDraftsSheet` (§3.3), company page + `ThesisBlock` (§3.4), Tambah with `?ticker=` prefill |
+| L3b | `features/riset/CompanyPage.tsx`, `features/riset/screens/Add.tsx`, `screens/thesis/ThesisScreen.tsx` | Perusahaan screen on `CoverageList` + "Tesis lain" + `VaultDraftsSheet` (§3.3), company page + `ThesisBlock` (§3.4) with the `tesis` block id below, Tambah with `?ticker=` prefill |
 | L3c | `screens/portfolio/PortfolioScreen.tsx` | Portofolio (§3.2) with `PositionSheet` and the eye toggle |
+
+**`CoverageList` contract** (L3a exports, L3b consumes). File `features/perusahaan/CoverageList.tsx`, built from finance-app `Landing.tsx:25-89` (`CompanyRow`, `Companies`) and `landingData.ts:20-33` (`CoverageGroups`, `groupCoverage`, which stay in `landingData.ts`):
+
+```ts
+import type { CoverageRow, DeskResponse } from "../research/types";
+export function CompanyRow(props: { row: CoverageRow }): JSX.Element;   // 2-line row, link → #/perusahaan/<T>
+export function CoverageList(props: { desk: DeskResponse }): JSX.Element;
+```
+
+`CoverageList` renders design.md §3.3 blocks 2–4 only: Dipegang (`held`), Manual (`manual`, omitted when empty), Pembanding (n) (`peers`, lipat, omitted when empty). It does not fetch, and it has no header, **Tambah**, loading, error, "Tesis lain" or footer: L3b's Perusahaan screen calls `useDesk()` and owns those. When `held` and `manual` are both empty it renders finance-app's empty text with a **Tambah emiten** link to `#/perusahaan/tambah`. L3a's `Beranda.tsx` does not use it.
+
+**`tesis` block id** (L3b; `features/riset/sections.ts` is reached by L3b's closure only). finance-app `sections.ts:1,4,6,9-22` has no `tesis`, so `sectionTarget("tesis")` returns `null` (`:25-29`) and `CompanyPage.tsx:46-53` neither opens nor scrolls. L3b adds `"tesis"` to `BlockId` and to `IDS` between `"jurnal"` and `"harga"`, `tesis: false` to `COLLAPSIBLE` (lipat), and `thesis: "tesis"` to `ALIASES`; `CompanyPage.tsx:32` adds `tesis: COLLAPSIBLE.tesis ?? false` to the open state (true in the thesis-only state). `ThesisBlock` renders with `id="tesis"`. Unit test: `sectionTarget("tesis")` and `sectionTarget("thesis")` return `"tesis"`; `#/perusahaan/COAL?section=tesis` opens the block and scrolls it to the top.
 
 **Ownership** (D14). A file reached by L3a's closure, or by both L3a's and L3b's, belongs to L3a; a file only one lane reaches belongs to that lane. Measured shared L3a∩L3b files: `features/research/{api,types,format}.ts`, `features/research/components/{FactChip,FactDrawer,ProvenanceBadge}.tsx`, `features/riset/ui.tsx`. L3a also owns the `App.tsx` route table and the `ROUTES` table of `e2e/floor.e2e.ts`: it lands every design.md §2.2 route, with L3b's and L3c's still on `PlaceholderScreen`; each later lane changes only its own lines (a route-line conflict on rebase is resolved by keeping both lines). L3b and L3c share no file except those two tables. `ThesisBlock` and `VaultDraftsSheet` live outside `features/research/` (e.g. `features/thesis/`), so `features/research/independence.test.ts` keeps forbidding `/api/thesis` there.
 
@@ -158,8 +170,8 @@ A finance-app PR (its repo, its canon): delete `src/research`, `src/thesis`, `sr
 | Slice | Commands (run from a fresh clone of the PR branch) |
 |---|---|
 | L1 | `cargo fmt --check` · `cargo clippy --all-targets -- -D warnings` · `cargo test --no-fail-fast` (canon goldens included) · start the release binary on an APFS clone of `~/finance-app-data` with a throwaway token on a spare port → `curl -sf /api/health` 200 and one authenticated `GET /api/research/desk` 200 · `git grep -nE 'FINANCE_|finance_session|X-Finance' -- ':!*.md'` empty |
-| L2 | `scripts/check.sh` OK (its `web` part is `npm ci && npm test && npm run build`; `build` runs `tsc -b`) · in `web/`: `npx playwright install webkit && npm run e2e` (project `webkit-iphone15`, mocks only, D15): `shell.e2e.ts` 4 links each ≥ 44 × 44 px, no FAB, also at 200 % root font; `floor.e2e.ts` every design.md §2.2 route (placeholders): no page overflow, targets ≥ 44 px, axe no serious/critical; `nav.e2e.ts` design.md §2.4 · screenshots committed under `docs/qa/L2/` and linked in the PR body (D17) · `docs/iphone-checklist.md` rewritten (not run) |
-| L3 | L2 checks plus: `floor.e2e.ts` on the lane's real screens (mock data: canon goldens, thesis goldens, `e2e/fixtures/stock-portfolio.json`; no backend, no live data); the lane's spec (§3.3 "e2e per lane"); the ported guard tests pass in `npm test`; tests dropped are listed in the PR body; screenshots under `docs/qa/L3a/`, `docs/qa/L3b/`, `docs/qa/L3c/`. After L3c: the old-route `git grep` of §3.3 is empty. Real held tickers (BUMI, BRIS) are checked at L4, not here |
+| L2 | `scripts/check.sh` OK (its `web` part is `npm ci && npm test && npm run build`; `build` runs `tsc -b`) · in `web/`: `npx playwright install webkit && npm run e2e` (project `webkit-iphone15`, mocks only, D15): `shell.e2e.ts` 4 links each ≥ 44 × 44 px, no FAB, also at 200 % root font; `floor.e2e.ts` every design.md §2.2 route (placeholders): no page overflow, targets ≥ 44 px, axe no serious/critical; `nav.e2e.ts` design.md §2.4 · screenshots committed under `docs/qa/l2/` and linked in the PR body (D17) · `docs/iphone-checklist.md` rewritten (not run) |
+| L3 | L2 checks plus: `floor.e2e.ts` on the lane's real screens (mock data: canon goldens, thesis goldens, `e2e/fixtures/stock-portfolio.json`; no backend, no live data); the lane's spec (§3.3 "e2e per lane"); the ported guard tests pass in `npm test`; tests dropped are listed in the PR body; screenshots under `docs/qa/l3a/`, `docs/qa/l3b/`, `docs/qa/l3c/`. After L3c: the old-route `git grep` of §3.3 is empty. Real held tickers (BUMI, BRIS) are checked at L4, not here |
 | L4 | `scripts/parity.sh` exit 0 · `scripts/counts.sh` exit 0 · `docs/iphone-checklist.md` passes at 393, 768, 1280 |
 | L5 | Health and `/` 200 on `:8789` and `:8445` · `counts.sh` exit 0 after the final clone · scheduler first run logged without errors |
 | L6 | finance-app full gates (fmt, clippy, cargo test, tsc, vitest, build, e2e) · spending acceptance from finance-app `prd.md` §3.1 · `git grep -nE 'api/(research|thesis|macro)|stock-portfolio'` in finance-app empty outside docs |
