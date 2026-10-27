@@ -1,0 +1,44 @@
+{
+  "claim_id": "c-e904edb8bb5c5152",
+  "ticker": "COAL",
+  "statement": "Laba bersih kuartal 2 positif",
+  "items": [
+    {
+      "status": "holding",
+      "label": "Berlaku",
+      "evaluated_at": "2026-10-24T09:00:00+00:00",
+      "value": 21800000.0,
+      "inputs": {
+        "window": "quarter:2026Q2",
+        "as_of": "2026-10-24",
+        "observations": [
+          {
+            "quarter": {
+              "fy": 2026,
+              "q": 2
+            },
+            "date": "2026-06-30",
+            "available_from": "2026-08-29",
+            "value": 21800000.0,
+            "inputs": {
+              "kind": "xbrl",
+              "operands": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": {
+                    "fy": 2026,
+                    "q": 2
+                  },
+                  "view": "standalone",
+                  "value": 21800000.0
+                }
+              ]
+            }
+          }
+        ],
+        "reason": null
+      }
+    }
+  ]
+}

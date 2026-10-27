@@ -1,0 +1,233 @@
+{
+  "ticker": "NONE",
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "rules_version": "2026.10-r3",
+  "currency": "IDR",
+  "fx_usd_idr": null,
+  "price": {
+    "close": 1277.0,
+    "date": "2026-10-23"
+  },
+  "shares": null,
+  "market_cap": null,
+  "latest_quarter": {
+    "fy": 2026,
+    "q": 2,
+    "label": "2026Q2",
+    "available_from": "2026-08-29"
+  },
+  "history": {
+    "from": "2025-10-01",
+    "to": "2026-10-23",
+    "days": 278
+  },
+  "reverse_dcf": {
+    "fcf_base": "ttm",
+    "fcf": 20000000.0,
+    "fcf_ttm": 20000000.0,
+    "fcf_avg5y": 20000000.0,
+    "horizon_years": 10,
+    "terminal_growth": 3.0,
+    "rows": [
+      {
+        "discount_rate": 9.0,
+        "implied_growth": null
+      },
+      {
+        "discount_rate": 11.0,
+        "implied_growth": null
+      },
+      {
+        "discount_rate": 13.0,
+        "implied_growth": null
+      }
+    ],
+    "applicable": false,
+    "reason": "harga atau jumlah saham belum tersedia"
+  },
+  "multiples": {
+    "pe": {
+      "ttm": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle5y": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle10y": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      }
+    },
+    "pb": {
+      "ttm": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle5y": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle10y": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      }
+    },
+    "ev_ebitda": {
+      "ttm": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle5y": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle10y": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      }
+    },
+    "dividend_yield": {
+      "ttm": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle5y": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      },
+      "cycle10y": {
+        "value": null,
+        "percentile": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "n": 0,
+        "caption": null,
+        "cpi_adjusted": null
+      }
+    }
+  },
+  "earnings_yield": {
+    "earnings_yield": null,
+    "bond_yield": null,
+    "bond_status": "TBD",
+    "bond_driver": "sbn_10y",
+    "spread": null,
+    "spread_band": {
+      "value": null,
+      "percentile": null,
+      "median": null,
+      "min": null,
+      "max": null,
+      "n": 0,
+      "caption": null,
+      "cpi_adjusted": null
+    }
+  },
+  "scenarios": {
+    "discount_rate": 11.0,
+    "rows": [
+      {
+        "name": "bear",
+        "growth": null,
+        "margin": null,
+        "exit_multiple": null,
+        "years": null,
+        "value_per_share": null,
+        "gap_pct": null,
+        "updated_at": null,
+        "action": "Isi skenario"
+      },
+      {
+        "name": "base",
+        "growth": null,
+        "margin": null,
+        "exit_multiple": null,
+        "years": null,
+        "value_per_share": null,
+        "gap_pct": null,
+        "updated_at": null,
+        "action": "Isi skenario"
+      },
+      {
+        "name": "bull",
+        "growth": null,
+        "margin": null,
+        "exit_multiple": null,
+        "years": null,
+        "value_per_share": null,
+        "gap_pct": null,
+        "updated_at": null,
+        "action": "Isi skenario"
+      }
+    ]
+  }
+}

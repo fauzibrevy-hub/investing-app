@@ -1,0 +1,489 @@
+{
+  "version": 1,
+  "ticker": "BUMI",
+  "nodes": [
+    {
+      "id": "n1",
+      "parent": null,
+      "label": "Segmen batubara",
+      "kind": "segmen",
+      "note": "Penambangan dan pemasaran batubara. Pendapatan eksternal segmen (USD): 1,175,412,847 batubara, 249,354,352 mineral.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 463,
+        "snippet": "Pihak Eksternal 1,175,412,847 249,354,352 1,424,767,199 External"
+      }
+    },
+    {
+      "id": "n2",
+      "parent": "n1",
+      "label": "Produksi batubara gabungan",
+      "kind": "produk",
+      "metric": "production_mt",
+      "note": "Realisasi 74.8MT terhadap target 78MT - 82MT; KPC dan Arutmin.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 163,
+        "snippet": "Produksi 78MT - 82MT 74.8MT Production"
+      }
+    },
+    {
+      "id": "n3",
+      "parent": "n1",
+      "label": "Volume batubara yang dipasarkan",
+      "kind": "produk",
+      "metric": "sales_mt",
+      "note": "Total batubara yang dipasarkan sebesar 74.7 juta ton.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 164,
+        "snippet": "the Company recorded total coal sales of 74.7 million tons,"
+      }
+    },
+    {
+      "id": "n4",
+      "parent": "n1",
+      "label": "Harga FOB gabungan",
+      "kind": "pendorong_harga",
+      "metric": "asp_usd_t",
+      "note": "Realisasi USD59.7/t terhadap target USD71/t - USD81/t.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 163,
+        "snippet": "Harga FOB Gabungan USD71/t - USD81/t USD59.7/t Combined FOB Prices"
+      }
+    },
+    {
+      "id": "n5",
+      "parent": "n1",
+      "label": "Harga acuan batubara Newcastle",
+      "kind": "pendorong_harga",
+      "note": "Dikutip laporan sebagai proyeksi JPMorgan.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 162,
+        "snippet": "harga acuan batubara Newcastle akan bergerak di"
+      }
+    },
+    {
+      "id": "n6",
+      "parent": "n1",
+      "label": "Harga Batubara Acuan (HBA) kalori tinggi",
+      "kind": "pendorong_harga",
+      "note": "Ditetapkan Kementerian ESDM sebesar US$124,01/ton.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 135,
+        "snippet": "sebesar US$124,01/ton. Pada akhir 2025, HBA kalori tinggi"
+      }
+    },
+    {
+      "id": "n7",
+      "parent": "n1",
+      "label": "Pasar domestik (kewajiban DMO)",
+      "kind": "pelanggan",
+      "note": "29.8% volume diserap pasar domestik; Perseroan berkomitmen memenuhi DMO.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 164,
+        "snippet": "29.8% of which was absorbed by the domestic market and"
+      }
+    },
+    {
+      "id": "n8",
+      "parent": "n1",
+      "label": "Pasar ekspor terbesar: Tiongkok, India, Jepang",
+      "kind": "pelanggan",
+      "note": "China 26.2% dan India 10.0% dari volume; Jepang disebut pada kalimat berikutnya.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 164,
+        "snippet": "sales were China (26.2%), India (10.0%), and Japan"
+      }
+    },
+    {
+      "id": "n9",
+      "parent": "n1",
+      "label": "PT Kaltim Prima Coal (KPC)",
+      "kind": "segmen",
+      "note": "Dicatat sebagai ventura bersama (joint ventures).",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 359,
+        "snippet": "PT Kaltim Prima Coal (KPC) Indonesia Pertambangan"
+      }
+    },
+    {
+      "id": "n10",
+      "parent": "n9",
+      "label": "Produk KPC: Prima, Pinang, Melawan, KPC 4200",
+      "kind": "produk",
+      "note": "Empat (4) jenis produk batubara.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 139,
+        "snippet": "4. KPC 4200, batubara sub-bituminous dengan"
+      }
+    },
+    {
+      "id": "n11",
+      "parent": "n9",
+      "label": "Harga FOB rata-rata KPC",
+      "kind": "pendorong_harga",
+      "note": "Tidak diaudit. USD/t: 62.33 vs 76.06 tahun sebelumnya.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 140,
+        "snippet": "Harga FOB Rata-Rata* $/t sold 62.33 76.06"
+      }
+    },
+    {
+      "id": "n12",
+      "parent": "n9",
+      "label": "Biaya per unit KPC",
+      "kind": "biaya",
+      "note": "Tidak diaudit: 45.5 vs 50.2 tahun sebelumnya (satuan tertulis S/t di dokumen).",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 140,
+        "snippet": "Unit Cost* S/t 45.5 50.2"
+      }
+    },
+    {
+      "id": "n13",
+      "parent": "n9",
+      "label": "Kepemilikan langsung Bumi di KPC",
+      "kind": "kepemilikan",
+      "note": "Persentase kepemilikan: 25.00%.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 359,
+        "snippet": "(langsung/direct) Batubara/ Coal 1992 25.00 25.00"
+      }
+    },
+    {
+      "id": "n14",
+      "parent": "n9",
+      "label": "Kepemilikan di KPC melalui Sitrade",
+      "kind": "kepemilikan",
+      "note": "Persentase kepemilikan: 25.99%.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 359,
+        "snippet": "(melalui/through Sitrade) Mining 25.99 25.99"
+      }
+    },
+    {
+      "id": "n15",
+      "parent": "n1",
+      "label": "PT Arutmin Indonesia (Arutmin)",
+      "kind": "segmen",
+      "note": "Entitas anak yang dikonsolidasikan.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 358,
+        "snippet": "PT Arutmin Indonesia (Arutmin) Indonesia Pertambangan"
+      }
+    },
+    {
+      "id": "n16",
+      "parent": "n15",
+      "label": "Enam tambang terbuka Arutmin",
+      "kind": "produk",
+      "note": "Senakin, Satui, Mulia/Jumbang, Sarongga, Asam-Asam, Kintap.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 140,
+        "snippet": "tahun 2025, Arutmin mengoperasikan 6 (enam) tambang"
+      }
+    },
+    {
+      "id": "n17",
+      "parent": "n15",
+      "label": "Harga FOB rata-rata Arutmin",
+      "kind": "pendorong_harga",
+      "note": "USD/t: 53.2 vs 59.4 tahun sebelumnya.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 142,
+        "snippet": "Harga FOB Rata-Rata $/t sold 53.2 59.4"
+      }
+    },
+    {
+      "id": "n18",
+      "parent": "n15",
+      "label": "Biaya per unit Arutmin",
+      "kind": "biaya",
+      "note": "USD/t: 36.6 vs 38.9 tahun sebelumnya.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 142,
+        "snippet": "Unit Cost $/t 36.6 38.9"
+      }
+    },
+    {
+      "id": "n19",
+      "parent": "n15",
+      "label": "Harga mengacu HPB (dari HBA) pada perjanjian dengan GST",
+      "kind": "pendorong_harga",
+      "note": "Berlaku pada perjanjian jaminan deposit Arutmin dengan PT Global Solid Transfer.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 432,
+        "snippet": "mengacu pada Harga Patokan Batubara (HPB)"
+      }
+    },
+    {
+      "id": "n20",
+      "parent": "n15",
+      "label": "Kepemilikan langsung Bumi di Arutmin",
+      "kind": "kepemilikan",
+      "note": "Persentase kepemilikan: 70.00%.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 358,
+        "snippet": "(langsung/direct ) Batubara/ Coal 1989 70.00 70.00"
+      }
+    },
+    {
+      "id": "n21",
+      "parent": "n15",
+      "label": "Kepemilikan di Arutmin melalui PT Green Resources",
+      "kind": "kepemilikan",
+      "note": "Persentase kepemilikan: 20.00%.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 358,
+        "snippet": "(melalui/through GR) Mining 20.00 20.00"
+      }
+    },
+    {
+      "id": "n22",
+      "parent": "n1",
+      "label": "PT Pendopo Energi Batubara (PEB)",
+      "kind": "segmen",
+      "note": "Batubara muda; pasokan komersial ke pedagang batubara.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 358,
+        "snippet": "PT Pendopo Energi Batubara Indonesia Pertambangan"
+      }
+    },
+    {
+      "id": "n23",
+      "parent": "n22",
+      "label": "Pedagang batubara (batubara run of mine)",
+      "kind": "pelanggan",
+      "note": "Pengiriman rutin dengan tongkang untuk kebutuhan domestik.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 143,
+        "snippet": "perusahaan perdagangan batubara (coal"
+      }
+    },
+    {
+      "id": "n24",
+      "parent": "n22",
+      "label": "Kepemilikan Bumi di PEB",
+      "kind": "kepemilikan",
+      "note": "Persentase kepemilikan: 84.48%, melalui PT Indah Alam Raya (IAR).",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 358,
+        "snippet": "(melalui/through IAR) Mining 2009 84.48 84.48"
+      }
+    },
+    {
+      "id": "n25",
+      "parent": null,
+      "label": "Segmen mineral",
+      "kind": "segmen",
+      "note": "Emas dan perak. Pendapatan eksternal segmen (USD): 249,354,352.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 463,
+        "snippet": "Pihak Eksternal 1,175,412,847 249,354,352 1,424,767,199 External"
+      }
+    },
+    {
+      "id": "n26",
+      "parent": "n25",
+      "label": "Kepemilikan langsung Bumi di PT Bumi Resources Minerals Tbk",
+      "kind": "kepemilikan",
+      "note": "Persentase kepemilikan: 20.09%; BRMS adalah perusahaan induk (holding).",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 357,
+        "snippet": "2003 20.09 20.09 1,310,548,105 1,154,868,810"
+      }
+    },
+    {
+      "id": "n27",
+      "parent": "n25",
+      "label": "PT Citra Palu Minerals (Poboya): porsi BRMS",
+      "kind": "segmen",
+      "note": "BRMS memegang 96,97% saham; Kontrak Karya, emas Poboya di Palu.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 145,
+        "snippet": "BRMS memiliki kepemilikan sebesar 96,97% saham pada"
+      }
+    },
+    {
+      "id": "n28",
+      "parent": "n25",
+      "label": "Kepemilikan Bumi di Jubilee Metals Limited (JML)",
+      "kind": "kepemilikan",
+      "note": "Persentase kepemilikan: 64.98%; aset emas di Queensland, Australia.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 171,
+        "snippet": "ownership stake in JML now stands at 64.98%"
+      }
+    },
+    {
+      "id": "n29",
+      "parent": "n25",
+      "label": "Kepemilikan Bumi di Wolfram Limited",
+      "kind": "kepemilikan",
+      "note": "Persentase kepemilikan: 100%; penambang tembaga dan emas di Australia.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 170,
+        "snippet": "kepemilikan terhadap Wolfram menjadi sebesar 100%."
+      }
+    },
+    {
+      "id": "n30",
+      "parent": null,
+      "label": "Pelanggan dengan transaksi lebih dari 10% pendapatan",
+      "kind": "pelanggan",
+      "note": "Tidak dirinci per segmen batubara atau mineral.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 450,
+        "snippet": "than 10% of total revenues and for the years"
+      }
+    },
+    {
+      "id": "n31",
+      "parent": "n30",
+      "label": "Rwood Resources DMCC",
+      "kind": "pelanggan",
+      "note": "USD: 506,867,782 vs 522,081,841 tahun sebelumnya.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 450,
+        "snippet": "Rwood Resources DMCC 506,867,782 522,081,841"
+      }
+    },
+    {
+      "id": "n32",
+      "parent": "n30",
+      "label": "PT PLN (Persero)",
+      "kind": "pelanggan",
+      "note": "USD: 251,731,856 vs 233,111,664 tahun sebelumnya.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 450,
+        "snippet": "PT PLN (Persero) 251,731,856 233,111,664"
+      }
+    },
+    {
+      "id": "n33",
+      "parent": "n30",
+      "label": "PT Hartadinata Abadi Tbk",
+      "kind": "pelanggan",
+      "note": "USD: 196,076,009 vs 139,239,762 tahun sebelumnya.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 450,
+        "snippet": "PT Hartadinata Abadi Tbk 196,076,009 139,239,762"
+      }
+    },
+    {
+      "id": "n34",
+      "parent": null,
+      "label": "Beban pokok pendapatan konsolidasi",
+      "kind": "biaya",
+      "note": "Rincian dalam USD.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 451,
+        "snippet": "32. BEBAN POKOK PENDAPATAN 32. COST OF REVENUES"
+      }
+    },
+    {
+      "id": "n35",
+      "parent": "n34",
+      "label": "Pengupasan dan penambangan",
+      "kind": "biaya",
+      "note": "USD: 868,015,458 vs 849,257,831 tahun sebelumnya; baris terbesar dalam rincian.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 451,
+        "snippet": "Pengupasan dan Penambangan 868,015,458 849,257,831"
+      }
+    },
+    {
+      "id": "n36",
+      "parent": "n34",
+      "label": "Royalti",
+      "kind": "biaya",
+      "note": "USD: 244,747,734 vs 294,049,753 tahun sebelumnya. Penurunan beban pokok dikaitkan dengan penyesuaian tarif royalti ekspor batubara.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 451,
+        "snippet": "Royalti 244,747,734 294,049,753"
+      }
+    },
+    {
+      "id": "n37",
+      "parent": null,
+      "label": "Laba tahun berjalan untuk pemilik entitas induk",
+      "kind": "kepemilikan",
+      "note": "USD: 81,011,806 vs 67,478,079 tahun sebelumnya; pertumbuhan 20.06%.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 155,
+        "snippet": "dapat diatribusikan kepada 81,011,806 67,478,079 20.06"
+      }
+    },
+    {
+      "id": "n38",
+      "parent": null,
+      "label": "Kepentingan non-pengendali",
+      "kind": "kepemilikan",
+      "note": "Bagian ekuitas entitas anak yang dimiliki pihak lain.",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 449,
+        "snippet": "30. KEPENTINGAN NON PENGENDALI 30. NON-CONTROLLING INTERESTS"
+      }
+    },
+    {
+      "id": "n39",
+      "parent": "n38",
+      "label": "Kepentingan non-pengendali di PT Bumi Resources Minerals Tbk",
+      "kind": "kepemilikan",
+      "note": "Saldo awal 1,333,940,869; saldo akhir 1,371,878,547 (USD).",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 449,
+        "snippet": "Minerals Tbk 1,333,940,869 38,393,348 (9,107) (446,563) 1,371,878,547"
+      }
+    },
+    {
+      "id": "n40",
+      "parent": "n38",
+      "label": "Kepentingan non-pengendali di PT Arutmin Indonesia",
+      "kind": "kepemilikan",
+      "note": "Saldo awal 129,744,069; saldo akhir 96,537,536 (USD); penyesuaian (36,061,971).",
+      "source": {
+        "document": "BUMI-AR-2025.pdf",
+        "page": 449,
+        "snippet": "PT Arutmin Indonesia 129,744,069 2,906,015 (50,577) (36,061,971) 96,537,536"
+      }
+    }
+  ]
+}

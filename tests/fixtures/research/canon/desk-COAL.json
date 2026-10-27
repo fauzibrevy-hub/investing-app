@@ -1,0 +1,246 @@
+{
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "inbox": [
+    {
+      "id": "level_crossed-f66630f56318c5e0",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "level_crossed",
+      "group": "level",
+      "section": "price",
+      "text": "Harga 1.290 turun melewati level 1.300 (\"Harga incaran\")",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "level_id": "j-aba40be3fe26119f",
+        "level": 1300.0,
+        "text": "Harga incaran",
+        "direction": "down",
+        "from": 1310.0,
+        "to": 1290.0,
+        "date": "2026-10-27"
+      }
+    },
+    {
+      "id": "level_crossed-2d5c66978cd0068b",
+      "at": "2026-10-28T03:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "level_crossed",
+      "group": "level",
+      "section": "price",
+      "text": "Harga 1.310 naik melewati level 1.300 (\"Harga incaran\")",
+      "age_days": 0,
+      "dismissed_at": null,
+      "payload": {
+        "level_id": "j-aba40be3fe26119f",
+        "level": 1300.0,
+        "text": "Harga incaran",
+        "direction": "up",
+        "from": 1277.0,
+        "to": 1310.0,
+        "date": "2026-10-26"
+      }
+    },
+    {
+      "id": "kpi_due-5fa233d806c8f05b",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "kpi_due",
+      "group": "kpi",
+      "section": "pack",
+      "text": "KPI Q2 26 belum diisi: Harga jual rata-rata, Biaya tunai, Nisbah kupas",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "due": "2026-09-12",
+        "missing": [
+          "Harga jual rata-rata",
+          "Biaya tunai",
+          "Nisbah kupas"
+        ]
+      }
+    },
+    {
+      "id": "filing_new-c6630d9139cbea05",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "filing_new",
+      "group": "laporan",
+      "section": "financials",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "filing_id": "COAL_2026_Q2",
+        "label": "2026Q2",
+        "fy": 2026,
+        "q": 2,
+        "audited": false,
+        "available_from": "2026-08-29"
+      }
+    },
+    {
+      "id": "claim_status-518fa203b890c5c4",
+      "at": "2026-10-24T09:00:00+00:00",
+      "ticker": "COAL",
+      "kind": "claim_status",
+      "group": "klaim",
+      "section": "claims",
+      "text": "Klaim \"Produksi minimal lima juta ton\": Belum teruji → Berlaku (nilai 6)",
+      "age_days": 4,
+      "dismissed_at": null,
+      "payload": {
+        "claim_id": "c-2fcedc885cd0b4b9",
+        "statement": "Produksi minimal lima juta ton",
+        "from": "not_testable",
+        "to": "holding",
+        "from_label": "Belum teruji",
+        "to_label": "Berlaku",
+        "value": 6.0
+      }
+    }
+  ],
+  "inbox_total": 5,
+  "filters": [
+    {
+      "group": "semua",
+      "label": "Semua",
+      "count": 5
+    },
+    {
+      "group": "laporan",
+      "label": "Laporan baru",
+      "count": 1
+    },
+    {
+      "group": "klaim",
+      "label": "Klaim",
+      "count": 1
+    },
+    {
+      "group": "kpi",
+      "label": "KPI",
+      "count": 1
+    },
+    {
+      "group": "level",
+      "label": "Level",
+      "count": 2
+    },
+    {
+      "group": "bendera",
+      "label": "Bendera",
+      "count": 0
+    },
+    {
+      "group": "data",
+      "label": "Data",
+      "count": 0
+    }
+  ],
+  "coverage": [
+    {
+      "ticker": "COAL",
+      "role": "held",
+      "peer_of": null,
+      "business_note": null,
+      "pack": {
+        "id": "coal_mining",
+        "label": "Tambang batubara",
+        "source": "filing",
+        "action": null
+      },
+      "last_seen": "2026-10-24T09:00:00+00:00",
+      "claims": {
+        "holding": 2,
+        "broken": 1,
+        "not_testable": 1,
+        "expired": 1
+      },
+      "xbrl": {
+        "populated": 17,
+        "total": 19,
+        "pct": 89.4737
+      },
+      "kpi": {
+        "entered": 1,
+        "unknown": 1,
+        "expected": 21,
+        "missing": [
+          "production_mt 2025Q3",
+          "production_mt 2025Q4",
+          "production_mt 2026Q1",
+          "sales_mt 2025Q3",
+          "sales_mt 2025Q4",
+          "sales_mt 2026Q1",
+          "asp_usd_t 2025Q3",
+          "asp_usd_t 2025Q4",
+          "asp_usd_t 2026Q1",
+          "asp_usd_t 2026Q2",
+          "cash_cost_usd_t 2025Q3",
+          "cash_cost_usd_t 2025Q4",
+          "cash_cost_usd_t 2026Q1",
+          "cash_cost_usd_t 2026Q2",
+          "stripping_ratio 2025Q3",
+          "stripping_ratio 2025Q4",
+          "stripping_ratio 2026Q1",
+          "stripping_ratio 2026Q2",
+          "reserves_mt 2025Q4"
+        ]
+      },
+      "next_report": {
+        "label": "2026Q3",
+        "deadline": "2026-10-30",
+        "overdue": false
+      },
+      "data": {
+        "state": "sebagian",
+        "label": "Sebagian",
+        "reasons": [],
+        "has_pack": true
+      }
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2026-10-30",
+      "ticker": "COAL",
+      "kind": "pojk",
+      "label": "Batas laporan 2026Q3",
+      "source": "pojk",
+      "window": {
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      },
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": null
+    },
+    {
+      "date": "2026-11-15",
+      "ticker": "COAL",
+      "kind": "rups",
+      "label": "RUPS",
+      "source": "manual",
+      "window": null,
+      "projected": false,
+      "overdue": false,
+      "amount": null,
+      "note": "RUPS luar biasa"
+    }
+  ],
+  "ages": {
+    "prices": {
+      "COAL": 1
+    },
+    "filings": {
+      "COAL": 60
+    },
+    "drivers": {},
+    "driver_labels": {}
+  }
+}

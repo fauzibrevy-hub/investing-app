@@ -1,0 +1,48 @@
+[package]
+name = "investing-app"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+publish = false
+
+[dependencies]
+anyhow = "1"
+axum = { version = "0.8", features = ["macros"] }
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }
+chrono-tz = "0.10"
+dotenvy = "0.15"
+fancy-regex = "0.14"
+futures = "0.3"
+hex = "0.4"
+hmac = "0.12"
+hyper = { version = "1", default-features = false }
+jsonwebtoken = "9"
+quick-xml = "0.37"
+rand = "0.8"
+regex = "1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+sha2 = "0.10"
+subtle = "2"
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+toml = "0.8"
+tokio-stream = { version = "0.1", features = ["sync"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["fs", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+uuid = { version = "1", features = ["v4"] }
+pdf-extract = "0.12"
+multer = "3"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+libc = "0.2"
+
+[dev-dependencies]
+http-body-util = "0.1"
+proptest = "1.11.0"
+tempfile = "3"
+flate2 = "1"

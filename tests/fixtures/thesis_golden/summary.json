@@ -1,0 +1,257 @@
+{
+ "generated_at": 1792483893,
+ "issuers": [
+  {
+   "archive": {
+    "last_retrieved_at": "2025-10-02T03:04:05.123000+00:00",
+    "pdf": 3,
+    "sidecars": 3,
+    "years": {
+     "2024": 2,
+     "lainnya": 1
+    }
+   },
+   "articles": {
+    "latest_date": "2026-10-01",
+    "mentions_approx": 4,
+    "recent": [
+     {
+      "date": "2026-10-01",
+      "name": "2026/okt/2026-10-01-pasar.md"
+     },
+     {
+      "date": "2026-01-05",
+      "name": "2026-01-05-alfa.md"
+     }
+    ]
+   },
+   "axes": {
+    "fundamental_status": "kuat",
+    "growth_status": "sedang",
+    "narrative_status": null
+   },
+   "bayar_risiko": "Siap turun 20% dari harga masuk.",
+   "company": "PT Alfa Sintetis Tbk",
+   "complete": true,
+   "coverage": "2023-2024 kuartalan",
+   "errors": [
+    "docs/broken.source.json: gagal dibaca (JSONDecodeError) — berkas kemungkinan belum terunduh dari iCloud"
+   ],
+   "evidence": {
+    "doc_quoted": 1,
+    "missing": 1,
+    "resolved": 2,
+    "total": 4
+   },
+   "falsifiers": {
+    "count": 2,
+    "dated_count": 1,
+    "nearest": {
+     "date": "2099-06-30",
+     "days_left": 26551,
+     "text": "Pendapatan turun dua kuartal berturut-turut sebelum 2099-06-30 atau margin di bawah 10% pada 2000-01-15."
+    },
+    "past_count": 1
+   },
+   "fundamental_status": "kuat",
+   "growth_status": "sedang",
+   "harga_acuan": {
+    "nilai": "Rp 1.500",
+    "raw": "Rp 1.500 — `sumber`: penutupan 2025-09-01 — status harga: `Stale`",
+    "status": "stale",
+    "sumber": "penutupan 2025-09-01"
+   },
+   "history_source": "financial_history_2023_2024.json",
+   "integrity": {
+    "checked": 1,
+    "max_abs_diff": 0.0,
+    "status": "ok"
+   },
+   "missing_files": [],
+   "missing_periods": [
+    "periode 2023-Q1 tidak dapat dibaca/tidak dipublikasikan (daftar missing_periods vault)",
+    "Q2 2023 tidak terbit"
+   ],
+   "narrative_status": null,
+   "notes": [
+    "Catatan tunggal"
+   ],
+   "review": {
+    "days_ago": 400,
+    "due": true,
+    "last_date": "2025-09-15",
+    "new_evidence_count": 1,
+    "open_followups": 2
+   },
+   "status": "holdings",
+   "status_since": "2025-03-14",
+   "tahap": "berjalan",
+   "tahap_alasan": "sesuai rencana sejauh ini",
+   "ticker": "AAAA",
+   "trigger_buang": [
+    "Falsifier terpicu"
+   ],
+   "trigger_tambah": [
+    "Harga di bawah 1.200 dengan volume tinggi",
+    "Laba kuartal naik"
+   ],
+   "verdict": "kuat"
+  },
+  {
+   "archive": {
+    "last_retrieved_at": null,
+    "pdf": 0,
+    "sidecars": 0,
+    "years": {}
+   },
+   "articles": {
+    "latest_date": "2026-01-05",
+    "mentions_approx": 1,
+    "recent": [
+     {
+      "date": "2026-01-05",
+      "name": "2026-01-05-alfa.md"
+     }
+    ]
+   },
+   "axes": {
+    "fundamental_status": null,
+    "growth_status": null,
+    "narrative_status": "hype"
+   },
+   "bayar_risiko": null,
+   "company": "PT Beta",
+   "complete": false,
+   "coverage": null,
+   "errors": [
+    "10-fundamental.md tidak ditemukan",
+    "00-lens.md tidak ditemukan",
+    "review-log.md tidak ditemukan"
+   ],
+   "evidence": {
+    "doc_quoted": 0,
+    "missing": 0,
+    "resolved": 0,
+    "total": 0
+   },
+   "falsifiers": {
+    "count": 1,
+    "dated_count": 1,
+    "nearest": null,
+    "past_count": 1
+   },
+   "fundamental_status": null,
+   "growth_status": null,
+   "harga_acuan": null,
+   "history_source": null,
+   "integrity": {
+    "checked": 0,
+    "max_abs_diff": null,
+    "status": "n/a"
+   },
+   "missing_files": [
+    "00-lens.md",
+    "10-fundamental.md",
+    "thesis.md",
+    "review-log.md"
+   ],
+   "missing_periods": [],
+   "narrative_status": "hype",
+   "notes": [],
+   "review": {
+    "days_ago": null,
+    "due": false,
+    "last_date": null,
+    "new_evidence_count": 0,
+    "open_followups": 0
+   },
+   "status": "watchlist",
+   "status_since": null,
+   "tahap": null,
+   "tahap_alasan": null,
+   "ticker": "BBBB",
+   "trigger_buang": [],
+   "trigger_tambah": [],
+   "verdict": "hype"
+  },
+  {
+   "archive": {
+    "last_retrieved_at": null,
+    "pdf": 0,
+    "sidecars": 0,
+    "years": {}
+   },
+   "articles": {
+    "latest_date": "2026-10-01",
+    "mentions_approx": 2,
+    "recent": [
+     {
+      "date": "2026-10-01",
+      "name": "2026/okt/2026-10-01-pasar.md"
+     }
+    ]
+   },
+   "axes": {
+    "fundamental_status": null,
+    "growth_status": null,
+    "narrative_status": null
+   },
+   "bayar_risiko": null,
+   "company": null,
+   "complete": false,
+   "coverage": null,
+   "errors": [
+    "20-naratif.md tidak ditemukan",
+    "10-fundamental.md tidak ditemukan",
+    "00-lens.md tidak ditemukan",
+    "review-log.md tidak ditemukan"
+   ],
+   "evidence": {
+    "doc_quoted": 0,
+    "missing": 0,
+    "resolved": 0,
+    "total": 0
+   },
+   "falsifiers": {
+    "count": 0,
+    "dated_count": 0,
+    "nearest": null,
+    "past_count": 0
+   },
+   "fundamental_status": null,
+   "growth_status": null,
+   "harga_acuan": null,
+   "history_source": null,
+   "integrity": {
+    "checked": 0,
+    "max_abs_diff": null,
+    "status": "n/a"
+   },
+   "missing_files": [
+    "00-lens.md",
+    "10-fundamental.md",
+    "20-naratif.md",
+    "review-log.md"
+   ],
+   "missing_periods": [],
+   "narrative_status": null,
+   "notes": [],
+   "review": {
+    "days_ago": null,
+    "due": false,
+    "last_date": null,
+    "new_evidence_count": 0,
+    "open_followups": 0
+   },
+   "status": "archived",
+   "status_since": null,
+   "tahap": "gugur",
+   "tahap_alasan": "dijual",
+   "ticker": "CCCC",
+   "trigger_buang": [],
+   "trigger_tambah": [],
+   "verdict": null
+  }
+ ],
+ "root_ok": true
+}

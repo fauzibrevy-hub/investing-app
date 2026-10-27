@@ -1,0 +1,176 @@
+{
+ "blocking_feeds": [
+  "brent_curve"
+ ],
+ "composite_score": -16.1,
+ "composite_score_rounded": -16,
+ "configured_pillar_weights": {
+  "energy": 15.0,
+  "growth": 20.0,
+  "inflation_cb": 15.0,
+  "liquidity": 15.0,
+  "usd_id": 15.0,
+  "ust_rates": 20.0
+ },
+ "coverage_state": "partial_comparable",
+ "cross_pillar_confirmation": true,
+ "effective_valid_weight": 70.0,
+ "effective_valid_weight_integer": 70,
+ "excluded_pillar_ids": [
+  "energy",
+  "inflation_cb"
+ ],
+ "excluded_pillar_reasons": {
+  "energy": "Internal weight capacity insufficient for energy",
+  "inflation_cb": "Internal weight capacity insufficient for inflation_cb"
+ },
+ "pillar_coverage": {
+  "energy": 70,
+  "growth": 100,
+  "inflation_cb": 70,
+  "liquidity": 100,
+  "usd_id": 100,
+  "ust_rates": 100
+ },
+ "pillar_details": {
+  "energy": {
+   "capacity_gate_passed": false,
+   "configured_weight": 0.15,
+   "coverage_pct": 70,
+   "effective_internal_weights": {},
+   "exclusion_reason": "Internal weight capacity insufficient for energy",
+   "is_valid": false,
+   "missing_metrics": [
+    "brent_curve"
+   ],
+   "name": "Energy",
+   "pillar_id": "energy",
+   "raw_contribution": null,
+   "score": null,
+   "valid_metrics": [
+    "brent_front_month",
+    "wti_spot"
+   ]
+  },
+  "growth": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.2,
+   "coverage_pct": 100,
+   "effective_internal_weights": {
+    "china_pmi_primary": 1.0
+   },
+   "exclusion_reason": null,
+   "is_valid": true,
+   "missing_metrics": [],
+   "name": "Growth",
+   "pillar_id": "growth",
+   "raw_contribution": -10.0,
+   "score": -50.0,
+   "valid_metrics": [
+    "china_pmi_primary"
+   ]
+  },
+  "inflation_cb": {
+   "capacity_gate_passed": false,
+   "configured_weight": 0.15,
+   "coverage_pct": 70,
+   "effective_internal_weights": {},
+   "exclusion_reason": "Internal weight capacity insufficient for inflation_cb",
+   "is_valid": false,
+   "missing_metrics": [
+    "id_core_cpi"
+   ],
+   "name": "Inflation Cb",
+   "pillar_id": "inflation_cb",
+   "raw_contribution": null,
+   "score": null,
+   "valid_metrics": [
+    "fed_funds_path",
+    "us_core_cpi"
+   ]
+  },
+  "liquidity": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.15,
+   "coverage_pct": 100,
+   "effective_internal_weights": {
+    "us_hy_oas": 0.5,
+    "vix": 0.5
+   },
+   "exclusion_reason": null,
+   "is_valid": true,
+   "missing_metrics": [],
+   "name": "Liquidity",
+   "pillar_id": "liquidity",
+   "raw_contribution": 7.5,
+   "score": 50.0,
+   "valid_metrics": [
+    "vix",
+    "us_hy_oas"
+   ]
+  },
+  "usd_id": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.15,
+   "coverage_pct": 100,
+   "effective_internal_weights": {
+    "dxy": 0.5,
+    "usd_idr": 0.5
+   },
+   "exclusion_reason": null,
+   "is_valid": true,
+   "missing_metrics": [],
+   "name": "Usd Id",
+   "pillar_id": "usd_id",
+   "raw_contribution": -3.75,
+   "score": -25.0,
+   "valid_metrics": [
+    "dxy",
+    "usd_idr"
+   ]
+  },
+  "ust_rates": {
+   "capacity_gate_passed": true,
+   "configured_weight": 0.2,
+   "coverage_pct": 100,
+   "effective_internal_weights": {
+    "ust_10y": 0.25,
+    "ust_10y_2y_spread": 0.25,
+    "ust_10y_real_yield": 0.25,
+    "ust_2y": 0.25
+   },
+   "exclusion_reason": null,
+   "is_valid": true,
+   "missing_metrics": [],
+   "name": "Ust Rates",
+   "pillar_id": "ust_rates",
+   "raw_contribution": -5.0,
+   "score": -25.0,
+   "valid_metrics": [
+    "ust_2y",
+    "ust_10y",
+    "ust_10y_2y_spread",
+    "ust_10y_real_yield"
+   ]
+  }
+ },
+ "pillar_scores": {
+  "energy": null,
+  "growth": -50.0,
+  "inflation_cb": null,
+  "liquidity": 50.0,
+  "usd_id": -25.0,
+  "ust_rates": -25.0
+ },
+ "regime_candidate": "Defensive",
+ "regime_final": "Defensive",
+ "score_vintage": "2026-10-20T08:00:00.123456+00:00",
+ "scoring_configuration_version": "2026.09-scoring-final",
+ "supporting_pillar_count": 3,
+ "valid_pillar_ids": [
+  "ust_rates",
+  "usd_id",
+  "growth",
+  "liquidity"
+ ]
+}

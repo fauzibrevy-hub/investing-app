@@ -1,0 +1,5344 @@
+{
+  "ticker": "NONE",
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "role": "held",
+  "business_note": null,
+  "pack": {
+    "id": null,
+    "source": "none",
+    "filing_code": "Z999",
+    "filing_default": null,
+    "override": null,
+    "version": null,
+    "label": null,
+    "action": "Tentukan paket"
+  },
+  "core": {
+    "id": "core",
+    "version": "2026.10-1"
+  },
+  "latest": {
+    "fy": 2026,
+    "q": 2,
+    "label": "2026Q2",
+    "from_filing": true
+  },
+  "quarters": [
+    {
+      "fy": 2023,
+      "q": 3,
+      "label": "2023Q3"
+    },
+    {
+      "fy": 2023,
+      "q": 4,
+      "label": "2023Q4"
+    },
+    {
+      "fy": 2024,
+      "q": 1,
+      "label": "2024Q1"
+    },
+    {
+      "fy": 2024,
+      "q": 2,
+      "label": "2024Q2"
+    },
+    {
+      "fy": 2024,
+      "q": 3,
+      "label": "2024Q3"
+    },
+    {
+      "fy": 2024,
+      "q": 4,
+      "label": "2024Q4"
+    },
+    {
+      "fy": 2025,
+      "q": 1,
+      "label": "2025Q1"
+    },
+    {
+      "fy": 2025,
+      "q": 2,
+      "label": "2025Q2"
+    },
+    {
+      "fy": 2025,
+      "q": 3,
+      "label": "2025Q3"
+    },
+    {
+      "fy": 2025,
+      "q": 4,
+      "label": "2025Q4"
+    },
+    {
+      "fy": 2026,
+      "q": 1,
+      "label": "2026Q1"
+    },
+    {
+      "fy": 2026,
+      "q": 2,
+      "label": "2026Q2"
+    }
+  ],
+  "dimensions": [
+    {
+      "pack": "core",
+      "id": "laba_rugi",
+      "label": "Laba rugi",
+      "kind": "core",
+      "metrics": [
+        {
+          "id": "revenue",
+          "label": "Pendapatan",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Skala usaha; hampir semua rasio lain dibaca relatif terhadap angka ini.",
+          "note": null,
+          "formula": "Revenue",
+          "period": "standalone",
+          "bindings": {
+            "Revenue": [
+              "idx-cor:SalesAndRevenue",
+              "idx-cor:RevenueFromFundManagementAsMudharib",
+              "idx-cor:InterestIncome"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 86000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 86000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 87000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 87000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 88000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 88000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 89000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 89000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 91000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 91000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 92000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 92000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 93000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 93000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 94000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 94000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 95000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 96000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 96000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 97000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 97000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 97000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 4.301075
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "gross_profit",
+          "label": "Laba kotor",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Selisih harga jual dan biaya langsung sebelum beban usaha.",
+          "note": null,
+          "formula": "GrossProfit",
+          "period": "standalone",
+          "bindings": {
+            "GrossProfit": [
+              "idx-cor:GrossProfit"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "GrossProfit",
+                  "source": "idx-cor:GrossProfit",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 20000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 20000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "operating_profit",
+          "label": "Laba usaha",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Laba dari operasi inti sebelum bunga dan pajak; untuk bank dan emiten tanpa tag laba usaha dipakai laba sebelum pajak.",
+          "note": null,
+          "formula": "OperatingProfit",
+          "period": "standalone",
+          "bindings": {
+            "OperatingProfit": [
+              "idx-cor:ProfitLossFromOperatingActivities",
+              "idx-cor:ProfitFromOperation",
+              "idx-cor:ProfitLossBeforeIncomeTax"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 10000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 10000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "net_income",
+          "label": "Laba bersih",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Hasil akhir untuk seluruh pemegang saham setelah pajak.",
+          "note": null,
+          "formula": "NetIncome",
+          "period": "standalone",
+          "bindings": {
+            "NetIncome": [
+              "idx-cor:ProfitLoss"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 7000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 7000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "net_margin",
+          "label": "Margin bersih",
+          "layer": "xbrl",
+          "unit": "%",
+          "direction": "higher",
+          "why": "Berapa rupiah laba per rupiah pendapatan; perubahan margin sering mendahului perubahan laba.",
+          "note": null,
+          "formula": "100 * ttm(NetIncome) / ttm(Revenue)",
+          "period": "ttm",
+          "bindings": {
+            "NetIncome": [
+              "idx-cor:ProfitLoss"
+            ],
+            "Revenue": [
+              "idx-cor:SalesAndRevenue",
+              "idx-cor:RevenueFromFundManagementAsMudharib",
+              "idx-cor:InterestIncome"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 8.284024,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2022Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 86000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q2",
+                  "view": "standalone",
+                  "value": 85000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q1",
+                  "view": "standalone",
+                  "value": 84000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2022Q4",
+                  "view": "standalone",
+                  "value": 83000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 8.187135,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 87000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 86000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q2",
+                  "view": "standalone",
+                  "value": 85000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q1",
+                  "view": "standalone",
+                  "value": 84000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 8.092486,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 88000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 87000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 86000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q2",
+                  "view": "standalone",
+                  "value": 85000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 8.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 89000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 88000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 87000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 86000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 7.909605,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 90000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 89000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 88000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 87000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 7.821229,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 91000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 90000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 89000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 88000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 7.734807,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 92000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 91000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 90000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 89000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 7.650273,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 93000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 92000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 91000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 7.567568,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 94000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 93000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 92000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 91000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 7.486631,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 95000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 94000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 93000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 92000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 7.407407,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 96000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 95000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 94000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 93000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 7.329843,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "NetIncome",
+                  "source": "idx-cor:ProfitLoss",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 7000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 97000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 96000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 95000000.0
+                },
+                {
+                  "ident": "Revenue",
+                  "source": "idx-cor:SalesAndRevenue",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 94000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 7.329843
+          },
+          "yoy": {
+            "kind": "pp",
+            "value": -0.32043
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 3.333333,
+            "n": 15,
+            "years": 3.75,
+            "caption": "p3 · 4 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "ebitda",
+          "label": "EBITDA (pendekatan)",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Laba usaha ditambah penyusutan dan amortisasi; basis untuk rasio utang. Pendekatan: memakai laba sebelum pajak bila tag laba usaha tidak ada.",
+          "note": null,
+          "formula": "OperatingProfit + Depreciation + Amortization",
+          "period": "standalone",
+          "bindings": {
+            "Amortization": [
+              "idx-cor:Amortization",
+              "idx-cor:AmortisationOfIntangibleAssets",
+              "0"
+            ],
+            "Depreciation": [
+              "idx-cor:Depreciation",
+              "idx-cor:DepreciationOfPropertyPlantAndEquipment",
+              "0"
+            ],
+            "OperatingProfit": [
+              "idx-cor:ProfitLossFromOperatingActivities",
+              "idx-cor:ProfitFromOperation",
+              "idx-cor:ProfitLossBeforeIncomeTax"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "OperatingProfit",
+                  "source": "idx-cor:ProfitLossFromOperatingActivities",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Depreciation",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Amortization",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 10000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "core",
+      "id": "arus_kas",
+      "label": "Arus kas",
+      "kind": "core",
+      "metrics": [
+        {
+          "id": "operating_cash_flow",
+          "label": "Arus kas operasi",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Kas yang benar-benar masuk dari operasi; pembanding kualitas laba.",
+          "note": null,
+          "formula": "Ocf",
+          "period": "standalone",
+          "bindings": {
+            "Ocf": [
+              "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 9000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 9000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 9000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "capex",
+          "label": "Belanja modal",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "neutral",
+          "why": "Investasi pada aset tetap; dibandingkan dengan penyusutan menunjukkan ekspansi atau penyusutan armada dan pabrik.",
+          "note": null,
+          "formula": "Capex",
+          "period": "standalone",
+          "bindings": {
+            "Capex": [
+              "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+              "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment",
+              "idx-cor:AcquisitionOfPropertyPlantAndEquipment"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 4000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 4000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "free_cash_flow",
+          "label": "Arus kas bebas",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Arus kas operasi dikurangi belanja modal: kas yang tersisa untuk utang, dividen, dan pertumbuhan.",
+          "note": null,
+          "formula": "Ocf - Capex",
+          "period": "standalone",
+          "bindings": {
+            "Capex": [
+              "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+              "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment",
+              "idx-cor:AcquisitionOfPropertyPlantAndEquipment"
+            ],
+            "Ocf": [
+              "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2023Q3",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2023Q4",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2024Q1",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2024Q2",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2024Q3",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2024Q4",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2025Q1",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2025Q2",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2025Q3",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2025Q4",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2026Q1",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 5000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Ocf",
+                  "source": "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 9000000.0
+                },
+                {
+                  "ident": "Capex",
+                  "source": "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+                  "q": "2026Q2",
+                  "view": "standalone",
+                  "value": 4000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 5000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "core",
+      "id": "neraca",
+      "label": "Neraca",
+      "kind": "core",
+      "metrics": [
+        {
+          "id": "total_equity",
+          "label": "Total ekuitas",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Modal pemegang saham; penyebut untuk imbal hasil ekuitas dan nilai buku.",
+          "note": null,
+          "formula": "Equity",
+          "period": "instant",
+          "bindings": {
+            "Equity": [
+              "idx-cor:Equity"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 90000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Equity",
+                  "source": "idx-cor:Equity",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 90000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 90000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "cash",
+          "label": "Kas dan setara kas",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Likuiditas yang tersedia tanpa menjual aset.",
+          "note": null,
+          "formula": "Cash",
+          "period": "instant",
+          "bindings": {
+            "Cash": [
+              "idx-cor:CashAndCashEquivalents",
+              "idx-cor:Cash"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 30000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 30000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "total_debt",
+          "label": "Total utang berbunga",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "lower",
+          "why": "Pinjaman bank, obligasi, dan pinjaman lain yang berbunga; komponen yang tidak dilaporkan dihitung nol secara eksplisit.",
+          "note": null,
+          "formula": "ShortTermBank + LongTermBank + CurrentBank + Bonds + CurrentBonds + OtherLong + OtherCurrent",
+          "period": "instant",
+          "bindings": {
+            "Bonds": [
+              "idx-cor:LongTermBondsPayable",
+              "idx-cor:BondsPayable",
+              "0"
+            ],
+            "CurrentBank": [
+              "idx-cor:CurrentMaturitiesOfBankLoans",
+              "0"
+            ],
+            "CurrentBonds": [
+              "idx-cor:CurrentMaturitiesOfBondsPayable",
+              "0"
+            ],
+            "LongTermBank": [
+              "idx-cor:LongTermBankLoans",
+              "0"
+            ],
+            "OtherCurrent": [
+              "idx-cor:CurrentMaturitiesOfOtherBorrowings",
+              "0"
+            ],
+            "OtherLong": [
+              "idx-cor:LongTermOtherBorrowings",
+              "0"
+            ],
+            "ShortTermBank": [
+              "idx-cor:ShortTermBankLoans",
+              "0"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 10000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 10000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 77.5,
+            "n": 40,
+            "years": 10.0,
+            "caption": "p78 · 10 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "net_debt",
+          "label": "Utang bersih",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "lower",
+          "why": "Utang berbunga dikurangi kas; negatif berarti kas bersih.",
+          "note": null,
+          "formula": "TotalDebt - Cash",
+          "period": "instant",
+          "bindings": {
+            "Cash": [
+              "idx-cor:CashAndCashEquivalents",
+              "idx-cor:Cash"
+            ],
+            "TotalDebt": [
+              "metric:total_debt"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2023Q3",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2023Q4",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2024Q1",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2024Q2",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2024Q3",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2024Q4",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2025Q1",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2025Q2",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2025Q3",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2025Q4",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2026Q1",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": -20000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": [
+                {
+                  "ident": "ShortTermBank",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "LongTermBank",
+                  "source": "idx-cor:LongTermBankLoans",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "CurrentBank",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "Bonds",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "CurrentBonds",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherLong",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "OtherCurrent",
+                  "source": "0",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 0.0
+                },
+                {
+                  "ident": "TotalDebt",
+                  "source": "metric:total_debt",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 10000000.0
+                },
+                {
+                  "ident": "Cash",
+                  "source": "idx-cor:CashAndCashEquivalents",
+                  "q": "2026Q2",
+                  "view": "instant",
+                  "value": 30000000.0
+                }
+              ]
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": -20000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 50.0,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p50 · 5 th"
+          },
+          "peers": []
+        }
+      ]
+    }
+  ],
+  "drivers": [],
+  "missing_drivers": [],
+  "peers": [],
+  "coverage": {
+    "has_pack": false,
+    "latest": {
+      "fy": 2026,
+      "q": 2
+    },
+    "xbrl": {
+      "populated": 13,
+      "total": 13,
+      "pct": 100.0
+    },
+    "kpi": {
+      "entered": 0,
+      "unknown": 0,
+      "expected": 0,
+      "missing": []
+    },
+    "state": "lengkap"
+  }
+}

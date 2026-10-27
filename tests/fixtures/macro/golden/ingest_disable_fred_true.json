@@ -1,0 +1,169 @@
+{
+ "changed": [
+  "brent_front_month",
+  "usd_idr",
+  "china_pmi_primary",
+  "vix"
+ ],
+ "store": {
+  "brent_curve": {
+   "fetched_at": "2026-10-19T20:00:00+00:00",
+   "history": [],
+   "observed_at": "2026-10-19",
+   "quality_note": "Brent M6 (BZJ27.NYM) feed unavailable (Client error '404 Not Found' for url 'https://query1.finance.yahoo.com/v8/finance/chart/BZJ27.NYM?range=1mo&interval=1d'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404); spread cannot be derived",
+   "release_at": "2026-10-19T19:30:00Z",
+   "upstream_ok": false,
+   "value": null
+  },
+  "brent_front_month": {
+   "fetched_at": "2026-10-20T08:00:00.123456+00:00",
+   "history": [
+    {
+     "date": "2026-10-16",
+     "value": 91.11
+    },
+    {
+     "date": "2026-10-19",
+     "value": 93.45
+    }
+   ],
+   "observed_at": "2026-10-20",
+   "quality_note": "Verified from upstream feed (YAHOO_FINANCE)",
+   "release_at": "2026-10-20T19:30:00Z",
+   "upstream_ok": true,
+   "value": 93.46,
+   "value_unit": "USD/barel"
+  },
+  "china_pmi_primary": {
+   "fetched_at": "2026-10-20T08:00:00.123456+00:00",
+   "history": [
+    {
+     "date": "2026-08-31",
+     "value": 49.4
+    },
+    {
+     "date": "2026-09-30",
+     "value": 49.9
+    }
+   ],
+   "observed_at": "2026-09-30",
+   "quality_note": "Verified from official feed (NBS_CHINA)",
+   "release_at": "2026-09-30T09:30:00+08:00",
+   "upstream_ok": true,
+   "value": 49.9,
+   "value_unit": "index_points"
+  },
+  "dxy": {
+   "observed_at": "2026-10-20",
+   "quality_note": "Expecting value: line 1 column 1 (char 0)",
+   "upstream_ok": false,
+   "value": 99.2
+  },
+  "fed_funds_path": {
+   "observed_at": "2026-07-29",
+   "quality_note": "All connection attempts failed",
+   "upstream_ok": false,
+   "value": 4.0
+  },
+  "id_core_cpi": {
+   "observed_at": "2026-06-30",
+   "quality_note": "Redirect response '302 Moved Temporarily' for url 'https://www.bi.go.id/biweb/api/Inflasi/GetInflasi'\nRedirect location: 'https://www.bi.go.id/id/e404.aspx'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/302",
+   "upstream_ok": false,
+   "value": 2.12
+  },
+  "us_core_cpi": {
+   "observed_at": "2026-08-01",
+   "quality_note": "All connection attempts failed",
+   "release_at": "2026-08-01T16:15:00Z",
+   "upstream_ok": false,
+   "value": 2.45
+  },
+  "us_hy_oas": {
+   "observed_at": "2026-10-16",
+   "quality_note": "All connection attempts failed",
+   "upstream_ok": false,
+   "value": 3.02
+  },
+  "usd_idr": {
+   "fetched_at": "2026-10-20T08:00:00.123456+00:00",
+   "history": [
+    {
+     "date": "2026-10-17",
+     "value": 16200.0
+    },
+    {
+     "date": "2026-10-20",
+     "value": 16311.99
+    }
+   ],
+   "observed_at": "2026-10-20",
+   "quality_note": "Verified from upstream feed (OPEN_EXCHANGE_RATES)",
+   "release_at": "2026-10-20T16:15:00+07:00",
+   "upstream_ok": true,
+   "value": 16311.99,
+   "value_unit": "IDR/USD"
+  },
+  "ust_10y": {
+   "observed_at": "2026-10-19",
+   "quality_note": "All connection attempts failed",
+   "upstream_ok": false,
+   "value": 4.31
+  },
+  "ust_10y_2y_spread": {
+   "fetched_at": "2026-10-20T01:00:00+00:00",
+   "observed_at": "2026-10-19",
+   "quality_note": "All connection attempts failed",
+   "release_at": "2026-10-19T16:15:00Z",
+   "upstream_ok": false,
+   "value": 41.0
+  },
+  "ust_10y_real_yield": {
+   "observed_at": "2026-10-19",
+   "quality_note": "All connection attempts failed",
+   "upstream_ok": false,
+   "value": 1.95
+  },
+  "ust_2y": {
+   "fetched_at": "2026-10-20T01:00:00+00:00",
+   "history": [],
+   "observed_at": "2026-10-19",
+   "quality_note": "All connection attempts failed",
+   "release_at": "2026-10-19T16:15:00Z",
+   "upstream_ok": false,
+   "value": 3.9
+  },
+  "vix": {
+   "fetched_at": "2026-10-20T08:00:00.123456+00:00",
+   "history": [
+    {
+     "date": "2026-10-19",
+     "value": 18.12
+    }
+   ],
+   "observed_at": "2026-10-20",
+   "quality_note": "Verified from upstream feed (YAHOO_FINANCE)",
+   "release_at": "2026-10-20T16:15:00-05:00",
+   "upstream_ok": true,
+   "value": 18.12,
+   "value_unit": "index_points"
+  },
+  "wti_spot": {
+   "fetched_at": "2026-10-16T20:00:00+00:00",
+   "history": [
+    {
+     "date": "2026-10-16",
+     "value": "bad"
+    },
+    {
+     "date": "2026-10-15",
+     "value": 85.5
+    }
+   ],
+   "observed_at": "2026-10-16",
+   "quality_note": "'meta'",
+   "release_at": "2026-10-16T14:30:00-05:00",
+   "upstream_ok": false,
+   "value": 86
+  }
+ }
+}

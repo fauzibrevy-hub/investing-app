@@ -1,0 +1,118 @@
+{
+  "ticker": "COAL",
+  "name": "PT Batubara Contoh Tbk",
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "role": "held",
+  "peer_of": null,
+  "avg_price": 1000.0,
+  "pack": {
+    "id": "coal_mining",
+    "label": "Tambang batubara",
+    "version": "2026.10-1",
+    "source": "filing",
+    "action": null
+  },
+  "business_note": null,
+  "latest_filing": {
+    "id": "COAL_2026_Q2",
+    "fy": 2026,
+    "period": "Q2",
+    "available_from": "2026-08-29",
+    "age_days": 60,
+    "audited": false,
+    "taxonomy": "general"
+  },
+  "latest_close": {
+    "date": "2026-10-27",
+    "close": 1290.0,
+    "age_days": 1
+  },
+  "seen_at": "2026-10-24T09:00:00+00:00",
+  "claims": {
+    "holding": 2,
+    "broken": 1,
+    "not_testable": 1,
+    "expired": 1
+  },
+  "coverage": {
+    "has_pack": true,
+    "latest": {
+      "fy": 2026,
+      "q": 2
+    },
+    "xbrl": {
+      "populated": 17,
+      "total": 19,
+      "pct": 89.473684
+    },
+    "kpi": {
+      "entered": 1,
+      "unknown": 1,
+      "expected": 21,
+      "missing": [
+        "production_mt 2025Q3",
+        "production_mt 2025Q4",
+        "production_mt 2026Q1",
+        "sales_mt 2025Q3",
+        "sales_mt 2025Q4",
+        "sales_mt 2026Q1",
+        "asp_usd_t 2025Q3",
+        "asp_usd_t 2025Q4",
+        "asp_usd_t 2026Q1",
+        "asp_usd_t 2026Q2",
+        "cash_cost_usd_t 2025Q3",
+        "cash_cost_usd_t 2025Q4",
+        "cash_cost_usd_t 2026Q1",
+        "cash_cost_usd_t 2026Q2",
+        "stripping_ratio 2025Q3",
+        "stripping_ratio 2025Q4",
+        "stripping_ratio 2026Q1",
+        "stripping_ratio 2026Q2",
+        "reserves_mt 2025Q4"
+      ]
+    },
+    "state": "sebagian"
+  },
+  "changes": [
+    {
+      "id": "level_crossed-f66630f56318c5e0",
+      "kind": "level_crossed",
+      "at": "2026-10-28T03:00:00+00:00",
+      "text": "Harga 1.290 turun melewati level 1.300 (\"Harga incaran\")",
+      "section": "price",
+      "dismissed": false
+    },
+    {
+      "id": "level_crossed-2d5c66978cd0068b",
+      "kind": "level_crossed",
+      "at": "2026-10-28T03:00:00+00:00",
+      "text": "Harga 1.310 naik melewati level 1.300 (\"Harga incaran\")",
+      "section": "price",
+      "dismissed": false
+    },
+    {
+      "id": "kpi_due-5fa233d806c8f05b",
+      "kind": "kpi_due",
+      "at": "2026-10-24T09:00:00+00:00",
+      "text": "KPI Q2 26 belum diisi: Harga jual rata-rata, Biaya tunai, Nisbah kupas",
+      "section": "pack",
+      "dismissed": false
+    },
+    {
+      "id": "filing_new-c6630d9139cbea05",
+      "kind": "filing_new",
+      "at": "2026-10-24T09:00:00+00:00",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "section": "financials",
+      "dismissed": false
+    },
+    {
+      "id": "claim_status-518fa203b890c5c4",
+      "kind": "claim_status",
+      "at": "2026-10-24T09:00:00+00:00",
+      "text": "Klaim \"Produksi minimal lima juta ton\": Belum teruji → Berlaku (nilai 6)",
+      "section": "claims",
+      "dismissed": false
+    }
+  ]
+}

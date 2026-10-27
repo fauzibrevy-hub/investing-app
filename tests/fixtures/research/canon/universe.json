@@ -1,0 +1,109 @@
+{
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "items": [
+    {
+      "ticker": "BANK",
+      "role": "held",
+      "peer_of": null,
+      "pack": {
+        "id": "bank_sharia",
+        "source": "filing",
+        "filing_code": "G111",
+        "filing_default": "bank_sharia",
+        "override": null
+      },
+      "business_note": null,
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "synced_at": "2026-10-24T09:00:00+00:00",
+      "peers": [],
+      "avg_price": 1000.0
+    },
+    {
+      "ticker": "BUST",
+      "role": "manual",
+      "peer_of": null,
+      "pack": {
+        "id": "heavy_equipment_contracting",
+        "source": "filing",
+        "filing_code": "C141",
+        "filing_default": "heavy_equipment_contracting",
+        "override": null
+      },
+      "business_note": null,
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "synced_at": "2026-10-24T09:00:00+00:00",
+      "peers": [],
+      "avg_price": null
+    },
+    {
+      "ticker": "COAL",
+      "role": "held",
+      "peer_of": null,
+      "pack": {
+        "id": "coal_mining",
+        "source": "filing",
+        "filing_code": "A121",
+        "filing_default": "coal_mining",
+        "override": null
+      },
+      "business_note": null,
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "synced_at": "2026-10-24T09:00:00+00:00",
+      "peers": [
+        "COPR"
+      ],
+      "avg_price": 1000.0
+    },
+    {
+      "ticker": "COPR",
+      "role": "peer",
+      "peer_of": "COAL",
+      "pack": {
+        "id": "coal_mining",
+        "source": "filing",
+        "filing_code": "A121",
+        "filing_default": "coal_mining",
+        "override": null
+      },
+      "business_note": null,
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "synced_at": "2026-10-24T09:00:00+00:00",
+      "peers": [],
+      "avg_price": null
+    },
+    {
+      "ticker": "NONE",
+      "role": "held",
+      "peer_of": null,
+      "pack": {
+        "id": null,
+        "source": "none",
+        "filing_code": "Z999",
+        "filing_default": null,
+        "override": null
+      },
+      "business_note": null,
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "synced_at": "2026-10-24T09:00:00+00:00",
+      "peers": [],
+      "avg_price": 1000.0
+    },
+    {
+      "ticker": "REST",
+      "role": "manual",
+      "peer_of": null,
+      "pack": {
+        "id": "heavy_equipment_contracting",
+        "source": "filing",
+        "filing_code": "C141",
+        "filing_default": "heavy_equipment_contracting",
+        "override": null
+      },
+      "business_note": null,
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "synced_at": "2026-10-24T09:00:00+00:00",
+      "peers": [],
+      "avg_price": null
+    }
+  ]
+}

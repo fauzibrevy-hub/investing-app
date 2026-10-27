@@ -1,0 +1,83 @@
+{
+  "ticker": "BANK",
+  "name": "PT Bank Syariah Contoh Tbk",
+  "as_of": "2026-10-28T03:00:00+00:00",
+  "role": "held",
+  "peer_of": null,
+  "avg_price": 1000.0,
+  "pack": {
+    "id": "bank_sharia",
+    "label": "Bank syariah",
+    "version": "2026.10-1",
+    "source": "filing",
+    "action": null
+  },
+  "business_note": null,
+  "latest_filing": {
+    "id": "BANK_2026_Q2",
+    "fy": 2026,
+    "period": "Q2",
+    "available_from": "2026-08-29",
+    "age_days": 60,
+    "audited": false,
+    "taxonomy": "financial_sharia"
+  },
+  "latest_close": {
+    "date": "2026-10-23",
+    "close": 1277.0,
+    "age_days": 5
+  },
+  "seen_at": null,
+  "claims": {
+    "holding": 1,
+    "broken": 0,
+    "not_testable": 0,
+    "expired": 0
+  },
+  "coverage": {
+    "has_pack": true,
+    "latest": {
+      "fy": 2026,
+      "q": 2
+    },
+    "xbrl": {
+      "populated": 27,
+      "total": 30,
+      "pct": 90.0
+    },
+    "kpi": {
+      "entered": 0,
+      "unknown": 0,
+      "expected": 8,
+      "missing": [
+        "car 2025Q3",
+        "car 2025Q4",
+        "car 2026Q1",
+        "car 2026Q2",
+        "tier1 2025Q3",
+        "tier1 2025Q4",
+        "tier1 2026Q1",
+        "tier1 2026Q2"
+      ]
+    },
+    "state": "sebagian"
+  },
+  "changes": [
+    {
+      "id": "kpi_due-9ec2b#",
+      "kind": "kpi_due",
+      "at": "2026-10-28T03:00:00+00:00",
+      "text": "KPI Q2 26 belum diisi: CAR (KPMM), Modal inti (Tier 1)",
+      "section": "pack",
+      "dismissed": false
+    },
+    {
+      "id": "filing_new-b2bac258f3118948",
+      "kind": "filing_new",
+      "at": "2026-10-24T09:00:00+00:00",
+      "text": "Laporan Q2 26 masuk (belum diaudit)",
+      "section": "financials",
+      "dismissed": false
+    }
+  ]
+}

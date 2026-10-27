@@ -1,0 +1,187 @@
+# it_distribution.toml: Distribusi TI (design.md §3.3; MSTI, IDX code I211, taxonomy
+# General). Working-capital days use average balances over the five latest instants against
+# trailing-twelve-month flows. The customers-above-10% tag exists undimensioned as a total.
+
+id = "it_distribution"
+version = "2026.10-1"
+label = "Distribusi TI"
+industry_codes = ["I211"]
+taxonomies = ["general"]
+
+[[dimension]]
+id = "bauran"
+label = "Bauran pendapatan"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "top_vendor_share_pct"
+  label = "Porsi vendor terbesar"
+  layer = "kpi"
+  unit = "%"
+  direction = "lower"
+  why = "Ketergantungan pada satu prinsipal; kontrak distribusi bisa berpindah."
+  cadence = "quarterly"
+  extract_aliases = ["largest vendor share", "top vendor share"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "hardware_share_pct"
+  label = "Porsi perangkat keras (vs jasa)"
+  layer = "kpi"
+  unit = "%"
+  direction = "neutral"
+  why = "Perangkat keras bermargin tipis dan padat modal kerja; jasa bermargin lebih tebal."
+  cadence = "quarterly"
+  extract_aliases = ["hardware share", "hardware revenue share"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "recurring_share_pct"
+  label = "Porsi pendapatan berulang"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Langganan dan kontrak pemeliharaan lebih dapat diprediksi daripada proyek."
+  cadence = "quarterly"
+  extract_aliases = ["recurring revenue share", "recurring revenue"]
+  range = [0, 100]
+
+[[dimension]]
+id = "margin"
+label = "Margin"
+kind = "pricing"
+
+  [[dimension.metric]]
+  id = "gross_margin"
+  label = "Margin kotor"
+  layer = "xbrl"
+  unit = "%"
+  direction = "higher"
+  why = "Daya tawar terhadap vendor dan pelanggan; distributor hidup dari beberapa poin persen."
+  period = "ttm"
+  formula = "100 * ttm(GrossProfit) / ttm(Revenue)"
+  elements.GrossProfit = ["idx-cor:GrossProfit"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "operating_margin"
+  label = "Margin usaha"
+  layer = "xbrl"
+  unit = "%"
+  direction = "higher"
+  why = "Margin setelah beban penjualan dan administrasi; menunjukkan skala dan disiplin biaya."
+  period = "ttm"
+  formula = "100 * ttm(OperatingProfit) / ttm(Revenue)"
+  elements.OperatingProfit = ["idx-cor:ProfitLossFromOperatingActivities", "idx-cor:ProfitFromOperation", "idx-cor:ProfitLossBeforeIncomeTax"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+[[dimension]]
+id = "modal_kerja"
+label = "Modal kerja"
+kind = "quality"
+
+  [[dimension.metric]]
+  id = "receivable_days"
+  label = "Hari piutang"
+  layer = "xbrl"
+  unit = "hari"
+  direction = "lower"
+  why = "Berapa lama pelanggan membayar; naik berarti kas tertahan atau pelanggan melemah."
+  period = "ttm"
+  formula = "365 * avg4q(ReceivablesTp + ReceivablesRp) / ttm(Revenue)"
+  elements.ReceivablesTp = ["idx-cor:TradeReceivablesThirdParties", "idx-cor:TradeReceivablesNet"]
+  elements.ReceivablesRp = ["idx-cor:TradeReceivablesRelatedParties", "0"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "inventory_days"
+  label = "Hari persediaan"
+  layer = "xbrl"
+  unit = "hari"
+  direction = "lower"
+  why = "Berapa lama barang tersimpan; perangkat TI cepat usang, jadi hari persediaan panjang berarti risiko penurunan nilai."
+  period = "ttm"
+  formula = "365 * avg4q(Inventories) / ttm(CostOfRevenue)"
+  elements.Inventories = ["idx-cor:Inventories", "idx-cor:CurrentInventories"]
+  elements.CostOfRevenue = ["idx-cor:CostOfSalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "payable_days"
+  label = "Hari utang usaha"
+  layer = "xbrl"
+  unit = "hari"
+  direction = "higher"
+  why = "Berapa lama vendor memberi tempo; pendanaan gratis dari prinsipal."
+  period = "ttm"
+  formula = "365 * avg4q(PayablesTp + PayablesRp) / ttm(CostOfRevenue)"
+  elements.PayablesTp = ["idx-cor:TradePayablesThirdParties", "idx-cor:TradePayables"]
+  elements.PayablesRp = ["idx-cor:TradePayablesRelatedParties", "0"]
+  elements.CostOfRevenue = ["idx-cor:CostOfSalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "cash_conversion_cycle"
+  label = "Siklus konversi kas"
+  layer = "xbrl"
+  unit = "hari"
+  direction = "lower"
+  why = "Hari piutang ditambah hari persediaan dikurangi hari utang usaha; berapa lama kas terikat per putaran."
+  period = "ttm"
+  formula = "ReceivableDays + InventoryDays - PayableDays"
+  elements.ReceivableDays = ["metric:receivable_days"]
+  elements.InventoryDays = ["metric:inventory_days"]
+  elements.PayableDays = ["metric:payable_days"]
+
+[[dimension]]
+id = "konsentrasi"
+label = "Konsentrasi"
+kind = "cost"
+
+  [[dimension.metric]]
+  id = "customers_over_10pct_share"
+  label = "Pendapatan dari pelanggan di atas 10%"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Bagian pendapatan dari pelanggan besar (tag pengungkapan di atas 10%); kehilangan satu pelanggan berarti kehilangan bagian ini."
+  period = "ttm"
+  formula = "100 * ttm(Over10) / ttm(Revenue)"
+  elements.Over10 = ["idx-cor:SalesAndRevenueMoreThan10Percent"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+  range = [0, 100]
+
+[[dimension]]
+id = "pipeline"
+label = "Pipeline"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "backlog_idr_b"
+  label = "Nilai kontrak tersisa (backlog)"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Pesanan yang sudah ditandatangani tetapi belum diakui; pandangan ke depan satu sampai dua kuartal."
+  cadence = "quarterly"
+  extract_aliases = ["backlog", "order backlog", "contract backlog"]
+
+[[dimension]]
+id = "neraca"
+label = "Neraca"
+kind = "balance"
+
+  [[dimension.metric]]
+  id = "net_cash"
+  label = "Kas bersih"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Kas dikurangi utang berbunga; distributor memakai utang untuk modal kerja, jadi kas bersih menunjukkan disiplin."
+  period = "instant"
+  formula = "Cash - TotalDebt"
+  elements.Cash = ["idx-cor:CashAndCashEquivalents"]
+  elements.TotalDebt = ["metric:core.total_debt"]
+
+[[driver]]
+id = "usd_idr"
+label = "USD/IDR"
+source = "Yahoo IDR=X"

@@ -1,0 +1,1 @@
+tahap: gugur — dijual

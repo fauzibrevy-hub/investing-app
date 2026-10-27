@@ -1,0 +1,203 @@
+{
+  "as_of": "2026-10-22T09:00:00+00:00",
+  "rules_version": "2026.10-2",
+  "context": {
+    "ihsg": {
+      "close": 6966.0419,
+      "change_pct": 0.0165,
+      "as_of": "2026-10-22"
+    },
+    "macro": {
+      "regime": "netral",
+      "score": 0.12,
+      "coverage": 88,
+      "movers": [
+        {
+          "pillar": "inflasi",
+          "score": 0.41
+        },
+        {
+          "pillar": "kurs",
+          "score": -0.33
+        },
+        {
+          "pillar": "suku_bunga",
+          "score": 0.2
+        },
+        {
+          "pillar": "komoditas",
+          "score": -0.1
+        }
+      ],
+      "as_of": "2026-10-22T09:00:00+00:00"
+    }
+  },
+  "items": [
+    {
+      "ticker": "AAAA",
+      "name": "Contoh Alfa",
+      "role": "held",
+      "eligibility": "layak",
+      "zone": "murah",
+      "confidence": "rendah",
+      "trend": "turun",
+      "price": 2474.94,
+      "fair_mid": 3535.6253,
+      "gap_pct": -29.9999,
+      "pillars": {
+        "quality": "kuat",
+        "growth": "kuat",
+        "balance": "kuat",
+        "consistency": "kuat",
+        "dividend": "kuat"
+      },
+      "attention": []
+    },
+    {
+      "ticker": "BBBB",
+      "name": "Contoh Bravo",
+      "role": "held",
+      "eligibility": "layak",
+      "zone": "mahal",
+      "confidence": "rendah",
+      "trend": "naik",
+      "price": 4619.24,
+      "fair_mid": 3421.6578,
+      "gap_pct": 35.0001,
+      "pillars": {
+        "quality": "kuat",
+        "growth": "kuat",
+        "balance": "kuat",
+        "consistency": "kuat",
+        "dividend": "kuat"
+      },
+      "attention": []
+    },
+    {
+      "ticker": "CCCC",
+      "name": "Contoh Charlie",
+      "role": "held",
+      "eligibility": "waspada",
+      "zone": "wajar",
+      "confidence": "rendah",
+      "trend": "mendatar",
+      "price": 3074.86,
+      "fair_mid": 3074.8638,
+      "gap_pct": -0.0001,
+      "pillars": {
+        "quality": "cukup",
+        "growth": "lemah",
+        "balance": "lemah",
+        "consistency": "kuat",
+        "dividend": "kuat"
+      },
+      "attention": []
+    },
+    {
+      "ticker": "DDDD",
+      "name": "Contoh Delta Bank",
+      "role": "watch",
+      "eligibility": "layak",
+      "zone": "wajar",
+      "confidence": "tinggi",
+      "trend": "naik",
+      "price": 3516.38,
+      "fair_mid": 3516.3821,
+      "gap_pct": -0.0001,
+      "pillars": {
+        "quality": "kuat",
+        "growth": "kuat",
+        "balance": "kuat",
+        "consistency": "kuat",
+        "dividend": "kuat"
+      },
+      "attention": []
+    },
+    {
+      "ticker": "EEEE",
+      "name": "Contoh Echo",
+      "role": "watch",
+      "eligibility": "tidak_layak",
+      "zone": "wajar",
+      "confidence": "rendah",
+      "trend": "turun",
+      "price": 2211.58,
+      "fair_mid": 2457.3081,
+      "gap_pct": -9.9999,
+      "pillars": {
+        "quality": "lemah",
+        "growth": "lemah",
+        "balance": "kuat",
+        "consistency": "lemah",
+        "dividend": "cukup"
+      },
+      "attention": []
+    },
+    {
+      "ticker": "FFFF",
+      "name": "Contoh Foxtrot",
+      "role": "watch",
+      "eligibility": "data_kurang",
+      "zone": "data_kurang",
+      "confidence": null,
+      "trend": "naik",
+      "price": 3298.88,
+      "fair_mid": null,
+      "gap_pct": null,
+      "pillars": {
+        "quality": "kuat",
+        "growth": "none",
+        "balance": "kuat",
+        "consistency": "none",
+        "dividend": "none"
+      },
+      "attention": []
+    },
+    {
+      "ticker": "GGGG",
+      "name": "Contoh Golf Bank",
+      "role": "watch",
+      "eligibility": "layak",
+      "zone": "data_kurang",
+      "confidence": null,
+      "trend": "naik",
+      "price": 3298.88,
+      "fair_mid": null,
+      "gap_pct": null,
+      "pillars": {
+        "quality": "kuat",
+        "growth": "cukup",
+        "balance": "kuat",
+        "consistency": "lemah",
+        "dividend": "none"
+      },
+      "attention": []
+    },
+    {
+      "ticker": "HHHH",
+      "name": "Contoh Hotel",
+      "role": "watch",
+      "eligibility": "layak",
+      "zone": "wajar",
+      "confidence": "rendah",
+      "trend": "naik",
+      "price": 3554.87,
+      "fair_mid": 3554.87,
+      "gap_pct": 0.0,
+      "pillars": {
+        "quality": "kuat",
+        "growth": "kuat",
+        "balance": "kuat",
+        "consistency": "kuat",
+        "dividend": "none"
+      },
+      "attention": [
+        {
+          "kind": "target_reached",
+          "text": "Harga mencapai harga incaran",
+          "rank": 3
+        }
+      ]
+    }
+  ]
+}

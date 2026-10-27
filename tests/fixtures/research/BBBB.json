@@ -1,0 +1,273 @@
+{
+  "ticker": "BBBB",
+  "name": "Contoh Bravo",
+  "taxonomy": "general",
+  "role": "held",
+  "eligibility": {
+    "state": "layak",
+    "pillars": [
+      {
+        "id": "quality",
+        "label": "Kualitas",
+        "state": "kuat",
+        "headline": "ROE 17,9%",
+        "evidence": [
+          {
+            "rule_id": "elig.quality.roe",
+            "text": "ROE TTM 17,9%",
+            "value": 17.8754,
+            "unit": "%",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "id": "growth",
+        "label": "Pertumbuhan",
+        "state": "kuat",
+        "headline": "Pendapatan +10,0% YoY",
+        "evidence": [
+          {
+            "rule_id": "elig.growth.rev_yoy",
+            "text": "Pendapatan TTM +10,0% YoY",
+            "value": 10.0,
+            "unit": "%",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          },
+          {
+            "rule_id": "elig.growth.rev_cagr3",
+            "text": "Pendapatan TTM tumbuh 10,0% per tahun (3 tahun)",
+            "value": 10.0,
+            "unit": "%",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          },
+          {
+            "rule_id": "elig.growth.ni_yoy",
+            "text": "Laba bersih TTM +10,0% YoY",
+            "value": 10.0,
+            "unit": "%",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "id": "balance",
+        "label": "Neraca",
+        "state": "kuat",
+        "headline": "DER 0,40x",
+        "evidence": [
+          {
+            "rule_id": "elig.balance.der",
+            "text": "DER 0,40x",
+            "value": 0.4,
+            "unit": "x",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          },
+          {
+            "rule_id": "elig.balance.current_ratio",
+            "text": "Rasio lancar 2,00x",
+            "value": 2.0,
+            "unit": "x",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "id": "consistency",
+        "label": "Konsistensi",
+        "state": "kuat",
+        "headline": "Tidak ada kuartal rugi",
+        "evidence": [
+          {
+            "rule_id": "elig.consistency.loss_q",
+            "text": "0 kuartal rugi dari 12",
+            "value": 0.0,
+            "unit": "kuartal",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "id": "dividend",
+        "label": "Dividen",
+        "state": "kuat",
+        "headline": "Dividen 5 dari 5 tahun",
+        "evidence": [
+          {
+            "rule_id": "elig.dividend.years",
+            "text": "Dividen dibayar 5 dari 5 tahun terakhir",
+            "value": 5.0,
+            "unit": "tahun",
+            "period": "5 tahun",
+            "source": "yahoo",
+            "as_of": "2026-10-22"
+          },
+          {
+            "rule_id": "elig.dividend.payout",
+            "text": "Payout 11,4%",
+            "value": 11.4134,
+            "unit": "%",
+            "period": "5 tahun",
+            "source": "yahoo",
+            "as_of": "2026-10-22"
+          }
+        ]
+      }
+    ],
+    "flags": []
+  },
+  "valuation": {
+    "zone": "mahal",
+    "confidence": "rendah",
+    "price": 4619.24,
+    "fair": {
+      "low": 3025.9276,
+      "mid": 3421.6578,
+      "high": 6388.9332
+    },
+    "methods": [
+      {
+        "id": "pe",
+        "label": "P/E historis",
+        "value": 3368.0712,
+        "inputs": {
+          "eps_ttm": 554.7806,
+          "median": 6.071,
+          "days": 1305,
+          "years": 4.9993
+        },
+        "used": true
+      },
+      {
+        "id": "pb",
+        "label": "P/B historis",
+        "value": 3475.2445,
+        "inputs": {
+          "bvps": 3270.0387,
+          "median": 1.0628,
+          "days": 1305,
+          "years": 4.9993
+        },
+        "used": true
+      },
+      {
+        "id": "yield",
+        "label": "Yield historis",
+        "value": 3025.9276,
+        "inputs": {
+          "dps_ttm": 63.3195,
+          "median": 0.0209,
+          "days": 1305,
+          "years": 4.9993
+        },
+        "used": true
+      },
+      {
+        "id": "graham",
+        "label": "Graham",
+        "value": 6388.9332,
+        "inputs": {
+          "eps_ttm": 554.7806,
+          "bvps": 3270.0387,
+          "factor": 22.5
+        },
+        "used": true
+      }
+    ],
+    "gap_pct": 35.0001
+  },
+  "trend": {
+    "state": "naik",
+    "ma50": 3290.6426,
+    "ma200": 3140.55,
+    "from_high_pct": 0.0,
+    "vs_ihsg_6m_pp": 44.4017,
+    "vol_1y": 41.1608
+  },
+  "refs": {
+    "avg_price": 1980.0,
+    "entry_price": null
+  },
+  "key_metrics": [
+    {
+      "id": "roe_ttm",
+      "label": "ROE TTM",
+      "value": 17.8754,
+      "unit": "%"
+    },
+    {
+      "id": "op_margin",
+      "label": "Margin operasi",
+      "value": 16.0,
+      "unit": "%"
+    },
+    {
+      "id": "der",
+      "label": "DER",
+      "value": 0.4,
+      "unit": "x"
+    },
+    {
+      "id": "eps_ttm",
+      "label": "EPS TTM",
+      "value": 554.7806,
+      "unit": "idr"
+    },
+    {
+      "id": "bvps",
+      "label": "BVPS",
+      "value": 3270.0387,
+      "unit": "idr"
+    },
+    {
+      "id": "dps_ttm",
+      "label": "DPS TTM",
+      "value": 63.3195,
+      "unit": "idr"
+    }
+  ],
+  "changes": [],
+  "data_quality": [
+    {
+      "code": "available_estimated",
+      "text": "Tanggal terbit laporan diperkirakan dari akhir periode",
+      "blocks": false
+    }
+  ],
+  "sources": {
+    "prices": {
+      "as_of": "2026-10-22",
+      "age_days": 0
+    },
+    "xbrl": {
+      "latest_period": "2026Q2",
+      "available_from": "2026-08-29",
+      "available_source": "estimated"
+    },
+    "shares": {
+      "value": 1000000.0,
+      "as_of": "2026-06-30",
+      "source": "xbrl_period"
+    },
+    "taxonomy": {
+      "value": "general",
+      "known": true
+    }
+  },
+  "rules_version": "2026.10-2",
+  "taken_at": "2026-10-22T09:00:00+00:00"
+}

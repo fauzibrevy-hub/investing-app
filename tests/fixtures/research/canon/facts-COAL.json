@@ -1,0 +1,145 @@
+{
+  "fact": {
+    "filing_id": "COAL_2026_Q2",
+    "element": "idx-cor:SalesAndRevenue",
+    "label": {
+      "id": "Sales And Revenue",
+      "en": "Sales And Revenue"
+    },
+    "ctx_kind": "duration",
+    "start": "2026-01-01",
+    "end": "2026-06-30",
+    "dims": "",
+    "value": 306000000.0,
+    "unit": "USD",
+    "decimals": -6,
+    "cite": null
+  },
+  "filing": {
+    "id": "COAL_2026_Q2",
+    "ticker": "COAL",
+    "fy": 2026,
+    "period": "Q2",
+    "taxonomy": "general",
+    "industry_code": "A121",
+    "period_start": "2026-01-01",
+    "period_end": "2026-06-30",
+    "audited": false,
+    "rounding": "Jutaan",
+    "currency": "USD",
+    "filed_at": null,
+    "available_from": "2026-08-29",
+    "available_source": "estimated",
+    "source_path": "<tmp>/XBRL/2026/Q2/COAL_2026_Q2.xbrl",
+    "file_hash": "723fb2ff90632182dc6844095bafde844d3daf38c8830ea50ee44a89fc1bb5ec",
+    "source_kind": "xbrl",
+    "ingested_at": "2026-10-24T09:00:00+00:00",
+    "fact_count": 20
+  },
+  "history": [
+    {
+      "filing_id": "COAL_2026_Q2",
+      "value": 306000000.0,
+      "decimals": -6,
+      "source_kind": "xbrl",
+      "cite": null,
+      "available_from": "2026-08-29",
+      "original": true
+    }
+  ],
+  "restatements": [],
+  "derived": [
+    {
+      "fy": 2026,
+      "q": 2,
+      "view": "standalone",
+      "value": 154000000.0,
+      "flags": [],
+      "formula": "ytd_q2 − ytd_q1",
+      "inputs": [
+        {
+          "role": "ytd_q2",
+          "value": 306000000.0,
+          "fact": {
+            "filing_id": "COAL_2026_Q2",
+            "element": "idx-cor:SalesAndRevenue",
+            "ctx_kind": "duration",
+            "start": "2026-01-01",
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-01-01_2026-06-30"
+          },
+          "cite": null
+        },
+        {
+          "role": "ytd_q1",
+          "value": 152000000.0,
+          "fact": {
+            "filing_id": "COAL_2026_Q1",
+            "element": "idx-cor:SalesAndRevenue",
+            "ctx_kind": "duration",
+            "start": "2026-01-01",
+            "end": "2026-03-31",
+            "dims": "",
+            "ctx": "2026-01-01_2026-03-31"
+          },
+          "cite": null
+        }
+      ],
+      "rules_version": "2026.10-r4"
+    },
+    {
+      "fy": 2026,
+      "q": 2,
+      "view": "ttm",
+      "value": 604000000.0,
+      "flags": [],
+      "formula": "ytd_q2 + prev_fy − prev_ytd_q2",
+      "inputs": [
+        {
+          "role": "ytd_q2",
+          "value": 306000000.0,
+          "fact": {
+            "filing_id": "COAL_2026_Q2",
+            "element": "idx-cor:SalesAndRevenue",
+            "ctx_kind": "duration",
+            "start": "2026-01-01",
+            "end": "2026-06-30",
+            "dims": "",
+            "ctx": "2026-01-01_2026-06-30"
+          },
+          "cite": null
+        },
+        {
+          "role": "prev_fy",
+          "value": 588000000.0,
+          "fact": {
+            "filing_id": "COAL_2025_FY",
+            "element": "idx-cor:SalesAndRevenue",
+            "ctx_kind": "duration",
+            "start": "2025-01-01",
+            "end": "2025-12-31",
+            "dims": "",
+            "ctx": "2025-01-01_2025-12-31"
+          },
+          "cite": null
+        },
+        {
+          "role": "prev_ytd_q2",
+          "value": 290000000.0,
+          "fact": {
+            "filing_id": "COAL_2025_Q2",
+            "element": "idx-cor:SalesAndRevenue",
+            "ctx_kind": "duration",
+            "start": "2025-01-01",
+            "end": "2025-06-30",
+            "dims": "",
+            "ctx": "2025-01-01_2025-06-30"
+          },
+          "cite": null
+        }
+      ],
+      "rules_version": "2026.10-r4"
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+# shipping.toml: Pelayaran (design.md §3.3; LEAD, SOCI). IDX codes both as A112 "Oil & Gas
+# Storage & Distribution", so the industry-code rule maps A112 to this pack; an A112 ticker
+# that is not a shipping company gets a per-ticker override. Vessel carrying amounts come from
+# the property, plant and equipment note, which the filings tag with class and carrying-amount
+# dimensions (names read from the filings on disk). Freight and handling costs are tagged but
+# nil in the filings checked, so that row shows a gap until a filing carries it. Per-vessel
+# metrics read the fleet count as an instant (`period = "instant"`): under `ttm` a KPI is
+# summed over four quarters, which is right for volumes and wrong for a stock like a fleet.
+
+id = "shipping"
+version = "2026.10-1"
+label = "Pelayaran"
+industry_codes = ["A112"]
+taxonomies = ["general", "infrastructure"]
+
+[[dimension]]
+id = "armada"
+label = "Armada"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "vessel_count"
+  label = "Jumlah kapal"
+  layer = "kpi"
+  unit = "kapal"
+  direction = "neutral"
+  why = "Kapasitas yang menghasilkan pendapatan; semua angka per kapal dibagi dengan ini."
+  cadence = "quarterly"
+  extract_aliases = ["fleet size", "number of vessels", "vessel count"]
+
+  [[dimension.metric]]
+  id = "fleet_age_years"
+  label = "Usia armada rata-rata"
+  layer = "kpi"
+  unit = "tahun"
+  direction = "lower"
+  why = "Armada tua berarti biaya perawatan dan pengedokan naik serta tarif sewa tertekan."
+  cadence = "quarterly"
+  extract_aliases = ["average fleet age", "fleet age"]
+
+  [[dimension.metric]]
+  id = "utilization_pct"
+  label = "Utilisasi armada"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Hari kapal bekerja dibagi hari tersedia; kapal menganggur tetap menanggung biaya tetap."
+  cadence = "quarterly"
+  extract_aliases = ["fleet utilization", "utilization rate"]
+  range = [0, 100]
+
+[[dimension]]
+id = "kontrak"
+label = "Kontrak"
+kind = "pricing"
+
+  [[dimension.metric]]
+  id = "time_charter_share_pct"
+  label = "Porsi sewa berjangka (vs spot)"
+  layer = "kpi"
+  unit = "%"
+  direction = "neutral"
+  why = "Sewa berjangka mengunci pendapatan, spot mengikuti pasar; menentukan seberapa cepat tarif pasar sampai ke laba."
+  cadence = "quarterly"
+  extract_aliases = ["time charter share", "time charter"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "backlog_usd_m"
+  label = "Nilai kontrak tersisa (backlog)"
+  layer = "kpi"
+  unit = "USD juta"
+  direction = "higher"
+  why = "Pendapatan yang sudah terikat kontrak; penyangga saat pasar spot lemah."
+  cadence = "quarterly"
+  extract_aliases = ["contract backlog", "backlog", "order backlog"]
+
+  [[dimension.metric]]
+  id = "backlog_tenor_years"
+  label = "Sisa tenor kontrak rata-rata"
+  layer = "kpi"
+  unit = "tahun"
+  direction = "higher"
+  why = "Berapa lama backlog bertahan; tenor pendek berarti risiko negosiasi ulang segera."
+  cadence = "quarterly"
+  extract_aliases = ["backlog tenor", "average remaining contract tenor"]
+
+  [[dimension.metric]]
+  id = "day_rate_usd"
+  label = "Tarif harian rata-rata"
+  layer = "kpi"
+  unit = "USD/hari"
+  direction = "higher"
+  why = "Harga sewa per kapal per hari; bersama utilisasi menentukan pendapatan per kapal."
+  cadence = "quarterly"
+  extract_aliases = ["average day rate", "day rate"]
+
+[[dimension]]
+id = "ekonomi_unit"
+label = "Ekonomi per kapal"
+kind = "quality"
+
+  [[dimension.metric]]
+  id = "revenue_per_vessel"
+  label = "Pendapatan per kapal"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Pendapatan setahun dibagi jumlah kapal pada akhir kuartal; menyaring efek pertumbuhan armada dari efek tarif."
+  period = "instant"
+  formula = "ttm(Revenue) / VesselCount"
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+  elements.VesselCount = ["kpi:vessel_count"]
+
+  [[dimension.metric]]
+  id = "ebitda_per_vessel"
+  label = "EBITDA per kapal"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Laba tunai setahun per kapal pada akhir kuartal; dasar menilai harga kapal di neraca dan di pasar."
+  period = "instant"
+  formula = "ttm(Ebitda) / VesselCount"
+  elements.Ebitda = ["metric:core.ebitda"]
+  elements.VesselCount = ["kpi:vessel_count"]
+
+[[dimension]]
+id = "biaya"
+label = "Biaya"
+kind = "cost"
+
+  [[dimension.metric]]
+  id = "freight_handling_ratio"
+  label = "Biaya angkut dan bongkar muat / pendapatan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Biaya operasi pelayaran langsung relatif terhadap pendapatan; naik saat bahan bakar dan pelabuhan mahal."
+  period = "ttm"
+  formula = "100 * ttm(Freight) / ttm(Revenue)"
+  elements.Freight = ["idx-cor:FreightAndHandlingCosts"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "cost_of_revenue_ratio"
+  label = "Beban pokok / pendapatan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Seluruh beban pokok pendapatan (awak, bahan bakar, penyusutan kapal) relatif terhadap pendapatan."
+  period = "ttm"
+  formula = "100 * ttm(CostOfRevenue) / ttm(Revenue)"
+  elements.CostOfRevenue = ["idx-cor:CostOfSalesAndRevenue"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "drydock_next_12m"
+  label = "Kapal masuk dok 12 bulan ke depan"
+  layer = "kpi"
+  unit = "kapal"
+  direction = "lower"
+  why = "Pengedokan berarti kapal berhenti menghasilkan dan biaya naik; jadwal dari laporan operasional."
+  cadence = "quarterly"
+  extract_aliases = ["vessels entering drydock", "drydock next 12 months"]
+
+[[dimension]]
+id = "neraca"
+label = "Neraca"
+kind = "balance"
+
+  [[dimension.metric]]
+  id = "vessels_gross"
+  label = "Kapal dalam aset tetap (nilai perolehan)"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "neutral"
+  why = "Harga perolehan kapal milik sendiri; dibandingkan dengan EBITDA per kapal dan harga pasar kapal bekas."
+  period = "instant"
+  formula = "VesselsGross"
+  elements.VesselsGross = ["idx-cor:PropertyPlantAndEquipment[idx-cor:CarryingAmountPropertyPlantEquipmentAxis=idx-cor:CarryingAmountGrossMember;idx-cor:ClassesPropertyPlantEquipmentAxis=idx-cor:VesselsDirectlyOwnedMember]"]
+
+  [[dimension.metric]]
+  id = "vessels_accumulated_depreciation"
+  label = "Akumulasi penyusutan kapal"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "neutral"
+  why = "Seberapa jauh kapal sudah disusutkan; mendekati nilai perolehan berarti armada menua di buku."
+  period = "instant"
+  formula = "VesselsAccDep"
+  elements.VesselsAccDep = ["idx-cor:PropertyPlantAndEquipment[idx-cor:CarryingAmountPropertyPlantEquipmentAxis=idx-cor:CarryingAmountAccumulatedDepreciationMember;idx-cor:ClassesPropertyPlantEquipmentAxis=idx-cor:VesselsDirectlyOwnedMember]"]
+
+  [[dimension.metric]]
+  id = "capex_to_depreciation"
+  label = "Belanja modal / penyusutan"
+  layer = "xbrl"
+  unit = "x"
+  direction = "neutral"
+  why = "Di atas 1 berarti armada bertambah atau diremajakan; di bawah 1 berarti armada menua."
+  period = "ttm"
+  formula = "ttm(Capex) / ttm(Depreciation)"
+  elements.Capex = ["abs:idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment", "abs:idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment"]
+  elements.Depreciation = ["idx-cor:Depreciation", "idx-cor:DepreciationOfPropertyPlantAndEquipment"]
+
+  [[dimension.metric]]
+  id = "net_debt_to_ebitda"
+  label = "Utang bersih / EBITDA"
+  layer = "xbrl"
+  unit = "x"
+  direction = "lower"
+  why = "Kapal dibiayai utang; angka ini menentukan ruang untuk kapal baru dan ketahanan saat tarif turun."
+  period = "instant"
+  formula = "NetDebt / ttm(Ebitda)"
+  elements.NetDebt = ["metric:core.net_debt"]
+  elements.Ebitda = ["metric:core.ebitda"]
+
+[[driver]]
+id = "charter_index"
+label = "Indeks sewa tanker dan OSV regional"
+source = "TBD"                           # Baltic, Clarksons and Platts are licensed (spike-r3-drivers.md)
+proxy = "bwet"                           # global tanker freight futures ETF, labelled proxy, not OSV
+compare_metric = "day_rate_usd"
+
+[[driver]]
+id = "bunker"
+label = "Harga bahan bakar kapal"
+source = "TBD"                           # no free VLSFO series; Ship & Bunker forbids automated access
+proxy = "brent"                          # Brent, labelled proxy

@@ -1,0 +1,133 @@
+{
+  "ticker": "HEVY",
+  "as_of": "<dynamic>",
+  "range": "1y",
+  "from": "2025-10-24",
+  "to": "2026-10-23",
+  "pack": "heavy_equipment_contracting",
+  "price": [
+    [
+      "2025-10-27",
+      2286.81
+    ],
+    [
+      "2025-10-28",
+      2287.95
+    ],
+    [
+      "2025-10-29",
+      2289.11
+    ]
+  ],
+  "ma200": [
+    [
+      "2025-10-27",
+      2250.5245
+    ],
+    [
+      "2025-10-28",
+      2250.5409
+    ],
+    [
+      "2025-10-29",
+      2250.5674
+    ]
+  ],
+  "drivers": [
+    {
+      "unit": "USD/t",
+      "cadence": "bulanan",
+      "note": "Rata-rata bulanan IMF; berbeda sekitar 5% dari Pink Sheet Bank Dunia (metode lain, tidak dicampur).",
+      "status": "belum diambil",
+      "last": null,
+      "id": "newcastle",
+      "label": "Batubara Newcastle",
+      "source": "FRED PCOALAUUSDM (IMF PCPS)",
+      "compare_metric": "coal_asp_usd_t",
+      "series": [],
+      "proxy": null
+    },
+    {
+      "unit": "USD/oz",
+      "cadence": "harian",
+      "note": "Kontrak COMEX bulan terdekat.",
+      "status": "belum diambil",
+      "last": null,
+      "id": "gold",
+      "label": "Harga emas",
+      "source": "Yahoo GC=F",
+      "compare_metric": null,
+      "series": [],
+      "proxy": null
+    },
+    {
+      "unit": "IDR",
+      "cadence": "harian",
+      "note": "Kurs pasar Yahoo, bukan JISDOR.",
+      "status": "tersedia",
+      "last": "2026-10-01",
+      "id": "usd_idr",
+      "label": "USD/IDR",
+      "source": "Yahoo IDR=X",
+      "compare_metric": null,
+      "series": [
+        [
+          "2025-11-01",
+          17360.0
+        ],
+        [
+          "2025-12-01",
+          17400.0
+        ],
+        [
+          "2026-01-01",
+          17440.0
+        ]
+      ],
+      "proxy": null
+    }
+  ],
+  "drivers_plotted": 1,
+  "index_relative": [
+    [
+      "2025-10-27",
+      100.0
+    ],
+    [
+      "2025-10-28",
+      99.9999
+    ],
+    [
+      "2025-10-29",
+      100.0002
+    ]
+  ],
+  "index_symbol": "^JKSE",
+  "levels": [],
+  "events": [
+    {
+      "date": "2026-05-15",
+      "kind": "dividend",
+      "amount": 39.0
+    }
+  ],
+  "stats": {
+    "close": {
+      "value": 2596.14,
+      "date": "2026-10-23"
+    },
+    "high_52w": {
+      "value": 2596.14,
+      "date": "2026-10-23",
+      "drawdown_pct": 0.0
+    },
+    "volatility_1y_pct": 0.2869,
+    "vs_index_6m_pct": 0.0003,
+    "dividend_yield_ttm_pct": 1.5022,
+    "avg_cost": {
+      "value": 1000.0,
+      "gap_pct": 159.614
+    }
+  },
+  "empty": false
+}

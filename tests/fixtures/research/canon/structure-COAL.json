@@ -1,0 +1,279 @@
+{
+  "ticker": "COAL",
+  "pack": {
+    "id": "coal_mining",
+    "label": "Tambang batubara"
+  },
+  "metrics": [
+    {
+      "id": "production_mt",
+      "label": "Produksi",
+      "unit": "Mt",
+      "pack": true
+    },
+    {
+      "id": "sales_mt",
+      "label": "Penjualan",
+      "unit": "Mt",
+      "pack": true
+    },
+    {
+      "id": "asp_usd_t",
+      "label": "Harga jual rata-rata",
+      "unit": "USD/t",
+      "pack": true
+    },
+    {
+      "id": "cash_cost_usd_t",
+      "label": "Biaya tunai",
+      "unit": "USD/t",
+      "pack": true
+    },
+    {
+      "id": "stripping_ratio",
+      "label": "Nisbah kupas",
+      "unit": "bcm/t",
+      "pack": true
+    },
+    {
+      "id": "mining_cost_ratio",
+      "label": "Biaya penambangan / pendapatan",
+      "unit": "%",
+      "pack": true
+    },
+    {
+      "id": "royalty_ratio",
+      "label": "Royalti ke pemerintah / pendapatan",
+      "unit": "%",
+      "pack": true
+    },
+    {
+      "id": "deferred_stripping_vs_production",
+      "label": "Pertumbuhan biaya pengupasan tangguhan vs produksi",
+      "unit": "pp",
+      "pack": true
+    },
+    {
+      "id": "reclamation_provisions",
+      "label": "Provisi reklamasi dan penutupan tambang",
+      "unit": "ccy",
+      "pack": true
+    },
+    {
+      "id": "net_debt_to_ebitda",
+      "label": "Utang bersih / EBITDA",
+      "unit": "x",
+      "pack": true
+    },
+    {
+      "id": "reserves_mt",
+      "label": "Cadangan terbukti dan terkira",
+      "unit": "Mt",
+      "pack": true
+    },
+    {
+      "id": "mine_life_years",
+      "label": "Umur tambang tersirat",
+      "unit": "tahun",
+      "pack": true
+    },
+    {
+      "id": "revenue",
+      "label": "Pendapatan",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "gross_profit",
+      "label": "Laba kotor",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "operating_profit",
+      "label": "Laba usaha",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "net_income",
+      "label": "Laba bersih",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "net_margin",
+      "label": "Margin bersih",
+      "unit": "%",
+      "pack": false
+    },
+    {
+      "id": "ebitda",
+      "label": "EBITDA (pendekatan)",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "operating_cash_flow",
+      "label": "Arus kas operasi",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "capex",
+      "label": "Belanja modal",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "free_cash_flow",
+      "label": "Arus kas bebas",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "total_equity",
+      "label": "Total ekuitas",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "cash",
+      "label": "Kas dan setara kas",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "total_debt",
+      "label": "Total utang berbunga",
+      "unit": "ccy",
+      "pack": false
+    },
+    {
+      "id": "net_debt",
+      "label": "Utang bersih",
+      "unit": "ccy",
+      "pack": false
+    }
+  ],
+  "kinds": [
+    {
+      "id": "segmen",
+      "label": "Segmen"
+    },
+    {
+      "id": "produk",
+      "label": "Produk"
+    },
+    {
+      "id": "pelanggan",
+      "label": "Pelanggan"
+    },
+    {
+      "id": "pendorong_harga",
+      "label": "Pendorong harga"
+    },
+    {
+      "id": "biaya",
+      "label": "Biaya"
+    },
+    {
+      "id": "kepemilikan",
+      "label": "Kepemilikan"
+    },
+    {
+      "id": "lainnya",
+      "label": "Lainnya"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "parent": null,
+      "label": "Segmen batubara",
+      "kind": "segmen",
+      "kind_label": "Segmen",
+      "metric": null,
+      "metric_label": null,
+      "note": null,
+      "state": "accepted",
+      "state_label": "diterima",
+      "owner": false,
+      "source": {
+        "document": "laporan-tahunan-2025.pdf",
+        "page": 12,
+        "snippet": "Segmen batubara"
+      }
+    },
+    {
+      "id": "n2",
+      "parent": "n1",
+      "label": "Batubara termal ekspor",
+      "kind": "produk",
+      "kind_label": "Produk",
+      "metric": "production_mt",
+      "metric_label": "Produksi",
+      "note": null,
+      "state": "proposed",
+      "state_label": "usulan",
+      "owner": false,
+      "source": {
+        "document": "laporan-tahunan-2025.pdf",
+        "page": 37,
+        "snippet": "Penjualan batubara termal ke pembeli di Asia"
+      }
+    },
+    {
+      "id": "n3",
+      "parent": "n2",
+      "label": "Pembeli di Asia",
+      "kind": "pelanggan",
+      "kind_label": "Pelanggan",
+      "metric": null,
+      "metric_label": null,
+      "note": null,
+      "state": "proposed",
+      "state_label": "usulan",
+      "owner": false,
+      "source": {
+        "document": "laporan-tahunan-2025.pdf",
+        "page": 38,
+        "snippet": "Pembeli utama berada di Asia"
+      }
+    },
+    {
+      "id": "n4",
+      "parent": null,
+      "label": "Kontraktor tambang",
+      "kind": "biaya",
+      "kind_label": "Biaya",
+      "metric": null,
+      "metric_label": null,
+      "note": null,
+      "state": "rejected",
+      "state_label": "ditolak",
+      "owner": false,
+      "source": {
+        "document": "laporan-tahunan-2025.pdf",
+        "page": 40,
+        "snippet": "Jasa penambangan oleh kontraktor"
+      }
+    }
+  ],
+  "counts": {
+    "proposed": 2,
+    "accepted": 1,
+    "rejected": 1
+  },
+  "updated_at": "2026-10-28T03:00:00+00:00",
+  "limits": {
+    "max_depth": 4,
+    "max_nodes": 40,
+    "max_label": 80,
+    "max_note": 200
+  },
+  "draft": {
+    "file": "COAL.draft.json",
+    "available": true
+  }
+}

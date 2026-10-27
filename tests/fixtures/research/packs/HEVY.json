@@ -1,0 +1,4243 @@
+{
+  "ticker": "HEVY",
+  "as_of": "<dynamic>",
+  "role": "held",
+  "business_note": null,
+  "pack": {
+    "id": "heavy_equipment_contracting",
+    "source": "filing",
+    "filing_code": "C141",
+    "filing_default": "heavy_equipment_contracting",
+    "override": null,
+    "version": "2026.10-1",
+    "label": "Alat berat dan kontraktor tambang",
+    "action": null
+  },
+  "core": {
+    "id": "core",
+    "version": "2026.10-1"
+  },
+  "latest": {
+    "fy": 2026,
+    "q": 2,
+    "label": "2026Q2",
+    "from_filing": true
+  },
+  "quarters": [
+    {
+      "fy": 2023,
+      "q": 3,
+      "label": "2023Q3"
+    },
+    {
+      "fy": 2023,
+      "q": 4,
+      "label": "2023Q4"
+    },
+    {
+      "fy": 2024,
+      "q": 1,
+      "label": "2024Q1"
+    },
+    {
+      "fy": 2024,
+      "q": 2,
+      "label": "2024Q2"
+    },
+    {
+      "fy": 2024,
+      "q": 3,
+      "label": "2024Q3"
+    },
+    {
+      "fy": 2024,
+      "q": 4,
+      "label": "2024Q4"
+    },
+    {
+      "fy": 2025,
+      "q": 1,
+      "label": "2025Q1"
+    },
+    {
+      "fy": 2025,
+      "q": 2,
+      "label": "2025Q2"
+    },
+    {
+      "fy": 2025,
+      "q": 3,
+      "label": "2025Q3"
+    },
+    {
+      "fy": 2025,
+      "q": 4,
+      "label": "2025Q4"
+    },
+    {
+      "fy": 2026,
+      "q": 1,
+      "label": "2026Q1"
+    },
+    {
+      "fy": 2026,
+      "q": 2,
+      "label": "2026Q2"
+    }
+  ],
+  "dimensions": [
+    {
+      "pack": "core",
+      "id": "laba_rugi",
+      "label": "Laba rugi",
+      "kind": "core",
+      "metrics": [
+        {
+          "id": "revenue",
+          "label": "Pendapatan",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Skala usaha; hampir semua rasio lain dibaca relatif terhadap angka ini.",
+          "note": null,
+          "formula": "Revenue",
+          "period": "standalone",
+          "bindings": {
+            "Revenue": [
+              "idx-cor:SalesAndRevenue",
+              "idx-cor:RevenueFromFundManagementAsMudharib",
+              "idx-cor:InterestIncome"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 318000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 321000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 324000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 327000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 330000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 333000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 336000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 339000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 342000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 345000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 348000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 351000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 351000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 3.539823
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "gross_profit",
+          "label": "Laba kotor",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Selisih harga jual dan biaya langsung sebelum beban usaha.",
+          "note": null,
+          "formula": "GrossProfit",
+          "period": "standalone",
+          "bindings": {
+            "GrossProfit": [
+              "idx-cor:GrossProfit"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 76000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 77000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 78000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 79000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 80000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 81000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 82000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 83000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 84000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 85000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 86000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 87000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 87000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 4.819277
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "operating_profit",
+          "label": "Laba usaha",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Laba dari operasi inti sebelum bunga dan pajak; untuk bank dan emiten tanpa tag laba usaha dipakai laba sebelum pajak.",
+          "note": null,
+          "formula": "OperatingProfit",
+          "period": "standalone",
+          "bindings": {
+            "OperatingProfit": [
+              "idx-cor:ProfitLossFromOperatingActivities",
+              "idx-cor:ProfitFromOperation",
+              "idx-cor:ProfitLossBeforeIncomeTax"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 43000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 43500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 44000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 44500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 45000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 45500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 46000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 46500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 47000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 47500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 48000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 48500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 48500000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 4.301075
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "net_income",
+          "label": "Laba bersih",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Hasil akhir untuk seluruh pemegang saham setelah pajak.",
+          "note": null,
+          "formula": "NetIncome",
+          "period": "standalone",
+          "bindings": {
+            "NetIncome": [
+              "idx-cor:ProfitLoss"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 32400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 32800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 33200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 33600000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 34000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 34400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 34800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 35200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 35600000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 36000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 36400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 36800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 36800000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 4.545455
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "net_margin",
+          "label": "Margin bersih",
+          "layer": "xbrl",
+          "unit": "%",
+          "direction": "higher",
+          "why": "Berapa rupiah laba per rupiah pendapatan; perubahan margin sering mendahului perubahan laba.",
+          "note": null,
+          "formula": "100 * ttm(NetIncome) / ttm(Revenue)",
+          "period": "ttm",
+          "bindings": {
+            "NetIncome": [
+              "idx-cor:ProfitLoss"
+            ],
+            "Revenue": [
+              "idx-cor:SalesAndRevenue",
+              "idx-cor:RevenueFromFundManagementAsMudharib",
+              "idx-cor:InterestIncome"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 10.143541,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 10.173776,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 10.203443,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 10.232558,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 10.261137,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 10.289193,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 10.316742,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 10.343797,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 10.37037,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 10.396476,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 10.422125,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 10.44733,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 10.44733
+          },
+          "yoy": {
+            "kind": "pp",
+            "value": 0.103534
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 96.666667,
+            "n": 15,
+            "years": 3.75,
+            "caption": "p97 · 4 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "ebitda",
+          "label": "EBITDA (pendekatan)",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Laba usaha ditambah penyusutan dan amortisasi; basis untuk rasio utang. Pendekatan: memakai laba sebelum pajak bila tag laba usaha tidak ada.",
+          "note": null,
+          "formula": "OperatingProfit + Depreciation + Amortization",
+          "period": "standalone",
+          "bindings": {
+            "Amortization": [
+              "idx-cor:Amortization",
+              "idx-cor:AmortisationOfIntangibleAssets",
+              "0"
+            ],
+            "Depreciation": [
+              "idx-cor:Depreciation",
+              "idx-cor:DepreciationOfPropertyPlantAndEquipment",
+              "0"
+            ],
+            "OperatingProfit": [
+              "idx-cor:ProfitLossFromOperatingActivities",
+              "idx-cor:ProfitFromOperation",
+              "idx-cor:ProfitLossBeforeIncomeTax"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 55600000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 56200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 56800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 57400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 58000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 58600000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 59200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 59800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 60400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 61000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 61600000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 62200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 3
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 62200000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 4.013378
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "core",
+      "id": "arus_kas",
+      "label": "Arus kas",
+      "kind": "core",
+      "metrics": [
+        {
+          "id": "operating_cash_flow",
+          "label": "Arus kas operasi",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Kas yang benar-benar masuk dari operasi; pembanding kualitas laba.",
+          "note": null,
+          "formula": "Ocf",
+          "period": "standalone",
+          "bindings": {
+            "Ocf": [
+              "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 48000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 48500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 49000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 49500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 50000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 50500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 51000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 51500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 52000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 52500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 53000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 53500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 53500000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 3.883495
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "capex",
+          "label": "Belanja modal",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "neutral",
+          "why": "Investasi pada aset tetap; dibandingkan dengan penyusutan menunjukkan ekspansi atau penyusutan armada dan pabrik.",
+          "note": null,
+          "formula": "Capex",
+          "period": "standalone",
+          "bindings": {
+            "Capex": [
+              "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+              "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment",
+              "idx-cor:AcquisitionOfPropertyPlantAndEquipment"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 21800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 22100000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 22400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 22700000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 23000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 23300000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 23600000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 23900000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 24200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 24500000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 24800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 25100000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 25100000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 5.020921
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "free_cash_flow",
+          "label": "Arus kas bebas",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Arus kas operasi dikurangi belanja modal: kas yang tersisa untuk utang, dividen, dan pertumbuhan.",
+          "note": null,
+          "formula": "Ocf - Capex",
+          "period": "standalone",
+          "bindings": {
+            "Capex": [
+              "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+              "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment",
+              "idx-cor:AcquisitionOfPropertyPlantAndEquipment"
+            ],
+            "Ocf": [
+              "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 26200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 26400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 26600000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 26800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 27000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 27200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 27400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 27600000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 27800000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 28000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 28200000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 28400000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 2
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 28400000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 2.898551
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "core",
+      "id": "neraca",
+      "label": "Neraca",
+      "kind": "core",
+      "metrics": [
+        {
+          "id": "total_equity",
+          "label": "Total ekuitas",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Modal pemegang saham; penyebut untuk imbal hasil ekuitas dan nilai buku.",
+          "note": null,
+          "formula": "Equity",
+          "period": "instant",
+          "bindings": {
+            "Equity": [
+              "idx-cor:Equity"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 430000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 435000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 440000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 445000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 450000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 455000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 460000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 465000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 470000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 475000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 480000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 485000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 485000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 4.301075
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "cash",
+          "label": "Kas dan setara kas",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Likuiditas yang tersedia tanpa menjual aset.",
+          "note": null,
+          "formula": "Cash",
+          "period": "instant",
+          "bindings": {
+            "Cash": [
+              "idx-cor:CashAndCashEquivalents",
+              "idx-cor:Cash"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 162000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 164000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 166000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 168000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 170000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 172000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 174000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 176000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 178000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 180000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 182000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 184000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 1
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 184000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 4.545455
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "total_debt",
+          "label": "Total utang berbunga",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "lower",
+          "why": "Pinjaman bank, obligasi, dan pinjaman lain yang berbunga; komponen yang tidak dilaporkan dihitung nol secara eksplisit.",
+          "note": null,
+          "formula": "ShortTermBank + LongTermBank + CurrentBank + Bonds + CurrentBonds + OtherLong + OtherCurrent",
+          "period": "instant",
+          "bindings": {
+            "Bonds": [
+              "idx-cor:LongTermBondsPayable",
+              "idx-cor:BondsPayable",
+              "0"
+            ],
+            "CurrentBank": [
+              "idx-cor:CurrentMaturitiesOfBankLoans",
+              "0"
+            ],
+            "CurrentBonds": [
+              "idx-cor:CurrentMaturitiesOfBondsPayable",
+              "0"
+            ],
+            "LongTermBank": [
+              "idx-cor:LongTermBankLoans",
+              "0"
+            ],
+            "OtherCurrent": [
+              "idx-cor:CurrentMaturitiesOfOtherBorrowings",
+              "0"
+            ],
+            "OtherLong": [
+              "idx-cor:LongTermOtherBorrowings",
+              "0"
+            ],
+            "ShortTermBank": [
+              "idx-cor:ShortTermBankLoans",
+              "0"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 95000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 7
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 95000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 0.0
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 77.5,
+            "n": 40,
+            "years": 10.0,
+            "caption": "p78 · 10 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "net_debt",
+          "label": "Utang bersih",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "lower",
+          "why": "Utang berbunga dikurangi kas; negatif berarti kas bersih.",
+          "note": null,
+          "formula": "TotalDebt - Cash",
+          "period": "instant",
+          "bindings": {
+            "Cash": [
+              "idx-cor:CashAndCashEquivalents",
+              "idx-cor:Cash"
+            ],
+            "TotalDebt": [
+              "metric:total_debt"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": -67000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": -69000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": -71000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": -73000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": -75000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": -77000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": -79000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": -81000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": -83000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": -85000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": -87000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": -89000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": -89000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": -9.876543
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 2.777778,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p3 · 5 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "heavy_equipment_contracting",
+      "id": "mesin",
+      "label": "Mesin konstruksi",
+      "kind": "volume",
+      "metrics": [
+        {
+          "id": "komatsu_units",
+          "label": "Unit Komatsu terjual",
+          "layer": "kpi",
+          "unit": "unit",
+          "direction": "higher",
+          "why": "Permintaan alat berat mengikuti siklus tambang dan konstruksi; unit terjual adalah indikator paling awal.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "heavy_equipment_contracting",
+      "id": "kontraktor",
+      "label": "Kontraktor tambang",
+      "kind": "volume",
+      "metrics": [
+        {
+          "id": "overburden_mbcm",
+          "label": "Pemindahan lapisan penutup",
+          "layer": "kpi",
+          "unit": "Mbcm",
+          "direction": "higher",
+          "why": "Volume kerja kontraktor; pendapatan jasa penambangan mengikuti angka ini.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "coal_extracted_mt",
+          "label": "Batubara ditambang untuk klien",
+          "layer": "kpi",
+          "unit": "Mt",
+          "direction": "higher",
+          "why": "Produksi batubara atas nama klien; rasio dengan lapisan penutup menunjukkan nisbah kupas kontrak.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "heavy_equipment_contracting",
+      "id": "harga",
+      "label": "Harga",
+      "kind": "pricing",
+      "metrics": [
+        {
+          "id": "coal_sales_mt",
+          "label": "Penjualan batubara sendiri",
+          "layer": "kpi",
+          "unit": "Mt",
+          "direction": "higher",
+          "why": "Volume dari tambang milik sendiri; segmen yang paling terpapar harga batubara.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "coal_asp_usd_t",
+          "label": "Harga jual rata-rata batubara",
+          "layer": "kpi",
+          "unit": "USD/t",
+          "direction": "higher",
+          "why": "Harga yang diterima per ton dari tambang sendiri; dibandingkan dengan Newcastle.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "gold_oz_sold",
+          "label": "Emas terjual",
+          "layer": "kpi",
+          "unit": "oz",
+          "direction": "higher",
+          "why": "Volume segmen emas; bersama harga emas menentukan pendapatan segmen.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "heavy_equipment_contracting",
+      "id": "biaya",
+      "label": "Biaya",
+      "kind": "cost",
+      "metrics": [
+        {
+          "id": "gold_aisc_usd_oz",
+          "label": "Biaya penopang menyeluruh emas (AISC)",
+          "layer": "kpi",
+          "unit": "USD/oz",
+          "direction": "lower",
+          "why": "Biaya penuh per ons; selisihnya dengan harga emas adalah margin segmen emas.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "parts_service_ratio",
+          "label": "Suku cadang dan jasa / pendapatan mesin",
+          "layer": "kpi",
+          "unit": "%",
+          "direction": "higher",
+          "why": "Pendapatan purnajual lebih stabil dan bermargin lebih tinggi daripada penjualan unit; bantalan saat unit turun.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": [
+            0.0,
+            100.0
+          ],
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "heavy_equipment_contracting",
+      "id": "segmen",
+      "label": "Segmen",
+      "kind": "quality",
+      "metrics": [
+        {
+          "id": "seg_rev_machinery",
+          "label": "Pendapatan segmen mesin",
+          "layer": "kpi",
+          "unit": "IDR miliar",
+          "direction": "higher",
+          "why": "Dari catatan segmen di laporan keuangan; memisahkan bisnis yang siklusnya berbeda.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "seg_rev_contracting",
+          "label": "Pendapatan segmen kontraktor",
+          "layer": "kpi",
+          "unit": "IDR miliar",
+          "direction": "higher",
+          "why": "Dari catatan segmen; mengikuti volume lapisan penutup dan tarif kontrak.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "seg_rev_coal",
+          "label": "Pendapatan segmen batubara",
+          "layer": "kpi",
+          "unit": "IDR miliar",
+          "direction": "higher",
+          "why": "Dari catatan segmen; segmen yang paling tergantung harga batubara.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "seg_rev_gold",
+          "label": "Pendapatan segmen emas",
+          "layer": "kpi",
+          "unit": "IDR miliar",
+          "direction": "higher",
+          "why": "Dari catatan segmen; segmen yang tergantung harga emas dan cadangan tambang.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "seg_margin_machinery",
+          "label": "Margin segmen mesin",
+          "layer": "kpi",
+          "unit": "%",
+          "direction": "higher",
+          "why": "Laba segmen dibagi pendapatan segmen; menunjukkan daya tawar harga unit dan purnajual.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "seg_margin_contracting",
+          "label": "Margin segmen kontraktor",
+          "layer": "kpi",
+          "unit": "%",
+          "direction": "higher",
+          "why": "Laba segmen dibagi pendapatan segmen; tertekan bila bahan bakar naik dan tarif kontrak tidak menyesuaikan.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "seg_margin_coal",
+          "label": "Margin segmen batubara",
+          "layer": "kpi",
+          "unit": "%",
+          "direction": "higher",
+          "why": "Laba segmen dibagi pendapatan segmen; paling berayun dengan harga batubara.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "seg_margin_gold",
+          "label": "Margin segmen emas",
+          "layer": "kpi",
+          "unit": "%",
+          "direction": "higher",
+          "why": "Laba segmen dibagi pendapatan segmen; mengikuti harga emas dikurangi AISC.",
+          "note": null,
+          "cadence": "quarterly",
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "state": "not_entered",
+              "action": "Isi"
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "state": "not_entered",
+              "action": "Isi"
+            }
+          ],
+          "latest": null,
+          "yoy": null,
+          "yoy_reason": null,
+          "percentile": {
+            "value": null,
+            "n": 0,
+            "years": 0.0,
+            "caption": "riwayat < 3 th"
+          },
+          "peers": []
+        }
+      ]
+    },
+    {
+      "pack": "heavy_equipment_contracting",
+      "id": "neraca",
+      "label": "Neraca",
+      "kind": "balance",
+      "metrics": [
+        {
+          "id": "capex_to_depreciation",
+          "label": "Belanja modal / penyusutan",
+          "layer": "xbrl",
+          "unit": "x",
+          "direction": "neutral",
+          "why": "Di atas 1 berarti armada dan kapasitas bertambah; di bawah 1 berarti aset menua.",
+          "note": null,
+          "formula": "ttm(Capex) / ttm(Depreciation)",
+          "period": "ttm",
+          "bindings": {
+            "Capex": [
+              "idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment",
+              "idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment"
+            ],
+            "Depreciation": [
+              "idx-cor:Depreciation",
+              "idx-cor:DepreciationOfPropertyPlantAndEquipment"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 1.714859,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 1.7251,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 1.735178,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 1.745098,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 1.754864,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 1.764479,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 1.773946,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 1.78327,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 1.792453,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 1.801498,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 1.810409,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 1.819188,
+              "gap": null,
+              "flags": [],
+              "inputs": 8
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 1.819188
+          },
+          "yoy": {
+            "kind": "x",
+            "value": 0.035918
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 96.666667,
+            "n": 15,
+            "years": 3.75,
+            "caption": "p97 · 4 th"
+          },
+          "peers": []
+        },
+        {
+          "id": "net_cash",
+          "label": "Kas bersih",
+          "layer": "xbrl",
+          "unit": "ccy",
+          "direction": "higher",
+          "why": "Kas dikurangi utang berbunga; ruang untuk akuisisi dan dividen tanpa tambahan utang.",
+          "note": null,
+          "formula": "Cash - TotalDebt",
+          "period": "instant",
+          "bindings": {
+            "Cash": [
+              "idx-cor:CashAndCashEquivalents"
+            ],
+            "TotalDebt": [
+              "metric:core.total_debt"
+            ]
+          },
+          "range": null,
+          "cells": [
+            {
+              "fy": 2023,
+              "q": 3,
+              "label": "2023Q3",
+              "value": 67000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2023,
+              "q": 4,
+              "label": "2023Q4",
+              "value": 69000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2024,
+              "q": 1,
+              "label": "2024Q1",
+              "value": 71000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2024,
+              "q": 2,
+              "label": "2024Q2",
+              "value": 73000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2024,
+              "q": 3,
+              "label": "2024Q3",
+              "value": 75000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2024,
+              "q": 4,
+              "label": "2024Q4",
+              "value": 77000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2025,
+              "q": 1,
+              "label": "2025Q1",
+              "value": 79000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2025,
+              "q": 2,
+              "label": "2025Q2",
+              "value": 81000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2025,
+              "q": 3,
+              "label": "2025Q3",
+              "value": 83000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2025,
+              "q": 4,
+              "label": "2025Q4",
+              "value": 85000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2026,
+              "q": 1,
+              "label": "2026Q1",
+              "value": 87000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            },
+            {
+              "fy": 2026,
+              "q": 2,
+              "label": "2026Q2",
+              "value": 89000000.0,
+              "gap": null,
+              "flags": [],
+              "inputs": 9
+            }
+          ],
+          "latest": {
+            "fy": 2026,
+            "q": 2,
+            "label": "2026Q2",
+            "value": 89000000.0
+          },
+          "yoy": {
+            "kind": "pct",
+            "value": 9.876543
+          },
+          "yoy_reason": null,
+          "percentile": {
+            "value": 97.222222,
+            "n": 18,
+            "years": 4.5,
+            "caption": "p97 · 5 th"
+          },
+          "peers": []
+        }
+      ]
+    }
+  ],
+  "drivers": [
+    {
+      "id": "newcastle",
+      "label": "Batubara Newcastle",
+      "source": "FRED PCOALAUUSDM (IMF PCPS)",
+      "compare_metric": "coal_asp_usd_t",
+      "status": "belum diambil",
+      "unit": "USD/t",
+      "cadence": "bulanan",
+      "note": "Rata-rata bulanan IMF; berbeda sekitar 5% dari Pink Sheet Bank Dunia (metode lain, tidak dicampur).",
+      "series": null,
+      "proxy": null
+    },
+    {
+      "id": "gold",
+      "label": "Harga emas",
+      "source": "Yahoo GC=F",
+      "compare_metric": null,
+      "status": "belum diambil",
+      "unit": "USD/oz",
+      "cadence": "harian",
+      "note": "Kontrak COMEX bulan terdekat.",
+      "series": null,
+      "proxy": null
+    },
+    {
+      "id": "usd_idr",
+      "label": "USD/IDR",
+      "source": "Yahoo IDR=X",
+      "compare_metric": null,
+      "status": "belum diambil",
+      "unit": "IDR",
+      "cadence": "harian",
+      "note": "Kurs pasar Yahoo, bukan JISDOR.",
+      "series": null,
+      "proxy": null
+    }
+  ],
+  "missing_drivers": [],
+  "peers": [],
+  "coverage": {
+    "has_pack": true,
+    "latest": {
+      "fy": 2026,
+      "q": 2
+    },
+    "xbrl": {
+      "populated": 15,
+      "total": 15,
+      "pct": 100.0
+    },
+    "kpi": {
+      "entered": 0,
+      "unknown": 0,
+      "expected": 64,
+      "missing": [
+        "komatsu_units 2025Q3",
+        "komatsu_units 2025Q4",
+        "komatsu_units 2026Q1",
+        "komatsu_units 2026Q2",
+        "overburden_mbcm 2025Q3",
+        "overburden_mbcm 2025Q4",
+        "overburden_mbcm 2026Q1",
+        "overburden_mbcm 2026Q2",
+        "coal_extracted_mt 2025Q3",
+        "coal_extracted_mt 2025Q4",
+        "coal_extracted_mt 2026Q1",
+        "coal_extracted_mt 2026Q2",
+        "coal_sales_mt 2025Q3",
+        "coal_sales_mt 2025Q4",
+        "coal_sales_mt 2026Q1",
+        "coal_sales_mt 2026Q2",
+        "coal_asp_usd_t 2025Q3",
+        "coal_asp_usd_t 2025Q4",
+        "coal_asp_usd_t 2026Q1",
+        "coal_asp_usd_t 2026Q2",
+        "gold_oz_sold 2025Q3",
+        "gold_oz_sold 2025Q4",
+        "gold_oz_sold 2026Q1",
+        "gold_oz_sold 2026Q2",
+        "gold_aisc_usd_oz 2025Q3",
+        "gold_aisc_usd_oz 2025Q4",
+        "gold_aisc_usd_oz 2026Q1",
+        "gold_aisc_usd_oz 2026Q2",
+        "parts_service_ratio 2025Q3",
+        "parts_service_ratio 2025Q4",
+        "parts_service_ratio 2026Q1",
+        "parts_service_ratio 2026Q2",
+        "seg_rev_machinery 2025Q3",
+        "seg_rev_machinery 2025Q4",
+        "seg_rev_machinery 2026Q1",
+        "seg_rev_machinery 2026Q2",
+        "seg_rev_contracting 2025Q3",
+        "seg_rev_contracting 2025Q4",
+        "seg_rev_contracting 2026Q1",
+        "seg_rev_contracting 2026Q2",
+        "seg_rev_coal 2025Q3",
+        "seg_rev_coal 2025Q4",
+        "seg_rev_coal 2026Q1",
+        "seg_rev_coal 2026Q2",
+        "seg_rev_gold 2025Q3",
+        "seg_rev_gold 2025Q4",
+        "seg_rev_gold 2026Q1",
+        "seg_rev_gold 2026Q2",
+        "seg_margin_machinery 2025Q3",
+        "seg_margin_machinery 2025Q4",
+        "seg_margin_machinery 2026Q1",
+        "seg_margin_machinery 2026Q2",
+        "seg_margin_contracting 2025Q3",
+        "seg_margin_contracting 2025Q4",
+        "seg_margin_contracting 2026Q1",
+        "seg_margin_contracting 2026Q2",
+        "seg_margin_coal 2025Q3",
+        "seg_margin_coal 2025Q4",
+        "seg_margin_coal 2026Q1",
+        "seg_margin_coal 2026Q2",
+        "seg_margin_gold 2025Q3",
+        "seg_margin_gold 2025Q4",
+        "seg_margin_gold 2026Q1",
+        "seg_margin_gold 2026Q2"
+      ]
+    },
+    "state": "sebagian"
+  }
+}

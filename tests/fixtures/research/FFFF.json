@@ -1,0 +1,207 @@
+{
+  "ticker": "FFFF",
+  "name": "Contoh Foxtrot",
+  "taxonomy": "general",
+  "role": "watch",
+  "eligibility": {
+    "state": "data_kurang",
+    "pillars": [
+      {
+        "id": "quality",
+        "label": "Kualitas",
+        "state": "kuat",
+        "headline": "ROE 35,7%",
+        "evidence": [
+          {
+            "rule_id": "elig.quality.roe",
+            "text": "ROE TTM 35,7%",
+            "value": 35.6555,
+            "unit": "%",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "id": "growth",
+        "label": "Pertumbuhan",
+        "state": "none",
+        "headline": "Data pertumbuhan belum cukup",
+        "evidence": []
+      },
+      {
+        "id": "balance",
+        "label": "Neraca",
+        "state": "kuat",
+        "headline": "DER 0,30x",
+        "evidence": [
+          {
+            "rule_id": "elig.balance.der",
+            "text": "DER 0,30x",
+            "value": 0.3,
+            "unit": "x",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          },
+          {
+            "rule_id": "elig.balance.current_ratio",
+            "text": "Rasio lancar 2,00x",
+            "value": 2.0,
+            "unit": "x",
+            "period": "TTM 2026Q2",
+            "source": "xbrl",
+            "as_of": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "id": "consistency",
+        "label": "Konsistensi",
+        "state": "none",
+        "headline": "Riwayat kuartal belum cukup",
+        "evidence": []
+      },
+      {
+        "id": "dividend",
+        "label": "Dividen",
+        "state": "none",
+        "headline": "Belum pernah membayar dividen",
+        "evidence": []
+      }
+    ],
+    "flags": []
+  },
+  "valuation": {
+    "zone": "data_kurang",
+    "confidence": null,
+    "price": 3298.88,
+    "fair": {
+      "low": null,
+      "mid": null,
+      "high": null
+    },
+    "methods": [
+      {
+        "id": "pe",
+        "label": "P/E historis",
+        "value": null,
+        "inputs": {
+          "reason": "Riwayat kurang dari 3 tahun"
+        },
+        "used": false
+      },
+      {
+        "id": "pb",
+        "label": "P/B historis",
+        "value": null,
+        "inputs": {
+          "reason": "Riwayat kurang dari 3 tahun"
+        },
+        "used": false
+      },
+      {
+        "id": "yield",
+        "label": "Yield historis",
+        "value": null,
+        "inputs": {
+          "reason": "Dividen dibayar kurang dari 3 dari 5 tahun"
+        },
+        "used": false
+      },
+      {
+        "id": "graham",
+        "label": "Graham",
+        "value": 5249.0358,
+        "inputs": {
+          "eps_ttm": 628.0356,
+          "bvps": 1949.81,
+          "factor": 22.5
+        },
+        "used": true
+      }
+    ],
+    "gap_pct": null
+  },
+  "trend": {
+    "state": "naik",
+    "ma50": 3157.5912,
+    "ma200": 3107.2872,
+    "from_high_pct": 0.0,
+    "vs_ihsg_6m_pp": 3.2766,
+    "vol_1y": 2.0119
+  },
+  "refs": {
+    "avg_price": null,
+    "entry_price": null
+  },
+  "key_metrics": [
+    {
+      "id": "roe_ttm",
+      "label": "ROE TTM",
+      "value": 35.6555,
+      "unit": "%"
+    },
+    {
+      "id": "op_margin",
+      "label": "Margin operasi",
+      "value": 16.0,
+      "unit": "%"
+    },
+    {
+      "id": "der",
+      "label": "DER",
+      "value": 0.3,
+      "unit": "x"
+    },
+    {
+      "id": "eps_ttm",
+      "label": "EPS TTM",
+      "value": 628.0356,
+      "unit": "idr"
+    },
+    {
+      "id": "bvps",
+      "label": "BVPS",
+      "value": 1949.81,
+      "unit": "idr"
+    },
+    {
+      "id": "dps_ttm",
+      "label": "DPS TTM",
+      "value": null,
+      "unit": "idr"
+    }
+  ],
+  "changes": [],
+  "data_quality": [
+    {
+      "code": "available_estimated",
+      "text": "Tanggal terbit laporan diperkirakan dari akhir periode",
+      "blocks": false
+    }
+  ],
+  "sources": {
+    "prices": {
+      "as_of": "2026-10-22",
+      "age_days": 0
+    },
+    "xbrl": {
+      "latest_period": "2026Q2",
+      "available_from": "2026-08-29",
+      "available_source": "estimated"
+    },
+    "shares": {
+      "value": 1000000.0,
+      "as_of": "2026-06-30",
+      "source": "xbrl_period"
+    },
+    "taxonomy": {
+      "value": "general",
+      "known": true
+    }
+  },
+  "rules_version": "2026.10-2",
+  "taken_at": "2026-10-22T09:00:00+00:00"
+}

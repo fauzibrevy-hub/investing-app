@@ -1,0 +1,126 @@
+{
+ "errors": [],
+ "framework_reconciliations": [
+  {
+   "guard": "jangan dobel hitung",
+   "rows": [
+    {
+     "classification": null,
+     "delta": "+1",
+     "name": "Likuiditas global",
+     "notes": "",
+     "raw_name": "**Likuiditas global**",
+     "references": "art-1",
+     "total": "8"
+    },
+    {
+     "classification": "kelas",
+     "delta": "+0",
+     "name": "Siklus komoditas",
+     "notes": "catatan",
+     "raw_name": "Siklus komoditas",
+     "references": "art-2",
+     "total": "3"
+    }
+   ],
+   "title": "Rekonsiliasi Oktober"
+  }
+ ],
+ "frameworks": [
+  {
+   "examples": "Fed",
+   "gist": "uang murah",
+   "name": "Likuiditas global",
+   "raw_name": "**Likuiditas global**",
+   "tally": "7"
+  },
+  {
+   "examples": "Brent",
+   "gist": "naik turun",
+   "name": "Siklus komoditas",
+   "raw_name": "Siklus komoditas",
+   "tally": "3"
+  }
+ ],
+ "generated_at": 1792483893,
+ "is_readonly": true,
+ "meta_pattern": "Semua kembali ke likuiditas.",
+ "source_files": {
+  "framework_map": "finance/article-bank/ricky-lens/00-framework-map.md",
+  "tesis_map": "finance/article-bank/ricky-lens/01-tesis-map.md"
+ },
+ "theses": [
+  {
+   "bukti": "stok turun",
+   "chain": "supply turun → harga naik",
+   "code": "T1",
+   "dukung": [
+    "AAAA",
+    "CCCC"
+   ],
+   "guard": "jangan kejar",
+   "id": "T1",
+   "koneksi": [
+    "lewat kurs"
+   ],
+   "meta": "bullish",
+   "preseden": "2008",
+   "raw_body": "**Rantai:** supply turun → harga naik\n- **Preseden:** 2008\n- **Dukung:** AAAA, CCCC ,\n- **Guard:** jangan kejar\n- **Bukti (Q3):** stok turun\n- **Koneksi T2:** lewat kurs\n- **Update 2026-10:** Brent 90",
+   "raw_heading": "## T1. Minyak naik (bullish)",
+   "stance": "bullish",
+   "title": "Minyak naik",
+   "updates": [
+    "Brent 90"
+   ]
+  },
+  {
+   "bukti": "",
+   "chain": "",
+   "code": "T2",
+   "dukung": [
+    "eksportir"
+   ],
+   "guard": "",
+   "id": "T2",
+   "koneksi": [],
+   "meta": "",
+   "preseden": "",
+   "raw_body": "- **Dukung:** eksportir",
+   "raw_heading": "## T2. Rupiah melemah",
+   "stance": "unstated",
+   "title": "Rupiah melemah",
+   "updates": []
+  },
+  {
+   "bukti": "",
+   "chain": "",
+   "code": "T1",
+   "dukung": [],
+   "guard": "",
+   "id": "T1-2",
+   "koneksi": [],
+   "meta": "",
+   "preseden": "",
+   "raw_body": "isi",
+   "raw_heading": "## T1. Duplikat kode",
+   "stance": "unstated",
+   "title": "Duplikat kode",
+   "updates": []
+  }
+ ],
+ "theses_reconciliations": [
+  {
+   "article_count": "5 artikel",
+   "articles_ref": "a, b",
+   "code": "T1",
+   "core": "masih valid",
+   "guard": "cek ulang",
+   "meta": "terkonfirmasi (5 artikel)",
+   "raw_body": "**Inti:** masih valid\n- **Artikel:** a, b\n- **Guard:** cek ulang\n- **Update Okt:** naik",
+   "title": "Minyak naik",
+   "updates": [
+    "naik"
+   ]
+  }
+ ]
+}

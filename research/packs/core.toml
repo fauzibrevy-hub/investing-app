@@ -1,0 +1,178 @@
+# core.toml: the metrics every ticker shows (design.md §3.1), always applied under the
+# industry pack. Element alternates are tried in order per period, so a bank's income tag or
+# an older capex name still fills the row. A literal alternate ("0") is a declared
+# fallback, visible here, never a silent zero. Shares outstanding and dividends per share
+# are served by the financials route with their point-in-time source (D13), not by a formula.
+
+id = "core"
+version = "2026.10-1"
+label = "Inti"
+
+[[dimension]]
+id = "laba_rugi"
+label = "Laba rugi"
+kind = "core"
+
+  [[dimension.metric]]
+  id = "revenue"
+  label = "Pendapatan"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Skala usaha; hampir semua rasio lain dibaca relatif terhadap angka ini."
+  period = "standalone"
+  formula = "Revenue"
+  elements.Revenue = ["idx-cor:SalesAndRevenue", "idx-cor:RevenueFromFundManagementAsMudharib", "idx-cor:InterestIncome"]
+
+  [[dimension.metric]]
+  id = "gross_profit"
+  label = "Laba kotor"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Selisih harga jual dan biaya langsung sebelum beban usaha."
+  period = "standalone"
+  formula = "GrossProfit"
+  elements.GrossProfit = ["idx-cor:GrossProfit"]
+
+  [[dimension.metric]]
+  id = "operating_profit"
+  label = "Laba usaha"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Laba dari operasi inti sebelum bunga dan pajak; untuk bank dan emiten tanpa tag laba usaha dipakai laba sebelum pajak."
+  period = "standalone"
+  formula = "OperatingProfit"
+  elements.OperatingProfit = ["idx-cor:ProfitLossFromOperatingActivities", "idx-cor:ProfitFromOperation", "idx-cor:ProfitLossBeforeIncomeTax"]
+
+  [[dimension.metric]]
+  id = "net_income"
+  label = "Laba bersih"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Hasil akhir untuk seluruh pemegang saham setelah pajak."
+  period = "standalone"
+  formula = "NetIncome"
+  elements.NetIncome = ["idx-cor:ProfitLoss"]
+
+  [[dimension.metric]]
+  id = "net_margin"
+  label = "Margin bersih"
+  layer = "xbrl"
+  unit = "%"
+  direction = "higher"
+  why = "Berapa rupiah laba per rupiah pendapatan; perubahan margin sering mendahului perubahan laba."
+  period = "ttm"
+  formula = "100 * ttm(NetIncome) / ttm(Revenue)"
+  elements.NetIncome = ["idx-cor:ProfitLoss"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue", "idx-cor:RevenueFromFundManagementAsMudharib", "idx-cor:InterestIncome"]
+
+  [[dimension.metric]]
+  id = "ebitda"
+  label = "EBITDA (pendekatan)"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Laba usaha ditambah penyusutan dan amortisasi; basis untuk rasio utang. Pendekatan: memakai laba sebelum pajak bila tag laba usaha tidak ada."
+  period = "standalone"
+  formula = "OperatingProfit + Depreciation + Amortization"
+  elements.OperatingProfit = ["idx-cor:ProfitLossFromOperatingActivities", "idx-cor:ProfitFromOperation", "idx-cor:ProfitLossBeforeIncomeTax"]
+  elements.Depreciation = ["idx-cor:Depreciation", "idx-cor:DepreciationOfPropertyPlantAndEquipment", "0"]
+  elements.Amortization = ["idx-cor:Amortization", "idx-cor:AmortisationOfIntangibleAssets", "0"]
+
+[[dimension]]
+id = "arus_kas"
+label = "Arus kas"
+kind = "core"
+
+  [[dimension.metric]]
+  id = "operating_cash_flow"
+  label = "Arus kas operasi"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Kas yang benar-benar masuk dari operasi; pembanding kualitas laba."
+  period = "standalone"
+  formula = "Ocf"
+  elements.Ocf = ["idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"]
+
+  [[dimension.metric]]
+  id = "capex"
+  label = "Belanja modal"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "neutral"
+  why = "Investasi pada aset tetap; dibandingkan dengan penyusutan menunjukkan ekspansi atau penyusutan armada dan pabrik."
+  period = "standalone"
+  formula = "Capex"
+  elements.Capex = ["abs:idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment", "abs:idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment", "abs:idx-cor:AcquisitionOfPropertyPlantAndEquipment"]
+
+  [[dimension.metric]]
+  id = "free_cash_flow"
+  label = "Arus kas bebas"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Arus kas operasi dikurangi belanja modal: kas yang tersisa untuk utang, dividen, dan pertumbuhan."
+  period = "standalone"
+  formula = "Ocf - Capex"
+  elements.Ocf = ["idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"]
+  elements.Capex = ["abs:idx-cor:PaymentsForAcquisitionOfPropertyPlantAndEquipment", "abs:idx-cor:PaymentsForAcquisitionOfPropertyAndEquipment", "abs:idx-cor:AcquisitionOfPropertyPlantAndEquipment"]
+
+[[dimension]]
+id = "neraca"
+label = "Neraca"
+kind = "core"
+
+  [[dimension.metric]]
+  id = "total_equity"
+  label = "Total ekuitas"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Modal pemegang saham; penyebut untuk imbal hasil ekuitas dan nilai buku."
+  period = "instant"
+  formula = "Equity"
+  elements.Equity = ["idx-cor:Equity"]
+
+  [[dimension.metric]]
+  id = "cash"
+  label = "Kas dan setara kas"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "higher"
+  why = "Likuiditas yang tersedia tanpa menjual aset."
+  period = "instant"
+  formula = "Cash"
+  elements.Cash = ["idx-cor:CashAndCashEquivalents", "idx-cor:Cash"]
+
+  [[dimension.metric]]
+  id = "total_debt"
+  label = "Total utang berbunga"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "lower"
+  why = "Pinjaman bank, obligasi, dan pinjaman lain yang berbunga; komponen yang tidak dilaporkan dihitung nol secara eksplisit."
+  period = "instant"
+  formula = "ShortTermBank + LongTermBank + CurrentBank + Bonds + CurrentBonds + OtherLong + OtherCurrent"
+  elements.ShortTermBank = ["idx-cor:ShortTermBankLoans", "0"]
+  elements.LongTermBank = ["idx-cor:LongTermBankLoans", "0"]
+  elements.CurrentBank = ["idx-cor:CurrentMaturitiesOfBankLoans", "0"]
+  elements.Bonds = ["idx-cor:LongTermBondsPayable", "idx-cor:BondsPayable", "0"]
+  elements.CurrentBonds = ["idx-cor:CurrentMaturitiesOfBondsPayable", "0"]
+  elements.OtherLong = ["idx-cor:LongTermOtherBorrowings", "0"]
+  elements.OtherCurrent = ["idx-cor:CurrentMaturitiesOfOtherBorrowings", "0"]
+
+  [[dimension.metric]]
+  id = "net_debt"
+  label = "Utang bersih"
+  layer = "xbrl"
+  unit = "ccy"
+  direction = "lower"
+  why = "Utang berbunga dikurangi kas; negatif berarti kas bersih."
+  period = "instant"
+  formula = "TotalDebt - Cash"
+  elements.TotalDebt = ["metric:total_debt"]
+  elements.Cash = ["idx-cor:CashAndCashEquivalents", "idx-cor:Cash"]

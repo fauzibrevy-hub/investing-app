@@ -1,0 +1,374 @@
+{
+ "alasan_masuk": "Pemimpin pasar dengan biaya terendah.",
+ "archive": {
+  "last_retrieved_at": "2025-10-02T03:04:05.123000+00:00",
+  "pdf": 3,
+  "sidecars": 3,
+  "years": {
+   "2024": 2,
+   "lainnya": 1
+  }
+ },
+ "archive_detail": {
+  "2024": {
+   "annual_report": [
+    {
+     "date": "2025-08-01T10:00:00+07:00",
+     "document_type": "annual_report",
+     "file": "ar-2024.pdf.source.json",
+     "fiscal_year": 2024,
+     "period": "FY",
+     "retrieved_at": "2025-08-01T10:00:00+07:00"
+    }
+   ],
+   "financial_statement": [
+    {
+     "date": "2025-10-02T03:04:05.123Z",
+     "document_type": "financial_statement",
+     "file": "lk-q4.source.json",
+     "fiscal_year": 2024,
+     "period": "Q4",
+     "retrieved_at": "2025-10-02T03:04:05.123Z"
+    }
+   ]
+  },
+  "lainnya": {
+   "news": [
+    {
+     "date": null,
+     "document_type": "news",
+     "file": "nodate.source.json",
+     "fiscal_year": null,
+     "period": null,
+     "retrieved_at": null
+    }
+   ]
+  }
+ },
+ "articles": {
+  "latest_date": "2026-10-01",
+  "mentions_approx": 4,
+  "recent": [
+   {
+    "date": "2026-10-01",
+    "name": "2026/okt/2026-10-01-pasar.md"
+   },
+   {
+    "date": "2026-01-05",
+    "name": "2026-01-05-alfa.md"
+   }
+  ]
+ },
+ "axes": {
+  "fundamental_status": "kuat",
+  "growth_status": "sedang",
+  "narrative_status": null
+ },
+ "bayar_risiko": "Siap turun 20% dari harga masuk.",
+ "chain": [
+  {
+   "bukti": "data penjualan",
+   "pernyataan": "Permintaan naik",
+   "status": "terdukung"
+  },
+  {
+   "bukti": "—",
+   "pernyataan": "Margin stabil",
+   "status": "belum"
+  }
+ ],
+ "company": "PT Alfa Sintetis Tbk",
+ "complete": true,
+ "coverage": "2023-2024 kuartalan",
+ "doc_evidence": [
+  {
+   "catatan": "c",
+   "dokumen": "d",
+   "hal": "1",
+   "metode": "m",
+   "metrik": "Pendapatan",
+   "nilai": 1,
+   "periode": "2025-06-30",
+   "raw": "1",
+   "unit": "x"
+  },
+  {
+   "catatan": "tidak tersedia",
+   "dokumen": "AR 2023",
+   "hal": "9",
+   "metode": "kutip",
+   "metrik": "Rasio X",
+   "nilai": null,
+   "periode": "2024",
+   "raw": "n/a",
+   "unit": "%"
+  },
+  {
+   "catatan": "ok",
+   "dokumen": "AR 2024",
+   "hal": "14",
+   "metode": "kutip",
+   "metrik": "Rasio X",
+   "nilai": 12.5,
+   "periode": "2025 Q1",
+   "raw": "12,5",
+   "unit": "%"
+  }
+ ],
+ "errors": [
+  "docs/broken.source.json: gagal dibaca (JSONDecodeError) — berkas kemungkinan belum terunduh dari iCloud"
+ ],
+ "evidence": {
+  "doc_quoted": 1,
+  "missing": 1,
+  "resolved": 2,
+  "total": 4
+ },
+ "falsifier_items": [
+  {
+   "dates": [
+    "2099-06-30",
+    "2000-01-15"
+   ],
+   "n": 1,
+   "text": "Pendapatan turun dua kuartal berturut-turut sebelum 2099-06-30 atau margin di bawah 10% pada 2000-01-15."
+  },
+  {
+   "dates": [],
+   "n": 2,
+   "text": "Tanpa tanggal."
+  }
+ ],
+ "falsifiers": {
+  "count": 2,
+  "dated_count": 1,
+  "nearest": {
+   "date": "2099-06-30",
+   "days_left": 26551,
+   "text": "Pendapatan turun dua kuartal berturut-turut sebelum 2099-06-30 atau margin di bawah 10% pada 2000-01-15."
+  },
+  "past_count": 1
+ },
+ "fundamental_status": "kuat",
+ "growth_status": "sedang",
+ "harga_acuan": {
+  "nilai": "Rp 1.500",
+  "raw": "Rp 1.500 — `sumber`: penutupan 2025-09-01 — status harga: `Stale`",
+  "status": "stale",
+  "sumber": "penutupan 2025-09-01"
+ },
+ "history_source": "financial_history_2023_2024.json",
+ "integrity": {
+  "checked": 1,
+  "max_abs_diff": 0.0,
+  "status": "ok"
+ },
+ "lens": {
+  "approved_at": "2025-03-20",
+  "locked": "ya",
+  "metrics": [
+   {
+    "alasan": "Skala",
+    "definisi": "Total pendapatan",
+    "field": "revenue",
+    "metrik": "Pendapatan",
+    "sumber_data": "Laporan keuangan"
+   },
+   {
+    "alasan": "Kualitas",
+    "definisi": "Laba atribusi",
+    "field": "net_income",
+    "metrik": "Laba bersih",
+    "sumber_data": "Laporan keuangan"
+   },
+   {
+    "alasan": "Uji",
+    "definisi": "Definisi X",
+    "field": "x",
+    "metrik": "Rasio X",
+    "sumber_data": "Dokumen"
+   },
+   {
+    "alasan": "Uji",
+    "definisi": "Definisi Y",
+    "field": "y",
+    "metrik": "Rasio Y",
+    "sumber_data": "Dokumen"
+   }
+  ]
+ },
+ "missing_files": [],
+ "missing_periods": [
+  "periode 2023-Q1 tidak dapat dibaca/tidak dipublikasikan (daftar missing_periods vault)",
+  "Q2 2023 tidak terbit"
+ ],
+ "narrative_status": null,
+ "needs_source": [
+  {
+   "catatan": "belum terbit",
+   "definisi": "Definisi Y",
+   "metrik": "Rasio Y",
+   "status": "menunggu",
+   "sumber_data": "Dokumen"
+  }
+ ],
+ "notes": [
+  "Catatan tunggal"
+ ],
+ "predictions": [
+  {
+   "cara_cek": "LK FY",
+   "prediksi": "Laba naik",
+   "status": "menunggu",
+   "tanggal": "2026-12-31"
+  }
+ ],
+ "review": {
+  "days_ago": 400,
+  "due": true,
+  "last_date": "2025-09-15",
+  "new_evidence_count": 1,
+  "open_followups": 2
+ },
+ "review_log": [
+  {
+   "bullets": [
+    {
+     "level": 0,
+     "text": "**Tindak lanjut:** tunggu LK."
+    },
+    {
+     "level": 0,
+     "text": "**Tindak lanjut** kedua."
+    }
+   ],
+   "date": "2025-09-15",
+   "title": "Review kuartal II",
+   "title_raw": "2025-09-15 — Review kuartal II"
+  },
+  {
+   "bullets": [
+    {
+     "level": 0,
+     "text": "Pendapatan sesuai."
+    },
+    {
+     "level": 0,
+     "text": "**Tindak lanjut** cek margin. lanjutan baris."
+    },
+    {
+     "level": 1,
+     "text": "sub poin"
+    }
+   ],
+   "date": "2025-06-01",
+   "title": "Review kuartal I",
+   "title_raw": "2025-06-01 — Review kuartal I"
+  },
+  {
+   "bullets": [
+    {
+     "level": 0,
+     "text": "satu"
+    }
+   ],
+   "date": null,
+   "title": "Catatan tanpa tanggal",
+   "title_raw": "Catatan tanpa tanggal"
+  }
+ ],
+ "series": {
+  "Laba bersih": [
+   {
+    "derived": true,
+    "is_cumulative": false,
+    "nilai": 300,
+    "periode": "Q1-2025",
+    "unit": "miliar"
+   }
+  ],
+  "Pendapatan": [
+   {
+    "derived": false,
+    "is_cumulative": false,
+    "nilai": null,
+    "periode": "31 Des 2023",
+    "unit": "miliar"
+   },
+   {
+    "derived": true,
+    "is_cumulative": false,
+    "nilai": 4800,
+    "periode": "FY2024",
+    "unit": "miliar"
+   },
+   {
+    "derived": false,
+    "is_cumulative": true,
+    "nilai": 1200,
+    "periode": "2025 Q1",
+    "unit": "miliar"
+   },
+   {
+    "derived": false,
+    "is_cumulative": false,
+    "nilai": null,
+    "periode": "2025 Q2",
+    "unit": "miliar"
+   },
+   {
+    "derived": false,
+    "is_cumulative": true,
+    "nilai": 2450.5,
+    "periode": "H1 2025",
+    "unit": "miliar"
+   }
+  ]
+ },
+ "status": "holdings",
+ "status_since": "2025-03-14",
+ "tahap": "berjalan",
+ "tahap_alasan": "sesuai rencana sejauh ini",
+ "ticker": "AAAA",
+ "timeline": [
+  {
+   "date": "2025-03-14",
+   "label": "Tercatat holdings",
+   "type": "entry"
+  },
+  {
+   "date": "2025-06-01",
+   "label": "Review kuartal I",
+   "type": "review"
+  },
+  {
+   "date": "2025-09-15",
+   "label": "Review kuartal II",
+   "type": "review"
+  },
+  {
+   "date": "2025-10-02",
+   "label": "Dokumen terbaru diambil · 3 PDF",
+   "type": "archive"
+  },
+  {
+   "date": "2026-01-05",
+   "label": "2026-01-05-alfa.md",
+   "type": "article"
+  },
+  {
+   "date": "2026-10-01",
+   "label": "2026/okt/2026-10-01-pasar.md",
+   "type": "article"
+  }
+ ],
+ "trigger_buang": [
+  "Falsifier terpicu"
+ ],
+ "trigger_tambah": [
+  "Harga di bawah 1.200 dengan volume tinggi",
+  "Laba kuartal naik"
+ ],
+ "verdict": "kuat",
+ "verdict_text": "Tesis masih berjalan dengan\nbukti yang cukup."
+}
