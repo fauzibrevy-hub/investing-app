@@ -18,12 +18,12 @@
 # when everything else succeeded). Health then reports `missed`, never a stale green.
 set -euo pipefail
 
-: "${FINANCE_DATA_DIR:=$HOME/finance-app-data}"
-: "${FINANCE_IDX_SCRAPER_DIR:=$HOME/tools/idx-financial-scraper}"
+: "${INVESTING_DATA_DIR:=$HOME/investing-app-data}"
+: "${INVESTING_IDX_SCRAPER_DIR:=$HOME/tools/idx-financial-scraper}"
 : "${PYTHON:=python3}"
-WATCHLIST="${FINANCE_RESEARCH_WATCHLIST:-$FINANCE_DATA_DIR/research/watchlist.csv}"
-XBRL_DIR="${FINANCE_IDX_XBRL_DIR:-$FINANCE_IDX_SCRAPER_DIR/data/XBRL}"
-# Must stay beside the watchlist: the app derives this path from FINANCE_RESEARCH_WATCHLIST.
+WATCHLIST="${INVESTING_RESEARCH_WATCHLIST:-$INVESTING_DATA_DIR/research/watchlist.csv}"
+XBRL_DIR="${INVESTING_IDX_XBRL_DIR:-$INVESTING_IDX_SCRAPER_DIR/data/XBRL}"
+# Must stay beside the watchlist: the app derives this path from INVESTING_RESEARCH_WATCHLIST.
 STATUS_FILE="$(dirname "$WATCHLIST")/scraper-status.json"
 LOCKDIR="$(dirname "$STATUS_FILE")/scraper.lock"
 
@@ -134,15 +134,15 @@ if ! write_status null null; then
 fi
 
 if [ ! -f "$WATCHLIST" ]; then
-  echo "scraper: watchlist not written yet: $WATCHLIST (start finance-app first)" >&2
+  echo "scraper: watchlist not written yet: $WATCHLIST (start investing-app first)" >&2
   exit 78 # EX_CONFIG
 fi
-if [ ! -f "$FINANCE_IDX_SCRAPER_DIR/run.py" ]; then
-  echo "scraper: run.py not found in $FINANCE_IDX_SCRAPER_DIR" >&2
+if [ ! -f "$INVESTING_IDX_SCRAPER_DIR/run.py" ]; then
+  echo "scraper: run.py not found in $INVESTING_IDX_SCRAPER_DIR" >&2
   exit 78
 fi
 
-cd "$FINANCE_IDX_SCRAPER_DIR"
+cd "$INVESTING_IDX_SCRAPER_DIR"
 BEFORE="$(count_files "$XBRL_DIR")"
 set_step download
 run_step "$PYTHON" run.py --skip-master --watchlist "$WATCHLIST"
@@ -150,4 +150,4 @@ AFTER="$(count_files "$XBRL_DIR")"
 NEW_FILES=$((AFTER > BEFORE ? AFTER - BEFORE : 0))
 set_step export
 run_step "$PYTHON" model/sqlite_export.py
-set_step done
+set_step "done"

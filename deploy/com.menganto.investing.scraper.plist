@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
-  Finance app, weekly XBRL scraper job (Riset). Template: __HOME__ and __APP_ROOT__ are
-  substituted when the copy for ~/Library/LaunchAgents is rendered (see deploy/RUNBOOK.md §8).
-  Installed (rendered, bootstrapped) by deploy/install.sh together with the app service.
+  Investing app, weekly XBRL scraper job (Riset). Template: __HOME__ and __APP_ROOT__ are
+  substituted when the copy for ~/Library/LaunchAgents is rendered (see deploy/RUNBOOK.md §5).
+  Installed (rendered, bootstrapped) only by deploy/install-scraper.sh, run once by the owner at
+  cutover; deploy/install.sh does not touch it.
   Each run leaves research/scraper-status.json beside the watchlist; /api/health?deep=1 reads it.
 
   No KeepAlive and no RunAtLoad: it fires on schedule only (Sundays 03:00 local) and exits. If the
   Mac is asleep at that time the job runs once on wake; if it is powered off the run is skipped
-  until next Sunday (manual run: see deploy/RUNBOOK.md §8).
+  until next Sunday (manual run: see deploy/RUNBOOK.md §5).
 -->
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.menganto.finance.scraper</string>
+    <string>com.menganto.investing.scraper</string>
 
     <key>ProgramArguments</key>
     <array>
@@ -33,10 +34,10 @@
     </dict>
 
     <key>StandardOutPath</key>
-    <string>__HOME__/Library/Logs/finance-scraper.out.log</string>
+    <string>__HOME__/Library/Logs/investing-scraper.out.log</string>
 
     <key>StandardErrorPath</key>
-    <string>__HOME__/Library/Logs/finance-scraper.err.log</string>
+    <string>__HOME__/Library/Logs/investing-scraper.err.log</string>
 
     <key>ProcessType</key>
     <string>Background</string>

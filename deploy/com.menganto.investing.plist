@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
-  Finance app (fauzibrevy-hub/finance-app) — user LaunchAgent.
+  Investing app (fauzibrevy-hub/investing-app) — user LaunchAgent.
 
   This is a template: launchd expands neither $HOME nor ~, so deploy/install.sh substitutes the
   literal strings __HOME__ and __APP_ROOT__ with the real home directory and checkout path while
   rendering the copy it actually loads into ~/Library/LaunchAgents. Everything else is static, and
   no secret lives here — the token is read by deploy/run.sh from
-  ~/.hermes/secrets/finance-app.env.
+  ~/.hermes/secrets/investing-app.env.
 
   KeepAlive + RunAtLoad: the service returns after a reboot and after a crash.
 -->
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.menganto.finance</string>
+    <string>com.menganto.investing</string>
 
     <key>ProgramArguments</key>
     <array>
@@ -36,10 +36,10 @@
     <integer>10</integer>
 
     <key>StandardOutPath</key>
-    <string>__HOME__/Library/Logs/finance-app.out.log</string>
+    <string>__HOME__/Library/Logs/investing-app.out.log</string>
 
     <key>StandardErrorPath</key>
-    <string>__HOME__/Library/Logs/finance-app.err.log</string>
+    <string>__HOME__/Library/Logs/investing-app.err.log</string>
 
     <key>ProcessType</key>
     <string>Background</string>
