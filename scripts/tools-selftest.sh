@@ -287,7 +287,7 @@ fi
 
 # 9. Guards. A curl shim on PATH records any request, so "before any request" is observed and no
 # request can reach :8787 even if a guard were broken.
-step 9 "guards: :8787 refused by parity.sh and writes.sh; writes.sh refuses a B without INVESTING_SANDBOX"
+step 9 "guards: :8787 refused by parity.sh and writes.sh; writes.sh refuses a live data dir and a B without INVESTING_SANDBOX"
 mkdir -p "$W/shim"
 printf '#!/bin/sh\necho "$*" >>"%s"\nexit 7\n' "$W/curl-calls" >"$W/shim/curl"
 chmod +x "$W/shim/curl"
@@ -331,7 +331,7 @@ else
   ok9=0
 fi
 if [ "$ok9" = 1 ]; then
-  pass 9 "all three guards exit 2 before any request or write"
+  pass 9 "every guard exits 2 before any request or write"
 else
   fail 9 "a guard did not exit 2 before any request or write"
 fi
