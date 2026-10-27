@@ -232,7 +232,7 @@ Copy by import closure: start from each screen file named below and copy exactly
 
 ### 3.4 L4 Side by side
 
-Runs on the owner's Mac. **(owner)** = owner's own terminal (§1). Order matters: the env file with the sandbox flags exists before anything starts (D4), and no scraper job is installed (D5).
+Runs on the owner's Mac, from `~/investing-app`, in a shell where the §1 `snapshot` function is defined. **(owner)** = owner's own terminal (§1). Order matters: the env file with the sandbox flags exists before anything starts (D4), and no scraper job is installed (D5).
 
 0. **(owner)** `git -C ~/investing-app pull --ff-only` on `main`; `lsof -nP -iTCP:8789 -sTCP:LISTEN` prints nothing; `tailscale serve status` shows no `:8445`.
 1. **(owner)** Write `~/.hermes/secrets/investing-app.env` (mode 600). Values in `<…>` are copied from `~/.hermes/secrets/finance-app.env`; lines whose finance-app counterpart is unset are left out.
