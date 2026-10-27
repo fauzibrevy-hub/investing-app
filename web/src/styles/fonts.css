@@ -1,0 +1,36 @@
+/* Nunito Sans, self-host (design.md §1.4). Subset latin, woff2 saja. Lisensi: ../assets/fonts/OFL.txt */
+@font-face {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../assets/fonts/nunito-sans-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("../assets/fonts/nunito-sans-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("../assets/fonts/nunito-sans-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("../assets/fonts/nunito-sans-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 800;
+  src: url("../assets/fonts/nunito-sans-latin-800-normal.woff2") format("woff2");
+}
