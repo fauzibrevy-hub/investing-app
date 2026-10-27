@@ -80,10 +80,10 @@ describe("manifest (design.md §10)", () => {
 
 describe("staleApiCaches", () => {
   it("API_CACHE bukan v1 lagi", () => {
-    expect(API_CACHE).not.toBe("finance-api-v1");
+    expect(API_CACHE).not.toBe("investing-api-v1");
   });
-  it("membuang semua finance-api-* lama, menyisakan yang aktif dan cache shell", () => {
-    const names = ["finance-api-v1", "finance-api-v0", API_CACHE, "finance-shell-abc", "other"];
-    expect(staleApiCaches(names)).toEqual(["finance-api-v1", "finance-api-v0"]);
+  it("membuang semua investing-api-* lama, menyisakan yang aktif dan cache shell", () => {
+    const names = ["investing-api-v1", "investing-api-v0", API_CACHE, "investing-shell-abc", "other"];
+    expect(staleApiCaches(names)).toEqual(["investing-api-v1", "investing-api-v0"]);
   });
 });

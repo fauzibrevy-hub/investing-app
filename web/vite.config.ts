@@ -13,9 +13,9 @@ const root = fileURLToPath(new URL(".", import.meta.url));
  * Membundel src/sw.ts menjadi /sw.js saat `vite build` (design.md §10): daftar precache = semua aset
  * hasil build + file public/, versi cache = hash dari daftar itu. Tidak aktif di `vite dev`.
  */
-function financeServiceWorker(): Plugin {
+function investingServiceWorker(): Plugin {
   return {
-    name: "finance-service-worker",
+    name: "investing-service-worker",
     apply: "build",
     enforce: "post",
     async generateBundle(_options, bundle) {
@@ -42,7 +42,7 @@ function financeServiceWorker(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), financeServiceWorker()],
+  plugins: [react(), investingServiceWorker()],
   server: {
     // Hanya untuk `npm run dev`: backend lokal (prd.md §6.3). UI sendiri selalu memanggil path relatif /api/...
     proxy: {

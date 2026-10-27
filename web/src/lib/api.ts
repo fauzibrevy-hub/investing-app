@@ -1,15 +1,15 @@
 /**
  * Klien API (prd.md §5, L3-BRIEF §2).
  * - Path selalu relatif `/api/...` (satu origin dengan backend; tanpa host/port).
- * - Auth lewat cookie `finance_session` (HttpOnly) → `credentials: "same-origin"`.
+ * - Auth lewat cookie `investing_session` (HttpOnly) → `credentials: "same-origin"`.
  * - Token hanya dikirim sekali ke `POST /api/session`; tidak pernah disimpan di sini.
- * - Header `X-Finance-Client: web` dikirim di setiap request (wajib untuk tulis).
+ * - Header `X-Investing-Client: web` dikirim di setiap request (wajib untuk tulis).
  */
 
-export const CLIENT_HEADER = "X-Finance-Client";
+export const CLIENT_HEADER = "X-Investing-Client";
 export const CLIENT_VALUE = "web";
 /** Diisi service worker saat respons diambil dari cache (design.md §10). Nilai: ISO 8601. */
-export const CACHE_DATE_HEADER = "X-Finance-Cache-Date";
+export const CACHE_DATE_HEADER = "X-Investing-Cache-Date";
 
 export type ApiErrorKind =
   | "unauthorized" // 401
@@ -239,7 +239,7 @@ export function newIdempotencyKey(): string {
 /**
  * Tukar token dengan cookie sesi. Token hanya hidup di argumen fungsi ini;
  * tidak disimpan di localStorage, sessionStorage, atau variabel modul.
- * ASUMSI bentuk body: `{ "token": "<FINANCE_APP_TOKEN>" }`.
+ * ASUMSI bentuk body: `{ "token": "<INVESTING_APP_TOKEN>" }`.
  */
 export async function createSession(token: string): Promise<void> {
   await request("/api/session", { method: "POST", body: { token } });

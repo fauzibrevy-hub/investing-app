@@ -48,19 +48,19 @@ function lastCall() {
 }
 
 describe("request", () => {
-  it("memakai path relatif, cookie same-origin, dan header X-Finance-Client", async () => {
+  it("memakai path relatif, cookie same-origin, dan header X-Investing-Client", async () => {
     fetchMock.mockResolvedValue(jsonResponse({ ok: 1 }));
     const data = await api.get<{ ok: number }>("/api/finance/summary");
     expect(data).toEqual({ ok: 1 });
     const { url, init } = lastCall();
     expect(url).toBe("/api/finance/summary");
     expect(init.credentials).toBe("same-origin");
-    expect(init.headers["X-Finance-Client"]).toBe("web");
+    expect(init.headers["X-Investing-Client"]).toBe("web");
     expect(init.headers.Authorization).toBeUndefined();
   });
 
   it("menolak path yang bukan /api/ atau absolut", async () => {
-    await expect(request("http://127.0.0.1:8787/api/x")).rejects.toThrow(/relatif/);
+    await expect(request("https://example.com/api/x")).rejects.toThrow(/relatif/);
     await expect(request("/finance/summary")).rejects.toThrow(/relatif/);
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -80,7 +80,7 @@ describe("request", () => {
     expect(init.body).toBe(form);
     expect(init.headers["Content-Type"]).toBeUndefined();
     expect(init.headers["Idempotency-Key"]).toBe("k-1");
-    expect(init.headers["X-Finance-Client"]).toBe("web");
+    expect(init.headers["X-Investing-Client"]).toBe("web");
   });
 
   it("POST: body JSON, Content-Type, Idempotency-Key, header klien", async () => {
@@ -92,7 +92,7 @@ describe("request", () => {
     expect(init.body).toBe('{"amount":1234}');
     expect(init.headers["Content-Type"]).toBe("application/json");
     expect(init.headers["Idempotency-Key"]).toBe("k-1");
-    expect(init.headers["X-Finance-Client"]).toBe("web");
+    expect(init.headers["X-Investing-Client"]).toBe("web");
   });
 
   it("204 → undefined", async () => {

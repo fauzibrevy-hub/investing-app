@@ -3,14 +3,14 @@
  * File ini dibundel ke sw.js; jangan import modul DOM/React di sini.
  */
 
-export const API_CACHE_PREFIX = "finance-api-";
+export const API_CACHE_PREFIX = "investing-api-";
 /** Naikkan saat bentuk payload /api berubah (v2 = R5: research v5) agar cache lama tak masuk UI baru. */
 export const API_CACHE = `${API_CACHE_PREFIX}v2`;
-export const SHELL_CACHE_PREFIX = "finance-shell-";
+export const SHELL_CACHE_PREFIX = "investing-shell-";
 export const API_CACHE_MAX_ENTRIES = 50;
 export const API_TIMEOUT_MS = 4_000;
 /** Disalin dari lib/api.ts (CACHE_DATE_HEADER); sw.js tidak mengimpor kode UI. */
-export const CACHE_DATE_HEADER = "X-Finance-Cache-Date";
+export const CACHE_DATE_HEADER = "X-Investing-Cache-Date";
 
 export type Strategy =
   | "passthrough" // tidak disentuh SW: tulis, sesi, SSE, lintas origin
@@ -43,7 +43,7 @@ export function keysToEvict<T>(keys: readonly T[], max = API_CACHE_MAX_ENTRIES):
   return keys.length > max ? keys.slice(0, keys.length - max) : [];
 }
 
-/** Cache API lama (finance-api-* selain yang aktif) yang harus dihapus saat activate. */
+/** Cache API lama (investing-api-* selain yang aktif) yang harus dihapus saat activate. */
 export function staleApiCaches(names: readonly string[], current = API_CACHE): string[] {
   return names.filter((n) => n.startsWith(API_CACHE_PREFIX) && n !== current);
 }
