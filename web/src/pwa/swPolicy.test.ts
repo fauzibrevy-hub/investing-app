@@ -54,12 +54,12 @@ describe("strategi service worker (design.md §10)", () => {
   });
 });
 
-describe("manifest (design.md §10)", () => {
+describe("manifest (design.md §4)", () => {
   const manifest = JSON.parse(manifestRaw);
   it("field sesuai tabel", () => {
     expect(manifest).toMatchObject({
-      name: "Finance",
-      short_name: "Finance",
+      name: "Investasi",
+      short_name: "Investasi",
       id: "/",
       start_url: "/?source=pwa",
       scope: "/",

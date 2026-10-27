@@ -260,3 +260,27 @@ export async function checkSession(): Promise<SessionState> {
     throw err;
   }
 }
+
+/**
+ * Backend sandbox? (design.md §3.6, D7): `GET /api/health`, satu-satunya rute terbuka, berisi `"sandbox": true` hanya
+ * di bawah `INVESTING_SANDBOX=1`. Gagal, bukan 2xx, atau salinan cache service worker → false: baris sandbox tetap tersembunyi.
+ */
+export async function checkSandbox(timeoutMs = 4_000): Promise<boolean> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch("/api/health", {
+      headers: { Accept: "application/json", [CLIENT_HEADER]: CLIENT_VALUE },
+      credentials: "same-origin",
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    if (!res.ok || res.headers.get(CACHE_DATE_HEADER)) return false;
+    const body = (await res.json()) as { sandbox?: unknown } | null;
+    return body?.sandbox === true;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
+  }
+}

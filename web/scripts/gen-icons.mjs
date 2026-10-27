@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Membuat ikon PWA (design.md §10): lingkaran `accent` #1961C4 dengan glyph "F" putih, tanpa gradient.
+ * Membuat ikon PWA (design.md §4): lingkaran `accent` #1961C4 dengan glyph "I" putih, tanpa gradient.
  * Tanpa dependensi: rasterisasi + encoder PNG memakai zlib bawaan Node.
  * Jalankan: node scripts/gen-icons.mjs  (hasil di public/)
  */
@@ -15,16 +15,13 @@ const WHITE = [0xff, 0xff, 0xff];
 const SS = 4; // supersampling per sumbu (anti-alias)
 
 /**
- * Glyph "F" geometris dalam koordinat unit [0,1] relatif ke kotak glyph.
- * Batang kiri + palang atas + palang tengah; tebal 0,22 lebar glyph.
+ * Glyph "I" geometris dalam koordinat unit [0,1] relatif ke kotak glyph.
+ * Satu batang di tengah, lebar 0,24 lebar kotak glyph.
  */
-function inF(u, v) {
+function inI(u, v) {
   if (u < 0 || u > 1 || v < 0 || v > 1) return false;
   const t = 0.24;
-  if (u <= t) return true; // batang
-  if (v <= t * 0.8) return true; // palang atas
-  if (v >= 0.42 && v <= 0.42 + t * 0.8 && u <= 0.82) return true; // palang tengah
-  return false;
+  return Math.abs(u - 0.5) <= t / 2;
 }
 
 /**
@@ -38,8 +35,8 @@ function render(size, { background = null, circle = true, glyphScale = 0.46 }) {
   const r = size / 2;
   const gh = size * glyphScale;
   const gw = gh * 0.72;
-  // Pusat optik: geser sedikit ke kanan karena massa F di kiri.
-  const gx = r - gw / 2 + gw * 0.06;
+  // "I" simetris: kotak glyph tepat di tengah.
+  const gx = r - gw / 2;
   const gy = r - gh / 2;
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
@@ -54,7 +51,7 @@ function render(size, { background = null, circle = true, glyphScale = 0.46 }) {
           if (inCircle) {
             color = ACCENT;
             alpha = 1;
-            if (inF((fx - gx) / gw, (fy - gy) / gh)) color = WHITE;
+            if (inI((fx - gx) / gw, (fy - gy) / gh)) color = WHITE;
           }
           if (alpha) {
             acc[0] += color[0];

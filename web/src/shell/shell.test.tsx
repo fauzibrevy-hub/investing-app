@@ -97,6 +97,36 @@ describe("UnlockScreen", () => {
   });
 });
 
+describe("UnlockScreen: baris sandbox (D7)", () => {
+  const SANDBOX_LINE = "Uji coba: perubahan di sini tidak dibawa ke data asli.";
+  const json = (body: unknown, headers: Record<string, string> = {}) =>
+    new Response(JSON.stringify(body), { status: 200, headers: { "Content-Type": "application/json", ...headers } });
+
+  it("tampil saat GET /api/health berisi sandbox: true", async () => {
+    fetchMock.mockResolvedValue(json({ status: "ok", sandbox: true }));
+    render(<UnlockScreen />);
+    expect(screen.getByRole("heading", { name: "Buka kunci Investasi" })).toBeInTheDocument();
+    expect(await screen.findByText(SANDBOX_LINE)).toBeInTheDocument();
+    expect(fetchMock.mock.calls[0][0]).toBe("/api/health");
+  });
+
+  it("tersembunyi tanpa kunci sandbox, saat health gagal, dan untuk salinan cache SW", async () => {
+    for (const reply of [
+      () => fetchMock.mockResolvedValue(json({ status: "ok" })),
+      () => fetchMock.mockRejectedValue(new TypeError("Failed to fetch")),
+      () => fetchMock.mockResolvedValue(json({ status: "ok", sandbox: true }, { "X-Investing-Cache-Date": "2026-10-27T00:00:00Z" })),
+    ]) {
+      reply();
+      const { unmount } = render(<UnlockScreen />);
+      await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/health", expect.anything()));
+      await act(async () => {});
+      expect(screen.queryByText(SANDBOX_LINE)).not.toBeInTheDocument();
+      unmount();
+      fetchMock.mockReset();
+    }
+  });
+});
+
 describe("AuthGate", () => {
   it("sesi belum terjawab → navigasi sudah tampil dengan penanda memuat, tanpa isi app", async () => {
     fetchMock.mockReturnValue(new Promise(() => {}));
@@ -116,7 +146,7 @@ describe("AuthGate", () => {
   it("401 → layar buka kunci", async () => {
     fetchMock.mockResolvedValue(new Response("{}", { status: 401, headers: { "Content-Type": "application/json" } }));
     render(<AuthGate>app</AuthGate>);
-    expect(await screen.findByRole("heading", { name: "Buka kunci Finance" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Buka kunci Investasi" })).toBeInTheDocument();
   });
 
   it("offline → app tetap dibuka (cache SW); 401 berikutnya mengunci", async () => {
