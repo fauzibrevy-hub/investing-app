@@ -48,8 +48,12 @@ export function isPushed(pathname: string): boolean {
 
 export interface NavStore {
   lastHash(tab: Tab): string | undefined;
-  /** Rule 5: the visited hash becomes its owner's `lastHash`. */
-  visit(hash: string): void;
+  /** The tab's own level (its root, with any query) last visited; rule 8 goes back to it. */
+  rootHash(tab: Tab): string | undefined;
+  /** Owner of the history entry at `idx` (React Router's `history.state.idx`) when this store rendered it. */
+  entryOwner(idx: number): Tab | undefined;
+  /** Rule 5: the visited hash becomes its owner's `lastHash`; `idx` records whose history entry it is (rule 8). */
+  visit(hash: string, idx?: number): void;
   savedScroll(hash: string): number | undefined;
   saveScroll(hash: string, y: number): void;
   forgetScroll(hash: string): void;
@@ -58,13 +62,24 @@ export interface NavStore {
 
 export function createNavStore(cap = SCROLL_CAP): NavStore {
   const last: Partial<Record<Tab, string>> = {};
+  const root: Partial<Record<Tab, string>> = {};
+  // A push at idx n drops the browser's entries above n, and the next render at n + 1 overwrites ours.
+  const entries = new Map<number, Tab>();
   // Map keeps insertion order: the first key is the oldest.
   const scroll = new Map<string, number>();
   return {
     lastHash: (tab) => last[tab],
-    visit(hash) {
+    rootHash: (tab) => root[tab],
+    entryOwner: (idx) => entries.get(idx),
+    visit(hash, idx) {
       const tab = owner(hash);
-      if (tab) last[tab] = hash;
+      if (idx !== undefined) {
+        if (tab) entries.set(idx, tab);
+        else entries.delete(idx);
+      }
+      if (!tab) return;
+      last[tab] = hash;
+      if (!isPushed(split(hash).pathname)) root[tab] = hash;
     },
     savedScroll: (hash) => scroll.get(hash),
     saveScroll(hash, y) {
@@ -95,12 +110,14 @@ export function tabTarget(store: NavStore, tab: Tab, active: Tab | null): string
 }
 
 /**
- * Rules 8 and 9: `-1` when the previous history entry is in this app (React Router's `history.state.idx > 0`),
- * else the owner tab's root.
+ * Rules 8 and 9: `-1` when the previous history entry (React Router's `history.state.idx - 1`) was rendered by this
+ * app with the same owner tab; else (a cold deep link, or a screen reached again through another tab's memory) the
+ * owner tab's stored route, its root if none. The caller replaces the entry with it; scroll comes back via rule 5.
  */
-export function backTarget(tab: Tab, historyState: unknown): -1 | string {
+export function backTarget(store: NavStore, tab: Tab, historyState: unknown): -1 | string {
   const idx = (historyState as { idx?: unknown } | null | undefined)?.idx;
-  return typeof idx === "number" && idx > 0 ? -1 : TAB_ROOTS[tab];
+  if (typeof idx === "number" && idx > 0 && store.entryOwner(idx - 1) === tab) return -1;
+  return store.rootHash(tab) ?? TAB_ROOTS[tab];
 }
 
 /** The app's one store. */

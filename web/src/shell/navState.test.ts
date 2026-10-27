@@ -138,14 +138,59 @@ describe("tabTarget (rules 6, 7)", () => {
 });
 
 describe("backTarget (rules 8, 9)", () => {
-  it("goes back one entry when the previous history entry is in this app", () => {
-    expect(backTarget("portofolio", { idx: 3 })).toBe(-1);
+  // `visit(hash, idx)` mirrors the shell: every rendered location with React Router's `history.state.idx`.
+  it("same tab: goes back one entry when the previous entry has the same owner", () => {
+    const store = createNavStore();
+    store.visit("/perusahaan", 0);
+    store.visit("/perusahaan/COAL", 1);
+    expect(backTarget(store, "perusahaan", { idx: 1 })).toBe(-1);
   });
 
-  it("goes to the owner tab's root on a cold deep link", () => {
-    expect(backTarget("perusahaan", { idx: 0 })).toBe("/perusahaan");
-    expect(backTarget("alat", null)).toBe("/alat");
-    expect(backTarget("beranda", undefined)).toBe("/beranda");
-    expect(backTarget("alat", { idx: "2" })).toBe("/alat");
+  it("a pushed screen from another tab: back one entry to that tab", () => {
+    const store = createNavStore();
+    store.visit("/beranda", 0);
+    store.visit("/perusahaan/COAL?from=beranda", 1);
+    expect(backTarget(store, "beranda", { idx: 1 })).toBe(-1);
+  });
+
+  it("returned to through tab memory: the previous entry is another tab, so the owner's stored route instead", () => {
+    const store = createNavStore();
+    store.visit("/perusahaan?urut=nama", 0);
+    store.visit("/perusahaan/COAL", 1);
+    store.visit("/alat", 2);
+    store.visit("/perusahaan/COAL", 3);
+    expect(backTarget(store, "perusahaan", { idx: 3 })).toBe("/perusahaan?urut=nama");
+  });
+
+  it("returned to through tab memory with no stored route for the owner: its root", () => {
+    const store = createNavStore();
+    store.visit("/perusahaan/COAL", 0);
+    store.visit("/alat/kalibrasi", 1);
+    store.visit("/perusahaan/COAL", 2);
+    expect(backTarget(store, "perusahaan", { idx: 2 })).toBe("/perusahaan");
+  });
+
+  it("follows the entry now at idx - 1 after the browser went back and pushed again", () => {
+    const store = createNavStore();
+    store.visit("/perusahaan", 0);
+    store.visit("/alat", 1);
+    store.visit("/perusahaan", 0);
+    store.visit("/perusahaan/COAL", 1);
+    expect(backTarget(store, "perusahaan", { idx: 1 })).toBe(-1);
+  });
+
+  it("cold deep link: the owner tab's root", () => {
+    const store = createNavStore();
+    store.visit("/perusahaan/COAL", 0);
+    expect(backTarget(store, "perusahaan", { idx: 0 })).toBe("/perusahaan");
+    expect(backTarget(store, "alat", null)).toBe("/alat");
+    expect(backTarget(store, "beranda", undefined)).toBe("/beranda");
+    expect(backTarget(store, "alat", { idx: "2" })).toBe("/alat");
+  });
+
+  it("an entry this store never saw (a reload mid-history) is not trusted: the owner's root", () => {
+    const store = createNavStore();
+    store.visit("/perusahaan/COAL", 4);
+    expect(backTarget(store, "perusahaan", { idx: 4 })).toBe("/perusahaan");
   });
 });
