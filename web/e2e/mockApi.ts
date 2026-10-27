@@ -1,22 +1,28 @@
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { Page, Route } from "@playwright/test";
-import { MACRO } from "../../src/features/research/desk/macro.testutil";
-import { proposalsResponse } from "../../src/features/research/testing/extract";
 
 /**
- * API tiruan untuk e2e Riset: jawaban dari `tests/fixtures/research/canon/*.json` (golden backend), satu per `pathname`,
- * dipasang lewat `page.route`. Sama pemetaannya dengan `canonSurfaces.testutil.tsx` (vitest); emiten tanpa golden
- * sendiri memakai golden batubara untuk klaim, jurnal, kalender dan harga. Jalur yang tidak punya jawaban dijawab 404
- * dan dicatat, supaya tes gagal bila layar meminta sesuatu yang tidak ditiru.
+ * API tiruan untuk e2e (D15: `vite preview` + `page.route`, tanpa backend): jawaban dari
+ * `tests/fixtures/research/canon/*.json` (golden Riset), `tests/fixtures/thesis_golden/*.json` (golden tesis) dan
+ * `e2e/fixtures/*.json` (sintetis: makro, usulan ekstraksi, portofolio saham), satu per `pathname`, dipasang lewat
+ * `page.route`. Emiten tanpa golden sendiri memakai golden batubara untuk klaim, jurnal, kalender dan harga. Jalur
+ * yang tidak punya jawaban dijawab 404 dan dicatat, supaya tes gagal bila layar meminta sesuatu yang tidak ditiru.
+ * Tidak mengimpor apa pun dari `src/`: berkas ini hanya membaca JSON.
  */
-const CANON = fileURLToPath(new URL("../../../tests/fixtures/research/canon/", import.meta.url));
+const CANON = fileURLToPath(new URL("../../tests/fixtures/research/canon/", import.meta.url));
+const THESIS = fileURLToPath(new URL("../../tests/fixtures/thesis_golden/", import.meta.url));
+const LOCAL = fileURLToPath(new URL("./fixtures/", import.meta.url));
 
-function golden(name: string): unknown {
-  const file = `${CANON}${name}.json`;
-  if (!existsSync(file)) throw new Error(`golden canon "${name}" tidak ada di tests/fixtures/research/canon`);
+function readJson(dir: string, name: string): any {
+  const file = `${dir}${name}.json`;
+  if (!existsSync(file)) throw new Error(`fixture "${name}" tidak ada di ${dir}`);
   return JSON.parse(readFileSync(file, "utf8"));
 }
+const thesis = (name: string) => readJson(THESIS, name);
+const local = (name: string) => readJson(LOCAL, name);
+
+const golden = (name: string): unknown => readJson(CANON, name);
 const has = (name: string) => existsSync(`${CANON}${name}.json`);
 
 type Handler = unknown | ((url: URL) => unknown);
@@ -29,8 +35,8 @@ function tickerRoutes(ticker: string): Record<string, Handler> {
     [`/api/research/${ticker}/claims`]: golden("claims-COAL"),
     [`/api/research/${ticker}/journal`]: golden("journal-COAL"),
     [`/api/research/${ticker}/documents`]: own(`documents-${ticker}`, "documents-COAL"),
-    // R8: golden canon tidak memuat usulan; jawaban sintetis dari testing/extract.ts.
-    [`/api/research/${ticker}/proposals`]: proposalsResponse(),
+    // R8: golden canon tidak memuat usulan; jawaban sintetis dari e2e/fixtures/proposals.json.
+    [`/api/research/${ticker}/proposals`]: local("proposals"),
     [`/api/research/${ticker}/seen`]: {},
     [`/api/research/${ticker}/calendar`]: golden("calendar-COAL"),
     [`/api/research/${ticker}/valuation`]: own(`valuation-${ticker}`, "valuation-COAL"),
@@ -66,6 +72,7 @@ function lookup(u: URL) {
 
 export const API_ROUTES: Record<string, Handler> = {
   "/api/session": {},
+  "/api/health": { status: "ok" },
   "/api/research/desk": golden("desk"),
   "/api/research/universe": golden("universe"),
   "/api/research/packs": golden("packs"),
@@ -75,7 +82,17 @@ export const API_ROUTES: Record<string, Handler> = {
   "/api/research/filings": golden("filings-COAL"),
   "/api/research/lookup": lookup,
   // Kartu konteks makro di Desk.
-  "/api/macro/observations": MACRO,
+  "/api/macro/observations": local("macro-observations"),
+  // Tesis (L3b): golden `tests/fixtures/thesis_golden/`; `/drafts` memakai bentuk `{ drafts, vault_drafts, total }`.
+  "/api/thesis/summary": thesis("summary"),
+  "/api/thesis/AAAA": thesis("detail_AAAA"),
+  "/api/thesis/BBBB": thesis("detail_BBBB"),
+  "/api/thesis/CCCC": thesis("detail_CCCC"),
+  "/api/thesis/macro": thesis("macro"),
+  "/api/thesis/drafts/vault": thesis("drafts_vault"),
+  "/api/thesis/drafts": { drafts: [], vault_drafts: thesis("drafts_vault").vault_drafts, total: thesis("drafts_vault").vault_drafts.length },
+  // Portofolio (L3c): posisi COAL dan REST, supaya halaman perusahaan posisi punya data canon.
+  "/api/finance/stock-portfolio": local("stock-portfolio"),
   ...tickerRoutes("COAL"),
   ...tickerRoutes("REST"),
   ...tickerRoutes("NONE"),
@@ -90,12 +107,15 @@ function dynamic(pathname: string): Handler | undefined {
   return undefined;
 }
 
-/** Pasang tiruan pada `page`; mengembalikan daftar `pathname` yang diminta layar tetapi tidak ditiru. */
-export async function mockResearchApi(page: Page): Promise<string[]> {
+/**
+ * Pasang tiruan pada `page`; mengembalikan daftar `pathname` yang diminta layar tetapi tidak ditiru.
+ * `health` menggantikan jawaban `/api/health` (mis. `{ status: "ok", sandbox: true }`, D7).
+ */
+export async function mockApi(page: Page, { health }: { health?: unknown } = {}): Promise<string[]> {
   const unmocked: string[] = [];
   await page.route("**/api/**", async (route: Route) => {
     const url = new URL(route.request().url());
-    const handler = API_ROUTES[url.pathname] ?? dynamic(url.pathname);
+    const handler = url.pathname === "/api/health" && health !== undefined ? health : (API_ROUTES[url.pathname] ?? dynamic(url.pathname));
     if (handler === undefined) {
       unmocked.push(url.pathname);
       return route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ detail: "not mocked" }) });
@@ -105,4 +125,12 @@ export async function mockResearchApi(page: Page): Promise<string[]> {
     return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
   });
   return unmocked;
+}
+
+/** Timpa satu jalur API di atas tiruan (rute yang dipasang belakangan dijalankan lebih dulu): status dan badan sendiri. */
+export async function overrideApi(page: Page, pathname: string, answer: { status?: number; body?: unknown }) {
+  await page.route(`**${pathname}`, async (route: Route) => {
+    if (new URL(route.request().url()).pathname !== pathname) return route.fallback();
+    return route.fulfill({ status: answer.status ?? 200, contentType: "application/json", body: JSON.stringify(answer.body ?? {}) });
+  });
 }

@@ -1,0 +1,50 @@
+{
+  "summary": {
+    "current_valuation": 115000000,
+    "total_cost": 101000000,
+    "total_pl": 1500000,
+    "total_pl_pct": 1.49,
+    "cash_balance": 12500000
+  },
+  "positions": [
+    {
+      "no": 1,
+      "category": "CORE",
+      "ticker": "COAL",
+      "full_code": "IDX:COAL",
+      "company_name": "Batubara Contoh Tbk",
+      "shares": 20000,
+      "lots": 200,
+      "avg_price": 4150,
+      "current_price": 4300,
+      "cost": 83000000,
+      "valuation": 86000000,
+      "pl": 3000000,
+      "pl_pct": 3.61,
+      "fund_alloc_pct": 0,
+      "val_alloc_pct": 62.5,
+      "target_alloc_pct": 60,
+      "drift_pct": 2.5
+    },
+    {
+      "no": 2,
+      "category": "CORE",
+      "ticker": "REST",
+      "full_code": "IDX:REST",
+      "company_name": "Restoran Contoh Tbk",
+      "shares": 10000,
+      "lots": 100,
+      "avg_price": 1800,
+      "current_price": 1650,
+      "cost": 18000000,
+      "valuation": 16500000,
+      "pl": -1500000,
+      "pl_pct": -8.33,
+      "fund_alloc_pct": 0,
+      "val_alloc_pct": 37.5,
+      "target_alloc_pct": 40,
+      "drift_pct": -2.5
+    }
+  ],
+  "available": true
+}

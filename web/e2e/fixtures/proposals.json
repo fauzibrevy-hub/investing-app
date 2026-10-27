@@ -1,0 +1,99 @@
+{
+  "ticker": "COAL",
+  "document_id": null,
+  "items": [
+    {
+      "document_id": "d-u-0001",
+      "ticker": "COAL",
+      "fy": 2026,
+      "q": 2,
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "decided_at": null,
+      "locator": "page",
+      "status": "pending",
+      "id": "p-prod-1",
+      "kpi_key": "production_mt:2026Q2",
+      "metric": "production_mt",
+      "metric_label": "Produksi",
+      "unit": "Mt",
+      "value": 5.4,
+      "page": 3,
+      "snippet": "Produksi batubara kuartal ini 5,4 juta ton, naik tipis dari kuartal lalu",
+      "rank": 1
+    },
+    {
+      "document_id": "d-u-0001",
+      "ticker": "COAL",
+      "fy": 2026,
+      "q": 2,
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "decided_at": null,
+      "locator": "page",
+      "status": "pending",
+      "id": "p-prod-2",
+      "kpi_key": "production_mt:2026Q2",
+      "metric": "production_mt",
+      "metric_label": "Produksi",
+      "unit": "Mt",
+      "value": 5.1,
+      "page": 7,
+      "snippet": "Produksi kuartal sebelumnya 5,1 juta ton | rencana tahunan",
+      "rank": 2
+    },
+    {
+      "document_id": "d-u-0001",
+      "ticker": "COAL",
+      "fy": 2026,
+      "q": 2,
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "decided_at": null,
+      "locator": "page",
+      "status": "pending",
+      "id": "p-cash-1",
+      "kpi_key": "cash_cost_usd_t:2026Q2",
+      "metric": "cash_cost_usd_t",
+      "metric_label": "Biaya tunai",
+      "unit": "USD/t",
+      "value": 55.3,
+      "page": 5,
+      "snippet": "Biaya tunai USD 55,3 per ton",
+      "rank": 1
+    },
+    {
+      "document_id": "d-u-0001",
+      "ticker": "COAL",
+      "fy": 2026,
+      "q": 2,
+      "created_at": "2026-10-24T09:00:00+00:00",
+      "decided_at": null,
+      "locator": "page",
+      "status": "pending",
+      "id": "p-sr-1",
+      "kpi_key": "stripping_ratio:2026Q2",
+      "metric": "stripping_ratio",
+      "metric_label": "Nisbah kupas",
+      "unit": "bcm/t",
+      "value": 6.8,
+      "page": 9,
+      "snippet": "Nisbah kupas 6,8 bcm per ton",
+      "rank": 1
+    }
+  ],
+  "counts": {
+    "pending": 4,
+    "accepted": 0,
+    "rejected": 0,
+    "superseded": 0
+  },
+  "documents": [
+    {
+      "id": "d-u-0001",
+      "kind": "presentasi",
+      "kind_label": "Presentasi",
+      "doc_date": "2026-10-20",
+      "added_at": "2026-10-24T09:00:00+00:00",
+      "format": "pdf",
+      "locator": "page"
+    }
+  ]
+}
