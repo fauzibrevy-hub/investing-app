@@ -2,11 +2,10 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../lib/api";
 import { AuthGate } from "./AuthGate";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BackHeader } from "./BackHeader";
 import { BottomNav } from "./BottomNav";
-import { DesktopSidebar } from "./DesktopSidebar";
-import { Fab } from "./Fab";
 import { UnlockScreen } from "./UnlockScreen";
-import { ROUTE_TITLES } from "./nav";
 
 let fetchMock: ReturnType<typeof vi.fn>;
 beforeEach(() => {
@@ -17,55 +16,58 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe("BottomNav", () => {
   it("nav berlabel, 4 item, item aktif aria-current + accent", () => {
-    render(<BottomNav active="thesis" />);
+    render(<BottomNav active="portofolio" />);
     const nav = screen.getByRole("navigation", { name: "Navigasi utama" });
     const links = nav.querySelectorAll("a");
     expect(links).toHaveLength(4);
-    const active = screen.getByRole("link", { name: "Investasi" });
+    expect([...links].map((a) => a.getAttribute("href"))).toEqual(["#/beranda", "#/portofolio", "#/perusahaan", "#/alat"]);
+    const active = screen.getByRole("link", { name: "Portofolio" });
     expect(active).toHaveAttribute("aria-current", "page");
     expect(active).toHaveClass("text-accent", "font-bold");
     expect(screen.getByRole("link", { name: "Beranda" })).toHaveClass("text-nav-inactive");
+    expect(nav).toHaveClass("grid-cols-4");
+    expect(screen.queryByRole("button", { name: "Catat transaksi" })).not.toBeInTheDocument();
+  });
+
+  it("tautan tab memakai target dari shell dan klik biasa diteruskan ke onSelect", () => {
+    const onSelect = vi.fn();
+    render(<BottomNav active="beranda" targets={{ perusahaan: "/perusahaan/BUMI" }} onSelect={onSelect} />);
+    const link = screen.getByRole("link", { name: "Perusahaan" });
+    expect(link).toHaveAttribute("href", "#/perusahaan/BUMI");
+    fireEvent.click(link);
+    expect(onSelect).toHaveBeenCalledWith("perusahaan", expect.anything());
+    fireEvent.click(link, { metaKey: true });
+    expect(onSelect).toHaveBeenCalledTimes(1);
   });
 });
 
-describe("entri Riset di navigasi", () => {
-  it("bottom nav dan sidebar menunjuk ke #/riset dan aktif di riset, research, dan idx", () => {
-    for (const key of ["riset", "research", "idx"] as const) {
-      const { unmount } = render(<BottomNav active={key} />);
-      const link = screen.getByRole("link", { name: "Riset" });
-      expect(link).toHaveAttribute("href", "#/riset");
-      expect(link).toHaveAttribute("aria-current", "page");
-      unmount();
-    }
-    const { unmount } = render(<DesktopSidebar active="riset" />);
-    expect(screen.getByRole("link", { name: "Riset" })).toHaveAttribute("href", "#/riset");
-    expect(screen.getByRole("link", { name: "Riset" })).toHaveAttribute("aria-current", "page");
-    unmount();
-    expect(ROUTE_TITLES.riset).toBe("Riset");
-  });
-});
+function Where() {
+  const { pathname, search } = useLocation();
+  return <p data-testid="where">{pathname + search}</p>;
+}
 
-describe("Fab", () => {
-  it("aria-label + loading aria-busy", () => {
-    const { rerender } = render(<Fab />);
-    expect(screen.getByRole("button", { name: "Catat transaksi" })).toHaveClass("h-[52px]", "w-[52px]");
-    rerender(<Fab loading />);
-    expect(screen.getByRole("button", { name: "Catat transaksi" })).toHaveAttribute("aria-busy", "true");
-  });
-});
+function renderBack(entry: string) {
+  return render(
+    <MemoryRouter initialEntries={[entry]}>
+      <Routes>
+        <Route path="*" element={<><BackHeader /><Where /></>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
 
-describe("DesktopSidebar", () => {
-  it("5 entri tanpa Macro; item 44 px hit dengan visual 40 px; error menampilkan Coba lagi", () => {
-    const onRefresh = vi.fn();
-    const { rerender } = render(<DesktopSidebar active="home" />);
-    const links = screen.getByRole("navigation", { name: "Navigasi utama" }).querySelectorAll("a");
-    expect(links).toHaveLength(5);
-    expect([...links].map((a) => a.getAttribute("href"))).not.toContain("#/macro");
-    expect(links[0]).toHaveClass("h-11");
-    expect(links[0].firstElementChild).toHaveClass("h-10", "bg-surface-icon", "text-accent");
-    rerender(<DesktopSidebar active="home" dataStatus="error" onRefresh={onRefresh} />);
-    fireEvent.click(screen.getByRole("button", { name: "Coba lagi" }));
-    expect(onRefresh).toHaveBeenCalled();
+describe("BackHeader", () => {
+  it("label tab pemilik dari ?from=, nama aksesibel Kembali ke …", () => {
+    renderBack("/perusahaan/BUMI?from=portofolio");
+    const back = screen.getByRole("link", { name: "Kembali ke Portofolio" });
+    expect(back).toHaveTextContent("Portofolio");
+    expect(back).toHaveClass("h-11");
+  });
+
+  it("deep link dingin: tab rute sendiri, ke akar tab", () => {
+    renderBack("/alat/kalibrasi");
+    fireEvent.click(screen.getByRole("link", { name: "Kembali ke Alat" }));
+    expect(screen.getByTestId("where")).toHaveTextContent(/^\/alat$/);
   });
 });
 
