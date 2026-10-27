@@ -51,4 +51,5 @@ case "${1:-all}" in
   *) echo "usage: $0 [hygiene|backend|web|all]" >&2; exit 2 ;;
 esac
 
-[ "$fail" = 0 ] && echo "OK" || { echo "check.sh: failed" >&2; exit 1; }
+if [ "$fail" != 0 ]; then echo "check.sh: failed" >&2; exit 1; fi
+echo "OK"
