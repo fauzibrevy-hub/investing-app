@@ -64,7 +64,7 @@ pub const SCRAPER_STATUS_FILE: &str = "scraper-status.json";
 /// A run that started but never wrote `finished_at` is "running" for this long, then "did not finish".
 const SCRAPER_RUNNING_HOURS: i64 = 6;
 
-/// Schedule in `deploy/com.menganto.finance.scraper.plist`: Weekday 0 (Sunday), 03:00 local.
+/// Schedule in `deploy/com.menganto.investing.scraper.plist`: Weekday 0 (Sunday), 03:00 local.
 pub const SCRAPER_SCHEDULE_WEEKDAY: chrono::Weekday = chrono::Weekday::Sun;
 pub const SCRAPER_SCHEDULE_HOUR: u32 = 3;
 /// A run may start this late after its slot (Mac asleep at 03:00, runs at wake) before it is `missed`.
