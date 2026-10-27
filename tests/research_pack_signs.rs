@@ -176,7 +176,8 @@ fn every_abs_tag_of_the_packs_is_a_magnitude_flow_in_derive() {
                 } = b
                 {
                     assert!(
-                        investing_app::research::derive::MAGNITUDE_FLOWS.contains(&element.as_str()),
+                        investing_app::research::derive::MAGNITUDE_FLOWS
+                            .contains(&element.as_str()),
                         "{}.{}: `abs:{element}` is not in derive::MAGNITUDE_FLOWS",
                         pack.id,
                         m.id

@@ -3,8 +3,8 @@
 use axum::body::Body;
 use axum::http::{Request, Response, StatusCode};
 use axum::Router;
-use investing_app::config::Config;
 use http_body_util::BodyExt;
+use investing_app::config::Config;
 use serde_json::Value;
 use tower::ServiceExt;
 

@@ -230,7 +230,10 @@ pub fn research_db_path(get: impl Fn(&str) -> Option<String>) -> PathBuf {
     let path =
         |k: &str, default: PathBuf| var(k).map(|v| expand_home(&v, &home)).unwrap_or(default);
     let data_dir = path("INVESTING_DATA_DIR", home.join("investing-app-data"));
-    path("INVESTING_RESEARCH_DB_PATH", data_dir.join("research.sqlite"))
+    path(
+        "INVESTING_RESEARCH_DB_PATH",
+        data_dir.join("research.sqlite"),
+    )
 }
 
 #[cfg(test)]
@@ -287,10 +290,22 @@ mod tests {
 
     #[test]
     fn sandbox_is_off_unless_set_truthy() {
-        for (v, on) in [(None, false), (Some("0"), false), (Some("1"), true), (Some("yes"), true)] {
-            let mut pairs = vec![("INVESTING_APP_TOKEN", TOKEN), ("PORTFOLIO_SPREADSHEET_ID", "b")];
+        for (v, on) in [
+            (None, false),
+            (Some("0"), false),
+            (Some("1"), true),
+            (Some("yes"), true),
+        ] {
+            let mut pairs = vec![
+                ("INVESTING_APP_TOKEN", TOKEN),
+                ("PORTFOLIO_SPREADSHEET_ID", "b"),
+            ];
             pairs.extend(v.map(|v| ("INVESTING_SANDBOX", v)));
-            assert_eq!(Config::from_lookup(env(&pairs)).unwrap().sandbox, on, "{v:?}");
+            assert_eq!(
+                Config::from_lookup(env(&pairs)).unwrap().sandbox,
+                on,
+                "{v:?}"
+            );
         }
     }
 
@@ -387,7 +402,10 @@ mod tests {
             PathBuf::from("/d/research/pdf-filings")
         );
         assert_eq!(
-            pdf_filings_dir(get(&[("HOME", "/h"), ("INVESTING_PDF_FILINGS_DIR", "~/pdf")])),
+            pdf_filings_dir(get(&[
+                ("HOME", "/h"),
+                ("INVESTING_PDF_FILINGS_DIR", "~/pdf")
+            ])),
             PathBuf::from("/h/pdf")
         );
     }

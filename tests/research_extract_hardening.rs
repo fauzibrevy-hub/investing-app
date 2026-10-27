@@ -16,10 +16,10 @@ use std::time::{Duration, Instant};
 
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode};
+use http_body_util::BodyExt;
 use investing_app::research::extract::doc::{DocError, Format};
 use investing_app::research::extract::isolated::{self, Limits};
 use investing_app::research::extract::rules::{propose, Target};
-use http_body_util::BodyExt;
 use r4_env::{env, Env};
 use serde_json::{json, Value};
 use tower::ServiceExt;

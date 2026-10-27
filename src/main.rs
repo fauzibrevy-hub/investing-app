@@ -72,7 +72,10 @@ fn research_ingest(args: &[String]) -> i32 {
     let store = match Store::open(&db) {
         Ok(s) => s,
         Err(e) => {
-            eprintln!("investing research-ingest: cannot open {}: {e}", db.display());
+            eprintln!(
+                "investing research-ingest: cannot open {}: {e}",
+                db.display()
+            );
             return 1;
         }
     };

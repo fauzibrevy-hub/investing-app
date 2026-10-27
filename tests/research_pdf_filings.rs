@@ -147,7 +147,11 @@ fn write_bumi_xbrl(dir: &Path) {
     xbrl_fixture::write(dir, &bumi_spec("Q3", m9));
 }
 
-fn derived_cell(store: &Store, element: &str, q: u32) -> investing_app::research::store::DerivedRow {
+fn derived_cell(
+    store: &Store,
+    element: &str,
+    q: u32,
+) -> investing_app::research::store::DerivedRow {
     store
         .derived("BUMI", Some(element))
         .unwrap()

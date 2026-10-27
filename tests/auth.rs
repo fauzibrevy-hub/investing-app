@@ -181,8 +181,8 @@ async fn get_session_reports_cookie_validity() {
             .status(),
         StatusCode::UNAUTHORIZED
     );
-    let other =
-        investing_app::auth::Auth::new(&"z".repeat(32)).issue_session(investing_app::auth::now_secs());
+    let other = investing_app::auth::Auth::new(&"z".repeat(32))
+        .issue_session(investing_app::auth::now_secs());
     assert_eq!(
         t.send(check(Some(&format!("investing_session={other}"))))
             .await
