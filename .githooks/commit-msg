@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-if grep -qi '^co-authored-by:' "$1"; then
+# Same trailer test as scripts/check.sh: any case, leading space, space before the colon.
+if grep -qiE '^[[:space:]]*co-authored-by[[:space:]]*:' "$1"; then
   echo "commit-msg: remove the Co-Authored-By trailer (CLAUDE.md)." >&2
   exit 1
 fi
