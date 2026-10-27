@@ -298,6 +298,16 @@ PATH="$W/shim:$PATH" A_URL=http://127.0.0.1:8787 A_DATA="$W/f1" B_DATA="$W/f2" T
 rc=$?
 echo "writes.sh A_URL=:8787 exit=$rc, curl calls: $(cat "$W/curl-calls" 2>/dev/null | wc -l | tr -d ' ')"
 { [ "$rc" = 2 ] && [ ! -e "$W/curl-calls" ]; } || ok9=0
+# A data dir that is, or links to, $HOME/finance-app-data (a fake HOME here) is refused before
+# any request or write (review L1b #6); nothing is created inside it.
+mkdir -p "$W/fakehome/finance-app-data"
+ln -s "$W/fakehome/finance-app-data" "$W/live-link"
+for live in "$W/fakehome/finance-app-data" "$W/live-link"; do
+  PATH="$W/shim:$PATH" HOME="$W/fakehome" A_DATA="$live" B_DATA="$W/f2" TICKER=AAAA scripts/writes.sh
+  rc=$?
+  echo "writes.sh A_DATA=${live#"$W"/}: exit=$rc, curl calls: $(cat "$W/curl-calls" 2>/dev/null | wc -l | tr -d ' ')"
+  { [ "$rc" = 2 ] && [ ! -e "$W/curl-calls" ] && [ -z "$(ls -A "$W/fakehome/finance-app-data")" ]; } || ok9=0
+done
 # B restarted on F2 without INVESTING_SANDBOX: refused, and neither side's log grows.
 stop_pid "$PID_B"
 PID_B=

@@ -3,7 +3,8 @@
 # Env (all required): A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER. A = the second finance-app instance,
 # B = the investing-app sandbox; *_DATA is each side's data dir (step 14 writes its draft file there).
 # Prints label<TAB>a<TAB>b<TAB>ok|DIFF|SKIP <reason>. Exit 0 when every pair matches, 1 otherwise,
-# 2 on usage, a refused URL (:8787) or a B whose /api/health lacks "sandbox": true, all before any write.
+# 2 on usage, a refused URL (:8787), an A_DATA or B_DATA that is (or links to) a live data dir under
+# $HOME, or a B whose /api/health lacks "sandbox": true, all before any write.
 # Tokens are never printed and never on a command line: curl reads them from a mode-600 header file.
 # Runs on macOS /bin/bash 3.2.
 set -euo pipefail
@@ -30,6 +31,18 @@ TICKER=$(printf '%s' "$TICKER" | tr '[:lower:]' '[:upper:]')
 for d in "$A_DATA" "$B_DATA"; do
   [ -d "$d" ] || usage "data dir $d does not exist"
 done
+# Live data dirs are never a write target (CLAUDE.md live-data rule): step 14 writes into *_DATA.
+# Symlinks are resolved, so a scratch-looking path that points at a live dir is refused too.
+if [ -n "${HOME:-}" ] && [ -d "$HOME" ]; then
+  home=$(cd "$HOME" && pwd -P)
+  for d in "$A_DATA" "$B_DATA"; do
+    real=$(cd "$d" && pwd -P)
+    case "$real" in
+      "$home/finance-app-data" | "$home/finance-app-data/"* | "$home/investing-app-data" | "$home/investing-app-data/"*)
+        usage "data dir $d resolves to $real: a live data dir, refused before any write" ;;
+    esac
+  done
+fi
 [ -f tests/fixtures/research/structure-BUMI.draft.json ] || usage "tests/fixtures/research/structure-BUMI.draft.json missing"
 
 # D7: B must be the sandbox, checked before anything is written.
