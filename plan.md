@@ -164,7 +164,16 @@ UNION ALL SELECT 'seen', ticker, 1 FROM seen
 ORDER BY 1, 2;
 ```
 
-`universe_overrides` is not counted: migration `005_drop_v4.sql:10` drops it. Whole-directory lines: `wc -l` of `research-log.jsonl` and `research-idempotency.jsonl`; `jq length` of the drafts file (an object keyed by draft id, finance-app `src/thesis/drafts.rs:40-55`, `src/thesis/mod.rs:155-156`); `jq length` of `macro_store.json` (indicators) and `jq '[.[] | (.history // []) | length] | add // 0'` (observations; 15 and 5 on `tests/fixtures/macro/store.json`); `find -type f | wc -l` of `research/documents`, `research/structure`, `research/pdf-filings`.
+`universe_overrides` is not counted: migration `005_drop_v4.sql:10` drops it. Whole-directory lines use key `-` and these metric labels:
+
+| Metric | Value |
+|---|---|
+| `log_lines` | `wc -l < research-log.jsonl` |
+| `idempotency_lines` | `wc -l < research-idempotency.jsonl` |
+| `thesis_drafts` | `jq length` of the drafts file (an object keyed by draft id, finance-app `src/thesis/drafts.rs:40-55`, `src/thesis/mod.rs:155-156`) |
+| `macro_indicators` | `jq length macro_store.json` (15 on `tests/fixtures/macro/store.json`) |
+| `macro_observations` | `jq '[.[] \| (.history // []) \| length] \| add // 0' macro_store.json` (5 on the same fixture) |
+| `files_documents`, `files_structure`, `files_pdf_filings` | `find research/<dir> -type f \| wc -l` for `documents`, `structure`, `pdf-filings` |
 
 **`scripts/parity.sh`** (prd.md S1, A1). Env `A_URL A_TOKEN B_URL B_TOKEN` (required, no defaults; A = finance-app side), optional `TICKERS` (default: every `role == "held"` ticker in A's `/api/research/universe` `.items[]`, plus the first `role == "peer"`). Bearer on both sides. Each body goes through `jq -S` with the number rule from finance-app `scripts/parity.sh:28` (`NUM`) and the drop for its path; prints `ok <path>` or `DIFF <path>` with the first 40 lines of `diff`; a different status on the two sides is a `DIFF`. Paths: prd.md A1 in order; ids for the by-id paths come from A's list responses in the same run; facts use `first(.. | objects | select(.filing_id and .element))` of `/{T}/financials?view=annual`. `/api/macro/stream`: status and `content-type` only (`curl -m 3`). Exit 0 when nothing differs, 1 otherwise, 2 on usage or a refused URL. Named drops, each written in the script with its reason:
 
@@ -181,25 +190,47 @@ ORDER BY 1, 2;
 
 L1b confirms each jq path against the self-test run and removes any drop that matches nothing; a new drop needs a reason line and the owner's OK in the L1b PR.
 
-**`scripts/writes.sh`** (prd.md A3). Env `A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER`. Refuses `:8787`, and refuses unless B's `/api/health` has `"sandbox": true`. Sends each request to A, then to B, each side using the ids its own earlier responses returned; request bodies are copied from the finance-app test named, so the expected status is known. Prints `label<TAB>a<TAB>b<TAB>ok|DIFF`; exit 0 when every pair matches.
+**`scripts/writes.sh`** (prd.md A3). Env `A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER`. Refuses `:8787`, and refuses unless B's `/api/health` has `"sandbox": true`. Sends each request to A, then to B, each side using the ids its own earlier responses returned; request bodies are copied from the finance-app test named, so the expected status is known. Prints `label<TAB>a<TAB>b<TAB>ok|DIFF|SKIP`; exit 0 when every pair matches.
 
-| Request | Body from finance-app `tests/` |
-|---|---|
-| `POST /api/research/universe`, `PUT /api/research/universe/{T}`, `DELETE /api/research/universe/{T}` (a second, added ticker) | `research_universe_api.rs` |
-| `PUT` and `DELETE /api/research/{T}/kpi/{metric}/{fy}/{q}` | `research_kpi.rs` |
-| `POST /api/research/{T}/documents/upload`, `POST /api/research/proposals/{id}/accept`, `…/reject` | `research_extract.rs` |
-| `POST /api/research/{T}/documents`, `POST /api/research/evidence` | `research_documents.rs` |
-| `POST /api/research/{T}/claims`, `PATCH /api/research/claims/{id}` | `research_claims.rs` |
-| `POST /api/research/{T}/journal`, `POST /api/research/journal/{id}/annotations` | `research_journal.rs` |
-| `POST /api/research/events/{id}/dismiss` (first undismissed event of the desk) | `research_events.rs` |
-| `POST /api/research/{T}/structure/draft` (after copying `tests/fixtures/research/structure-BUMI.draft.json` to `<DATA>/research/structure/{T}.draft.json` on each side), `PUT` (accepted, then rejected) and `DELETE /api/research/{T}/structure/nodes/{id}`, `POST /api/research/{T}/structure/nodes` | `research_structure.rs` |
-| `PUT /api/research/{T}/scenarios` | `research_valuation.rs` |
-| `POST /api/research/{T}/seen`, `PUT` and `DELETE /api/research/{T}/shares` | `research_api.rs` |
-| `POST /api/research/{T}/calendar`, `DELETE /api/research/{T}/calendar/{date}/{kind}` | `research_calendar.rs` |
-| `POST /api/research/packs/reload` | `research_packs.rs` |
-| `POST /api/research/refresh?ticker={T}` (expected 503 on both while the scheduler is off, D19) | `research_api.rs` |
-| `POST /api/thesis/drafts`, `DELETE /api/thesis/drafts/{id}` | `thesis.rs` |
-| `POST /api/macro/trigger` | `macro_watch.rs` |
+Requests run in this order, so every id exists before a request uses it: whatever a step creates is updated or deleted only by a later step, using the id from that step's own response on the same side. Three steps take an id the script does not create itself (12, 13, 15). When that id is missing on both sides, the step prints `label<TAB>-<TAB>-<TAB>SKIP <reason>` and does not fail the run. When it is missing on one side only, the step is a `DIFF`.
+
+| # | Request | Id from | Body from finance-app `tests/` |
+|---|---|---|---|
+| 1 | `POST /api/research/universe` (a second ticker `{U}`, role manual) | — | `research_universe_api.rs` |
+| 2 | `PUT /api/research/universe/{T}` (override) | — | `research_universe_api.rs` |
+| 3 | `DELETE /api/research/universe/{U}` | step 1 | `research_universe_api.rs` |
+| 4 | `PUT /api/research/{T}/kpi/{metric}/{fy}/{q}` | — | `research_kpi.rs` |
+| 5 | `DELETE` the same KPI cell | step 4 | `research_kpi.rs` |
+| 6 | `POST /api/research/{T}/claims` | — | `research_claims.rs` |
+| 7 | `PATCH /api/research/claims/{id}` | step 6 | `research_claims.rs` |
+| 8 | `POST /api/research/{T}/documents` (link) | — | `research_documents.rs` |
+| 9 | `POST /api/research/evidence` | claim from 6, document from 8 | `research_documents.rs` |
+| 10 | `POST /api/research/{T}/journal` | — | `research_journal.rs` |
+| 11 | `POST /api/research/journal/{id}/annotations` | step 10 | `research_journal.rs` |
+| 12 | `POST /api/research/events/{id}/dismiss` | first undismissed event in `GET /api/research/desk`, read now (after the claim and journal writes); SKIP "no open event" | `research_events.rs` |
+| 13 | `POST /api/research/{T}/documents/upload`, then `POST /api/research/proposals/{id}/accept` and `…/{id}/reject` | first and second pending proposal in `GET /api/research/{T}/proposals` after the upload; SKIP "fewer than 2 proposals" for the accept/reject pair only (the upload always runs) | `research_extract.rs` |
+| 14 | `POST /api/research/{T}/structure/draft`, after writing the draft file on each side (below) | — | `research_structure.rs` |
+| 15 | `PUT /api/research/{T}/structure/nodes/{id}` with `accepted`, then another node with `rejected` | first two node ids in `GET /api/research/{T}/structure` after step 14 | `research_structure.rs` |
+| 16 | `POST /api/research/{T}/structure/nodes`, then `DELETE /api/research/{T}/structure/nodes/{id}` | the POST's own response | `research_structure.rs` |
+| 17 | `PUT /api/research/{T}/scenarios` | — | `research_valuation.rs` |
+| 18 | `POST /api/research/{T}/seen` | — | `research_api.rs` |
+| 19 | `PUT /api/research/{T}/shares`, then `DELETE` it | the PUT | `research_api.rs` |
+| 20 | `POST /api/research/{T}/calendar`, then `DELETE /api/research/{T}/calendar/{date}/{kind}` with the same date and kind | the POST | `research_calendar.rs` |
+| 21 | `POST /api/research/packs/reload` | — | `research_packs.rs` |
+| 22 | `POST /api/research/refresh?ticker={T}` (expected 503 on both while the scheduler is off, D19) | — | `research_api.rs` |
+| 23 | `POST /api/thesis/drafts`, then `DELETE /api/thesis/drafts/{id}` | the POST | `thesis.rs` |
+| 24 | `POST /api/macro/trigger` | — | `macro_watch.rs` |
+
+Step 16 always creates its own node, so it never SKIPs. Step 15 SKIPs only if the import in step 14 failed on both sides, and then step 14 is already a `DIFF` or a matching error.
+
+Draft file for step 14. The import refuses a file whose `ticker` is not `{T}` (`ticker_mismatch`, finance-app `tests/research_structure.rs:585-589`) and any node `metric` outside `{T}`'s pack or core (`unknown_metric`, `src/research/structure.rs:139-147`). The fixture is BUMI's, with coal-pack metrics `production_mt`, `sales_mt` and `asp_usd_t`. So each side gets a rewritten copy, and the fixture itself stays byte for byte:
+
+```bash
+jq --arg t "$TICKER" '.ticker = $t | if $t == "BUMI" then . else .nodes |= map(del(.metric)) end' \
+  tests/fixtures/research/structure-BUMI.draft.json > "$DATA/research/structure/$TICKER.draft.json"
+```
+
+Checked 2026-10-27 on the fixture: `TICKER=AAAA` gives ticker AAAA, 40 nodes, no metrics; `TICKER=BUMI` keeps all three metrics.
 
 **`scripts/tools-selftest.sh`** proves the three on fixtures, with no live data and no network beyond what `macro/trigger` does with `MACRO_DISABLE_FRED=1`:
 
@@ -210,7 +241,7 @@ L1b confirms each jq path against the self-test run and removes any drop that ma
 5. Start the binary twice with the smoke env (§3.1): A on F1 at `127.0.0.1:18801`, B on F2 at `127.0.0.1:18802` with `INVESTING_SANDBOX=1`; add AAAA as a manual ticker on both with the request from `research_universe_api.rs`.
 6. `TICKERS=AAAA scripts/parity.sh` → exit 0, no `DIFF`.
 7. Negative: one extra claim on B only → `parity.sh` exit 1 naming `/api/research/AAAA/claims`; `counts.sh "$W/f1" "$W/f2"` exit 1 naming `claims AAAA`.
-8. `TICKER=AAAA scripts/writes.sh` → exit 0; the refresh row reads `503 503 ok`.
+8. `TICKER=AAAA scripts/writes.sh` → exit 0; the refresh row reads `503 503 ok`; the structure-draft row reads `ok` (the AAAA rewrite above). `SKIP` is accepted only on steps 12 and 13 (the fixture desk may have no open event, and the upload may yield fewer than two proposals), and each `SKIP` line is pasted into the L1b PR. At L4, any `SKIP` is reported in the L4 PR next to `writes.txt`.
 9. Guards: `A_URL=http://127.0.0.1:8787 scripts/parity.sh` and the same for `writes.sh` exit 2 before any request; `writes.sh` with B started without `INVESTING_SANDBOX` exits 2.
 10. Stop both binaries; the script exits 0 only when every step above matched.
 
