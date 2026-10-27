@@ -1,4 +1,4 @@
-//! App-owned research store: `FINANCE_DATA_DIR/research.sqlite` (research plan §4.1, D16).
+//! App-owned research store: `INVESTING_DATA_DIR/research.sqlite` (research plan §4.1, D16).
 //!
 //! Schema migrations run through `PRAGMA user_version`; SQL lives in `migrations/NNN_*.sql`
 //! and is embedded at build time. User-authored data (universe rows, manual shares, KPIs,

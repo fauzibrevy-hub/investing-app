@@ -11,7 +11,7 @@ mod r4_env;
 mod xbrl_fixture;
 
 use axum::http::StatusCode;
-use finance_app::research::store::{CorpEventRow, EventKind, PriceBar};
+use investing_app::research::store::{CorpEventRow, EventKind, PriceBar};
 use r4_env::{env, Env};
 use serde_json::{json, Value};
 

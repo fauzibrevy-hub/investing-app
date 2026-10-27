@@ -1,5 +1,5 @@
 //! Pack loading (research plan §4.3, §9): `research/packs/*.toml` from
-//! `FINANCE_RESEARCH_PACKS_DIR` at start, hot reload on request, and the canon packs
+//! `INVESTING_RESEARCH_PACKS_DIR` at start, hot reload on request, and the canon packs
 //! embedded at build time as the fallback for a missing directory or a broken file.
 //!
 //! A directory file that fails validation is reported (health, `GET /packs`) and the

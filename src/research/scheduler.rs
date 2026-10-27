@@ -2,7 +2,7 @@
 //! directory every 10 minutes and at start (a new file hash means ingest), prices and
 //! driver series once per trading day after 16:30 WIB, then claim re-evaluation and the
 //! inbox producers.
-//! `FINANCE_RESEARCH_DISABLE_SCHEDULER` turns the loop off; `tick` can still be called by hand.
+//! `INVESTING_RESEARCH_DISABLE_SCHEDULER` turns the loop off; `tick` can still be called by hand.
 
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
@@ -65,9 +65,9 @@ pub struct Scheduler<P: PriceSource, H: HeldProvider> {
     pub store: Arc<Store>,
     pub prices: P,
     pub held: H,
-    /// Raw `.xbrl` filings (`FINANCE_IDX_XBRL_DIR`), read-only.
+    /// Raw `.xbrl` filings (`INVESTING_IDX_XBRL_DIR`), read-only.
     pub xbrl_dir: PathBuf,
-    /// Original-filing JSON files (`FINANCE_PDF_FILINGS_DIR`), read-only; `None` reads none.
+    /// Original-filing JSON files (`INVESTING_PDF_FILINGS_DIR`), read-only; `None` reads none.
     pdf_dir: Option<PathBuf>,
     pub watchlist: PathBuf,
     pub clock: Clock,

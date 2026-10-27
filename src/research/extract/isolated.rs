@@ -69,11 +69,11 @@ const LIMIT: DocError = DocError::Unreadable(
     "The file could not be read safely (it crashed the reader or needed too much time or memory)",
 );
 
-/// The binary to start: `FINANCE_EXTRACT_EXE` when set, else this very executable. Under
+/// The binary to start: `INVESTING_EXTRACT_EXE` when set, else this very executable. Under
 /// `cargo test` the current executable is a test harness in `target/*/deps/`; the server
 /// binary sits one directory up.
 fn extractor_exe() -> Option<PathBuf> {
-    if let Some(p) = std::env::var_os("FINANCE_EXTRACT_EXE").map(PathBuf::from) {
+    if let Some(p) = std::env::var_os("INVESTING_EXTRACT_EXE").map(PathBuf::from) {
         return p.is_file().then_some(p);
     }
     let me = std::env::current_exe().ok()?;
@@ -81,7 +81,7 @@ fn extractor_exe() -> Option<PathBuf> {
     if dir.file_name().is_some_and(|n| n == "deps") {
         let sibling = dir
             .parent()?
-            .join(format!("finance-app{}", std::env::consts::EXE_SUFFIX));
+            .join(format!("investing-app{}", std::env::consts::EXE_SUFFIX));
         return sibling.is_file().then_some(sibling);
     }
     Some(me)
@@ -167,7 +167,7 @@ fn static_message(m: &str) -> &'static str {
         .unwrap_or("The file could not be read")
 }
 
-/// Entry point of `finance-app __extract-text <pdf|pptx> [--max-rss-mb N]`: reads the file on
+/// Entry point of `investing-app __extract-text <pdf|pptx> [--max-rss-mb N]`: reads the file on
 /// stdin, writes one JSON line on stdout. Returns the process exit code.
 pub fn child_main(args: &[String]) -> i32 {
     use std::io::{Read, Write};

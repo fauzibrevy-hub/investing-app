@@ -9,9 +9,9 @@ mod xbrl_fixture;
 use std::path::Path;
 
 use chrono::{TimeZone, Utc};
-use finance_app::research::derive::RULES_VERSION;
-use finance_app::research::store::Store;
-use finance_app::research::xbrl;
+use investing_app::research::derive::RULES_VERSION;
+use investing_app::research::store::Store;
+use investing_app::research::xbrl;
 use rusqlite::Connection;
 use xbrl_fixture::{general_year, Year};
 

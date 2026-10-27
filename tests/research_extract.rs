@@ -1105,7 +1105,7 @@ async fn rebuild_restores_documents_proposals_decisions_and_accepted_values() {
     let kpis = e.store.kpis("COAL").unwrap();
     let links = e.store.evidence("COAL").unwrap();
     assert_eq!(proposals.len(), 4);
-    let status = |rows: &[finance_app::research::store::ProposalRow], id: &str| {
+    let status = |rows: &[investing_app::research::store::ProposalRow], id: &str| {
         rows.iter().find(|p| p.id == id).unwrap().status.clone()
     };
     assert_eq!(
@@ -1131,7 +1131,7 @@ async fn rebuild_restores_documents_proposals_decisions_and_accepted_values() {
     )
     .unwrap();
     let fresh =
-        finance_app::research::store::Store::open(&fresh_dir.path().join("research.sqlite"))
+        investing_app::research::store::Store::open(&fresh_dir.path().join("research.sqlite"))
             .unwrap();
     assert_eq!(fresh.proposals("COAL", None, None).unwrap(), proposals);
     assert_eq!(fresh.documents("COAL").unwrap(), documents);
@@ -1139,7 +1139,7 @@ async fn rebuild_restores_documents_proposals_decisions_and_accepted_values() {
 
 #[test]
 fn migrations_009_and_010_create_the_proposals_table_and_reopening_changes_nothing() {
-    use finance_app::research::store::{latest_version, Store};
+    use investing_app::research::store::{latest_version, Store};
     assert!(latest_version() >= 10, "010 is user_version 10");
     let dir = tempfile::tempdir().unwrap();
     let db = dir.path().join("research.sqlite");

@@ -300,7 +300,7 @@ async fn a_repeated_key_replays_and_rebuild_restores_documents_and_links() {
 async fn migration_008_adds_the_evidence_uniqueness_and_reopening_changes_nothing() {
     let e = env();
     let version = e.store.user_version().unwrap();
-    assert_eq!(version, finance_app::research::store::latest_version());
+    assert_eq!(version, investing_app::research::store::latest_version());
     assert!(version >= 7, "008 is user_version 7");
     let d = doc(&e, "COAL", "d1", json!({"kind": "catatan", "text": "x"})).await;
     let id = d["id"].as_str().unwrap().to_string();
@@ -316,7 +316,7 @@ async fn migration_008_adds_the_evidence_uniqueness_and_reopening_changes_nothin
     assert!(twice, "a repeated link must violate evidence_unique");
     // A second open of the same file runs no migration and keeps the data.
     let again =
-        finance_app::research::store::Store::open(&e.dir.path().join("research.sqlite")).unwrap();
+        investing_app::research::store::Store::open(&e.dir.path().join("research.sqlite")).unwrap();
     assert_eq!(again.user_version().unwrap(), version);
     assert_eq!(again.documents("COAL").unwrap().len(), 1);
 }

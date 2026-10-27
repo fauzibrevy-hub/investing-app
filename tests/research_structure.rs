@@ -13,8 +13,8 @@ mod xbrl_fixture;
 
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode};
-use finance_app::research::packs::def::Pack;
-use finance_app::research::store::{latest_version, Store, LOG_FILE};
+use investing_app::research::packs::def::Pack;
+use investing_app::research::store::{latest_version, Store, LOG_FILE};
 use r4_env::{call, env, Env};
 use serde_json::{json, Value};
 
@@ -780,7 +780,7 @@ async fn a_rejected_node_frees_a_slot_for_an_owner_branch() {
 #[tokio::test]
 async fn a_kept_node_linking_a_metric_of_an_earlier_pack_does_not_block_an_import() {
     let e = env();
-    let kept = finance_app::research::store::StructureNode {
+    let kept = investing_app::research::store::StructureNode {
         id: "o-1".into(),
         parent: None,
         label: "Milik lama".into(),
@@ -816,7 +816,7 @@ async fn a_draft_file_itself_may_hold_at_most_40_nodes() {
 
 #[test]
 fn packs_link_each_driver_to_a_metric_of_the_same_pack() {
-    let packs = finance_app::research::packs::Packs::embedded().set();
+    let packs = investing_app::research::packs::Packs::embedded().set();
     let link = |pack: &str, driver: &str| {
         let p = packs.get(pack).unwrap();
         let d = p.drivers.iter().find(|d| d.id == driver).unwrap();

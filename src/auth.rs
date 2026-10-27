@@ -1,10 +1,10 @@
-//! Auth (prd.md §5): one secret, `FINANCE_APP_TOKEN`.
+//! Auth (prd.md §5): one secret, `INVESTING_APP_TOKEN`.
 //!
 //! - Non-browser clients send `Authorization: Bearer <token>`.
 //! - The PWA exchanges the token once at `POST /api/session` for an HMAC-signed
-//!   `finance_session` cookie. The signing key is derived from the token, so
+//!   `investing_session` cookie. The signing key is derived from the token, so
 //!   rotating the token invalidates every session.
-//! - Cookie-authenticated writes must also carry `X-Finance-Client: web`.
+//! - Cookie-authenticated writes must also carry `X-Investing-Client: web`.
 //! - `GET /api/health` and `/api/session` (GET checks the cookie, POST
 //!   issues it, DELETE clears it) are the only routes reachable without
 //!   credentials.
@@ -27,9 +27,9 @@ use crate::error::ApiError;
 
 type HmacSha256 = Hmac<Sha256>;
 
-pub const COOKIE_NAME: &str = "finance_session";
+pub const COOKIE_NAME: &str = "investing_session";
 pub const SESSION_MAX_AGE_SECS: u64 = 30 * 24 * 60 * 60;
-const CLIENT_HEADER: &str = "x-finance-client";
+const CLIENT_HEADER: &str = "x-investing-client";
 
 #[derive(Clone)]
 pub struct Auth {
@@ -136,7 +136,7 @@ pub async fn require_auth(State(auth): State<Auth>, req: Request, next: Next) ->
             let safe = matches!(*req.method(), Method::GET | Method::HEAD | Method::OPTIONS);
             let from_web = headers.get(CLIENT_HEADER).and_then(|v| v.to_str().ok()) == Some("web");
             if !safe && !from_web {
-                return ApiError::new(StatusCode::FORBIDDEN, "Missing X-Finance-Client header")
+                return ApiError::new(StatusCode::FORBIDDEN, "Missing X-Investing-Client header")
                     .into_response();
             }
             return next.run(req).await;
@@ -231,7 +231,7 @@ mod tests {
         );
         h.insert(
             header::COOKIE,
-            HeaderValue::from_static("x=1; finance_session=v1.2.ff"),
+            HeaderValue::from_static("x=1; investing_session=v1.2.ff"),
         );
         assert_eq!(bearer(&h), Some("abc"));
         assert_eq!(session_cookie(&h), Some("v1.2.ff"));

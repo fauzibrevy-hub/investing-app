@@ -16,14 +16,14 @@ use axum::routing::get;
 use axum::Router;
 use chrono::{TimeZone, Utc};
 use common::test_app;
-use finance_app::research::prices::yahoo::{self, parse_chart, YahooSource};
-use finance_app::research::prices::PriceSource;
-use finance_app::research::scheduler::{due_for_prices, last_slot, Clock, Scheduler};
-use finance_app::research::sources::emitens;
-use finance_app::research::sources::portfolio::HeldProvider;
-use finance_app::research::sources::SourceError;
-use finance_app::research::store::Store;
-use finance_app::research::universe::HeldPosition;
+use investing_app::research::prices::yahoo::{self, parse_chart, YahooSource};
+use investing_app::research::prices::PriceSource;
+use investing_app::research::scheduler::{due_for_prices, last_slot, Clock, Scheduler};
+use investing_app::research::sources::emitens;
+use investing_app::research::sources::portfolio::HeldProvider;
+use investing_app::research::sources::SourceError;
+use investing_app::research::store::Store;
+use investing_app::research::universe::HeldPosition;
 use serde_json::{json, Value};
 
 // ---- Yahoo mock ----
@@ -466,10 +466,10 @@ async fn universe_sync_writes_the_watchlist_and_survives_a_portfolio_failure() {
     let base = serve(Mock::new(vec![Mode::Ok], 10)).await;
     let dir = tempfile::tempdir().unwrap();
     let s = scheduler(dir.path(), &base, FakeHeld::ok(&["CCCC", "AAAA"]));
-    finance_app::research::universe::add(
+    investing_app::research::universe::add(
         &s.store,
-        &finance_app::research::packs::Packs::embedded().set(),
-        &finance_app::research::universe::AddRequest {
+        &investing_app::research::packs::Packs::embedded().set(),
+        &investing_app::research::universe::AddRequest {
             ticker: "BBBB".into(),
             ..Default::default()
         },
@@ -515,7 +515,7 @@ async fn router_is_mounted_behind_auth_and_health_lists_research_sources() {
     assert_eq!(res.status(), StatusCode::UNAUTHORIZED);
 
     let seed = Store::open(&t.cfg.research_db_path).unwrap();
-    finance_app::research::universe::sync(
+    investing_app::research::universe::sync(
         &seed,
         &[HeldPosition {
             ticker: "AAAA".into(),

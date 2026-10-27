@@ -12,11 +12,11 @@ mod r4_env;
 mod xbrl_fixture;
 
 use axum::http::{Method, StatusCode};
-use finance_app::research::events::react::{react, Scope};
-use finance_app::research::store::PriceBar;
-use finance_app::research::universe::{add, AddRequest};
-use finance_app::research::valuation::PojkOffsets;
-use finance_app::research::xbrl;
+use investing_app::research::events::react::{react, Scope};
+use investing_app::research::store::PriceBar;
+use investing_app::research::universe::{add, AddRequest};
+use investing_app::research::valuation::PojkOffsets;
+use investing_app::research::xbrl;
 use r4_env::{call, env, Env};
 use serde_json::{json, Value};
 use xbrl_fixture::{general_year, Year};
@@ -620,7 +620,7 @@ async fn kpi_and_stale_events_are_refreshed_and_retired_when_their_condition_cle
         .core()
         .kpi_metrics()
         .chain(coal.kpi_metrics())
-        .filter(|m| m.cadence != Some(finance_app::research::packs::Cadence::Annual))
+        .filter(|m| m.cadence != Some(investing_app::research::packs::Cadence::Annual))
         .enumerate()
     {
         e.send(
@@ -659,7 +659,7 @@ async fn kpi_and_stale_events_are_refreshed_and_retired_when_their_condition_cle
 
 #[tokio::test]
 async fn levels_and_their_crossings_follow_a_split_after_they_were_written() {
-    use finance_app::research::store::{CorpEventRow, EventKind};
+    use investing_app::research::store::{CorpEventRow, EventKind};
     let e = env();
     let (s, _) = e
         .post(

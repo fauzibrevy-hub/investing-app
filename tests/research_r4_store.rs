@@ -3,7 +3,7 @@
 //! the schema refuses is an error and never reaches the log, and a store rebuilt from the
 //! log next to nothing keeps annotations on the entries migrated from v4 notes.
 
-use finance_app::research::store::{
+use investing_app::research::store::{
     AnnotationRow, ClaimEvalRow, ClaimRow, JournalRow, Store, LOG_FILE,
 };
 

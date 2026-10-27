@@ -7,11 +7,11 @@ pub const MIN_TOKEN_LEN: usize = 32;
 
 #[derive(Debug, thiserror::Error, PartialEq)]
 pub enum ConfigError {
-    #[error("FINANCE_APP_TOKEN is required and must be at least {MIN_TOKEN_LEN} characters")]
+    #[error("INVESTING_APP_TOKEN is required and must be at least {MIN_TOKEN_LEN} characters")]
     Token,
     #[error("{0} is required")]
     Missing(&'static str),
-    #[error("FINANCE_BIND is not a valid socket address: {0}")]
+    #[error("INVESTING_BIND is not a valid socket address: {0}")]
     Bind(String),
 }
 
@@ -19,7 +19,6 @@ pub enum ConfigError {
 pub struct Config {
     pub token: String,
     pub bind: SocketAddr,
-    pub finance_spreadsheet_id: String,
     pub portfolio_spreadsheet_id: String,
     pub google_credentials_path: PathBuf,
     pub data_dir: PathBuf,
@@ -42,7 +41,7 @@ pub struct Config {
     /// Raw `.xbrl` filings written by the scraper, read-only (research plan §4.2, §9).
     pub idx_xbrl_dir: PathBuf,
     /// Original filings read from a PDF, one JSON file each, beside the XBRL source
-    /// (`FINANCE_PDF_FILINGS_DIR`, default `<data dir>/research/pdf-filings`). Optional:
+    /// (`INVESTING_PDF_FILINGS_DIR`, default `<data dir>/research/pdf-filings`). Optional:
     /// a missing directory is an empty source.
     pub research_pdf_filings_dir: PathBuf,
     /// Pack TOML files (research plan §4.3, §9); the built-in packs are used when missing.
@@ -82,48 +81,46 @@ impl Config {
                 .filter(|v| !v.is_empty())
         };
 
-        let token = var("FINANCE_APP_TOKEN").ok_or(ConfigError::Token)?;
+        let token = var("INVESTING_APP_TOKEN").ok_or(ConfigError::Token)?;
         if token.chars().count() < MIN_TOKEN_LEN {
             return Err(ConfigError::Token);
         }
-        let bind_raw = var("FINANCE_BIND").unwrap_or_else(|| "127.0.0.1:8787".into());
+        let bind_raw = var("INVESTING_BIND").unwrap_or_else(|| "127.0.0.1:8789".into());
         let bind = bind_raw.parse().map_err(|_| ConfigError::Bind(bind_raw))?;
 
         let home = var("HOME").map(PathBuf::from).unwrap_or_default();
         let path =
             |k: &str, default: PathBuf| var(k).map(|v| expand_home(&v, &home)).unwrap_or(default);
 
-        let data_dir = path("FINANCE_DATA_DIR", home.join("finance-app-data"));
+        let data_dir = path("INVESTING_DATA_DIR", home.join("investing-app-data"));
         let idx_scraper_dir = path(
-            "FINANCE_IDX_SCRAPER_DIR",
+            "INVESTING_IDX_SCRAPER_DIR",
             home.join("tools/idx-financial-scraper"),
         );
         Ok(Self {
             token,
             bind,
-            finance_spreadsheet_id: var("FINANCE_SPREADSHEET_ID")
-                .ok_or(ConfigError::Missing("FINANCE_SPREADSHEET_ID"))?,
             portfolio_spreadsheet_id: var("PORTFOLIO_SPREADSHEET_ID")
                 .ok_or(ConfigError::Missing("PORTFOLIO_SPREADSHEET_ID"))?,
             google_credentials_path: path(
                 "GOOGLE_APPLICATION_CREDENTIALS",
                 home.join("credentials/hermes-finance-service-account.json"),
             ),
-            web_dist: path("FINANCE_WEB_DIST", PathBuf::from("web/dist")),
+            web_dist: path("INVESTING_WEB_DIST", PathBuf::from("web/dist")),
             vault_root: path(
-                "FINANCE_VAULT_ROOT",
+                "INVESTING_VAULT_ROOT",
                 home.join("Documents/Hermes_Master_Vault"),
             ),
             thesis_drafts_path: path(
-                "FINANCE_THESIS_DRAFTS_PATH",
+                "INVESTING_THESIS_DRAFTS_PATH",
                 data_dir.join("thesis_drafts.json"),
             ),
             idx_db_path: path(
-                "FINANCE_IDX_DB_PATH",
+                "INVESTING_IDX_DB_PATH",
                 home.join("tools/idx-financial-scraper/data/idx.sqlite"),
             ),
             macro_store_path: path(
-                "FINANCE_MACRO_STORE_PATH",
+                "INVESTING_MACRO_STORE_PATH",
                 data_dir.join("macro_store.json"),
             ),
             macro_disable_fred: var("MACRO_DISABLE_FRED").is_some_and(|v| {
@@ -132,28 +129,28 @@ impl Config {
                     "1" | "true" | "yes" | "isolated" | "offline"
                 )
             }),
-            macro_watcher: var("FINANCE_MACRO_WATCHER").is_none_or(|v| truthy(&v)),
+            macro_watcher: var("INVESTING_MACRO_WATCHER").is_none_or(|v| truthy(&v)),
             research_db_path,
             research_scraper_watchlist: path(
-                "FINANCE_RESEARCH_WATCHLIST",
+                "INVESTING_RESEARCH_WATCHLIST",
                 data_dir.join("research/watchlist.csv"),
             ),
             idx_emitens_csv: path(
-                "FINANCE_IDX_EMITENS_CSV",
+                "INVESTING_IDX_EMITENS_CSV",
                 home.join("tools/idx-financial-scraper/data/emitens.csv"),
             ),
-            idx_xbrl_dir: path("FINANCE_IDX_XBRL_DIR", idx_scraper_dir.join("data/XBRL")),
+            idx_xbrl_dir: path("INVESTING_IDX_XBRL_DIR", idx_scraper_dir.join("data/XBRL")),
             research_packs_dir: path(
-                "FINANCE_RESEARCH_PACKS_DIR",
+                "INVESTING_RESEARCH_PACKS_DIR",
                 PathBuf::from("research/packs"),
             ),
             research_documents_dir: data_dir.join("research/documents"),
             research_pdf_filings_dir: path(
-                "FINANCE_PDF_FILINGS_DIR",
+                "INVESTING_PDF_FILINGS_DIR",
                 data_dir.join("research/pdf-filings"),
             ),
             idx_scraper_dir,
-            research_disable_scheduler: var("FINANCE_RESEARCH_DISABLE_SCHEDULER")
+            research_disable_scheduler: var("INVESTING_RESEARCH_DISABLE_SCHEDULER")
                 .is_some_and(|v| truthy(&v)),
             data_dir,
         })
@@ -164,7 +161,6 @@ impl Config {
         Self {
             token: "t".repeat(MIN_TOKEN_LEN),
             bind: "127.0.0.1:0".parse().unwrap(),
-            finance_spreadsheet_id: "test-finance".into(),
             portfolio_spreadsheet_id: "test-portfolio".into(),
             google_credentials_path: dir.join("missing-credentials.json"),
             data_dir: dir.to_path_buf(),
@@ -200,7 +196,7 @@ fn expand_home(v: &str, home: &Path) -> PathBuf {
     }
 }
 
-/// The directory of original-filing JSON files (`FINANCE_PDF_FILINGS_DIR`), for the CLI.
+/// The directory of original-filing JSON files (`INVESTING_PDF_FILINGS_DIR`), for the CLI.
 pub fn pdf_filings_dir(get: impl Fn(&str) -> Option<String>) -> PathBuf {
     let var = |k: &str| {
         get(k)
@@ -210,15 +206,15 @@ pub fn pdf_filings_dir(get: impl Fn(&str) -> Option<String>) -> PathBuf {
     let home = var("HOME").map(PathBuf::from).unwrap_or_default();
     let path =
         |k: &str, default: PathBuf| var(k).map(|v| expand_home(&v, &home)).unwrap_or(default);
-    let data_dir = path("FINANCE_DATA_DIR", home.join("finance-app-data"));
+    let data_dir = path("INVESTING_DATA_DIR", home.join("investing-app-data"));
     path(
-        "FINANCE_PDF_FILINGS_DIR",
+        "INVESTING_PDF_FILINGS_DIR",
         data_dir.join("research/pdf-filings"),
     )
 }
 
 /// Path to the app-owned research store (`research.sqlite`), honouring
-/// `FINANCE_RESEARCH_DB_PATH` / `FINANCE_DATA_DIR` with the same defaults as `Config`.
+/// `INVESTING_RESEARCH_DB_PATH` / `INVESTING_DATA_DIR` with the same defaults as `Config`.
 /// Standalone so CLI subcommands can find the database without the full server env.
 pub fn research_db_path(get: impl Fn(&str) -> Option<String>) -> PathBuf {
     let var = |k: &str| {
@@ -229,8 +225,8 @@ pub fn research_db_path(get: impl Fn(&str) -> Option<String>) -> PathBuf {
     let home = var("HOME").map(PathBuf::from).unwrap_or_default();
     let path =
         |k: &str, default: PathBuf| var(k).map(|v| expand_home(&v, &home)).unwrap_or(default);
-    let data_dir = path("FINANCE_DATA_DIR", home.join("finance-app-data"));
-    path("FINANCE_RESEARCH_DB_PATH", data_dir.join("research.sqlite"))
+    let data_dir = path("INVESTING_DATA_DIR", home.join("investing-app-data"));
+    path("INVESTING_RESEARCH_DB_PATH", data_dir.join("research.sqlite"))
 }
 
 #[cfg(test)]
@@ -255,39 +251,32 @@ mod tests {
             ConfigError::Token
         );
         assert_eq!(
-            Config::from_lookup(env(&[("FINANCE_APP_TOKEN", "short")])).unwrap_err(),
+            Config::from_lookup(env(&[("INVESTING_APP_TOKEN", "short")])).unwrap_err(),
             ConfigError::Token
         );
     }
 
     #[test]
-    fn spreadsheet_ids_are_required() {
-        let err = Config::from_lookup(env(&[("FINANCE_APP_TOKEN", TOKEN)])).unwrap_err();
-        assert_eq!(err, ConfigError::Missing("FINANCE_SPREADSHEET_ID"));
-        let err = Config::from_lookup(env(&[
-            ("FINANCE_APP_TOKEN", TOKEN),
-            ("FINANCE_SPREADSHEET_ID", "a"),
-        ]))
-        .unwrap_err();
+    fn portfolio_spreadsheet_id_is_required() {
+        let err = Config::from_lookup(env(&[("INVESTING_APP_TOKEN", TOKEN)])).unwrap_err();
         assert_eq!(err, ConfigError::Missing("PORTFOLIO_SPREADSHEET_ID"));
     }
 
     #[test]
     fn defaults_and_home_expansion() {
         let cfg = Config::from_lookup(env(&[
-            ("FINANCE_APP_TOKEN", TOKEN),
-            ("FINANCE_SPREADSHEET_ID", "a"),
+            ("INVESTING_APP_TOKEN", TOKEN),
             ("PORTFOLIO_SPREADSHEET_ID", "b"),
             ("HOME", "/h"),
-            ("FINANCE_IDX_DB_PATH", "~/x.sqlite"),
+            ("INVESTING_IDX_DB_PATH", "~/x.sqlite"),
         ]))
         .unwrap();
-        assert_eq!(cfg.bind.to_string(), "127.0.0.1:8787");
-        assert_eq!(cfg.data_dir, PathBuf::from("/h/finance-app-data"));
+        assert_eq!(cfg.bind.to_string(), "127.0.0.1:8789");
+        assert_eq!(cfg.data_dir, PathBuf::from("/h/investing-app-data"));
         assert_eq!(cfg.idx_db_path, PathBuf::from("/h/x.sqlite"));
         assert_eq!(
             cfg.macro_store_path,
-            PathBuf::from("/h/finance-app-data/macro_store.json")
+            PathBuf::from("/h/investing-app-data/macro_store.json")
         );
         assert!(!format!("{cfg:?}").contains(TOKEN));
     }
@@ -295,21 +284,20 @@ mod tests {
     #[test]
     fn research_paths_default_under_data_dir() {
         let cfg = Config::from_lookup(env(&[
-            ("FINANCE_APP_TOKEN", TOKEN),
-            ("FINANCE_SPREADSHEET_ID", "a"),
+            ("INVESTING_APP_TOKEN", TOKEN),
             ("PORTFOLIO_SPREADSHEET_ID", "b"),
             ("HOME", "/h"),
-            ("FINANCE_IDX_SCRAPER_DIR", "~/scraper"),
-            ("FINANCE_RESEARCH_DISABLE_SCHEDULER", "1"),
+            ("INVESTING_IDX_SCRAPER_DIR", "~/scraper"),
+            ("INVESTING_RESEARCH_DISABLE_SCHEDULER", "1"),
         ]))
         .unwrap();
         assert_eq!(
             cfg.research_db_path,
-            PathBuf::from("/h/finance-app-data/research.sqlite")
+            PathBuf::from("/h/investing-app-data/research.sqlite")
         );
         assert_eq!(
             cfg.research_scraper_watchlist,
-            PathBuf::from("/h/finance-app-data/research/watchlist.csv")
+            PathBuf::from("/h/investing-app-data/research/watchlist.csv")
         );
         assert_eq!(
             cfg.idx_emitens_csv,
@@ -320,11 +308,11 @@ mod tests {
         assert_eq!(cfg.research_packs_dir, PathBuf::from("research/packs"));
         assert_eq!(
             cfg.research_documents_dir,
-            PathBuf::from("/h/finance-app-data/research/documents")
+            PathBuf::from("/h/investing-app-data/research/documents")
         );
         assert_eq!(
             cfg.research_pdf_filings_dir,
-            PathBuf::from("/h/finance-app-data/research/pdf-filings")
+            PathBuf::from("/h/investing-app-data/research/pdf-filings")
         );
         assert!(cfg.research_disable_scheduler);
     }
@@ -333,9 +321,9 @@ mod tests {
     fn the_config_and_the_cli_resolve_the_pdf_dir_alike() {
         for pairs in [
             vec![("HOME", "/h")],
-            vec![("HOME", "/h"), ("FINANCE_DATA_DIR", "/d")],
-            vec![("HOME", "/h"), ("FINANCE_PDF_FILINGS_DIR", "~/pdf")],
-            vec![("HOME", "/h"), ("FINANCE_PDF_FILINGS_DIR", "  ")],
+            vec![("HOME", "/h"), ("INVESTING_DATA_DIR", "/d")],
+            vec![("HOME", "/h"), ("INVESTING_PDF_FILINGS_DIR", "~/pdf")],
+            vec![("HOME", "/h"), ("INVESTING_PDF_FILINGS_DIR", "  ")],
         ] {
             let lookup = |k: &str| {
                 pairs
@@ -344,22 +332,21 @@ mod tests {
                     .map(|(_, v)| v.to_string())
             };
             let cfg = Config::from_lookup(env(&[
-                ("FINANCE_APP_TOKEN", TOKEN),
-                ("FINANCE_SPREADSHEET_ID", "a"),
+                ("INVESTING_APP_TOKEN", TOKEN),
                 ("PORTFOLIO_SPREADSHEET_ID", "b"),
                 ("HOME", pairs[0].1),
                 (
-                    "FINANCE_DATA_DIR",
+                    "INVESTING_DATA_DIR",
                     pairs
                         .iter()
-                        .find(|(n, _)| *n == "FINANCE_DATA_DIR")
-                        .map_or("/h/finance-app-data", |p| p.1),
+                        .find(|(n, _)| *n == "INVESTING_DATA_DIR")
+                        .map_or("/h/investing-app-data", |p| p.1),
                 ),
                 (
-                    "FINANCE_PDF_FILINGS_DIR",
+                    "INVESTING_PDF_FILINGS_DIR",
                     pairs
                         .iter()
-                        .find(|(n, _)| *n == "FINANCE_PDF_FILINGS_DIR")
+                        .find(|(n, _)| *n == "INVESTING_PDF_FILINGS_DIR")
                         .map_or("", |p| p.1),
                 ),
             ]))
@@ -383,11 +370,11 @@ mod tests {
             }
         };
         assert_eq!(
-            pdf_filings_dir(get(&[("HOME", "/h"), ("FINANCE_DATA_DIR", "/d")])),
+            pdf_filings_dir(get(&[("HOME", "/h"), ("INVESTING_DATA_DIR", "/d")])),
             PathBuf::from("/d/research/pdf-filings")
         );
         assert_eq!(
-            pdf_filings_dir(get(&[("HOME", "/h"), ("FINANCE_PDF_FILINGS_DIR", "~/pdf")])),
+            pdf_filings_dir(get(&[("HOME", "/h"), ("INVESTING_PDF_FILINGS_DIR", "~/pdf")])),
             PathBuf::from("/h/pdf")
         );
     }
@@ -395,11 +382,10 @@ mod tests {
     #[test]
     fn xbrl_dir_can_be_set_apart_from_the_scraper_dir() {
         let cfg = Config::from_lookup(env(&[
-            ("FINANCE_APP_TOKEN", TOKEN),
-            ("FINANCE_SPREADSHEET_ID", "a"),
+            ("INVESTING_APP_TOKEN", TOKEN),
             ("PORTFOLIO_SPREADSHEET_ID", "b"),
             ("HOME", "/h"),
-            ("FINANCE_IDX_XBRL_DIR", "~/filings"),
+            ("INVESTING_IDX_XBRL_DIR", "~/filings"),
         ]))
         .unwrap();
         assert_eq!(cfg.idx_xbrl_dir, PathBuf::from("/h/filings"));

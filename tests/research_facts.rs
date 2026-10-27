@@ -12,8 +12,8 @@ use axum::body::Body;
 use axum::http::{Request, StatusCode};
 use chrono::{TimeZone, Utc};
 use common::{json_of, TestApp};
-use finance_app::research::store::Store;
-use finance_app::research::xbrl;
+use investing_app::research::store::Store;
+use investing_app::research::xbrl;
 use serde_json::Value;
 use xbrl_fixture::{general_year, Year};
 
@@ -259,7 +259,7 @@ async fn standalone_ttm_and_annual_views_with_flags_gaps_and_shares() {
     {
         let store = Store::open(&t.cfg.research_db_path).unwrap();
         store
-            .set_shares_manual(&finance_app::research::store::ManualShares {
+            .set_shares_manual(&investing_app::research::store::ManualShares {
                 ticker: "AAAA".into(),
                 shares: 5_000_000.0,
                 as_of: "2025-01-15".into(),
@@ -439,8 +439,8 @@ async fn restated_fy_is_counted_as_restated_year_not_as_reconciliation_failure()
 /// itself a sign conflict stays a failure; per-share elements are in neither.
 #[tokio::test]
 async fn restated_years_and_failures_partition_the_q4_cells() {
-    use finance_app::research::derive::{Cell, CellInputs, Flag, Restatement};
-    use finance_app::research::xbrl::CtxKind;
+    use investing_app::research::derive::{Cell, CellInputs, Flag, Restatement};
+    use investing_app::research::xbrl::CtxKind;
     use std::collections::BTreeSet;
 
     let dir = tempfile::tempdir().unwrap();

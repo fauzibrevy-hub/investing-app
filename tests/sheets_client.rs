@@ -6,7 +6,7 @@ use axum::extract::{Path, Query, State};
 use axum::http::HeaderMap;
 use axum::routing::{get, post};
 use axum::{Json, Router};
-use finance_app::sheets::{SheetsClient, SheetsError, TokenSource};
+use investing_app::sheets::{SheetsClient, SheetsError, TokenSource};
 use serde_json::{json, Value};
 
 #[derive(Default)]

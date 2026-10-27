@@ -2,8 +2,8 @@
 //! `backend/api/thesis_bank.py`.
 //!
 //! - `summary`, `{ticker}`, `macro`: read-only parsers over the Obsidian
-//!   vault (`FINANCE_VAULT_ROOT`); the app never writes to the vault.
-//! - `drafts*`: the drafts JSON store (`FINANCE_THESIS_DRAFTS_PATH`) plus
+//!   vault (`INVESTING_VAULT_ROOT`); the app never writes to the vault.
+//! - `drafts*`: the drafts JSON store (`INVESTING_THESIS_DRAFTS_PATH`) plus
 //!   read-only vault theses.
 
 mod dossier;

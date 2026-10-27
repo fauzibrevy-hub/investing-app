@@ -15,13 +15,13 @@ use axum::body::Body;
 use axum::http::{HeaderMap, Method, Request, StatusCode};
 use axum::Router;
 use chrono::{Datelike, NaiveDate, TimeZone, Utc};
-use finance_app::research::api::{self, ApiState, Options};
-use finance_app::research::engine::Engine;
-use finance_app::research::packs::Packs;
-use finance_app::research::store::{CorpEventRow, EventKind, PriceBar, Store};
-use finance_app::research::universe::{add, sync, AddRequest, HeldPosition, Role};
-use finance_app::research::valuation::{EMBEDDED_RULES, RULES_FILE};
-use finance_app::research::xbrl;
+use investing_app::research::api::{self, ApiState, Options};
+use investing_app::research::engine::Engine;
+use investing_app::research::packs::Packs;
+use investing_app::research::store::{CorpEventRow, EventKind, PriceBar, Store};
+use investing_app::research::universe::{add, sync, AddRequest, HeldPosition, Role};
+use investing_app::research::valuation::{EMBEDDED_RULES, RULES_FILE};
+use investing_app::research::xbrl;
 use http_body_util::BodyExt;
 use serde_json::{json, Value};
 use tower::ServiceExt;
@@ -138,7 +138,7 @@ fn env() -> Env {
         // is the point-in-time source (D13 step 2); the derived path is covered in
         // research_facts.rs.
         store
-            .set_shares_manual(&finance_app::research::store::ManualShares {
+            .set_shares_manual(&investing_app::research::store::ManualShares {
                 ticker: (*t).into(),
                 shares: 1_000_000.0 * (i as f64 + 1.0),
                 as_of: "2016-10-01".into(),
@@ -451,7 +451,7 @@ async fn a3_3_multiples_ttm_and_cycle_adjusted_side_by_side_with_percentiles_and
     assert_eq!(v["shares"]["count"], 3_000_000.0);
     // A later manual count (a rights issue) takes over from its date on.
     e.store
-        .set_shares_manual(&finance_app::research::store::ManualShares {
+        .set_shares_manual(&investing_app::research::store::ManualShares {
             ticker: "HEVY".into(),
             shares: 2_000_000.0,
             as_of: "2026-01-15".into(),

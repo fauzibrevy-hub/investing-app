@@ -16,9 +16,9 @@ use std::time::{Duration, Instant};
 
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode};
-use finance_app::research::extract::doc::{DocError, Format};
-use finance_app::research::extract::isolated::{self, Limits};
-use finance_app::research::extract::rules::{propose, Target};
+use investing_app::research::extract::doc::{DocError, Format};
+use investing_app::research::extract::isolated::{self, Limits};
+use investing_app::research::extract::rules::{propose, Target};
 use http_body_util::BodyExt;
 use r4_env::{env, Env};
 use serde_json::{json, Value};
@@ -997,12 +997,12 @@ async fn rebuild_replays_superseded_states() {
 
 #[test]
 fn migration_010_keeps_the_rows_of_a_v9_store_and_allows_superseded() {
-    use finance_app::research::store::Store;
+    use investing_app::research::store::Store;
     let dir = tempfile::tempdir().unwrap();
     let db = dir.path().join("research.sqlite");
     let old = Store::open_at_version(&db, 9).unwrap();
     assert_eq!(old.user_version().unwrap(), 9);
-    old.add_document(&finance_app::research::store::DocumentRow {
+    old.add_document(&investing_app::research::store::DocumentRow {
         id: "d".into(),
         ticker: "COAL".into(),
         kind: "laporan".into(),
@@ -1025,7 +1025,7 @@ fn migration_010_keeps_the_rows_of_a_v9_store_and_allows_superseded() {
     let store = Store::open(&db).unwrap();
     assert_eq!(
         store.user_version().unwrap(),
-        finance_app::research::store::latest_version()
+        investing_app::research::store::latest_version()
     );
     assert_eq!(store.proposal("p-old").unwrap().unwrap().status, "rejected");
     store

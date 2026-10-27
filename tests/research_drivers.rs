@@ -18,14 +18,14 @@ use axum::routing::get;
 use axum::Router;
 use chrono::{TimeZone, Utc};
 use common::test_app_with;
-use finance_app::research::packs::Pack;
-use finance_app::research::prices::drivers::{self, DriverFetcher, Family, HttpDrivers};
-use finance_app::research::prices::yahoo::YahooSource;
-use finance_app::research::scheduler::{Clock, Scheduler};
-use finance_app::research::sources::portfolio::HeldProvider;
-use finance_app::research::sources::SourceError;
-use finance_app::research::store::Store;
-use finance_app::research::universe::{add, AddRequest, HeldPosition, Role};
+use investing_app::research::packs::Pack;
+use investing_app::research::prices::drivers::{self, DriverFetcher, Family, HttpDrivers};
+use investing_app::research::prices::yahoo::YahooSource;
+use investing_app::research::scheduler::{Clock, Scheduler};
+use investing_app::research::sources::portfolio::HeldProvider;
+use investing_app::research::sources::SourceError;
+use investing_app::research::store::Store;
+use investing_app::research::universe::{add, AddRequest, HeldPosition, Role};
 use serde_json::{json, Value};
 
 #[derive(Clone, Copy, PartialEq)]
@@ -400,7 +400,7 @@ async fn pack_payloads_list_every_driver_with_a_status_word_and_labelled_proxies
     let db = dir.path().join("research.sqlite");
     {
         let store = Store::open(&db).unwrap();
-        let packs = finance_app::research::packs::Packs::embedded().set();
+        let packs = investing_app::research::packs::Packs::embedded().set();
         for (ticker, pack) in [
             ("BANK", "bank_sharia"),
             ("SHIP", "shipping"),

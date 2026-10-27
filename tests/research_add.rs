@@ -12,8 +12,8 @@ mod xbrl_fixture;
 use std::sync::Arc;
 
 use axum::http::{Method, StatusCode};
-use finance_app::research::api::{self, ApiState, Options};
-use finance_app::research::engine::Engine;
+use investing_app::research::api::{self, ApiState, Options};
+use investing_app::research::engine::Engine;
 use r4_env::{call, env, Env};
 use serde_json::{json, Value};
 use tokio::sync::mpsc;
@@ -297,7 +297,7 @@ async fn peer_cycles_of_any_length_are_refused_on_post_and_put() {
 
 #[tokio::test]
 async fn delete_inside_a_stored_peer_cycle_answers_normally() {
-    use finance_app::research::universe::{Role, UniverseEntry};
+    use investing_app::research::universe::{Role, UniverseEntry};
     let e = env();
     let a = app(&e, Some(EMITENS), None);
     let row = |t: &str, of: &str| UniverseEntry {

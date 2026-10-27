@@ -114,14 +114,14 @@ async fn session_cookie_flow() {
     assert_eq!(
         write.status(),
         StatusCode::FORBIDDEN,
-        "cookie write needs X-Finance-Client"
+        "cookie write needs X-Investing-Client"
     );
 
     let write = t
         .send(
             Request::post("/api/nope")
                 .header("cookie", &cookie)
-                .header("x-finance-client", "web")
+                .header("x-investing-client", "web")
                 .body(Body::empty())
                 .unwrap(),
         )
@@ -150,15 +150,15 @@ async fn get_session_reports_cookie_validity() {
     // No cookie, or a forged/foreign one → 401.
     assert_eq!(t.send(check(None)).await.status(), StatusCode::UNAUTHORIZED);
     assert_eq!(
-        t.send(check(Some("finance_session=v1.1.deadbeef")))
+        t.send(check(Some("investing_session=v1.1.deadbeef")))
             .await
             .status(),
         StatusCode::UNAUTHORIZED
     );
     let other =
-        finance_app::auth::Auth::new(&"z".repeat(32)).issue_session(finance_app::auth::now_secs());
+        investing_app::auth::Auth::new(&"z".repeat(32)).issue_session(investing_app::auth::now_secs());
     assert_eq!(
-        t.send(check(Some(&format!("finance_session={other}"))))
+        t.send(check(Some(&format!("investing_session={other}"))))
             .await
             .status(),
         StatusCode::UNAUTHORIZED

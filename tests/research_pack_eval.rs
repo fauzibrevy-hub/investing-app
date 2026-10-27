@@ -4,7 +4,7 @@
 
 use std::collections::HashMap;
 
-use finance_app::research::packs::{
+use investing_app::research::packs::{
     evaluate, Ctx, Gap, Pack, PackSet, Period, Quarter, Source, View,
 };
 
@@ -254,7 +254,7 @@ fn source() -> MapSource {
     s
 }
 
-fn run(metric: &str, q: Quarter) -> finance_app::research::packs::Outcome {
+fn run(metric: &str, q: Quarter) -> investing_app::research::packs::Outcome {
     let set = packs();
     let src = source();
     let ctx = Ctx {

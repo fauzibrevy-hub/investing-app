@@ -16,11 +16,11 @@ use axum::body::Body;
 use axum::http::{Method, Request, StatusCode};
 use chrono::{TimeZone, Utc};
 use common::{json_of, TestApp};
-use finance_app::research::kpi::KpiValue;
-use finance_app::research::packs::Packs;
-use finance_app::research::store::Store;
-use finance_app::research::universe::{add, sync, AddRequest, HeldPosition, Role};
-use finance_app::research::xbrl;
+use investing_app::research::kpi::KpiValue;
+use investing_app::research::packs::Packs;
+use investing_app::research::store::Store;
+use investing_app::research::universe::{add, sync, AddRequest, HeldPosition, Role};
+use investing_app::research::xbrl;
 use serde_json::{json, Value};
 
 const NOW: &str = "2026-10-24T09:00:00+00:00";

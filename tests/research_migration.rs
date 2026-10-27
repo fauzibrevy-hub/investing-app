@@ -7,8 +7,8 @@
 
 use std::path::Path;
 
-use finance_app::research::store::{latest_version, Store, LOG_FILE};
-use finance_app::research::universe;
+use investing_app::research::store::{latest_version, Store, LOG_FILE};
+use investing_app::research::universe;
 use rusqlite::{params, Connection, OpenFlags};
 
 const NOTE_TEXT: &str = "Catatan sintetis: margin membaik dua kuartal berturut-turut.";
@@ -411,7 +411,7 @@ fn universe_sync_keeps_canon_columns_peers_and_manual_role() {
         ("2026-06-30", 11.0),
     ] {
         store
-            .set_shares_manual(&finance_app::research::store::ManualShares {
+            .set_shares_manual(&investing_app::research::store::ManualShares {
                 ticker: "AAAA".into(),
                 shares,
                 as_of: as_of.into(),
