@@ -162,6 +162,8 @@ fn run_script(data: &Path, scraper: &Path) -> i32 {
     let script = Path::new(env!("CARGO_MANIFEST_DIR")).join("deploy/scraper.sh");
     Command::new("bash")
         .arg(script)
+        // HOME too: any default the script falls back to stays in the test dir.
+        .env("HOME", data)
         .env("INVESTING_DATA_DIR", data)
         .env("INVESTING_IDX_SCRAPER_DIR", scraper)
         .env("PYTHON", "python3")
@@ -328,6 +330,7 @@ impl Rig {
     fn command(&self) -> Command {
         let mut c = Command::new("bash");
         c.arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("deploy/scraper.sh"))
+            .env("HOME", self.t.dir.path())
             .env("INVESTING_DATA_DIR", self.t.dir.path())
             .env("INVESTING_IDX_SCRAPER_DIR", &self.scr)
             .env("PYTHON", "python3")
