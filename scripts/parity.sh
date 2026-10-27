@@ -15,6 +15,8 @@
 # NUMBER RULE (finance-app scripts/parity.sh:28, owner decision): compare values, not
 # representation. jq 1.7 preserves number literals, so 13000.0 and 13000 would diff as
 # text; every integral number becomes an integer and real fractions stay untouched.
+# No -e on purpose: a failing curl or jq (an unreachable side, a non-JSON body) is a DIFF to
+# report and count, not a reason to abort the run.
 set -uo pipefail
 
 die() {

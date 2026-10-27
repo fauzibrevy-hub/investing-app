@@ -4,6 +4,8 @@
 # a scratch HOME, a mktemp data dir and a throwaway token. No network beyond what macro/trigger does
 # with MACRO_DISABLE_FRED=1. Binaries are stopped by PID, never by name (other worktrees run the
 # same binary). Exit 0 only when every step matched, 1 otherwise.
+# No -e on purpose: the scripts under test exit non-zero in the negative steps (7, 9), and each
+# step records its own pass or fail instead of aborting the run.
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 2
 
