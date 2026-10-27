@@ -2,11 +2,10 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../lib/api";
 import { AuthGate } from "./AuthGate";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BackHeader } from "./BackHeader";
 import { BottomNav } from "./BottomNav";
-import { DesktopSidebar } from "./DesktopSidebar";
-import { Fab } from "./Fab";
 import { UnlockScreen } from "./UnlockScreen";
-import { ROUTE_TITLES } from "./nav";
 
 let fetchMock: ReturnType<typeof vi.fn>;
 beforeEach(() => {
@@ -17,55 +16,58 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe("BottomNav", () => {
   it("nav berlabel, 4 item, item aktif aria-current + accent", () => {
-    render(<BottomNav active="thesis" />);
+    render(<BottomNav active="portofolio" />);
     const nav = screen.getByRole("navigation", { name: "Navigasi utama" });
     const links = nav.querySelectorAll("a");
     expect(links).toHaveLength(4);
-    const active = screen.getByRole("link", { name: "Investasi" });
+    expect([...links].map((a) => a.getAttribute("href"))).toEqual(["#/beranda", "#/portofolio", "#/perusahaan", "#/alat"]);
+    const active = screen.getByRole("link", { name: "Portofolio" });
     expect(active).toHaveAttribute("aria-current", "page");
     expect(active).toHaveClass("text-accent", "font-bold");
     expect(screen.getByRole("link", { name: "Beranda" })).toHaveClass("text-nav-inactive");
+    expect(nav).toHaveClass("grid-cols-4");
+    expect(screen.queryByRole("button", { name: "Catat transaksi" })).not.toBeInTheDocument();
+  });
+
+  it("tautan tab memakai target dari shell dan klik biasa diteruskan ke onSelect", () => {
+    const onSelect = vi.fn();
+    render(<BottomNav active="beranda" targets={{ perusahaan: "/perusahaan/BUMI" }} onSelect={onSelect} />);
+    const link = screen.getByRole("link", { name: "Perusahaan" });
+    expect(link).toHaveAttribute("href", "#/perusahaan/BUMI");
+    fireEvent.click(link);
+    expect(onSelect).toHaveBeenCalledWith("perusahaan", expect.anything());
+    fireEvent.click(link, { metaKey: true });
+    expect(onSelect).toHaveBeenCalledTimes(1);
   });
 });
 
-describe("entri Riset di navigasi", () => {
-  it("bottom nav dan sidebar menunjuk ke #/riset dan aktif di riset, research, dan idx", () => {
-    for (const key of ["riset", "research", "idx"] as const) {
-      const { unmount } = render(<BottomNav active={key} />);
-      const link = screen.getByRole("link", { name: "Riset" });
-      expect(link).toHaveAttribute("href", "#/riset");
-      expect(link).toHaveAttribute("aria-current", "page");
-      unmount();
-    }
-    const { unmount } = render(<DesktopSidebar active="riset" />);
-    expect(screen.getByRole("link", { name: "Riset" })).toHaveAttribute("href", "#/riset");
-    expect(screen.getByRole("link", { name: "Riset" })).toHaveAttribute("aria-current", "page");
-    unmount();
-    expect(ROUTE_TITLES.riset).toBe("Riset");
-  });
-});
+function Where() {
+  const { pathname, search } = useLocation();
+  return <p data-testid="where">{pathname + search}</p>;
+}
 
-describe("Fab", () => {
-  it("aria-label + loading aria-busy", () => {
-    const { rerender } = render(<Fab />);
-    expect(screen.getByRole("button", { name: "Catat transaksi" })).toHaveClass("h-[52px]", "w-[52px]");
-    rerender(<Fab loading />);
-    expect(screen.getByRole("button", { name: "Catat transaksi" })).toHaveAttribute("aria-busy", "true");
-  });
-});
+function renderBack(entry: string) {
+  return render(
+    <MemoryRouter initialEntries={[entry]}>
+      <Routes>
+        <Route path="*" element={<><BackHeader /><Where /></>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
 
-describe("DesktopSidebar", () => {
-  it("5 entri tanpa Macro; item 44 px hit dengan visual 40 px; error menampilkan Coba lagi", () => {
-    const onRefresh = vi.fn();
-    const { rerender } = render(<DesktopSidebar active="home" />);
-    const links = screen.getByRole("navigation", { name: "Navigasi utama" }).querySelectorAll("a");
-    expect(links).toHaveLength(5);
-    expect([...links].map((a) => a.getAttribute("href"))).not.toContain("#/macro");
-    expect(links[0]).toHaveClass("h-11");
-    expect(links[0].firstElementChild).toHaveClass("h-10", "bg-surface-icon", "text-accent");
-    rerender(<DesktopSidebar active="home" dataStatus="error" onRefresh={onRefresh} />);
-    fireEvent.click(screen.getByRole("button", { name: "Coba lagi" }));
-    expect(onRefresh).toHaveBeenCalled();
+describe("BackHeader", () => {
+  it("label tab pemilik dari ?from=, nama aksesibel Kembali ke …", () => {
+    renderBack("/perusahaan/BUMI?from=portofolio");
+    const back = screen.getByRole("link", { name: "Kembali ke Portofolio" });
+    expect(back).toHaveTextContent("Portofolio");
+    expect(back).toHaveClass("h-11");
+  });
+
+  it("deep link dingin: tab rute sendiri, ke akar tab", () => {
+    renderBack("/alat/kalibrasi");
+    fireEvent.click(screen.getByRole("link", { name: "Kembali ke Alat" }));
+    expect(screen.getByTestId("where")).toHaveTextContent(/^\/alat$/);
   });
 });
 
@@ -95,6 +97,36 @@ describe("UnlockScreen", () => {
   });
 });
 
+describe("UnlockScreen: baris sandbox (D7)", () => {
+  const SANDBOX_LINE = "Uji coba: perubahan di sini tidak dibawa ke data asli.";
+  const json = (body: unknown, headers: Record<string, string> = {}) =>
+    new Response(JSON.stringify(body), { status: 200, headers: { "Content-Type": "application/json", ...headers } });
+
+  it("tampil saat GET /api/health berisi sandbox: true", async () => {
+    fetchMock.mockResolvedValue(json({ status: "ok", sandbox: true }));
+    render(<UnlockScreen />);
+    expect(screen.getByRole("heading", { name: "Buka kunci Investasi" })).toBeInTheDocument();
+    expect(await screen.findByText(SANDBOX_LINE)).toBeInTheDocument();
+    expect(fetchMock.mock.calls[0][0]).toBe("/api/health");
+  });
+
+  it("tersembunyi tanpa kunci sandbox, saat health gagal, dan untuk salinan cache SW", async () => {
+    for (const reply of [
+      () => fetchMock.mockResolvedValue(json({ status: "ok" })),
+      () => fetchMock.mockRejectedValue(new TypeError("Failed to fetch")),
+      () => fetchMock.mockResolvedValue(json({ status: "ok", sandbox: true }, { "X-Investing-Cache-Date": "2026-10-27T00:00:00Z" })),
+    ]) {
+      reply();
+      const { unmount } = render(<UnlockScreen />);
+      await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/health", expect.anything()));
+      await act(async () => {});
+      expect(screen.queryByText(SANDBOX_LINE)).not.toBeInTheDocument();
+      unmount();
+      fetchMock.mockReset();
+    }
+  });
+});
+
 describe("AuthGate", () => {
   it("sesi belum terjawab → navigasi sudah tampil dengan penanda memuat, tanpa isi app", async () => {
     fetchMock.mockReturnValue(new Promise(() => {}));
@@ -114,7 +146,7 @@ describe("AuthGate", () => {
   it("401 → layar buka kunci", async () => {
     fetchMock.mockResolvedValue(new Response("{}", { status: 401, headers: { "Content-Type": "application/json" } }));
     render(<AuthGate>app</AuthGate>);
-    expect(await screen.findByRole("heading", { name: "Buka kunci Finance" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Buka kunci Investasi" })).toBeInTheDocument();
   });
 
   it("offline → app tetap dibuka (cache SW); 401 berikutnya mengunci", async () => {

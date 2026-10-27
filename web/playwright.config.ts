@@ -1,9 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Riset R6.4 (plan §7.2, "Visual and a11y"): aplikasi hasil `npm run build` disajikan `vite preview`; API Riset ditiru
- * dari `tests/fixtures/research/canon/*.json` lewat `page.route` (e2e/research/mockApi.ts). Tidak ada backend.
- * Jalankan `npm run build` lebih dulu, lalu `npm run e2e`.
+ * D15 (plan §3.2): the built app is served by `vite preview`; the API is mocked with `page.route` from
+ * `tests/fixtures/**` and `e2e/fixtures/**` (e2e/mockApi.ts). No backend, no live data.
+ * One project, WebKit with iPhone 15 emulation (D13; CI installs WebKit only): not iOS Safari (no keyboard, URL bar
+ * or VoiceOver), so it is the automated floor and `docs/iphone-checklist.md` stays the manual device list (D16).
+ * Run `npm run build` first, then `npm run e2e`.
  */
 const PORT = 4173;
 
@@ -16,16 +18,11 @@ export default defineConfig({
   reporter: [["list"]],
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
-    ...devices["Desktop Chrome"],
-    // Service worker aplikasi akan melewati `page.route`; layar Riset diuji tanpa SW.
+    // The app's service worker would bypass `page.route`; the screens are tested without it.
     serviceWorkers: "block",
     reducedMotion: "reduce",
   },
-  projects: [
-    { name: "chromium" },
-    // WebKit (macOS) dengan emulasi iPhone 15: bukan iOS Safari (tanpa papan ketik, bilah URL, VoiceOver). Hanya tes tata letak.
-    { name: "webkit-iphone15", testMatch: "**/layout.e2e.ts", use: { ...devices["iPhone 15"] } },
-  ],
+  projects: [{ name: "webkit-iphone15", use: { ...devices["iPhone 15"] } }],
   webServer: {
     command: `npx vite preview --host 127.0.0.1 --port ${PORT} --strictPort`,
     url: `http://127.0.0.1:${PORT}`,

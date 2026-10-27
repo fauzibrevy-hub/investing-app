@@ -1,95 +1,72 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import { useLocation } from "react-router-dom";
-import { useIsDesktop } from "../lib/useMediaQuery";
+import { useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BottomNav } from "./BottomNav";
-import { DesktopSidebar } from "./DesktopSidebar";
-import { DetailPanel } from "./DetailPanel";
-import { Fab } from "./Fab";
 import { OfflineBanner } from "./OfflineBanner";
 import { UpdateBanner } from "./UpdateBanner";
-import { ROUTE_TITLES, type RouteKey } from "./nav";
+import { locationHash, navStore, owner, restoreScroll, TABS, tabTarget, type Tab } from "./navState";
 
-interface DetailContent {
-  title: string;
-  content: ReactNode;
-  wide?: boolean;
-}
+/**
+ * Rule 5 of design.md §2.4: on every location change save the scroll of the hash being left, write the new hash to its
+ * owner's memory, then on the next frame scroll to the new hash's saved position (0 if none). The position is tracked
+ * from scroll events, because by the time the new route has rendered the document may already be shorter.
+ */
+function useNavMemory(hash: string) {
+  const current = useRef<{ hash: string; y: number } | null>(null);
 
-interface ShellApi {
-  /** Desktop: buka panel detail 380 px. Mobile: layar P3 menavigasi ke layar baru sendiri. */
-  openDetail: (detail: DetailContent) => void;
-  closeDetail: () => void;
-  isDesktop: boolean;
-}
+  useEffect(() => {
+    const before = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    const onScroll = () => {
+      if (current.current) current.current.y = window.scrollY;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.history.scrollRestoration = before;
+    };
+  }, []);
 
-const ShellContext = createContext<ShellApi>({ openDetail: () => {}, closeDetail: () => {}, isDesktop: false });
-export const useShell = () => useContext(ShellContext);
-
-export function routeKeyFromPath(pathname: string): RouteKey | null {
-  const key = pathname.split("/")[1] as RouteKey;
-  return key in ROUTE_TITLES ? key : null;
-}
-
-interface AppShellProps {
-  children: ReactNode;
-  /** Aksi FAB / tombol "Catat transaksi" (sheet dibangun di P3). */
-  onAdd?: () => void;
-  sidebar?: { updatedAt?: Date | null; status?: "ready" | "loading" | "error"; onRefresh?: () => void; refreshing?: boolean };
+  useLayoutEffect(() => {
+    const prev = current.current;
+    if (prev && prev.hash !== hash) navStore.saveScroll(prev.hash, prev.y);
+    navStore.visit(hash);
+    const target = restoreScroll(navStore, hash);
+    current.current = { hash, y: target ?? window.scrollY };
+    if (target === null) return;
+    const frame = requestAnimationFrame(() => window.scrollTo(0, target));
+    return () => cancelAnimationFrame(frame);
+  }, [hash]);
 }
 
 /**
- * Dua layout berbeda (kontrak §2.4): < 1024 px kolom maks 480 px + bottom nav + FAB;
- * ≥ 1024 px sidebar 232 px + konten (padding 40, maks 1040) + panel detail 380 px.
+ * Mobile layout only, at every width (D13, design.md §1, §5): one `max-w-mobile` column and the bottom bar,
+ * fixed and centred with the column.
  */
-export function AppShell({ children, onAdd, sidebar }: AppShellProps) {
-  const isDesktop = useIsDesktop();
-  const active = routeKeyFromPath(useLocation().pathname);
-  const [detail, setDetail] = useState<DetailContent | null>(null);
-  const closeDetail = useCallback(() => setDetail(null), []);
-  const api = useMemo<ShellApi>(() => ({ openDetail: setDetail, closeDetail, isDesktop }), [closeDetail, isDesktop]);
+export function AppShell({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
+  const hash = locationHash(useLocation());
+  const active = owner(hash);
+  useNavMemory(hash);
 
-  if (isDesktop) {
-    return (
-      <ShellContext.Provider value={api}>
-        <div className="flex h-dvh overflow-hidden bg-bg">
-          <DesktopSidebar
-            active={active}
-            className="shrink-0"
-            updatedAt={sidebar?.updatedAt}
-            dataStatus={sidebar?.status}
-            onRefresh={sidebar?.onRefresh}
-            refreshing={sidebar?.refreshing}
-          />
-          {/* `relative`: elemen `.sr-only` (absolute) di dalam konten ikut terkurung di kotak gulir `main`, bukan memanjangkan dokumen. */}
-          <main className="relative min-w-0 flex-1 overflow-y-auto p-10">
-            <div className="mx-auto flex max-w-content flex-col gap-6">
-              <UpdateBanner />
-              <OfflineBanner />
-              {children}
-            </div>
-          </main>
-          {detail ? (
-            <DetailPanel open title={detail.title} wide={detail.wide} onClose={closeDetail} className="xl:static xl:shrink-0">
-              {detail.content}
-            </DetailPanel>
-          ) : null}
-        </div>
-      </ShellContext.Provider>
-    );
-  }
+  const targets = Object.fromEntries(TABS.map((tab) => [tab, tabTarget(navStore, tab, active)])) as Record<Tab, string>;
+  const select = (tab: Tab) => {
+    const target = tabTarget(navStore, tab, active);
+    // Rule 7: the active tab goes to its root at the top, forgetting where the root was left.
+    if (tab === active) navStore.forgetScroll(target);
+    if (target === hash) window.scrollTo(0, 0);
+    else navigate(target);
+  };
 
   return (
-    <ShellContext.Provider value={api}>
+    <>
       <main className="mx-auto min-h-dvh max-w-mobile bg-bg pb-[calc(106px+env(safe-area-inset-bottom))] pl-[var(--gutter-left)] pr-[var(--gutter-right)] pt-[calc(env(safe-area-inset-top)+12px)]">
         <UpdateBanner className="mb-4" />
         <OfflineBanner className="mb-4" />
         {children}
       </main>
       <div className="fixed inset-x-0 z-20 mx-auto w-[calc(min(100vw,480px)-30px)]" style={{ bottom: "var(--nav-bottom)" }}>
-        <BottomNav active={active} />
-        {/* Pusat FAB sejajar tepi atas nav (menonjol 26 px). */}
-        <Fab onClick={onAdd} className="absolute left-1/2 top-[-26px] -translate-x-1/2" />
+        <BottomNav active={active} targets={targets} onSelect={select} />
       </div>
-    </ShellContext.Provider>
+    </>
   );
 }

@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
  * Mode sembunyi nominal (design.md §3.1 blok 2, §6.8). Preferensi tampilan ini disimpan di
  * localStorage (bukan data sensitif); token tidak pernah disimpan di sini.
  */
-const STORAGE_KEY = "finance.hideAmounts";
+const STORAGE_KEY = "investing.hideAmounts";
 
 interface HideAmountsValue {
   hidden: boolean;

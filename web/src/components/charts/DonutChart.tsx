@@ -3,7 +3,6 @@ import { catColor } from "../../lib/categories";
 import { cn } from "../../lib/cn";
 import { formatPercent, formatRupiah } from "../../lib/money";
 import { HIDDEN_ARIA_LABEL, useHideAmounts } from "../../lib/privacy";
-import { useIsDesktop } from "../../lib/useMediaQuery";
 import { useOverflow } from "../../lib/useOverflow";
 import { Button } from "../Button";
 import type { LoadState } from "../Card";
@@ -28,7 +27,7 @@ export interface DonutChartProps {
   countLabel?: (count: number) => string;
   status?: LoadState;
   onRetry?: () => void;
-  /** Default mengikuti breakpoint (164 px mobile, 220 px desktop). */
+  /** Default 164 px (mobile, D13); 220 px hanya bila diminta. */
   size?: "mobile" | "desktop";
   /** Indeks segmen terpilih (terkontrol), mis. untuk menyorot baris di daftar. */
   selected?: number | null;
@@ -46,14 +45,13 @@ export function DonutChart({
   countLabel = (n) => `${n} kategori`,
   status = "ready",
   onRetry,
-  size,
+  size = "mobile",
   selected: selectedProp,
   onSelectedChange,
   ariaLabel,
   className,
 }: DonutChartProps) {
-  const isDesktop = useIsDesktop();
-  const { diameter, thickness } = DONUT_SIZES[size ?? (isDesktop ? "desktop" : "mobile")];
+  const { diameter, thickness } = DONUT_SIZES[size];
   const ring = useMemo(() => ringGeometry(diameter, thickness), [diameter, thickness]);
   const box = diameter + HIT_EXTRA * 2;
   const c = box / 2;

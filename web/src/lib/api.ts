@@ -1,15 +1,15 @@
 /**
  * Klien API (prd.md §5, L3-BRIEF §2).
  * - Path selalu relatif `/api/...` (satu origin dengan backend; tanpa host/port).
- * - Auth lewat cookie `finance_session` (HttpOnly) → `credentials: "same-origin"`.
+ * - Auth lewat cookie `investing_session` (HttpOnly) → `credentials: "same-origin"`.
  * - Token hanya dikirim sekali ke `POST /api/session`; tidak pernah disimpan di sini.
- * - Header `X-Finance-Client: web` dikirim di setiap request (wajib untuk tulis).
+ * - Header `X-Investing-Client: web` dikirim di setiap request (wajib untuk tulis).
  */
 
-export const CLIENT_HEADER = "X-Finance-Client";
+export const CLIENT_HEADER = "X-Investing-Client";
 export const CLIENT_VALUE = "web";
 /** Diisi service worker saat respons diambil dari cache (design.md §10). Nilai: ISO 8601. */
-export const CACHE_DATE_HEADER = "X-Finance-Cache-Date";
+export const CACHE_DATE_HEADER = "X-Investing-Cache-Date";
 
 export type ApiErrorKind =
   | "unauthorized" // 401
@@ -239,7 +239,7 @@ export function newIdempotencyKey(): string {
 /**
  * Tukar token dengan cookie sesi. Token hanya hidup di argumen fungsi ini;
  * tidak disimpan di localStorage, sessionStorage, atau variabel modul.
- * ASUMSI bentuk body: `{ "token": "<FINANCE_APP_TOKEN>" }`.
+ * ASUMSI bentuk body: `{ "token": "<INVESTING_APP_TOKEN>" }`.
  */
 export async function createSession(token: string): Promise<void> {
   await request("/api/session", { method: "POST", body: { token } });
@@ -258,5 +258,29 @@ export async function checkSession(): Promise<SessionState> {
   } catch (err) {
     if (err instanceof ApiError && err.kind === "unauthorized") return "invalid";
     throw err;
+  }
+}
+
+/**
+ * Backend sandbox? (design.md §3.6, D7): `GET /api/health`, satu-satunya rute terbuka, berisi `"sandbox": true` hanya
+ * di bawah `INVESTING_SANDBOX=1`. Gagal, bukan 2xx, atau salinan cache service worker → false: baris sandbox tetap tersembunyi.
+ */
+export async function checkSandbox(timeoutMs = 4_000): Promise<boolean> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch("/api/health", {
+      headers: { Accept: "application/json", [CLIENT_HEADER]: CLIENT_VALUE },
+      credentials: "same-origin",
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    if (!res.ok || res.headers.get(CACHE_DATE_HEADER)) return false;
+    const body = (await res.json()) as { sandbox?: unknown } | null;
+    return body?.sandbox === true;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
   }
 }

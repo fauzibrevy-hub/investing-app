@@ -2,7 +2,6 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type Keyb
 import { cn } from "../../lib/cn";
 import { formatRupiah } from "../../lib/money";
 import { HIDDEN_ARIA_LABEL, useHideAmounts } from "../../lib/privacy";
-import { useIsDesktop } from "../../lib/useMediaQuery";
 import { Button } from "../Button";
 import type { LoadState } from "../Card";
 import {
@@ -56,13 +55,12 @@ export function TrendChart({
   formatAxis = defaultFormatAxis,
   status = "ready",
   onRetry,
-  size,
+  size = "mobile",
   ariaLabel,
   className,
   onActiveChange,
 }: TrendChartProps) {
-  const isDesktop = useIsDesktop();
-  const plotHeight = TREND_LAYOUT.plotHeight[size ?? (isDesktop ? "desktop" : "mobile")];
+  const plotHeight = TREND_LAYOUT.plotHeight[size];
   const { hidden } = useHideAmounts();
   const fadeId = `trend-fade-${useId().replace(/:/g, "")}`;
 

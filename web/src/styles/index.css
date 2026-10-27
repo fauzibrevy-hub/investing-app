@@ -11,10 +11,9 @@
     -webkit-tap-highlight-color: transparent;
     /*
      * WCAG 2.4.11: di ponsel halaman menggulir di dokumen dan nav bawah (tetap) menutupi tepi bawah layar. Fokus papan ketik
-     * yang digulirkan peramban berhenti di atas nav: tinggi nav + jarak bawahnya (area aman) + tonjolan FAB 26 px.
-     * Di desktop yang menggulir `<main>`, `html` tidak menggulir, jadi aturan ini tidak berpengaruh.
+     * yang digulirkan peramban berhenti di atas nav: tinggi nav + jarak bawahnya (area aman). Tanpa FAB (D13).
      */
-    scroll-padding-bottom: calc(var(--nav-height) + var(--nav-bottom) + 26px + 8px);
+    scroll-padding-bottom: calc(var(--nav-height) + var(--nav-bottom) + 8px);
   }
   body {
     margin: 0;

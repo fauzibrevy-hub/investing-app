@@ -1,34 +1,23 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Spinner } from "../components/Spinner";
 import { ApiError, checkSession, onUnauthorized } from "../lib/api";
-import { useIsDesktop } from "../lib/useMediaQuery";
-import { routeKeyFromPath } from "./AppShell";
 import { BottomNav } from "./BottomNav";
-import { DesktopSidebar } from "./DesktopSidebar";
+import { owner } from "./navState";
 import { UnlockScreen } from "./UnlockScreen";
 
 type GateState = "checking" | "locked" | "expired" | "unlocked";
 
 /**
  * Kerangka selama sesi diperiksa (bisa sampai 6 detik di jaringan setengah mati): navigasi sudah tampil dan hanya isinya
- * yang menunggu, jadi layar tidak kosong. Tanpa data dan tanpa FAB; navigasi hanya mengganti hash.
+ * yang menunggu, jadi layar tidak kosong. Layout mobile saja (D13); tanpa data; navigasi hanya mengganti hash.
  */
 function CheckingShell() {
-  const isDesktop = useIsDesktop();
-  const active = routeKeyFromPath(window.location.hash.replace(/^#/, ""));
+  const active = owner(window.location.hash.replace(/^#/, ""));
   const waiting = (
     <div className="flex min-h-[50dvh] items-center justify-center text-accent" role="status" aria-busy="true" aria-label="Memeriksa sesi">
       <Spinner size={24} />
     </div>
   );
-  if (isDesktop) {
-    return (
-      <div className="flex h-dvh overflow-hidden bg-bg">
-        <DesktopSidebar active={active} className="shrink-0" dataStatus="loading" />
-        <main className="relative min-w-0 flex-1 overflow-y-auto p-10">{waiting}</main>
-      </div>
-    );
-  }
   return (
     <>
       <main className="mx-auto min-h-dvh max-w-mobile bg-bg pb-[calc(106px+env(safe-area-inset-bottom))] pl-[var(--gutter-left)] pr-[var(--gutter-right)] pt-[calc(env(safe-area-inset-top)+12px)]">{waiting}</main>

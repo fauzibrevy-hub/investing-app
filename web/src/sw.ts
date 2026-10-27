@@ -1,9 +1,9 @@
 /// <reference lib="webworker" />
 /**
- * Service worker Finance (design.md §10). Dibundel oleh plugin `financeServiceWorker` di vite.config.ts
+ * Service worker Investasi (design.md §4). Dibundel oleh plugin `investingServiceWorker` di vite.config.ts
  * menjadi /sw.js; `__PRECACHE__` dan `__SW_VERSION__` diisi dari hasil build.
  *
- * Token FINANCE_APP_TOKEN tidak pernah lewat sini: POST /api/session tidak diintersep (passthrough),
+ * Token INVESTING_APP_TOKEN tidak pernah lewat sini: POST /api/session tidak diintersep (passthrough),
  * dan yang di-cache hanya body respons GET /api/*.
  */
 import { API_CACHE, API_TIMEOUT_MS, CACHE_DATE_HEADER, isCacheable, keysToEvict, SHELL_CACHE_PREFIX, staleApiCaches, strategyFor } from "./pwa/swPolicy";
