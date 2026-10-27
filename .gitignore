@@ -1,0 +1,11 @@
+/target/
+node_modules/
+web/dist/
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-*
+*.db
+*.log
+.DS_Store
