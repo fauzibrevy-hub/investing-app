@@ -49,6 +49,8 @@ pub struct Config {
     /// Uploaded PDF and PPTX files, `<sha256>.<ext>` (research plan R8).
     pub research_documents_dir: PathBuf,
     pub research_disable_scheduler: bool,
+    /// `INVESTING_SANDBOX`: `/api/health` says `"sandbox": true` (D7). Default off.
+    pub sandbox: bool,
 }
 
 // Never print the token.
@@ -152,6 +154,7 @@ impl Config {
             idx_scraper_dir,
             research_disable_scheduler: var("INVESTING_RESEARCH_DISABLE_SCHEDULER")
                 .is_some_and(|v| truthy(&v)),
+            sandbox: var("INVESTING_SANDBOX").is_some_and(|v| truthy(&v)),
             data_dir,
         })
     }
@@ -180,6 +183,7 @@ impl Config {
             research_documents_dir: dir.join("research/documents"),
             research_pdf_filings_dir: dir.join("research/pdf-filings"),
             research_disable_scheduler: true,
+            sandbox: false,
         }
     }
 }
@@ -279,6 +283,15 @@ mod tests {
             PathBuf::from("/h/investing-app-data/macro_store.json")
         );
         assert!(!format!("{cfg:?}").contains(TOKEN));
+    }
+
+    #[test]
+    fn sandbox_is_off_unless_set_truthy() {
+        for (v, on) in [(None, false), (Some("0"), false), (Some("1"), true), (Some("yes"), true)] {
+            let mut pairs = vec![("INVESTING_APP_TOKEN", TOKEN), ("PORTFOLIO_SPREADSHEET_ID", "b")];
+            pairs.extend(v.map(|v| ("INVESTING_SANDBOX", v)));
+            assert_eq!(Config::from_lookup(env(&pairs)).unwrap().sandbox, on, "{v:?}");
+        }
     }
 
     #[test]

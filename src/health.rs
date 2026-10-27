@@ -1,6 +1,8 @@
 //! `GET /api/health` (public) and `GET /api/health?deep=1` (per-source status,
 //! prd.md §7). Deep checks are cheap local probes: they report whether each
 //! source is reachable from this process, never its contents.
+//!
+//! Both forms carry `"sandbox": true` while `INVESTING_SANDBOX` is set (D7).
 
 use std::path::Path;
 use std::sync::Arc;
@@ -69,12 +71,18 @@ async fn health(State(cfg): State<Arc<Config>>, Query(q): Query<HealthQuery>) ->
         .deep
         .as_deref()
         .is_some_and(|v| matches!(v, "1" | "true" | "yes"));
-    if !deep {
-        return Json(json!({"status": "ok"}));
+    let mut body = if deep {
+        let sources = deep_sources(&cfg);
+        let all_ok = sources.values().all(|s| s["ok"] == true);
+        json!({"status": if all_ok { "ok" } else { "degraded" }, "sources": sources})
+    } else {
+        json!({"status": "ok"})
+    };
+    // D7: the sandbox says so, and nothing else does (no key at all when off).
+    if cfg.sandbox {
+        body["sandbox"] = Value::Bool(true);
     }
-    let sources = deep_sources(&cfg);
-    let all_ok = sources.values().all(|s| s["ok"] == true);
-    Json(json!({"status": if all_ok { "ok" } else { "degraded" }, "sources": sources}))
+    Json(body)
 }
 
 pub fn router(cfg: Arc<Config>) -> Router {

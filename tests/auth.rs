@@ -2,7 +2,7 @@ mod common;
 
 use axum::body::Body;
 use axum::http::{header, Request, StatusCode};
-use common::{json_of, test_app};
+use common::{json_of, test_app, test_app_with};
 use serde_json::json;
 
 #[tokio::test]
@@ -15,6 +15,32 @@ async fn health_is_public() {
     .await;
     assert_eq!(status, StatusCode::OK);
     assert_eq!(body, json!({"status": "ok"}));
+}
+
+#[tokio::test]
+async fn health_has_no_sandbox_key_by_default() {
+    let t = test_app();
+    for uri in ["/api/health", "/api/health?deep=1"] {
+        let (status, body) = t.get(uri).await;
+        assert_eq!(status, StatusCode::OK, "{uri}");
+        assert!(body.get("sandbox").is_none(), "{uri}: {body}");
+    }
+}
+
+#[tokio::test]
+async fn health_reports_sandbox_while_set() {
+    let t = test_app_with(|c| c.sandbox = true);
+    let (status, body) = json_of(
+        t.send(Request::get("/api/health").body(Body::empty()).unwrap())
+            .await,
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(body, json!({"status": "ok", "sandbox": true}));
+    let (status, body) = t.get("/api/health?deep=1").await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(body["sandbox"], true);
+    assert!(body["sources"].is_object());
 }
 
 #[tokio::test]
