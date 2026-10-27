@@ -89,14 +89,14 @@ collect_dir() {
   local log_lines idempotency_lines thesis_drafts macro_indicators macro_observations
   local files_documents files_structure files_pdf_filings
 
-  log_lines="$(wc -l < "$DIR/research-log.jsonl" | tr -d '[:space:]')"
-  idempotency_lines="$(wc -l < "$DIR/research-idempotency.jsonl" | tr -d '[:space:]')"
-  thesis_drafts="$(jq 'length' "$drafts")"
-  macro_indicators="$(jq 'length' "$DIR/macro_store.json")"
-  macro_observations="$(jq '[.[] | (.history // []) | length] | add // 0' "$DIR/macro_store.json")"
-  files_documents="$(find "$DIR/research/documents" -type f | wc -l | tr -d '[:space:]')"
-  files_structure="$(find "$DIR/research/structure" -type f | wc -l | tr -d '[:space:]')"
-  files_pdf_filings="$(find "$DIR/research/pdf-filings" -type f | wc -l | tr -d '[:space:]')"
+  log_lines="$(wc -l < "$DIR/research-log.jsonl" | tr -d '[:space:]')" || return 1
+  idempotency_lines="$(wc -l < "$DIR/research-idempotency.jsonl" | tr -d '[:space:]')" || return 1
+  thesis_drafts="$(jq 'length' "$drafts")" || return 1
+  macro_indicators="$(jq 'length' "$DIR/macro_store.json")" || return 1
+  macro_observations="$(jq '[.[] | (.history // []) | length] | add // 0' "$DIR/macro_store.json")" || return 1
+  files_documents="$(find "$DIR/research/documents" -type f | wc -l | tr -d '[:space:]')" || return 1
+  files_structure="$(find "$DIR/research/structure" -type f | wc -l | tr -d '[:space:]')" || return 1
+  files_pdf_filings="$(find "$DIR/research/pdf-filings" -type f | wc -l | tr -d '[:space:]')" || return 1
 
   printf 'log_lines\t-\t%s\n' "$log_lines"
   printf 'idempotency_lines\t-\t%s\n' "$idempotency_lines"
@@ -128,14 +128,20 @@ awk -F'\t' '
   FILENAME == ARGV[2] { b[$1 "\t" $2] = $3; next }
   {
     k = $1 "\t" $2
-    av = (k in a && a[k] != "") ? a[k] : 0
-    bv = (k in b && b[k] != "") ? b[k] : 0
+    # an empty value is a failed query, never a 0
+    if ((k in a && a[k] == "") || (k in b && b[k] == "")) bad = 1
+    av = (k in a) ? a[k] : 0
+    bv = (k in b) ? b[k] : 0
     if (av != bv) {
       printf "%s\t%s\t%s\n", k, av, bv
       diffs++
     }
   }
   END {
+    if (bad) {
+      print "counts.sh: an empty count (failed query)" > "/dev/stderr"
+      exit 2
+    }
     printf "counts: %d differences\n", diffs + 0
     exit (diffs > 0 ? 1 : 0)
   }
