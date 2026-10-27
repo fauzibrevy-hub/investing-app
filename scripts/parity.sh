@@ -31,8 +31,10 @@ A_URL="${A_URL%/}"
 B_URL="${B_URL%/}"
 
 # Live finance-app is never a parity target (D2). Checked before any request.
+# LIVE_PORT_RE is the same line as in writes.sh: any host, then :8787 as the whole port.
+LIVE_PORT_RE='^([A-Za-z][A-Za-z0-9+.-]*://)?[^/?#]*:8787([/?#]|$)'
 for u in "$A_URL" "$B_URL"; do
-  if [[ "$u" =~ :8787([^0-9]|$) ]]; then
+  if [[ "$u" =~ $LIVE_PORT_RE ]]; then
     die "refusing $u: port 8787 is the live finance-app"
   fi
 done

@@ -292,14 +292,20 @@ mkdir -p "$W/shim"
 printf '#!/bin/sh\necho "$*" >>"%s"\nexit 7\n' "$W/curl-calls" >"$W/shim/curl"
 chmod +x "$W/shim/curl"
 ok9=1
-PATH="$W/shim:$PATH" A_URL=http://127.0.0.1:8787 scripts/parity.sh
-rc=$?
-echo "parity.sh A_URL=:8787 exit=$rc, curl calls: $(cat "$W/curl-calls" 2>/dev/null | wc -l | tr -d ' ')"
-{ [ "$rc" = 2 ] && [ ! -e "$W/curl-calls" ]; } || ok9=0
-PATH="$W/shim:$PATH" A_URL=http://127.0.0.1:8787 A_DATA="$W/f1" B_DATA="$W/f2" TICKER=AAAA scripts/writes.sh
-rc=$?
-echo "writes.sh A_URL=:8787 exit=$rc, curl calls: $(cat "$W/curl-calls" 2>/dev/null | wc -l | tr -d ' ')"
-{ [ "$rc" = 2 ] && [ ! -e "$W/curl-calls" ]; } || ok9=0
+# Both scripts, both sides, 127.0.0.1 and localhost, with a path, a query and a fragment
+# after the port (review L1b #9).
+for live in A_URL=http://127.0.0.1:8787 B_URL=http://127.0.0.1:8787 A_URL=http://localhost:8787 \
+  B_URL=http://localhost:8787 'A_URL=http://127.0.0.1:8787/' 'B_URL=http://localhost:8787/api' \
+  'A_URL=http://127.0.0.1:8787?x=1' 'B_URL=http://localhost:8787#x'; do
+  env PATH="$W/shim:$PATH" "$live" scripts/parity.sh
+  rc=$?
+  echo "parity.sh $live: exit=$rc, curl calls: $(cat "$W/curl-calls" 2>/dev/null | wc -l | tr -d ' ')"
+  { [ "$rc" = 2 ] && [ ! -e "$W/curl-calls" ]; } || ok9=0
+  env PATH="$W/shim:$PATH" "$live" A_DATA="$W/f1" B_DATA="$W/f2" TICKER=AAAA scripts/writes.sh
+  rc=$?
+  echo "writes.sh $live: exit=$rc, curl calls: $(cat "$W/curl-calls" 2>/dev/null | wc -l | tr -d ' ')"
+  { [ "$rc" = 2 ] && [ ! -e "$W/curl-calls" ]; } || ok9=0
+done
 # A data dir that is, or links to, $HOME/finance-app-data (a fake HOME here) is refused before
 # any request or write (review L1b #6); nothing is created inside it.
 mkdir -p "$W/fakehome/finance-app-data"

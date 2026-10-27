@@ -19,10 +19,12 @@ for v in A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER; do
   [ -n "${!v:-}" ] || usage "$v is required (env: A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER)"
 done
 # D2: the live finance-app port is never a target.
+# LIVE_PORT_RE is the same line as in parity.sh: any host, then :8787 as the whole port.
+LIVE_PORT_RE='^([A-Za-z][A-Za-z0-9+.-]*://)?[^/?#]*:8787([/?#]|$)'
 for v in A_URL B_URL; do
-  case "${!v}" in
-    *:8787 | *:8787/*) usage "$v=${!v} refused: :8787 is the live finance-app" ;;
-  esac
+  if [[ "${!v}" =~ $LIVE_PORT_RE ]]; then
+    usage "$v=${!v} refused: :8787 is the live finance-app"
+  fi
 done
 A_URL=${A_URL%/}
 B_URL=${B_URL%/}
