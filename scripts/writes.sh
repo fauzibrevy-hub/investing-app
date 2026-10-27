@@ -80,9 +80,10 @@ get() {
 # val FILE FILTER: one value out of a JSON file as text, empty when absent.
 val() { jq -r "($2) // empty | tostring" "$1" 2>/dev/null || true; }
 
+# row LABEL A B [EXPECT]: ok when both statuses match (and, with EXPECT, both are EXPECT).
 row() {
   local verdict=DIFF
-  if [ "$2" = "$3" ] && [ "$2" != - ] && [ "$2" != 000 ]; then
+  if [ "$2" = "$3" ] && [ "$2" != - ] && [ "$2" != 000 ] && { [ -z "${4:-}" ] || [ "$2" = "$4" ]; }; then
     verdict=ok
   else
     diffs=$((diffs + 1))
@@ -92,7 +93,7 @@ row() {
 
 skip() { printf '%s\t-\t-\tSKIP %s\n' "$1" "$2"; }
 
-# pair2 LABEL METHOD PATH_A PATH_B BODY_A BODY_B: the request on A, then on B. An empty path means
+# pair2 LABEL METHOD PATH_A PATH_B BODY_A BODY_B [EXPECT]: the request on A, then on B. An empty path means
 # that side has no id from its own earlier response: nothing is sent there and its status reads `-`.
 # Afterwards $tmp/a.json and $tmp/b.json hold the two response bodies.
 pair2() {
@@ -109,7 +110,7 @@ pair2() {
     send b "$2" "$4" "$6"
     sb=$code
   fi
-  row "$1" "$sa" "$sb"
+  row "$1" "$sa" "$sb" "${7:-}"
 }
 
 # pair LABEL METHOD PATH_A PATH_B [BODY]: the same body on both sides.
@@ -290,8 +291,9 @@ pair "20 DELETE $R/$T/calendar/{date}/{kind}" DELETE \
 # 21 research_packs.rs
 pair "21 POST $R/packs/reload" POST "$R/packs/reload" "$R/packs/reload"
 
-# 22 research_api.rs: 503 on both while the scheduler is off (D19).
-pair "22 POST $R/refresh?ticker=$T" POST "$R/refresh?ticker=$T" "$R/refresh?ticker=$T"
+# 22 research_api.rs: 503 on both while the scheduler is off (D19). Both sides returning 202 (a
+# scheduler running, so a real refresh) is a DIFF, not a match.
+pair2 "22 POST $R/refresh?ticker=$T" POST "$R/refresh?ticker=$T" "$R/refresh?ticker=$T" "" "" 503
 
 # 23 thesis.rs
 pair "23 POST /api/thesis/drafts" POST /api/thesis/drafts /api/thesis/drafts \
