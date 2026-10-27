@@ -2,6 +2,12 @@
 # scripts/counts.sh DIR_A DIR_B
 # Compare per-ticker SQLite record counts and whole-directory metrics between two
 # research data directories (plan.md §3.1b, prd.md S2 / A2).
+#
+# Read-only, writes nothing. When a directory has no research.sqlite-wal and no -shm, the
+# database is opened with &immutable=1 (SQLite then neither creates those files nor fails on a
+# closed WAL / .backup copy). Immutable mode assumes NO WRITER: run against stopped snapshot
+# copies or a stopped server's dir. On a dir a running server writes to, a checkpointed idle
+# database can read a stale view; stop the server first (plan.md §3.1b deviation, review L1b #7).
 set -euo pipefail
 
 usage() {
