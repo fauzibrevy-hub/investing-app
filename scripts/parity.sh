@@ -61,8 +61,12 @@ drop_for() {
     # NEW (same): request time (src/research/api/r4.rs:1053).
     /api/research/calibration)
       echo 'del(.as_of)' ;;
-    # Request time (src/research/api.rs:963, src/research/api/lookup.rs:110).
-    /api/research/universe | /api/research/lookup\?q=*)
+    # Request time (src/research/api.rs:963, src/research/api/lookup.rs:110);
+    # NEW: .items[].added_at and .items[].synced_at are the POST /universe write time when
+    # self-test step 5 adds a ticker to each running instance (src/research/api.rs:673-674,1142).
+    /api/research/universe)
+      echo 'del(.as_of, .items[].added_at, .items[].synced_at)' ;;
+    /api/research/lookup\?q=*)
       echo 'del(.as_of)' ;;
     # Request time (src/research/valuation.rs:882).
     /api/research/*/valuation)
