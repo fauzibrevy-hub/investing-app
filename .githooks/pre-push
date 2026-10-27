@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# GitHub cannot protect main on this private free-plan repo, so this hook is the only push block.
+# Enable once per clone: git config core.hooksPath .githooks
+set -euo pipefail
+while read -r _ _ remote_ref _; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "pre-push: never push to main; open a draft PR (CLAUDE.md)." >&2
+    exit 1
+  fi
+done
+exec scripts/check.sh hygiene
