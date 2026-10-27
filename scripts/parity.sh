@@ -65,7 +65,7 @@ drop_for() {
     # NEW: .items[].added_at and .items[].synced_at are the POST /universe write time when
     # self-test step 5 adds a ticker to each running instance (src/research/api.rs:673-674,1142).
     /api/research/universe)
-      echo 'del(.as_of, .items[].added_at, .items[].synced_at)' ;;
+      echo 'del(.as_of, .items[]?.added_at, .items[]?.synced_at)' ;;
     /api/research/lookup\?q=*)
       echo 'del(.as_of)' ;;
     /api/research/compare | /api/research/filings)
