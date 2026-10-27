@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
-# GitHub cannot protect main on this private free-plan repo, so this hook is the only push block.
-# Enable once per clone: git config core.hooksPath .githooks
+# GitHub cannot protect main on this private free-plan repo: this hook blocks pushes to main, CI catches the rest.
+# Active only when git runs with core.hooksPath=.githooks (CLAUDE.md Guardrails).
+# Checks each pushed commit and the commits it adds, not the working tree (cherry-picked trailers included).
 set -euo pipefail
-while read -r _ _ remote_ref _; do
-  if [ "$remote_ref" = "refs/heads/main" ]; then
+remote=$1
+status=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = refs/heads/main ]; then
     echo "pre-push: never push to main; open a draft PR (CLAUDE.md)." >&2
     exit 1
   fi
+  case $local_sha in *[!0]*) ;; *) continue ;; esac # branch deletion: nothing to check
+  if case $remote_sha in *[!0]*) git cat-file -e "$remote_sha^{commit}" 2>/dev/null ;; *) false ;; esac; then
+    range="$remote_sha..$local_sha"
+  else
+    range="$local_sha --not --remotes=$remote"
+  fi
+  echo "pre-push: $local_ref -> $remote_ref"
+  CHECK_REV=$local_sha CHECK_RANGE=$range scripts/check.sh hygiene </dev/null || status=1
 done
-exec scripts/check.sh hygiene
+exit $status
