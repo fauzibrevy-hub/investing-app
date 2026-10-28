@@ -21,6 +21,8 @@ export interface Surface {
   path: string;
   /** Penanda bahwa data permukaan sudah tampil (bukan skeleton). */
   landmark: () => Promise<unknown>;
+  /** `false`: permukaan yang dilayani API lain (Portofolio membaca portofolio Sheets); gerbang khusus riset (independence, provenance) melewatinya. */
+  research?: boolean;
 }
 
 export const SURFACES: Surface[] = [
@@ -33,6 +35,8 @@ export const SURFACES: Surface[] = [
       return screen.findByRole("list", { name: /Indikator makro/ });
     },
   },
+  // L3c: Portofolio membaca portofolio Sheets, bukan API riset; `STOCK_PORTFOLIO` menirunya (emiten sintetis COAL dan REST).
+  { name: "Portofolio", path: "/portofolio", landmark: () => screen.findByRole("list", { name: "Legenda komposisi" }), research: false },
   { name: "Alat", path: "/alat", landmark: () => screen.findByRole("list", { name: "Alat" }) },
   { name: "Compare", path: "/alat/bandingkan?pack=coal_mining", landmark: () => screen.findByRole("region", { name: /Tabel perbandingan/ }) },
   { name: "Calibration", path: "/alat/kalibrasi", landmark: () => screen.findByRole("list", { name: "Butir kalibrasi" }) },
@@ -54,6 +58,33 @@ export const SURFACES: Surface[] = [
   { name: "Company REST Keuangan", path: "/perusahaan/REST?section=keuangan", landmark: () => screen.findByRole("table", { name: "Laba rugi, kuartal" }) },
   { name: "Company NONE Kuartal", path: "/perusahaan/NONE?section=kuartal", landmark: () => screen.findByRole("heading", { level: 2, name: /Kuartal terakhir/ }) },
 ];
+
+const position = (no: number, ticker: string, name: string, lots: number, avg: number, last: number, cost: number, w: number, target: number) => ({
+  no,
+  category: "CORE",
+  ticker,
+  full_code: `IDX:${ticker}`,
+  company_name: name,
+  shares: lots * 100,
+  lots,
+  avg_price: avg,
+  current_price: last,
+  cost,
+  valuation: lots * 100 * last,
+  pl: lots * 100 * last - cost,
+  pl_pct: ((lots * 100 * last - cost) / cost) * 100,
+  fund_alloc_pct: 0,
+  val_alloc_pct: w,
+  target_alloc_pct: target,
+  drift_pct: w - target,
+});
+
+/** `GET /api/finance/stock-portfolio` untuk Portofolio (L3c). */
+const STOCK_PORTFOLIO = {
+  summary: { current_valuation: 115_000_000, total_cost: 101_000_000, total_pl: 1_500_000, total_pl_pct: 1.49, cash_balance: 12_500_000, updated_at: "2026-10-27T09:30:00" },
+  positions: [position(1, "COAL", "Batubara Contoh Tbk", 200, 4150, 4300, 83_000_000, 62.5, 60), position(2, "REST", "Restoran Contoh Tbk", 100, 1800, 1650, 18_000_000, 37.5, 40)],
+  available: true,
+};
 
 /** Golden yang dipakai permukaan: teks dari backend (label metrik paket, nama emiten), bukan kata milik layar. */
 export function canonPayloads(): unknown[] {
@@ -99,6 +130,7 @@ export function mockCanonBackend(extra: Record<string, unknown> = {}) {
     "/api/research/filings": golden("filings-COAL"),
     // Kisi Makro di Beranda: satu-satunya jalur di luar /api/research/ yang dibaca fitur ini (independence.test.ts).
     "/api/macro/observations": MACRO,
+    "/api/finance/stock-portfolio": STOCK_PORTFOLIO,
     ...tickerRoutes("COAL"),
     ...tickerRoutes("REST"),
     ...tickerRoutes("NONE"),

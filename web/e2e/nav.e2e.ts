@@ -264,3 +264,62 @@ test.describe("baris sandbox di layar buka kunci (design.md §3.6, D7)", () => {
     await expect(failing.getByText(LINE)).toHaveCount(0);
   });
 });
+
+test.describe("jangkauan S4 (prd.md §5 S4)", () => {
+  test("setiap tempat di §2 satu ketukan dari bar bawah", async ({ page }) => {
+    await open(page, "/beranda");
+    for (const [label, hash, heading] of [
+      ["Portofolio", "#/portofolio", "Portofolio"],
+      ["Perusahaan", "#/perusahaan", "Perusahaan"],
+      ["Alat", "#/alat", "Alat"],
+      ["Beranda", "#/beranda", "Beranda"],
+    ] as const) {
+      await tab(page, label).click();
+      await expect.poll(() => hashOf(page)).toBe(hash);
+      await expect(page.getByRole("heading", { level: 1, name: heading, exact: true })).toBeVisible();
+      await expect(page.locator(`${NAV} a[aria-current="page"]`)).toHaveText(label);
+    }
+  });
+
+  test("halaman perusahaan <= 2 ketukan dari Portofolio (posisi -> Buka halaman perusahaan -> ‹ Portofolio)", async ({ page }) => {
+    await open(page, "/portofolio");
+    await expect(page.getByRole("heading", { level: 1, name: "Portofolio", exact: true })).toBeVisible();
+    // Ketukan 1: baris posisi membuka Sheet posisi.
+    await page.getByRole("button", { name: /^COAL\s.*\blot\b/ }).click();
+    const dialog = page.getByRole("dialog", { name: "COAL" });
+    await expect(dialog).toBeVisible();
+    // Ketukan 2: Buka halaman perusahaan membuka rute perusahaan dengan BackHeader ‹ Portofolio.
+    await dialog.getByRole("link", { name: "Buka halaman perusahaan" }).click();
+    await expect.poll(() => hashOf(page)).toBe("#/perusahaan/COAL?from=portofolio");
+    await expect(back(page, "Portofolio")).toHaveText("Portofolio");
+    await expect(page.locator(`${NAV} a[aria-current="page"]`)).toHaveText("Portofolio");
+  });
+
+  test("halaman perusahaan <= 2 ketukan dari item kotak masuk Beranda (item -> Buka halaman perusahaan -> ‹ Beranda)", async ({ page }) => {
+    await open(page, "/beranda");
+    // Ketukan 1: baris kotak masuk membuka Sheet item.
+    const firstInbox = page.locator('section[data-block="perlu-perhatian"] [data-event-id] button').first();
+    await firstInbox.waitFor();
+    await firstInbox.click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    // Ketukan 2: Buka halaman perusahaan membuka rute perusahaan dengan BackHeader ‹ Beranda.
+    await dialog.getByRole("button", { name: "Buka halaman perusahaan" }).click();
+    await expect.poll(() => hashOf(page)).toMatch(/^#\/perusahaan\/[A-Z]+\?.*from=beranda/);
+    await expect(back(page, "Beranda")).toHaveText("Beranda");
+    await expect(page.locator(`${NAV} a[aria-current="page"]`)).toHaveText("Beranda");
+  });
+
+  test("halaman perusahaan <= 2 ketukan dari Perusahaan (1 ketukan ke emiten; masih placeholder di cabang L3c)", async ({ page }) => {
+    await open(page, "/perusahaan");
+    const companyLink = page.locator("[data-company] a").first();
+    if ((await companyLink.count()) > 0) {
+      await companyLink.click();
+      await expect.poll(() => hashOf(page)).toMatch(/^#\/perusahaan\/[A-Z]+$/);
+    } else {
+      await push(page, "/perusahaan/COAL");
+    }
+    await expect(back(page, "Perusahaan")).toHaveText("Perusahaan");
+    await expect(page.locator(`${NAV} a[aria-current="page"]`)).toHaveText("Perusahaan");
+  });
+});

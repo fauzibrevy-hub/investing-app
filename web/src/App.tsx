@@ -9,14 +9,14 @@ import { Calibration } from "./features/riset/screens/Calibration";
 import { Compare } from "./features/riset/screens/Compare";
 import { Packs } from "./features/riset/screens/Packs";
 import { HideAmountsProvider } from "./lib/privacy";
+import { PortfolioScreen } from "./screens/portfolio/PortfolioScreen";
 import { AppShell } from "./shell/AppShell";
 import { AuthGate } from "./shell/AuthGate";
-import { PlaceholderScreen } from "./screens/PlaceholderScreen";
 
 /**
  * The one route table (design.md §2.2). Each L3 lane replaces only its own lines (plan.md §3.3).
  * `?from=<tab>` on a pushed route is read by the shell (design.md §2.4), not here.
- * Beranda and Alat (list and the three tools) are real screens; the three tools draw their own `BackHeader`.
+ * Beranda, Portofolio and Alat (list and the three tools) are real screens; the three tools draw their own `BackHeader`.
  * Exported for the guard tests, which mount it on a `MemoryRouter`.
  */
 export function AppRoutes() {
@@ -24,7 +24,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/" element={<Navigate to="/beranda" replace />} />
       <Route path="/beranda" element={<Beranda />} />
-      <Route path="/portofolio" element={<PlaceholderScreen title="Portofolio" />} />
+      <Route path="/portofolio" element={<PortfolioScreen />} />
       <Route path="/perusahaan" element={<Perusahaan />} />
       <Route path="/perusahaan/tambah" element={<Add />} />
       <Route path="/perusahaan/:ticker" element={<CompanyPage />} />
