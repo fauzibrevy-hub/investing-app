@@ -191,7 +191,7 @@ export function PortfolioScreen() {
       </section>
 
       <section className="flex flex-col gap-2">
-        <SectionHeader title="Posisi" />
+        <SectionHeader title="Posisi (Rp)" />
         <div className="flex flex-col">
           {status === "loading" ? (
             Array.from({ length: 4 }, (_, i) => <TransactionRowSkeleton key={i} />)
@@ -223,9 +223,10 @@ export function PortfolioScreen() {
 }
 
 /**
- * Baris posisi: ukuran dan pitch seperti `TransactionRow` (57 px), tetapi lokal supaya subjudul "200 lot · avg 4.150"
- * turun ke baris berikutnya alih-alih dipotong (angka tidak pernah dipotong, finance-app design.md §7), dan swatch hanya
- * selebar dirinya (sejajar dengan legenda di atasnya).
+ * Baris posisi: ukuran dan pitch seperti `TransactionRow` (57 px), tetapi lokal karena tiga hal: nilai pasar tanpa `Rp`
+ * (satuan ada di judul blok; tidak ada `Rp` berulang di dalam kartu, design.md §6), subjudul "200 lot · avg 4.150" turun
+ * baris alih-alih dipotong (angka tidak pernah dipotong, finance-app design.md §7), dan swatch hanya selebar dirinya
+ * (sejajar dengan legenda di atasnya).
  */
 function PositionRow({ p, cat, subtitle, onClick }: { p: Position; cat: CatIndex; subtitle: string; onClick: () => void }) {
   const gain = p.pl_pct >= 0;
@@ -237,7 +238,7 @@ function PositionRow({ p, cat, subtitle, onClick }: { p: Position; cat: CatIndex
         <span className="text-label text-text-2">{subtitle}</span>
       </span>
       <span className="flex shrink-0 flex-col items-end text-right">
-        <Money value={p.valuation} className="text-body-strong text-text" />
+        <Money value={p.valuation} bare className="text-body-strong text-text" />
         <span className={cn("num text-caption font-bold", gain ? "text-status-safe" : "text-status-over")}>{formatPercent(p.pl_pct, { signed: true })}</span>
       </span>
     </button>

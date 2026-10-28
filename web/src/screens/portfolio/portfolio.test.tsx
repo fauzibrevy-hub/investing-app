@@ -148,6 +148,9 @@ describe("Portofolio: tata letak", () => {
     const rows = screen.getAllByRole("button").filter((b) => /lot · avg/.test(b.textContent ?? ""));
     expect(rows.map((r) => r.textContent?.slice(0, 4))).toEqual(["BUMI", "SOCI"]);
     expect(rows[0]).toHaveTextContent("1 lot · avg 4.150");
+    expect(screen.getByRole("heading", { name: "Posisi (Rp)" })).toBeInTheDocument(); // satuan di judul blok
+    expect(within(rows[0]).getByText("600.000")).toBeInTheDocument(); // nilai pasar tanpa Rp
+    expect(rows.map((r) => r.textContent).join("")).not.toContain("Rp"); // tidak ada Rp berulang di baris
     expect(rows[0].className).toContain("min-h-[57px]");
     expect(within(rows[0]).getByText("−14,3%")).toHaveClass("text-status-over");
   });
@@ -214,8 +217,9 @@ describe("Portofolio: tombol mata (sembunyikan nominal)", () => {
     expect(hero).toHaveTextContent("•••");
     expect(within(hero).getByText("Rp••• · +11,1%")).toBeInTheDocument();
     expect(screen.getByRole("group", { name: "Ringkasan portofolio" }).textContent).toBe("Modal•••Nilai pasar•••Kas•••");
-    expect(screen.getAllByText("Rp•••").length).toBeGreaterThanOrEqual(2); // nilai pasar tiap posisi
     const row = positionRow("BUMI");
+    expect(within(row as HTMLElement).getByText("•••", { selector: "span.num" })).toBeInTheDocument(); // nilai pasar posisi, tanpa Rp
+    expect(row?.textContent).not.toContain("Rp");
     expect(row).toHaveTextContent("1 lot · avg •••");
     expect(row).toHaveTextContent("−14,3%");
   });

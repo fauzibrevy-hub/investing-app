@@ -174,6 +174,10 @@ test.describe("Portofolio (#/portofolio)", () => {
     await openPortofolio(page);
     expect((await visibleRpDigits(page)).length).toBeGreaterThan(0);
 
+    // Satuan ada di judul blok: baris Posisi menampilkan angka tanpa `Rp` (hidden: `•••`).
+    const posisi = page.locator("section", { has: page.getByRole("heading", { name: "Posisi (Rp)" }) });
+    expect(await posisi.innerText()).not.toMatch(/Rp\s*[\d•]/);
+
     const eye = page.getByRole("button", { name: "Sembunyikan nominal" });
     await expect(eye).toHaveAttribute("aria-pressed", "false");
     expect((await eye.boundingBox())!.height).toBeGreaterThanOrEqual(44);
