@@ -284,7 +284,8 @@ describe("accessibility after the release-candidate QA", () => {
     const buttons = within(grid).getAllByRole("button");
     expect(buttons.length).toBeGreaterThan(0);
     for (const b of buttons) {
-      const label = b.firstElementChild?.firstElementChild?.textContent ?? "";
+      // The label span ends in a space so the visible words do not fuse with the value's (axe label-content-name-mismatch).
+      const label = (b.firstElementChild?.firstElementChild?.textContent ?? "").trim();
       expect(label).not.toBe("");
       expect(b.getAttribute("aria-label")!.startsWith(`${label} `)).toBe(true);
       expect(b.getAttribute("aria-label")).toMatch(/, asal angka /);

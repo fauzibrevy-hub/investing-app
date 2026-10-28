@@ -69,7 +69,8 @@ export function SourcedStat({ label, name, value, source, date, detail = [], sub
   return (
     <div className={cn("flex min-w-0 flex-col", className)}>
       <button type="button" aria-expanded={open} aria-controls={panel} aria-label={labelFirst ? `${label} ${value}, asal angka ${name}` : `Asal angka ${name}: ${value}`} onClick={() => setOpen((o) => !o)} className={cn(TARGET, stacked ? "block" : "flex items-center")}>
-        <StatRow label={label} value={value} wrapLabel={stacked} valueClassName={stacked ? "text-left text-text" : "text-right text-text"} className="w-full" />
+        {/* Spasi di ujung label: label dan nilai adalah anak flex tanpa teks di antaranya, sehingga teks tampil yang dibaca axe menyatu ("pasarRp645") dan tak lagi termuat di nama tombol (WCAG 2.5.3). CSS membuangnya di ujung baris. */}
+        <StatRow label={`${label} `} value={value} wrapLabel={stacked} valueClassName={stacked ? "text-left text-text" : "text-right text-text"} className="w-full" />
       </button>
       {sub}
       <span id={panel} hidden={!open} data-source="" className="text-caption text-text-2">
