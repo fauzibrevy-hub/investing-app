@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../../../components/Button";
 import { ApiError, newIdempotencyKey } from "../../../lib/api";
+import { BackHeader } from "../../../shell/BackHeader";
 import { addToUniverse, usePacks } from "../../research/api";
 import { StepNote, noteError } from "../../research/add/StepNote";
 import { StepPeers } from "../../research/add/StepPeers";
 import { StepSummary } from "../../research/add/StepSummary";
 import { StepTicker } from "../../research/add/StepTicker";
 import { tickerBlocker, useTickerCheck } from "../../research/add/useTickerCheck";
-import { BackLink, PAGE } from "../ui";
+import { PAGE } from "../ui";
 
 export const STEPS = ["Emiten", "Pembanding", "Bisnis", "Ringkasan"] as const;
 
@@ -26,18 +27,25 @@ function useBodyKeys() {
   };
 }
 
+/** Kode dari `?ticker=` (design.md §3.4): hanya empat huruf yang dipakai; yang lain diabaikan, bukan dipotong menjadi kode lain. */
+function prefill(param: string | null): string {
+  return param && /^[A-Za-z]{4}$/.test(param) ? param.toUpperCase() : "";
+}
+
 /**
- * Tambah emiten `#/riset/add` (ui-slicing.md §6): selebar kolom di iPhone, langkah ditulis "Langkah 2 dari 4", tombol utama
+ * Tambah emiten `#/perusahaan/tambah` (ui-slicing.md §6): selebar kolom di iPhone, langkah ditulis "Langkah 2 dari 4", tombol utama
  * lengket di atas navigasi bawah. **Mulai** menambahkan emiten (backend mengantre pengambilan harga dan menulis daftar
- * pantau scraper), lalu pembanding, lalu membuka halaman perusahaan di tabel Kuartal terakhir.
+ * pantau scraper), lalu pembanding, lalu membuka halaman perusahaan di tabel Kuartal terakhir. `?ticker=<T>` mengisi kode
+ * dan memeriksanya sekali saat layar dibuka (dari "Tambah ke riset" di halaman tesis).
  */
 export function Add() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const packs = usePacks();
   const keyFor = useBodyKeys();
   const heading = useRef<HTMLHeadingElement>(null);
   const [step, setStep] = useState(0);
-  const [ticker, setTicker] = useState("");
+  const [ticker, setTicker] = useState(() => prefill(params.get("ticker")));
   const [pack, setPack] = useState("");
   const [peers, setPeers] = useState<string[]>([]);
   const [note, setNote] = useState("");
@@ -77,7 +85,7 @@ export function Add() {
         const pb = { ticker: peer, role: "peer" as const, peer_of: ticker };
         await addToUniverse(pb, { idempotencyKey: keyFor(pb) });
       }
-      navigate({ pathname: `/riset/${ticker}`, search: "?section=kuartal" });
+      navigate({ pathname: `/perusahaan/${ticker}`, search: "?section=kuartal" });
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "Emiten belum tersimpan");
       setBusy(null);
@@ -91,7 +99,7 @@ export function Add() {
   return (
     <div className={PAGE}>
       <header className="flex flex-col gap-1">
-        <BackLink />
+        <BackHeader />
         <h1 className="text-title text-text">Tambah emiten</h1>
       </header>
       <section aria-label="Tambah emiten" className="flex min-w-0 flex-col gap-5 md:max-w-[560px]">
@@ -129,3 +137,5 @@ export function Add() {
     </div>
   );
 }
+
+export default Add;

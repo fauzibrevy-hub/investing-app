@@ -90,7 +90,7 @@ export function StepTicker({ ticker, onTicker, pack, onPack, check, showErrors, 
         {held ? (
           <p className="text-label text-text">
             {`${item.ticker} dipegang di portofolio: sudah ada di Riset dan tidak bisa dihapus. `}
-            <Link className="font-bold text-accent" to={`/research/${item.ticker}`}>
+            <Link className="font-bold text-accent" to={`/perusahaan/${item.ticker}`}>
               Buka dossier
             </Link>
           </p>
@@ -99,7 +99,7 @@ export function StepTicker({ ticker, onTicker, pack, onPack, check, showErrors, 
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-label text-text">
               {`${item.ticker} sudah ada di Riset. `}
-              <Link className="font-bold text-accent" to={`/research/${item.ticker}`}>
+              <Link className="font-bold text-accent" to={`/perusahaan/${item.ticker}`}>
                 Buka dossier
               </Link>
             </p>
