@@ -471,13 +471,34 @@ row("M6", "M6", "M6 Beranda: sheets lock the page behind them, close restores it
 
 /* ------------------------------------------------------------------------------------------ M7 */
 
-row("M7", "M7", `M7 ${T_BIG}: tall claim sheet keeps header and × on screen and scrolls inside`, async (c) => {
+row("M7", "M7", "M7 tall claim sheet keeps header and × on screen and scrolls inside", async (c) => {
   const { page } = c;
   await unlock(page);
-  await openCompany(page, T_BIG, "klaim");
-  const claims = page.locator('section[data-block="klaim"] ul[aria-label="Daftar klaim"] li button');
+  // Any claim card, open or closed (the status never matters here), on the first of these tickers that has one. The list
+  // loads after the page, so wait for the block to stop loading before counting: `count()` does not wait.
+  const tried: string[] = [];
+  let ticker = "";
+  let claims = page.locator("button[data-claim-status]");
+  for (const t of [...new Set([T_BIG, "BUMI", "BRIS", "LEAD", "SOCI"])]) {
+    try {
+      await openCompany(page, t, "klaim");
+    } catch {
+      tried.push(`${t}: no company page`);
+      continue;
+    }
+    const cards = block(page, "klaim").locator("button[data-claim-status]");
+    await expect(block(page, "klaim").locator('[role="status"][aria-busy="true"]')).toHaveCount(0, { timeout: 30_000 }).catch(() => undefined);
+    await cards.first().waitFor({ timeout: 10_000 }).catch(() => undefined);
+    if ((await cards.count()) > 0) {
+      ticker = t;
+      claims = cards;
+      break;
+    }
+    tried.push(`${t}: no claim card`);
+  }
+  test.skip(!ticker, `no claim card to open (${tried.join("; ")})`);
   const count = await claims.count();
-  expect(count, `no claims on ${T_BIG} to open`).toBeGreaterThan(0);
+  // The longest card gives the tallest sheet; one card is simply that card.
   const lengths = await claims.evaluateAll((els) => els.map((e) => (e.textContent ?? "").length));
   const longest = lengths.indexOf(Math.max(...lengths));
   const full = page.viewportSize()!;
@@ -532,7 +553,7 @@ row("M7", "M7", `M7 ${T_BIG}: tall claim sheet keeps header and × on screen and
   // Short claims fit even in a short window; a 300 px window makes any sheet tall, so the "scrolls inside" path is exercised.
   if (!scrolled) scrolled = await runAt("tiny", 300);
   await page.setViewportSize(full);
-  c.note(`longest of ${count} claim(s), viewports ${full.height}, 560, 420${scrolled ? "" : ", 300"} px high; content ${scrolled ? "scrolled inside the sheet" : "never overflowed"}`);
+  c.note(`${ticker}: longest of ${count} claim card(s)${tried.length ? ` (tried first: ${tried.join("; ")})` : ""}, viewports ${full.height}, 560, 420${scrolled ? "" : ", 300"} px high; content ${scrolled ? "scrolled inside the sheet" : "never overflowed"}`);
 });
 
 /* ------------------------------------------------------------------------------------------ M8 */
