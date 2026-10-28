@@ -76,11 +76,15 @@ describe("Perlu perhatian (inbox)", () => {
     const items = within(region).getAllByRole("listitem");
     expect(items).toHaveLength(5);
     expect(items[0].querySelector('[data-line="1"]')).toHaveTextContent(/COAL\s*Level\s*hari ini/);
+    // C8: a row may take two lines (line 2 clamps, it does not truncate) and keeps its 60 px height.
     expect(items[0].querySelector('[data-line="2"]')).toHaveClass("line-clamp-2");
+    expect(items[0].querySelector('[data-line="2"]')).not.toHaveClass("truncate");
+    for (const li of items) expect(li).toHaveClass("min-h-[60px]");
     fireEvent.click(within(block("Perlu perhatian")).getByRole("button", { name: `Lihat semua (${DESK.inbox.length})` }));
     expect(within(region).getAllByRole("listitem")).toHaveLength(DESK.inbox.length);
     const chips = screen.getByRole("group", { name: "Filter kotak masuk" });
-    expect(chips).toHaveClass("hscroll", "scroll-px-[var(--gutter-left)]");
+    // C8: the chip row keeps the 18 px gutter at rest (`px`) and when snapping (`scroll-px`).
+    expect(chips).toHaveClass("hscroll", "px-[var(--gutter-left)]", "scroll-px-[var(--gutter-left)]");
     expect(within(chips).getAllByRole("button").map((b) => b.textContent)).toEqual(DESK.filters.map((f) => `${f.label} ${f.count}`));
     fireEvent.click(within(chips).getByRole("button", { name: /^Klaim/ }));
     expect(within(region).getAllByRole("listitem")).toHaveLength(1);
@@ -160,6 +164,23 @@ describe("Kalender", () => {
     expect(within(cal).queryByRole("button", { name: /Lihat semua/ })).toBeNull();
   });
 
+  it("each row links to the company page, owned by Beranda (from=beranda), as a target of at least 44 px (design.md §2.4 rule 4)", async () => {
+    mockApi({ "/api/research/desk": DESK, "/api/macro/observations": MACRO });
+    renderBeranda();
+    await screen.findByRole("group", { name: "Kotak masuk" });
+    const items = within(block("Kalender")).getAllByRole("listitem");
+    for (const [i, li] of items.entries()) {
+      const link = within(li).getByRole("link");
+      expect(link).toHaveAttribute("href", `/perusahaan/${DESK.calendar[i].ticker}?from=beranda`);
+      expect(link).toHaveClass("min-h-[60px]", "w-full");
+      expect(li).toHaveClass("min-h-[60px]");
+      expect(li).not.toHaveClass("h-[60px]");
+    }
+    expect(within(items[0]).getByRole("link")).toHaveAccessibleName(/BANK/);
+    fireEvent.click(within(items[0]).getByRole("link"));
+    expect(await screen.findByTestId("at")).toHaveTextContent(`/perusahaan/${DESK.calendar[0].ticker}?from=beranda`);
+  });
+
   it("up to five items: no Lihat semua", async () => {
     mockApi({ "/api/research/desk": { ...DESK, calendar: DESK.calendar.slice(0, 2) }, "/api/macro/observations": MACRO });
     renderBeranda();
@@ -190,6 +211,10 @@ describe("Makro (MacroGrid)", () => {
     expect(two).toHaveTextContent("80,5");
     expect(two).toHaveTextContent("USD/barel");
     expect(two).toHaveTextContent("+1,85");
+    // F6: line 2 never wraps onto a third line; the unit gives way (ellipsis), the number and the change do not.
+    expect(two).not.toHaveClass("flex-wrap");
+    expect(two.querySelector('[aria-hidden="true"].truncate')).toHaveTextContent("USD/barel");
+    expect(oil.querySelector('[data-line="3"]')).toBeNull();
     expect(card("Suku bunga acuan").querySelector('[data-line="2"]')).toHaveTextContent(/^4,75.*%.*−0,25/);
     expect(card("Kurs rupiah")).not.toHaveTextContent("Rp");
     expect(card("Inflasi inti")).toHaveTextContent("belum ada");

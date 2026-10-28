@@ -27,14 +27,19 @@ function MacroCard({ o, asOf, onOpen }: { o: Observation; asOf: string; onOpen: 
         <span data-line="1" className="line-clamp-2 break-words text-caption text-text-2">
           {o.name}
         </span>
-        {/* Baris 2: nilai terakhir dan satuannya, lalu selisih bertanda. Netral: tanpa warna naik/turun. */}
-        <span data-line="2" className="flex min-w-0 flex-wrap items-baseline gap-x-2">
-          <span className="num whitespace-nowrap text-table text-text">
-            {o.value === null ? <span className="text-caption text-text-2">belum ada</span> : valueText(o.value)}
+        {/* Baris 2: nilai terakhir dan satuannya, lalu selisih bertanda. Netral: tanpa warna naik/turun. Tidak pernah membungkus
+            (kartu tetap dua baris, juga pada teks besar): angka dan selisih tidak menyusut, satuan yang dipotong dengan elipsis. */}
+        <span data-line="2" className="flex min-w-0 items-baseline gap-x-2">
+          <span className="num flex min-w-0 items-baseline text-table text-text">
+            <span className="shrink-0 whitespace-nowrap">{o.value === null ? <span className="text-caption text-text-2">belum ada</span> : valueText(o.value)}</span>
             {o.value !== null ? <span className="sr-only">{` ${unitWords(o.unit)}`}</span> : null}
-            {o.value !== null && unit ? <span aria-hidden="true" className="text-caption text-text-2">{` ${unit}`}</span> : null}
+            {o.value !== null && unit ? (
+              <span aria-hidden="true" className="min-w-0 truncate text-caption text-text-2">
+                {` ${unit}`}
+              </span>
+            ) : null}
           </span>
-          <span className="num ml-auto whitespace-nowrap text-caption text-text-2">
+          <span className="num ml-auto shrink-0 whitespace-nowrap text-caption text-text-2">
             {change === "—" ? (
               <span className="sr-only">selisih tidak tersedia</span>
             ) : (
@@ -44,13 +49,14 @@ function MacroCard({ o, asOf, onOpen }: { o: Observation; asOf: string; onOpen: 
               </>
             )}
           </span>
-          {since ? (
-            <span className="w-full text-caption text-text-2">
-              <span className="sr-only">diamati </span>
-              {dayLabel(since)}
-            </span>
-          ) : null}
         </span>
+        {/* Indikator basi: tanggal pengamatan terakhir di baris sendiri (satu-satunya alasan kartu bertinggi tiga baris). */}
+        {since ? (
+          <span data-line="3" className="text-caption text-text-2">
+            <span className="sr-only">diamati </span>
+            {dayLabel(since)}
+          </span>
+        ) : null}
       </button>
     </li>
   );

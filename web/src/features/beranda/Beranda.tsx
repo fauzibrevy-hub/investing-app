@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RefreshCw } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Sheet } from "../../components/Sheet";
@@ -145,8 +145,9 @@ function CalendarBlock({ desk }: { desk: DeskResponse }) {
       ) : (
         <ul>
           {items.map((item) => (
-            <li key={`${item.ticker}-${item.kind}-${item.date}-${item.label}`} className="h-[60px] border-b border-border-hairline last:border-b-0">
-              <div className="flex h-full min-w-0 flex-col justify-center">
+            <li key={`${item.ticker}-${item.kind}-${item.date}-${item.label}`} className="min-h-[60px] border-b border-border-hairline last:border-b-0">
+              {/* Baris kalender menaut ke halaman perusahaan; Beranda tetap pemiliknya (design.md §2.4 aturan 4). */}
+              <Link to={`/perusahaan/${item.ticker}?from=beranda`} className="flex min-h-[60px] w-full min-w-0 flex-col justify-center py-2 active:bg-surface-sunken">
                 <span data-line="1" className="flex min-w-0 items-baseline gap-2 text-table">
                   <time dateTime={item.window?.end ?? item.date} className="num shrink-0 text-text">
                     {calendarWhen(item)}
@@ -159,7 +160,7 @@ function CalendarBlock({ desk }: { desk: DeskResponse }) {
                   {item.label}
                   {item.note ? ` · ${item.note}` : ""}
                 </span>
-              </div>
+              </Link>
             </li>
           ))}
         </ul>

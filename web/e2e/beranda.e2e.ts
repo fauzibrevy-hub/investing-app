@@ -3,12 +3,13 @@ import { fileURLToPath } from "node:url";
 import { expect, test, type Page } from "@playwright/test";
 import { axeSeriousCritical, horizontalOverflow, smallTargets, textCollisions } from "./audits";
 import { mockApi, overrideApi } from "./mockApi";
+import { fullPageShot } from "./shots";
 
 /**
  * Beranda `#/beranda` (design.md §3.1; plan §3.3 e2e L3a): the Makro grid and the inbox sheets on the phone widths
  * 320 and 393 px, ported from finance-app's `macro.e2e.ts` and `overlays.e2e.ts`. Mocks only (mockApi.ts, D15); the
  * synthetic observations are built here from the shape of `e2e/fixtures/macro-observations.json`, not imported from `src/`.
- * Screenshots of the open inbox sheet and of the 200 % root font go to `docs/qa/l3a/`.
+ * Screenshots of the viewport with the tab bar, of the open inbox sheet and of the 200 % root font go to `docs/qa/l3a/`.
  */
 const SHOTS = fileURLToPath(new URL("../../docs/qa/l3a/", import.meta.url));
 mkdirSync(SHOTS, { recursive: true });
@@ -87,9 +88,37 @@ for (const width of WIDTHS) {
       expect(await horizontalOverflow(page), "gulir horizontal halaman").toMatchObject({ overflow: false });
     });
 
+    test("at 200 % root font every Makro card stays two lines: the signed change never drops to a third line", async ({ page }) => {
+      await openBeranda(page);
+      await page.addStyleTag({ content: "html{font-size:200% !important}" });
+      await page.waitForTimeout(300);
+      const cards = await page.locator(MACRO).getByRole("list", { name: /Indikator makro/ }).getByRole("listitem").evaluateAll((items) =>
+        items.map((li) => {
+          const button = li.querySelector("button")!;
+          const lines = Array.from(button.children) as HTMLElement[];
+          const line2 = button.querySelector<HTMLElement>('[data-line="2"]')!;
+          const lh = parseFloat(getComputedStyle(line2).lineHeight);
+          return {
+            name: button.querySelector('[data-line="1"]')!.textContent,
+            lines: lines.map((l) => l.getAttribute("data-line")),
+            line2H: line2.getBoundingClientRect().height,
+            line2Lh: lh,
+            below: Array.from(line2.children).filter((c) => c.getBoundingClientRect().bottom > line2.getBoundingClientRect().bottom + 1).length,
+          };
+        }),
+      );
+      expect(cards.length).toBeGreaterThan(0);
+      for (const c of cards) {
+        expect(c.lines, `${c.name}: baris kartu`).toEqual(["1", "2"]);
+        expect(c.line2H, `${c.name}: baris 2 membungkus`).toBeLessThanOrEqual(c.line2Lh + 1);
+        expect(c.below, `${c.name}: nilai atau selisih jatuh ke bawah baris 2`).toBe(0);
+      }
+      expect(await horizontalOverflow(page), "gulir horizontal halaman").toMatchObject({ overflow: false });
+    });
+
     test("worst-case values (large, negative, with a unit) neither collide nor widen the page", async ({ page }) => {
       await mockApi(page);
-      const worst = obs(0, { metric_id: "worst", name: "Inflasi tahunan dengan nama yang panjang", unit: "percent_yoy", value: -1234.56, history: [{ date: "2026-09-18", value: 1234.56 }] });
+      const worst = obs(0, { metric_id: "worst", name: "Inflasi tahunan dengan nama yang panjang", unit: "percent_yoy", value: -1234.56, history: [{ date: "2026-09-18", value: -1200 }] });
       await overrideApi(page, "/api/macro/observations", { body: macroOf([worst, obs(1), obs(2)]) });
       await page.goto("/#/beranda");
       const card = page.locator(MACRO).getByRole("button", { name: /Inflasi tahunan/ });
@@ -190,11 +219,29 @@ for (const width of WIDTHS) {
       await dialog.getByRole("button", { name: "Buka halaman perusahaan" }).click();
       await expect.poll(() => new URL(page.url()).hash).toMatch(/^#\/perusahaan\/COAL\?.*from=beranda/);
     });
+
+    test("calendar: each row is a company link with from=beranda, at least 60 px tall, and it opens", async ({ page }) => {
+      await openBeranda(page);
+      const links = page.locator('section[data-block="kalender"] li a');
+      expect(await links.count()).toBeGreaterThan(0);
+      for (const a of await links.all()) {
+        await expect(a).toHaveAttribute("href", /^#\/perusahaan\/[A-Z]+\?from=beranda$/);
+        expect((await a.boundingBox())!.height, "tinggi baris kalender").toBeGreaterThanOrEqual(60);
+      }
+      await links.first().click();
+      await expect.poll(() => new URL(page.url()).hash).toMatch(/^#\/perusahaan\/[A-Z]+\?from=beranda$/);
+    });
   });
 }
 
 test.describe("screenshots", () => {
   test.use({ viewport: { width: 393, height: 852 } });
+
+  test("Beranda viewport with the tab bar at the bottom edge", async ({ page }) => {
+    await openBeranda(page);
+    await expect(page.locator('nav[aria-label="Navigasi utama"]')).toBeVisible();
+    await page.screenshot({ path: `${SHOTS}beranda-tab-bar.png`, scale: "css" });
+  });
 
   test("Beranda with an inbox sheet open", async ({ page }) => {
     await openBeranda(page);
@@ -209,7 +256,7 @@ test.describe("screenshots", () => {
     await page.addStyleTag({ content: "html{font-size:200% !important}" });
     await page.waitForTimeout(300);
     await audit(page);
-    await page.screenshot({ path: `${SHOTS}beranda-font200.png`, fullPage: true, scale: "css" });
+    await fullPageShot(page, `${SHOTS}beranda-font200.png`);
   });
 });
 

@@ -93,7 +93,9 @@ function CompareTable({ data }: { data: CompareResponse }) {
   const mixedMoney = moneyRowHeader(scales) === MIXED_HEADER;
   const cols = data.tickers.length + 1;
   return (
-    <div role="region" tabIndex={0} aria-label="Tabel perbandingan, geser untuk melihat kolom lain" className="max-w-full overflow-x-auto overscroll-x-contain">
+    // `relative`: teks `sr-only` (absolute) di kolom yang tergulir keluar layar ikut terpotong wilayah ini; tanpa itu ia
+    // memperlebar halaman begitu tabel lebih lebar dari layar.
+    <div role="region" tabIndex={0} aria-label="Tabel perbandingan, geser untuk melihat kolom lain" className="relative max-w-full overflow-x-auto overscroll-x-contain">
       <table className="w-full min-w-max border-collapse text-table">
         <caption className="sr-only">{`Perbandingan ${data.pack?.label ?? "metrik inti"}: metrik pada baris, emiten pada kolom`}</caption>
         <thead>
