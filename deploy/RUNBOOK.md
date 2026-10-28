@@ -30,6 +30,10 @@ First start: macOS asks whether `investing-app` may access files in Documents, b
 in `~/Documents`. Click Allow. Until you do, `/api/thesis/*` answers nothing (curl status `000`, so
 `scripts/parity.sh` shows `DIFF` on every thesis path) while `/api/health` still answers 200.
 
+macOS ties that Documents permission to the binary's code identity, so a rebuild by `install.sh` can ask again (the same happens at L5). If `/api/thesis/*` hangs after a rebuild, check System Settings → Privacy & Security → Files & Folders before anything else.
+
+Parity is order-sensitive: run §3.4 step 5 once, in order, on a fresh snapshot (step 2). Re-running `parity.sh` after `writes.sh` shows timestamp-only `DIFF`s from the writes themselves, not a real difference.
+
 ## 2. Verify
 
 ```
