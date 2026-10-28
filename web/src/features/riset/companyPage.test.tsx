@@ -171,6 +171,19 @@ describe("quarter table labels and gap reasons (E4)", () => {
     expect(noPageOverflowProblems(container.firstElementChild as HTMLElement).filter((p) => !p.startsWith("akar layar"))).toEqual([]);
   });
 
+  it("the table scrolls inside its own named, focusable box with the metric column pinned (design.md §3 app-wide rules)", async () => {
+    const { container } = renderPage();
+    await screen.findByRole("heading", { level: 2, name: /Kuartal terakhir · Q2 26/ });
+    const table = container.querySelector("#kuartal table") as HTMLElement;
+    const box = table.parentElement as HTMLElement;
+    // 1e15 YoY values make the table wider than the 357 px column: they scroll in this box instead of running off the screen.
+    expect(box).toHaveAttribute("role", "region");
+    expect(box).toHaveAttribute("tabindex", "0");
+    expect(box).toHaveAccessibleName(/^Kuartal terakhir Q2 26 dibanding Q2 25, per metrik paket, gulir untuk kolom lain$/);
+    expect(box).toHaveClass("overflow-x-auto");
+    for (const th of table.querySelectorAll('tbody th[scope="row"], thead th:first-child')) expect(th).toHaveClass("sticky", "left-0");
+  });
+
   it("a TTM metric under the quarter columns says TTM in its label, a quarter metric does not (M3)", async () => {
     const { container } = renderPage();
     await screen.findByRole("heading", { level: 2, name: /Kuartal terakhir · Q2 26/ });

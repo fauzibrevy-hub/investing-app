@@ -95,7 +95,7 @@ function Row({ row, latestLabel, priorLabel, currency, amountScale, onFill }: { 
   const annualOnly = [row.latest, row.prior].every((c) => c && isKpiCell(c) && c.state === "not_applicable");
   return (
     <tr data-metric={metric.id} className="border-b border-border-hairline">
-      <th scope="row" className="min-h-11 py-1 pl-0 pr-2 text-left align-middle">
+      <th scope="row" className={`${STICKY} min-h-11 py-1 pl-0 pr-2 text-left align-middle`}>
         <span className="flex min-w-0 flex-col" title={`${metric.label}. ${metric.why}`}>
           <span className="break-words text-label font-semibold leading-snug text-text">{quarterTableLabel(metric)}</span>
           <span className="text-caption leading-snug text-text-2">{unit}</span>
@@ -127,15 +127,22 @@ function Row({ row, latestLabel, priorLabel, currency, amountScale, onFill }: { 
   );
 }
 
-/** Tabel muat di lebar layar (357 px di iPhone): tata letak tetap, tanpa kotak gulir. */
+const STICKY = "sticky left-0 z-[1] bg-bg";
+
+/**
+ * Tabel yang muat di lebar layar (357 px di iPhone) tampil apa adanya; angka yang lebih lebar (YoY triliunan) tidak
+ * dipotong atau dibungkus, tabel menggulir di kotaknya sendiri dengan kolom metrik tetap di kiri (design.md §3, aturan
+ * lintas layar). Kotak itu wilayah bernama yang bisa difokus, supaya pembaca papan ketik dapat menggulirnya.
+ */
 function QuarterTable({ groups, latest, currency, onFill }: { groups: QuarterGroup[]; latest: PackResponse["latest"]; currency: string | null; onFill: CellProps["onFill"] }) {
   const latestLabel = periodLabel(latest.label);
   const priorLabel = periodLabel(`${latest.fy - 1}Q${latest.q}`);
   const amountScale = tableScale(groups, currency);
+  const caption = `Kuartal terakhir ${latestLabel} dibanding ${priorLabel}, per metrik paket`;
   return (
-    <div className="w-full min-w-0">
+    <div role="region" tabIndex={0} aria-label={`${caption}, gulir untuk kolom lain`} data-scroll-container="" className="w-full min-w-0 max-w-full overflow-x-auto overscroll-x-contain">
       <table className="w-full table-fixed border-collapse text-table">
-        <caption className="sr-only-table">{`Kuartal terakhir ${latestLabel} dibanding ${priorLabel}, per metrik paket`}</caption>
+        <caption className="sr-only-table">{caption}</caption>
         <colgroup>
           <col className="w-[40%]" />
           <col className="w-[19%]" />
@@ -144,7 +151,7 @@ function QuarterTable({ groups, latest, currency, onFill }: { groups: QuarterGro
         </colgroup>
         <thead>
           <tr className="border-b border-border-hairline text-table-head uppercase text-text-2">
-            <th scope="col" className="h-10 pl-0 pr-2 text-left">
+            <th scope="col" className={`${STICKY} h-10 pl-0 pr-2 text-left`}>
               Metrik
             </th>
             <th scope="col" className="px-1 text-right">{latestLabel}</th>
@@ -159,7 +166,7 @@ function QuarterTable({ groups, latest, currency, onFill }: { groups: QuarterGro
             <tbody data-group={g.id}>
               {/* Judul kelompok baris di dalam <tbody>: `rowgroup`, bukan `colgroup` (itu terbaca sebagai kepala kolom "LABA RUGI"). */}
               <tr>
-                <th scope="rowgroup" colSpan={4} className="h-9 pl-0 pt-3 text-left text-table-head uppercase tracking-wide text-text-2">
+                <th scope="rowgroup" colSpan={4} className={`${STICKY} h-9 pl-0 pt-3 text-left text-table-head uppercase tracking-wide text-text-2`}>
                   {g.label}
                 </th>
               </tr>
