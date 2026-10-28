@@ -1,0 +1,280 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowDown, ArrowUp, Eye, EyeOff } from "lucide-react";
+import { BudgetBar } from "../../components/BudgetBar";
+import { Button } from "../../components/Button";
+import { Card } from "../../components/Card";
+import { DonutChart } from "../../components/charts/DonutChart";
+import { prepareSegments } from "../../components/charts/donutGeometry";
+import { DetailStat } from "../../components/DetailStat";
+import { Money } from "../../components/Money";
+import { SectionHeader } from "../../components/SectionHeader";
+import { Sheet } from "../../components/Sheet";
+import { Skeleton } from "../../components/Skeleton";
+import { StatRow } from "../../components/StatRow";
+import { ListState, TransactionRow, TransactionRowSkeleton } from "../../components/TransactionRow";
+import { catColor, type CatIndex } from "../../lib/categories";
+import { cn } from "../../lib/cn";
+import { formatPercent, formatPp, formatRupiah, HIDDEN_FULL } from "../../lib/money";
+import { formatNumber } from "../../lib/numbers";
+import { HIDDEN_ARIA_LABEL, useHideAmounts } from "../../lib/privacy";
+import { useResource, type Resource } from "../../lib/useResource";
+import { PAGE } from "../../features/riset/ui";
+
+/** Bentuk `GET /api/finance/stock-portfolio` (= MC, tab `PORTOFOLIO`). */
+export interface Position {
+  no: number;
+  category: string;
+  ticker: string;
+  company_name: string;
+  shares: number;
+  lots: number;
+  avg_price: number;
+  current_price: number;
+  cost: number;
+  valuation: number;
+  pl: number;
+  pl_pct: number;
+  val_alloc_pct: number;
+  target_alloc_pct: number;
+  drift_pct: number;
+}
+export interface StockPortfolio {
+  summary: { current_valuation: number; total_cost: number; total_pl: number; total_pl_pct: number; cash_balance: number; updated_at?: string };
+  positions: Position[];
+  available: boolean;
+}
+
+export const useStockPortfolio = () => useResource<StockPortfolio>("/api/finance/stock-portfolio");
+
+function portfolioStatus(r: Resource<StockPortfolio>): "ready" | "loading" | "error" | "empty" {
+  if (r.status !== "ready") return r.status;
+  return r.data && r.data.available && r.data.positions.length ? "ready" : "empty";
+}
+
+/** Σ nilai pasar posisi. `summary.current_valuation` sudah termasuk kas (= Σ valuation + cash_balance). */
+export const marketValue = (positions: Position[]) => positions.reduce((a, p) => a + p.valuation, 0);
+
+/** Warna per ticker mengikuti segmen donut (urut nilai pasar; kecil → cat-8). */
+function tickerColors(positions: Position[]) {
+  const segments = prepareSegments(positions.map((p) => ({ label: p.ticker, value: p.valuation })));
+  const map = new Map<string, CatIndex>();
+  segments.forEach((s) => (s.merged.length ? s.merged.forEach((m) => map.set(m, s.cat)) : map.set(s.label, s.cat)));
+  return { segments, map };
+}
+
+const dataAge = (s: StockPortfolio["summary"] | undefined) => (s?.updated_at ? `Harga per ${s.updated_at.slice(0, 16).replace("T", " ")}` : null);
+
+/** Satu baris P/L bertanda ("+Rp1,2 jt · +4,1%"): satu-satunya `Rp` di blok hero (design.md §3.2 blok 2). */
+function PlLine({ pl, pct }: { pl: number; pct: number }) {
+  const { hidden } = useHideAmounts();
+  const up = pl >= 0;
+  const rupiah = hidden ? HIDDEN_FULL : formatRupiah(pl, { short: true, signed: true });
+  const percent = formatPercent(pct, { signed: true });
+  return (
+    <p className={cn("flex flex-wrap items-center gap-x-1 text-label font-bold", up ? "text-status-safe" : "text-status-over")}>
+      {up ? <ArrowUp size={14} strokeWidth={2.25} aria-hidden="true" /> : <ArrowDown size={14} strokeWidth={2.25} aria-hidden="true" />}
+      <span className="num" aria-label={hidden ? `${HIDDEN_ARIA_LABEL}, ${percent}` : undefined}>{`${rupiah} · ${percent}`}</span>
+      <span className="font-medium text-text-2">belum terealisasi</span>
+    </p>
+  );
+}
+
+const subtitleOf = (p: Position, hidden: boolean) => `${formatNumber(p.lots)} lot · avg ${formatRupiah(p.avg_price, { bare: true, hidden })}`;
+
+function Swatch({ cat, className }: { cat: CatIndex; className?: string }) {
+  return <span data-swatch={cat} className={cn("h-3 w-3 shrink-0 rounded-pill", className)} style={{ background: catColor(cat) }} aria-hidden="true" />;
+}
+
+export function PortfolioScreen() {
+  const pf = useStockPortfolio();
+  const { hidden, toggle } = useHideAmounts();
+  const [openTicker, setOpenTicker] = useState<string | null>(null);
+  const status = portfolioStatus(pf);
+  const s = pf.data?.summary;
+  const positions = [...(pf.data?.positions ?? [])].sort((a, b) => b.valuation - a.valuation);
+  const { segments, map } = tickerColors(positions);
+  const statState = status === "ready" ? "ready" : status;
+  const short = (v: number) => formatRupiah(v, { short: true, bare: true, hidden });
+  const age = dataAge(s);
+  const opened = positions.find((p) => p.ticker === openTicker) ?? null;
+
+  return (
+    <div className={PAGE}>
+      <header>
+        <SectionHeader
+          variant="screen"
+          title="Portofolio"
+          trailing={<Button variant="icon" aria-label={hidden ? "Tampilkan nominal" : "Sembunyikan nominal"} aria-pressed={hidden} icon={hidden ? <EyeOff /> : <Eye />} onClick={toggle} className="-mr-1.5" />}
+        />
+        {age ? <p className="text-caption text-text-2">{age}</p> : null}
+      </header>
+
+      <section aria-label="Nilai portofolio" className="flex flex-col gap-1">
+        <p className="text-label text-text-2">Nilai portofolio (Rp), termasuk kas</p>
+        {status === "loading" ? (
+          <div className="mt-1 flex flex-col gap-2">
+            <Skeleton width={240} height={40} />
+            <Skeleton width={200} height={20} />
+          </div>
+        ) : status === "error" ? (
+          <ListState status="error" onRetry={pf.reload} className="items-start" />
+        ) : status === "empty" ? (
+          <ListState status="empty" message="Belum ada posisi di tab PORTOFOLIO" className="items-start" />
+        ) : s ? (
+          <>
+            <Money value={s.current_valuation} bare className="block whitespace-nowrap text-hero text-text" />
+            <PlLine pl={s.total_pl} pct={s.total_pl_pct} />
+          </>
+        ) : null}
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <SectionHeader title="Ringkasan (Rp)" />
+        <div role="group" aria-label="Ringkasan portofolio" className="grid grid-cols-3 gap-2">
+          {[
+            ["Modal", s ? short(s.total_cost) : undefined],
+            ["Nilai pasar", s ? short(marketValue(positions)) : undefined],
+            ["Kas", s ? short(s.cash_balance) : undefined],
+          ].map(([label, value]) => (
+            <Card key={label} tone="summary" className="!p-3">
+              <StatRow onTint label={label as string} value={value} status={statState} />
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <SectionHeader title="Komposisi" />
+        <DonutChart
+          title="Nilai pasar"
+          countLabel={(n) => `${n} emiten`}
+          data={segments.map((x) => ({ label: x.label, value: x.value }))}
+          status={status}
+          onRetry={pf.reload}
+        />
+        {status === "ready" ? (
+          <ul aria-label="Legenda komposisi" className="flex flex-col">
+            {positions.map((p) => (
+              <li key={p.ticker} className="flex min-h-9 items-center gap-2 text-label">
+                <Swatch cat={map.get(p.ticker) ?? 8} />
+                <span className="min-w-0 flex-1 truncate font-bold text-text">{p.ticker}</span>
+                <span className="num text-text-2">{formatPercent(p.val_alloc_pct)}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <SectionHeader title="Posisi" />
+        <div className="flex flex-col">
+          {status === "loading" ? (
+            Array.from({ length: 4 }, (_, i) => <TransactionRowSkeleton key={i} />)
+          ) : status === "ready" ? (
+            positions.map((p) => (
+              <TransactionRow
+                key={p.ticker}
+                variant="position"
+                title={p.ticker}
+                subtitle={subtitleOf(p, hidden)}
+                leading={<Swatch cat={map.get(p.ticker) ?? 8} className="mx-3" />}
+                value={p.valuation}
+                plPercent={p.pl_pct}
+                onClick={() => setOpenTicker(p.ticker)}
+              />
+            ))
+          ) : status === "error" ? (
+            <ListState status="error" onRetry={pf.reload} />
+          ) : (
+            <ListState status="empty" message="Belum ada posisi" />
+          )}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <SectionHeader title="Alokasi vs target" />
+        <AllocationList positions={positions} colors={map} status={status} />
+      </section>
+
+      <footer className="flex flex-col gap-1 border-t border-border-hairline pt-3 text-caption text-text-2">
+        {age ? <p>{age}</p> : null}
+        <p>Bukan saran investasi</p>
+      </footer>
+
+      <PositionSheet p={opened} onClose={() => setOpenTicker(null)} />
+    </div>
+  );
+}
+
+function AllocationList({ positions, colors, status }: { positions: Position[]; colors: Map<string, CatIndex>; status: string }) {
+  if (status === "loading") return <BudgetBar name="" cat={8} status="loading" />;
+  if (status !== "ready") return null;
+  return (
+    <div className="flex flex-col gap-1">
+      {positions.map((p) => (
+        <BudgetBar
+          key={p.ticker}
+          name={`${p.ticker} · ${formatPercent(p.val_alloc_pct)} / target ${formatPercent(p.target_alloc_pct)}`}
+          cat={colors.get(p.ticker) ?? 8}
+          spent={p.val_alloc_pct}
+          limit={100}
+          marker={p.target_alloc_pct / 100}
+          rightText={formatPp(p.drift_pct)}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------- detail */
+
+/** Sheet posisi (design.md §3.2, D9): `PositionDetail` lalu **Buka halaman perusahaan** (aturan 4 §2.4: `from=portofolio`). */
+function PositionSheet({ p, onClose }: { p: Position | null; onClose: () => void }) {
+  return (
+    <Sheet
+      open={p !== null}
+      title={p?.ticker ?? "Posisi"}
+      onClose={onClose}
+      footer={
+        p ? (
+          <Link
+            to={`/perusahaan/${encodeURIComponent(p.ticker)}?from=portofolio`}
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-surface-sunken px-6 text-body-strong text-accent active:opacity-[0.85]"
+          >
+            Buka halaman perusahaan
+          </Link>
+        ) : undefined
+      }
+    >
+      {p ? <PositionDetail p={p} /> : null}
+    </Sheet>
+  );
+}
+
+export function PositionDetail({ p }: { p: Position }) {
+  const { hidden } = useHideAmounts();
+  const full = (v: number) => formatRupiah(v, { hidden });
+  const plClass = p.pl >= 0 ? "text-status-safe" : "text-status-over";
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col">
+        <p className="text-label text-text-2">{p.company_name}</p>
+        <p className="text-caption text-text-2">{p.category}</p>
+      </div>
+      <div className="flex flex-col">
+        <DetailStat label="Lot" value={formatNumber(p.lots)} />
+        <DetailStat label="Lembar" value={formatNumber(p.shares)} />
+        <DetailStat label="Harga rata-rata" value={formatRupiah(p.avg_price, { hidden })} />
+        <DetailStat label="Harga close" value={formatRupiah(p.current_price, { hidden })} />
+        <DetailStat label="Modal" value={full(p.cost)} />
+        <DetailStat label="Nilai pasar" value={full(p.valuation)} />
+        <DetailStat label="P/L" value={formatRupiah(p.pl, { hidden, signed: true })} valueClassName={plClass} />
+        <DetailStat label="P/L %" value={formatPercent(p.pl_pct, { signed: true })} valueClassName={plClass} />
+        <DetailStat label="Bobot" value={formatPercent(p.val_alloc_pct)} />
+        <DetailStat label="Target" value={formatPercent(p.target_alloc_pct)} />
+        <DetailStat label="Drift" value={formatPp(p.drift_pct)} />
+      </div>
+    </div>
+  );
+}

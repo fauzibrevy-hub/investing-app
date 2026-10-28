@@ -14,3 +14,8 @@ export async function fullPageShot(page: Page, path: string) {
     await hide.evaluate((el) => el.remove());
   }
 }
+
+/** Screenshot of the current viewport (for sheets, dialogs and bottom-bar captures). */
+export async function viewportShot(page: Page, path: string) {
+  await page.screenshot({ path, scale: "css" });
+}

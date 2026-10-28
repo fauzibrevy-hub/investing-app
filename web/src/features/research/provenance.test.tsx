@@ -104,7 +104,7 @@ describe("every shown number opens its provenance (A5.5, S5)", () => {
     expect(unsourcedNumbers(dom(`<dl><dt>Imbal hasil</dt><dd>10</dd></dl>`))).toHaveLength(1);
   });
 
-  it.each(SURFACES)("$name: no number outside a FactChip, KpiCell, SourcedValue or sourced MetricCard", async (surface) => {
+  it.each(SURFACES.filter((s) => s.research !== false))("$name: no number outside a FactChip, KpiCell, SourcedValue or sourced MetricCard", async (surface) => {
     const { container } = await renderSurface(surface);
     const offenders = unsourcedNumbers(container);
     expect(offenders, `angka tanpa asal di ${surface.name}: ${offenders.join("; ")}`).toEqual([]);

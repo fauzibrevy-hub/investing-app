@@ -66,7 +66,7 @@ describe("research feature independence (design §9, plan §7.4)", () => {
     expect(hits).toEqual([]);
   });
 
-  it.each(SURFACES)("$name: every request goes to /api/research/ (Beranda also reads the macro observations) and at least one is made", async (surface) => {
+  it.each(SURFACES.filter((s) => s.research !== false))("$name: every request goes to /api/research/ (Beranda also reads the macro observations) and at least one is made", async (surface) => {
     const fetchMock = mockCanonBackend();
     await renderSurface(surface);
     const requested = fetchMock.mock.calls.map(([input]) => String(input));
