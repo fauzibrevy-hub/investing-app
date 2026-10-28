@@ -266,7 +266,7 @@ export function QuarterTable({ caption, title, unitHeader, periods, groups, stat
                   <tr key={row.id} data-subtotal={row.subtotal || undefined} className={cn("border-b border-border-hairline text-text", row.subtotal && "font-bold")}>
                     <th scope="row" className={cn(stickyHead, FIRST_COLUMN, "h-11 break-words py-2 pl-4 pr-3 text-left", row.subtotal ? "font-bold" : "font-medium")} data-first="" style={firstWidth}>
                       {row.label}
-                      {row.unit ? <span className="block text-caption font-medium text-text-2 lg:ml-1 lg:inline">{`(${rowUnitText(row.unit)})`}</span> : null}
+                      {row.unit ? <span className="block text-caption font-medium text-text-2">{`(${rowUnitText(row.unit)})`}</span> : null}
                     </th>
                     {periods.map((p, i) => {
                       const cell = row.cells[i];

@@ -476,7 +476,7 @@ export function StructureMindMap(props: StructureMindMapProps) {
         Tinggi peta dan ruang di bawahnya menyisakan nav + area aman + tonjolan FAB + 8 px, jadi keterangan warna di
         dasar peta dan kartu di kanvas tidak tertutup FAB, baik saat peta digulir ke puncak layar maupun ke ujungnya.
       */}
-      <div className="pb-[calc(var(--nav-height)+var(--nav-bottom)+34px)] lg:pb-0">
+      <div className="pb-[calc(var(--nav-height)+var(--nav-bottom)+34px)]">
         <div
           ref={overlayRef}
           data-mindmap=""
@@ -487,7 +487,7 @@ export function StructureMindMap(props: StructureMindMapProps) {
           tabIndex={full ? -1 : undefined}
           className={cn(
             "flex flex-col overflow-hidden border border-border-hairline bg-surface-sunken",
-            full ? "fixed inset-0 z-30 rounded-none pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent" : "relative h-[max(420px,calc(100svh-var(--nav-height)-var(--nav-bottom)-50px))] rounded-md lg:h-[560px]",
+            full ? "fixed inset-0 z-30 rounded-none pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent" : "relative h-[max(420px,calc(100svh-var(--nav-height)-var(--nav-bottom)-50px))] rounded-md",
           )}
         >
           {/* Satu baris di ponsel: tombol ikon 44 px dengan nama dan tooltip; kata hanya di kanvas lebar. */}

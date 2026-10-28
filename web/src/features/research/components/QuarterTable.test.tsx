@@ -131,7 +131,8 @@ describe("QuarterTable", () => {
     expect(within(table).getAllByRole("columnheader")[0]).not.toHaveClass("whitespace-nowrap");
     const eps = within(table).getAllByRole("rowheader").find((th) => th.textContent?.startsWith("Laba per saham"))!;
     // Satu baris sendiri di ponsel, sebaris dengan label di layar lebar; satuan tidak pernah dalam bahasa Inggris.
-    expect(within(eps).getByText("(IDR per saham)")).toHaveClass("block", "lg:ml-1", "lg:inline");
+    expect(within(eps).getByText("(IDR per saham)")).toHaveClass("block");
+    expect(within(eps).getByText("(IDR per saham)").className).not.toMatch(/lg:/);
     expect(within(table).queryByText(/\/shares/)).toBeNull();
     for (const cell of screen.getAllByRole("cell").filter((c) => c.hasAttribute("data-cell"))) expect(cell).toHaveClass("whitespace-nowrap");
   });

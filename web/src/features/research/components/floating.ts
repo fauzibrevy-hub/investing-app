@@ -5,9 +5,8 @@ const GAP = 4;
 const MARGIN = 8;
 /** Tinggi minimal panel bila tombolnya sudah tergulir lewat tepi layar (px). */
 const MIN_HEIGHT = 120;
-/** Bilah bawah tetap (layout < 1024 px): tinggi dengan FAB, selaras `pb-[calc(106px+…)]` di AppShell. */
-const NAV_RESERVE = 106;
-const DESKTOP_MIN_WIDTH = 1024;
+/** Bilah bawah tetap di setiap lebar jendela (D13, design.md §2.1; tanpa FAB): `--nav-height` 56 px + 8 px jarak bawah. */
+const NAV_RESERVE = 64;
 
 export interface VerticalPlacement {
   side: "below" | "above";
@@ -62,7 +61,7 @@ export function useFloatingPosition(anchor: RefObject<HTMLElement>, open: boolea
       const r = el.getBoundingClientRect();
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      const bottomReserve = vw < DESKTOP_MIN_WIDTH ? NAV_RESERVE + safeAreaBottom() : 0;
+      const bottomReserve = NAV_RESERVE + safeAreaBottom();
       const v = placeVertically({ anchorTop: r.top, anchorBottom: r.bottom, viewportHeight: vh, bottomReserve });
       const vertical: CSSProperties = { ...(v.side === "below" ? { top: v.top } : { bottom: v.bottom }), maxHeight: v.maxHeight };
       const width = Math.min(panelWidth, vw - 2 * GAP);

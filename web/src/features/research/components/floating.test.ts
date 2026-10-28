@@ -44,7 +44,14 @@ describe("useFloatingPosition", () => {
   it("caps the panel to the room below the anchor and keeps it clear of the bottom nav at 393", () => {
     const style = place({ left: 300, right: 380 }, 393, "end");
     expect(style.top).toBe(148);
-    expect(style.maxHeight).toBe(852 - 106 - 148);
+    expect(style.maxHeight).toBe(852 - 64 - 148);
+  });
+
+  it("keeps the same clearance for the bottom bar at 1280, where D13 still shows it (no desktop variant)", () => {
+    const narrow = place({ left: 300, right: 380 }, 393, "end");
+    const wide = place({ left: 300, right: 380 }, 1280, "end");
+    expect(wide.top).toBe(narrow.top);
+    expect(wide.maxHeight).toBe(852 - 64 - 148);
   });
 });
 

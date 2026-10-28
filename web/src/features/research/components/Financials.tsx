@@ -294,10 +294,10 @@ export function Financials({ ticker }: SectionProps) {
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
-      {/* Ponsel: bertumpuk, masing-masing selebar kartu; desktop: berdampingan. */}
-      <div className="flex flex-col gap-3 lg:flex-row">
-        <Segmented label="Tampilan laporan" options={VIEWS} value={view} onChange={setView} className="lg:flex-[2]" />
-        <Segmented label="Jumlah periode" options={PERIOD_COUNTS} value={count} onChange={setCount} className="lg:flex-1" />
+      {/* Bertumpuk, masing-masing selebar kartu, di setiap lebar jendela (D13). */}
+      <div className="flex flex-col gap-3">
+        <Segmented label="Tampilan laporan" options={VIEWS} value={view} onChange={setView} />
+        <Segmented label="Jumlah periode" options={PERIOD_COUNTS} value={count} onChange={setCount} />
       </div>
       {data && fin.refreshing ? <p className="sr-only" role="status">Memuat ulang…</p> : null}
       {body}

@@ -281,8 +281,10 @@ describe("structure mind map: cards, sheet, gestures and the list fallback", () 
     // and of the "Catat transaksi" FAB that rises 26 px above it (+ 8 px air): 16 + 34 px less height, 34 px more room below,
     // so the legend at the bottom of the map is never under the FAB, whether the map is scrolled to the top or to its end.
     const frame = document.querySelector("[data-mindmap]") as HTMLElement;
-    expect(frame).toHaveClass("h-[max(420px,calc(100svh-var(--nav-height)-var(--nav-bottom)-50px))]", "lg:h-[560px]");
-    expect(frame.parentElement).toHaveClass("pb-[calc(var(--nav-height)+var(--nav-bottom)+34px)]", "lg:pb-0");
+    expect(frame).toHaveClass("h-[max(420px,calc(100svh-var(--nav-height)-var(--nav-bottom)-50px))]");
+    expect(frame.className, "tinggi sama di setiap lebar jendela (D13)").not.toMatch(/lg:/);
+    expect(frame.parentElement).toHaveClass("pb-[calc(var(--nav-height)+var(--nav-bottom)+34px)]");
+    expect(frame.parentElement!.className, "ruang bebas di atas bilah di setiap lebar (D13)").not.toMatch(/lg:/);
   });
 
   it("a canvas of 600 px or more is two-sided: depth-1 branches on both sides of the company card", async () => {

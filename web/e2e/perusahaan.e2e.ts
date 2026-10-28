@@ -196,6 +196,46 @@ for (const ticker of ["COAL", "REST"] as const) {
   }
 }
 
+/** D13 (design.md §1, §2.1): a Mac window keeps the phone column and the bottom bar, so nothing here may change at 1280 px. */
+test.describe("COAL company page at 1280px (D13: the phone layout at every width)", () => {
+  test.use({ viewport: { width: 1280, height: 852 } });
+
+  test("Struktur: the mind map keeps its phone height and bar clearance", async ({ page }) => {
+    await mockApi(page);
+    const geometry = () =>
+      page.evaluate(() => {
+        const map = document.querySelector<HTMLElement>("[data-mindmap]")!;
+        return { height: Math.round(map.getBoundingClientRect().height), clearance: getComputedStyle(map.parentElement!).paddingBottom };
+      });
+    await page.setViewportSize({ width: 393, height: 852 });
+    await company(page, "COAL", "struktur");
+    const phone = await geometry();
+    await page.setViewportSize({ width: 1280, height: 852 });
+    await page.waitForLoadState("networkidle");
+    const mac = await geometry();
+    expect(mac, "peta pikiran di 1280 px sama dengan di 393 px").toEqual(phone);
+    expect(parseFloat(mac.clearance), "ruang bebas di atas bilah bawah").toBeGreaterThan(0);
+    await expect(page.locator('nav[aria-label="Navigasi utama"]'), "bilah bawah tetap tampil").toBeVisible();
+    await audit(page);
+  });
+
+  test("Keuangan: the two Segmented controls stack in the column, units sit under their row label", async ({ page }) => {
+    await mockApi(page);
+    await company(page, "COAL", "keuangan");
+    await page.getByRole("table").first().waitFor();
+    const views = (await page.getByRole("radiogroup", { name: "Tampilan laporan" }).boundingBox())!;
+    const counts = (await page.getByRole("radiogroup", { name: "Jumlah periode" }).boundingBox())!;
+    expect(counts.y, "Jumlah periode di bawah Tampilan laporan").toBeGreaterThanOrEqual(views.y + views.height - 0.5);
+    expect(Math.abs(counts.x - views.x), "kedua kontrol rata kiri").toBeLessThanOrEqual(1);
+    const stacked = await page.evaluate(() => {
+      const unit = document.querySelector<HTMLElement>("table th[scope='row'] > span.block");
+      return unit ? getComputedStyle(unit).display : null;
+    });
+    if (stacked !== null) expect(stacked, "satuan baris di bawah label").toBe("block");
+    await audit(page);
+  });
+});
+
 for (const width of WIDTHS) {
   test.describe(`COAL overlays at ${width}px`, () => {
     test.use({ viewport: { width, height: 852 } });
