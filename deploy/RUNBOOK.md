@@ -26,6 +26,10 @@ scraper job is a separate step: §5, `install-scraper.sh`, once, at cutover.
 sets it: launchd starts the service in `/`, where the relative default finds no pack files and
 `GET /api/research/packs` would report `files: 0` and seven `embedded_ids`.
 
+First start: macOS asks whether `investing-app` may access files in Documents, because the vault lives
+in `~/Documents`. Click Allow. Until you do, `/api/thesis/*` answers nothing (curl status `000`, so
+`scripts/parity.sh` shows `DIFF` on every thesis path) while `/api/health` still answers 200.
+
 ## 2. Verify
 
 ```
