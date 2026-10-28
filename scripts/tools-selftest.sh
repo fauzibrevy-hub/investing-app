@@ -189,10 +189,42 @@ scripts/counts.sh "$W/f1" "$W/f2-bad"
 crc=$?
 echo "malformed drafts on B: exit=$crc"
 rm -rf "$W/f2-bad"
-if [ "$rc" = 0 ] && [ "$(printf '%s\n' "$out" | tail -n 1)" = "counts: 0 differences" ] && [ "$crc" = 2 ]; then
-  pass 4 "exit 0, counts: 0 differences; a malformed drafts file exits 2"
+# A drafts path that is a directory is not "never created": exit 2.
+cp -R "$W/f2" "$W/f2-dir"
+rm "$W/f2-dir/thesis_drafts.json"
+mkdir "$W/f2-dir/thesis_drafts.json"
+scripts/counts.sh "$W/f1" "$W/f2-dir"
+drc=$?
+echo "drafts path is a directory on B: exit=$drc"
+rm -rf "$W/f2-dir"
+# Never-created files (finance-app has no drafts file until a draft is saved, no research/documents
+# until a document is): both sides without them is 0 = 0, printed as `missing (0)`; one side without
+# a drafts file against a side with a draft is a difference.
+for side in f1 f2; do
+  cp -R "$W/$side" "$W/$side-bare"
+  rm "$W/$side-bare/thesis_drafts.json"
+  rmdir "$W/$side-bare/research/documents" "$W/$side-bare/research/structure" "$W/$side-bare/research/pdf-filings"
+done
+bout="$(scripts/counts.sh "$W/f1-bare" "$W/f2-bare")"
+brc=$?
+echo "$bout"
+echo "both sides never-created: exit=$brc"
+mout="$(scripts/counts.sh "$W/f1" "$W/f2-bare")"
+mrc=$?
+echo "$mout"
+echo "A has 1 draft, B has no drafts file: exit=$mrc"
+rm -rf "$W/f1-bare" "$W/f2-bare"
+tab="$(printf '\t')"
+if [ "$rc" = 0 ] && [ "$(printf '%s\n' "$out" | tail -n 1)" = "counts: 0 differences" ] && [ "$crc" = 2 ] && [ "$drc" = 2 ] &&
+  [ "$brc" = 0 ] && [ "$(printf '%s\n' "$bout" | tail -n 1)" = "counts: 0 differences" ] &&
+  [ "$(printf '%s\n' "$bout" | grep -c "^note${tab}")" = 8 ] &&
+  printf '%s\n' "$bout" | grep -qx "note${tab}A${tab}thesis_drafts${tab}missing (0)" &&
+  printf '%s\n' "$bout" | grep -qx "note${tab}B${tab}files_pdf_filings${tab}missing (0)" &&
+  [ "$mrc" = 1 ] && printf '%s\n' "$mout" | grep -qx "thesis_drafts${tab}-${tab}1${tab}0" &&
+  printf '%s\n' "$mout" | grep -qx "note${tab}B${tab}thesis_drafts${tab}missing (0)"; then
+  pass 4 "exit 0, counts: 0 differences; malformed drafts or a drafts directory exit 2; never-created drafts/documents count 0 and print missing (0)"
 else
-  fail 4 "expected exit 0 and 'counts: 0 differences', and exit 2 on a malformed drafts file"
+  fail 4 "expected exit 0 and 'counts: 0 differences', exit 2 on a malformed or non-file drafts path, and 0 = 0 with missing (0) notes for never-created files"
 fi
 
 # 5. A on F1, B on F2 (sandbox); AAAA as a manual ticker on both (research_universe_api.rs:

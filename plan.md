@@ -140,7 +140,7 @@ Expected: `true`; `desk 200 stock 500 summary 404 idx 404` (stock 500 carries `"
 
 Three scripts L4 and L5 only run, plus a self-test that proves them on fixtures. No defaults point at a live port; each refuses `:8787` before any request (D2).
 
-**`scripts/counts.sh DIR_A DIR_B`** (prd.md S2, A2). Opens each `research.sqlite` read-only (`sqlite3 -readonly "file:$DIR/research.sqlite?mode=ro"`), writes nothing. Prints `metric<TAB>key<TAB>a<TAB>b` for each line that differs, then `counts: <n> differences`; exit 0 when n = 0, 1 otherwise, 2 on usage or a missing file. Drafts file: `$DIR/thesis_drafts.json`, overridable with `DRAFTS_A` / `DRAFTS_B`. The per-ticker query, run on a schema built from every finance-app migration on 2026-10-27:
+**`scripts/counts.sh DIR_A DIR_B`** (prd.md S2, A2). Opens each `research.sqlite` read-only (`sqlite3 -readonly "file:$DIR/research.sqlite?mode=ro"`), writes nothing. Prints `metric<TAB>key<TAB>a<TAB>b` for each line that differs, then `counts: <n> differences`; exit 0 when n = 0, 1 otherwise, 2 on usage or a missing file. Drafts file: `$DIR/thesis_drafts.json`, overridable with `DRAFTS_A` / `DRAFTS_B`. Finance-app creates the drafts file and `research/{documents,structure,pdf-filings}` only on first use (loader `src/thesis/drafts.rs:31` treats NotFound as an empty map), so on either side an absent drafts file counts as 0 drafts and an absent directory as 0 files, each printed as `note<TAB>side<TAB>metric<TAB>missing (0)` ahead of the differences (found at L4, 2026-10-28). A drafts file that exists but is corrupt, or a path of the wrong kind, still exits 2. The per-ticker query, run on a schema built from every finance-app migration on 2026-10-27:
 
 ```sql
 SELECT 'filings', ticker, count(*) FROM filings GROUP BY ticker
@@ -243,6 +243,7 @@ Checked 2026-10-27 on the fixture: `TICKER=AAAA` gives ticker AAAA, 40 nodes, no
 7. Negative: one extra claim on B only → `parity.sh` exit 1 naming `/api/research/AAAA/claims`; `counts.sh "$W/f1" "$W/f2"` exit 1 naming `claims AAAA`.
 8. `TICKER=AAAA scripts/writes.sh` → exit 0; the refresh row reads `503 503 ok`; the structure-draft row reads `ok` (the AAAA rewrite above). `SKIP` is accepted only on steps 12 and 13 (the fixture desk may have no open event, and the upload may yield fewer than two proposals), and each `SKIP` line is pasted into the L1b PR. At L4, any `SKIP` is reported in the L4 PR next to `writes.txt`.
 9. Guards: `A_URL=http://127.0.0.1:8787 scripts/parity.sh` and the same for `writes.sh` exit 2 before any request; `writes.sh` with B started without `INVESTING_SANDBOX` exits 2.
+    Step 4 also covers never-created drafts and documents: 0 = 0 with `missing (0)` notes on both sides; one side without a drafts file against a side with a draft is a difference; a drafts path that is a directory exits 2.
     Step 9 also runs `writes.sh` under a curl shim and a scratch `$HOME`: `B_DATA` = `investing-app-data` with `"sandbox": true` passes the guard; with the key absent, `false`, non-JSON or B unreachable it exits 2 after the one health read; `finance-app-data` exits 2 with no request even when health says `sandbox: true`.
 10. Stop both binaries; the script exits 0 only when every step above matched.
 
