@@ -3,8 +3,10 @@
 # Env (all required): A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER. A = the second finance-app instance,
 # B = the investing-app sandbox; *_DATA is each side's data dir (step 14 writes its draft file there).
 # Prints label<TAB>a<TAB>b<TAB>ok|DIFF|SKIP <reason>. Exit 0 when every pair matches, 1 otherwise,
-# 2 on usage, a refused URL (:8787), an A_DATA or B_DATA that is (or links to) a live data dir under
-# $HOME, or a B whose /api/health lacks "sandbox": true, all before any write.
+# 2 on usage, a refused URL (:8787), an A_DATA or B_DATA that is (or links to) $HOME/finance-app-data,
+# an A_DATA that is (or links to) $HOME/investing-app-data, or a B whose /api/health lacks
+# "sandbox": true, all before any write. B_DATA may be $HOME/investing-app-data only because that
+# health check passed: at L4 that dir is the sandbox snapshot (plan.md §3.4 step 5), thrown away at L5.
 # Tokens are never printed and never on a command line: curl reads them from a mode-600 header file.
 # Runs on macOS /bin/bash 3.2.
 set -euo pipefail
@@ -35,19 +37,28 @@ for d in "$A_DATA" "$B_DATA"; do
 done
 # Live data dirs are never a write target (CLAUDE.md live-data rule): step 14 writes into *_DATA.
 # Symlinks are resolved, so a scratch-looking path that points at a live dir is refused too.
+# finance-app-data is refused on both sides, always. investing-app-data is refused as A_DATA (A is
+# finance-app's copy); as B_DATA it is allowed only after the /api/health sandbox check below, which
+# runs before any write: at L4 the sandbox's own data dir IS $HOME/investing-app-data.
 if [ -n "${HOME:-}" ] && [ -d "$HOME" ]; then
   home=$(cd "$HOME" && pwd -P)
-  for d in "$A_DATA" "$B_DATA"; do
-    real=$(cd "$d" && pwd -P)
+  real_a=$(cd "$A_DATA" && pwd -P)
+  real_b=$(cd "$B_DATA" && pwd -P)
+  for real in "$real_a" "$real_b"; do
     case "$real" in
-      "$home/finance-app-data" | "$home/finance-app-data/"* | "$home/investing-app-data" | "$home/investing-app-data/"*)
-        usage "data dir $d resolves to $real: a live data dir, refused before any write" ;;
+      "$home/finance-app-data" | "$home/finance-app-data/"*)
+        usage "data dir $real is finance-app's live data dir, refused before any write" ;;
     esac
   done
+  case "$real_a" in
+    "$home/investing-app-data" | "$home/investing-app-data/"*)
+      usage "A_DATA $real_a is the investing-app data dir; A is finance-app's copy, refused before any write" ;;
+  esac
 fi
 [ -f tests/fixtures/research/structure-BUMI.draft.json ] || usage "tests/fixtures/research/structure-BUMI.draft.json missing"
 
-# D7: B must be the sandbox, checked before anything is written.
+# D7: B must be the sandbox, checked before anything is written. Unreachable, non-JSON, a missing
+# key and false all refuse, which is also what lets B_DATA be $HOME/investing-app-data above.
 if ! curl -s -m 5 "$B_URL/api/health" | jq -e '.sandbox == true' >/dev/null 2>&1; then
   usage "B_URL=$B_URL: /api/health has no \"sandbox\": true (start B with INVESTING_SANDBOX=1)"
 fi

@@ -190,7 +190,7 @@ ORDER BY 1, 2;
 
 L1b confirms each jq path against the self-test run and removes any drop that matches nothing; a new drop needs a reason line and the owner's OK in the L1b PR.
 
-**`scripts/writes.sh`** (prd.md A3). Env `A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER`. Refuses `:8787`, and refuses unless B's `/api/health` has `"sandbox": true`. Sends each request to A, then to B, each side using the ids its own earlier responses returned; request bodies are copied from the finance-app test named, so the expected status is known. Prints `label<TAB>a<TAB>b<TAB>ok|DIFF|SKIP`; exit 0 when every pair matches.
+**`scripts/writes.sh`** (prd.md A3). Env `A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER`. Refuses `:8787`, and refuses unless B's `/api/health` has `"sandbox": true` (unreachable, non-JSON, key absent or false all refuse, exit 2). A data dir that is or links to `~/finance-app-data` is refused on both sides, always. `~/investing-app-data` is refused as `A_DATA`; as `B_DATA` it is allowed only past that health check, because at L4 it IS the sandbox's own data dir (§3.4 step 5), thrown away at L5 step 3 (found at L4, 2026-10-28; the L1b guard refused it unconditionally). Sends each request to A, then to B, each side using the ids its own earlier responses returned; request bodies are copied from the finance-app test named, so the expected status is known. Prints `label<TAB>a<TAB>b<TAB>ok|DIFF|SKIP`; exit 0 when every pair matches.
 
 Requests run in this order, so every id exists before a request uses it: whatever a step creates is updated or deleted only by a later step, using the id from that step's own response on the same side. Three steps take an id the script does not create itself (12, 13, 15). When that id is missing on both sides, the step prints `label<TAB>-<TAB>-<TAB>SKIP <reason>` and does not fail the run. When it is missing on one side only, the step is a `DIFF`.
 
@@ -243,6 +243,7 @@ Checked 2026-10-27 on the fixture: `TICKER=AAAA` gives ticker AAAA, 40 nodes, no
 7. Negative: one extra claim on B only → `parity.sh` exit 1 naming `/api/research/AAAA/claims`; `counts.sh "$W/f1" "$W/f2"` exit 1 naming `claims AAAA`.
 8. `TICKER=AAAA scripts/writes.sh` → exit 0; the refresh row reads `503 503 ok`; the structure-draft row reads `ok` (the AAAA rewrite above). `SKIP` is accepted only on steps 12 and 13 (the fixture desk may have no open event, and the upload may yield fewer than two proposals), and each `SKIP` line is pasted into the L1b PR. At L4, any `SKIP` is reported in the L4 PR next to `writes.txt`.
 9. Guards: `A_URL=http://127.0.0.1:8787 scripts/parity.sh` and the same for `writes.sh` exit 2 before any request; `writes.sh` with B started without `INVESTING_SANDBOX` exits 2.
+    Step 9 also runs `writes.sh` under a curl shim and a scratch `$HOME`: `B_DATA` = `investing-app-data` with `"sandbox": true` passes the guard; with the key absent, `false`, non-JSON or B unreachable it exits 2 after the one health read; `finance-app-data` exits 2 with no request even when health says `sandbox: true`.
 10. Stop both binaries; the script exits 0 only when every step above matched.
 
 ### 3.2 L2 Web shell

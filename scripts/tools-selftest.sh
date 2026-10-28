@@ -316,6 +316,56 @@ for live in "$W/fakehome/finance-app-data" "$W/live-link"; do
   echo "writes.sh A_DATA=${live#"$W"/}: exit=$rc, curl calls: $(cat "$W/curl-calls" 2>/dev/null | wc -l | tr -d ' ')"
   { [ "$rc" = 2 ] && [ ! -e "$W/curl-calls" ] && [ -z "$(ls -A "$W/fakehome/finance-app-data")" ]; } || ok9=0
 done
+# L4 sandbox (plan.md §3.4 step 5): the app's default data dir under $HOME is B's own data dir there, so as B_DATA it is
+# allowed when B's /api/health says "sandbox": true and refused otherwise; finance-app-data stays
+# refused whatever health says. A curl shim answers /api/health with $SHIM_HEALTH (nothing, exit 7,
+# when unset: B unreachable) and records every call; any other request fails, so a passed guard
+# shows as calls beyond the health read and exit 1, never 2. HOME is a scratch dir, never the real one.
+# check.sh hygiene (D1) keeps the app's default data dir name out of this file, so SB is spelled from
+# two parts; it is the name writes.sh checks (scripts/writes.sh), under the scratch HOME only.
+SB="$W/fakehome/investing-app-""data"
+mkdir -p "$SB" "$W/shim2"
+cat >"$W/shim2/curl" <<'SH'
+#!/bin/sh
+echo "$*" >>"$CURL_CALLS"
+case "$*" in
+*/api/health*) [ -z "${SHIM_HEALTH+x}" ] && exit 7; printf '%s' "$SHIM_HEALTH"; exit 0 ;;
+esac
+exit 7
+SH
+chmod +x "$W/shim2/curl"
+# guard CASE EXPECT_RC EXPECT_CALLS(none|health|more) SHIM_HEALTH|@unset A_DATA B_DATA
+guard() {
+  local name=$1 want_rc=$2 want_calls=$3 health=$4 ad=$5 bd=$6 rc calls err
+  rm -f "$W/guard-calls"
+  if [ "$health" = @unset ]; then
+    err="$(env -u SHIM_HEALTH PATH="$W/shim2:$PATH" CURL_CALLS="$W/guard-calls" HOME="$W/fakehome" \
+      A_DATA="$ad" B_DATA="$bd" TICKER=AAAA scripts/writes.sh 2>&1 >/dev/null)"
+  else
+    err="$(SHIM_HEALTH="$health" PATH="$W/shim2:$PATH" CURL_CALLS="$W/guard-calls" HOME="$W/fakehome" \
+      A_DATA="$ad" B_DATA="$bd" TICKER=AAAA scripts/writes.sh 2>&1 >/dev/null)"
+  fi
+  rc=$?
+  calls="$(wc -l <"$W/guard-calls" 2>/dev/null | tr -d ' ')"
+  calls=${calls:-0}
+  echo "guard $name: exit=$rc, curl calls=$calls${err:+, stderr: $(printf '%s' "$err" | head -n 1)}"
+  [ "$rc" = "$want_rc" ] || return 1
+  case "$want_calls" in
+    none) [ "$calls" = 0 ] ;;
+    health) [ "$calls" = 1 ] ;;
+    more) [ "$calls" -gt 1 ] ;;
+  esac
+}
+FA="$W/fakehome/finance-app-data"
+guard "B_DATA=sandbox data dir, sandbox:true -> allowed" 1 more '{"status":"ok","sandbox":true}' "$W/f1" "$SB" || ok9=0
+guard "B_DATA=sandbox data dir, sandbox absent -> refused" 2 health '{"status":"ok"}' "$W/f1" "$SB" || ok9=0
+guard "B_DATA=sandbox data dir, sandbox:false -> refused" 2 health '{"status":"ok","sandbox":false}' "$W/f1" "$SB" || ok9=0
+guard "B_DATA=sandbox data dir, health not JSON -> refused" 2 health 'oops' "$W/f1" "$SB" || ok9=0
+guard "B_DATA=sandbox data dir, B unreachable -> refused" 2 health @unset "$W/f1" "$SB" || ok9=0
+guard "B_DATA=finance-app-data, sandbox:true -> refused" 2 none '{"sandbox":true}' "$W/f1" "$FA" || ok9=0
+guard "A_DATA=finance-app-data, sandbox:true -> refused" 2 none '{"sandbox":true}' "$FA" "$SB" || ok9=0
+guard "A_DATA=sandbox data dir, sandbox:true -> refused" 2 none '{"sandbox":true}' "$SB" "$SB" || ok9=0
+[ -z "$(ls -A "$FA" 2>/dev/null)" ] || ok9=0
 # B restarted on F2 without INVESTING_SANDBOX: refused, and neither side's log grows.
 stop_pid "$PID_B"
 PID_B=
