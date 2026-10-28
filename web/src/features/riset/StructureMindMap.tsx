@@ -2,7 +2,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useSta
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Maximize2, Minus, Palette, Plus, Scan, X } from "lucide-react";
 import { cn } from "../../lib/cn";
 import { useModal } from "../../lib/modalStack";
-import { useSheetTrigger } from "../research/dossier/mobile/useSheetTrigger";
+import { useSheetTrigger } from "../research/components/useSheetTrigger";
 import type { StructureKind, StructureNode } from "../research/types";
 import { MindMapNodeSheet } from "./MindMapNodeSheet";
 import { expandableIds, isNarrow, layoutMindMap, TOGGLE, type MindMapLayout, type PlacedNode } from "./mindmapLayout";

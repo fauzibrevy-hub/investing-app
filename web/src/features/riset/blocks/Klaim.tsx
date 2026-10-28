@@ -6,7 +6,7 @@ import { ClaimEditor } from "../../research/components/ClaimEditor";
 import { ClaimEvaluations } from "../../research/components/ClaimEvaluations";
 import { ClaimRow } from "../../research/components/ClaimRow";
 import { ClaimCountsLine } from "../../research/components/claimStatus";
-import { useSheetTrigger } from "../../research/dossier/mobile/useSheetTrigger";
+import { useSheetTrigger } from "../../research/components/useSheetTrigger";
 import type { DossierResponse } from "../../research/types";
 import { Block, Empty, LoadError, Loading } from "../ui";
 

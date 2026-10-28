@@ -1,4 +1,4 @@
-import { Financials } from "../../research/dossier/sections/Financials";
+import { Financials } from "../../research/components/Financials";
 import type { DossierResponse } from "../../research/types";
 import { Block } from "../ui";
 

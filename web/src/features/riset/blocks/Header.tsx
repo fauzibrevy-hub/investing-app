@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
-import { PackOverride } from "../../research/dossier/DossierHeader";
+import { PackOverride } from "../../research/components/PackOverride";
 import { formatAge, formatValue } from "../../research/format";
 import type { DossierResponse } from "../../research/types";
 

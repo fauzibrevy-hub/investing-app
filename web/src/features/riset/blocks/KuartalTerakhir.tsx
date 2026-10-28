@@ -4,7 +4,7 @@ import { PackValue, YoyValue, isKpiCell } from "../../research/components/Metric
 import { formatMetric, metricScale } from "../../research/components/metricFormat";
 import { currencyWord, formatScaled, periodLabel, type Scale } from "../../research/format";
 import type { KpiPackCell, PackCell, PackMetric, PackResponse, XbrlPackCell } from "../../research/types";
-import { useSheetTrigger } from "../../research/dossier/mobile/useSheetTrigger";
+import { useSheetTrigger } from "../../research/components/useSheetTrigger";
 import { KpiEntrySheet } from "../KpiEntrySheet";
 import { gapSentence } from "../dataGaps";
 import { kpiMoneyUnit, lastQuarterGroups, quarterTableLabel, tableScale, unitCaption, type QuarterGroup, type QuarterRow } from "../lastQuarter";

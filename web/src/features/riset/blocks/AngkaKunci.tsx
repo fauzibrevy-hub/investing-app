@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Skeleton } from "../../../components/Skeleton";
 import { useDossier, useFinancials, usePack, useValuation } from "../../research/api";
-import { SourcedStat } from "../../research/dossier/mobile/SourcedStat";
+import { SourcedStat } from "../../research/components/SourcedStat";
 import { formatDelta, formatValue, periodLabel } from "../../research/format";
 import { relativeChange, signChangePhrase } from "../../research/change";
 import type { FinancialsResponse, PackResponse, YoY } from "../../research/types";

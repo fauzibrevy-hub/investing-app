@@ -3,7 +3,7 @@ import { Segmented } from "../../../components/Segmented";
 import { StatRow } from "../../../components/StatRow";
 import { usePack, usePrices } from "../../research/api";
 import { SourcedValue } from "../../research/components/SourcedValue";
-import { SourcedStat } from "../../research/dossier/mobile/SourcedStat";
+import { SourcedStat } from "../../research/components/SourcedStat";
 import { formatDelta, formatPct, formatValue, periodLabel } from "../../research/format";
 import type { PackResponse, PriceRange, PricesResponse } from "../../research/types";
 import { DriverVsReported, PriceVsDriver } from "../HargaCharts";

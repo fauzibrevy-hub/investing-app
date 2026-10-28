@@ -1295,3 +1295,9 @@ export interface StructureNodeCreate {
   metric?: string | null;
   note?: string | null;
 }
+
+/** Setiap bagian memuat datanya sendiri lewat hook `api.ts`; `dossier` hanya header dan ringkasan. */
+export interface SectionProps {
+  ticker: string;
+  dossier: DossierResponse;
+}

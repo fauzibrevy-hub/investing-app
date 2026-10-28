@@ -4,7 +4,7 @@ import { ApiError } from "../../../lib/api";
 import { importStructureDraft, updateStructureNode, useFinancials, usePack, useStructure } from "../../research/api";
 import { cellValue, latestKpiCell, latestXbrlCell, PackValue } from "../../research/components/MetricRow";
 import { formatMetric, metricScale } from "../../research/components/metricFormat";
-import { useSheetTrigger } from "../../research/dossier/mobile/useSheetTrigger";
+import { useSheetTrigger } from "../../research/components/useSheetTrigger";
 import { periodLabel } from "../../research/format";
 import type { KpiPackCell, PackMetric, PackResponse, StructureNode, StructureResponse } from "../../research/types";
 import { KpiEntrySheet } from "../KpiEntrySheet";

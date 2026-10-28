@@ -6,8 +6,7 @@ import { cn } from "../../../lib/cn";
 import { ApiError } from "../../../lib/api";
 import { closeClaim, useClaimEvidence, useClaims, useFinancials } from "../api";
 import { chooseScale, formatDate, formatPct, formatScaled, formatValue } from "../format";
-import type { Claim, ClaimStatus, Comparator } from "../types";
-import type { DossierPayload } from "../dossier/sections";
+import type { Claim, ClaimStatus, Comparator, DossierResponse } from "../types";
 import { STATUS_ORDER, STATUS_WORDS, ClaimStatusMark } from "./claimStatus";
 import { ClaimEditor } from "./ClaimEditor";
 
@@ -246,7 +245,7 @@ export function sortClaims(items: readonly Claim[]): Claim[] {
 
 export interface ClaimsPanelProps {
   ticker: string;
-  dossier: DossierPayload;
+  dossier: DossierResponse;
 }
 
 /** Separuh Klaim di pane kanan: **Tambah klaim**, editor inline di puncak daftar, lalu `ClaimCard` terurut. */
