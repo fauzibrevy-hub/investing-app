@@ -1,0 +1,6 @@
+note	A	files_documents	missing (0)
+note	A	thesis_drafts	missing (0)
+note	B	files_documents	missing (0)
+note	B	thesis_drafts	missing (0)
+counts: 0 differences
+counts exit 0

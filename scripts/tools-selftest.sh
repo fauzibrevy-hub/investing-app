@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/tools-selftest.sh (plan.md §3.1b, steps 1-10): proves counts.sh, parity.sh and writes.sh
+# scripts/tools-selftest.sh (plan.md §3.1b, steps 1-12): proves counts.sh, parity.sh and writes.sh
 # on fixtures. No live data: two binaries on 127.0.0.1:18801 (A) and :18802 (B, sandbox), each with
 # a scratch HOME, a mktemp data dir and a throwaway token. No network beyond what macro/trigger does
 # with MACRO_DISABLE_FRED=1. Binaries are stopped by PID, never by name (other worktrees run the
@@ -11,6 +11,7 @@ cd "$(dirname "$0")/.." || exit 2
 
 PORT_A=18801
 PORT_B=18802
+PORT_C=18803
 A_URL="http://127.0.0.1:$PORT_A"
 B_URL="http://127.0.0.1:$PORT_B"
 BIN=./target/release/investing-app
@@ -45,6 +46,7 @@ snapshot() {
 
 PID_A=
 PID_B=
+PID_C=
 W=
 # stop_pid PID: TERM, then KILL after 5 s; only the PID this script started.
 stop_pid() {
@@ -60,6 +62,7 @@ stop_pid() {
 cleanup() {
   stop_pid "$PID_A"
   stop_pid "$PID_B"
+  stop_pid "$PID_C"
   [ -z "$W" ] || rm -rf "$W"
 }
 trap cleanup EXIT
@@ -189,10 +192,42 @@ scripts/counts.sh "$W/f1" "$W/f2-bad"
 crc=$?
 echo "malformed drafts on B: exit=$crc"
 rm -rf "$W/f2-bad"
-if [ "$rc" = 0 ] && [ "$(printf '%s\n' "$out" | tail -n 1)" = "counts: 0 differences" ] && [ "$crc" = 2 ]; then
-  pass 4 "exit 0, counts: 0 differences; a malformed drafts file exits 2"
+# A drafts path that is a directory is not "never created": exit 2.
+cp -R "$W/f2" "$W/f2-dir"
+rm "$W/f2-dir/thesis_drafts.json"
+mkdir "$W/f2-dir/thesis_drafts.json"
+scripts/counts.sh "$W/f1" "$W/f2-dir"
+drc=$?
+echo "drafts path is a directory on B: exit=$drc"
+rm -rf "$W/f2-dir"
+# Never-created files (finance-app has no drafts file until a draft is saved, no research/documents
+# until a document is): both sides without them is 0 = 0, printed as `missing (0)`; one side without
+# a drafts file against a side with a draft is a difference.
+for side in f1 f2; do
+  cp -R "$W/$side" "$W/$side-bare"
+  rm "$W/$side-bare/thesis_drafts.json"
+  rmdir "$W/$side-bare/research/documents" "$W/$side-bare/research/structure" "$W/$side-bare/research/pdf-filings"
+done
+bout="$(scripts/counts.sh "$W/f1-bare" "$W/f2-bare")"
+brc=$?
+echo "$bout"
+echo "both sides never-created: exit=$brc"
+mout="$(scripts/counts.sh "$W/f1" "$W/f2-bare")"
+mrc=$?
+echo "$mout"
+echo "A has 1 draft, B has no drafts file: exit=$mrc"
+rm -rf "$W/f1-bare" "$W/f2-bare"
+tab="$(printf '\t')"
+if [ "$rc" = 0 ] && [ "$(printf '%s\n' "$out" | tail -n 1)" = "counts: 0 differences" ] && [ "$crc" = 2 ] && [ "$drc" = 2 ] &&
+  [ "$brc" = 0 ] && [ "$(printf '%s\n' "$bout" | tail -n 1)" = "counts: 0 differences" ] &&
+  [ "$(printf '%s\n' "$bout" | grep -c "^note${tab}")" = 8 ] &&
+  printf '%s\n' "$bout" | grep -qx "note${tab}A${tab}thesis_drafts${tab}missing (0)" &&
+  printf '%s\n' "$bout" | grep -qx "note${tab}B${tab}files_pdf_filings${tab}missing (0)" &&
+  [ "$mrc" = 1 ] && printf '%s\n' "$mout" | grep -qx "thesis_drafts${tab}-${tab}1${tab}0" &&
+  printf '%s\n' "$mout" | grep -qx "note${tab}B${tab}thesis_drafts${tab}missing (0)"; then
+  pass 4 "exit 0, counts: 0 differences; malformed drafts or a drafts directory exit 2; never-created drafts/documents count 0 and print missing (0)"
 else
-  fail 4 "expected exit 0 and 'counts: 0 differences', and exit 2 on a malformed drafts file"
+  fail 4 "expected exit 0 and 'counts: 0 differences', exit 2 on a malformed or non-file drafts path, and 0 = 0 with missing (0) notes for never-created files"
 fi
 
 # 5. A on F1, B on F2 (sandbox); AAAA as a manual ticker on both (research_universe_api.rs:
@@ -316,6 +351,56 @@ for live in "$W/fakehome/finance-app-data" "$W/live-link"; do
   echo "writes.sh A_DATA=${live#"$W"/}: exit=$rc, curl calls: $(cat "$W/curl-calls" 2>/dev/null | wc -l | tr -d ' ')"
   { [ "$rc" = 2 ] && [ ! -e "$W/curl-calls" ] && [ -z "$(ls -A "$W/fakehome/finance-app-data")" ]; } || ok9=0
 done
+# L4 sandbox (plan.md §3.4 step 5): the app's default data dir under $HOME is B's own data dir there, so as B_DATA it is
+# allowed when B's /api/health says "sandbox": true and refused otherwise; finance-app-data stays
+# refused whatever health says. A curl shim answers /api/health with $SHIM_HEALTH (nothing, exit 7,
+# when unset: B unreachable) and records every call; any other request fails, so a passed guard
+# shows as calls beyond the health read and exit 1, never 2. HOME is a scratch dir, never the real one.
+# check.sh hygiene (D1) keeps the app's default data dir name out of this file, so SB is spelled from
+# two parts; it is the name writes.sh checks (scripts/writes.sh), under the scratch HOME only.
+SB="$W/fakehome/investing-app-""data"
+mkdir -p "$SB" "$W/shim2"
+cat >"$W/shim2/curl" <<'SH'
+#!/bin/sh
+echo "$*" >>"$CURL_CALLS"
+case "$*" in
+*/api/health*) [ -z "${SHIM_HEALTH+x}" ] && exit 7; printf '%s' "$SHIM_HEALTH"; exit 0 ;;
+esac
+exit 7
+SH
+chmod +x "$W/shim2/curl"
+# guard CASE EXPECT_RC EXPECT_CALLS(none|health|more) SHIM_HEALTH|@unset A_DATA B_DATA
+guard() {
+  local name=$1 want_rc=$2 want_calls=$3 health=$4 ad=$5 bd=$6 rc calls err
+  rm -f "$W/guard-calls"
+  if [ "$health" = @unset ]; then
+    err="$(env -u SHIM_HEALTH PATH="$W/shim2:$PATH" CURL_CALLS="$W/guard-calls" HOME="$W/fakehome" \
+      A_DATA="$ad" B_DATA="$bd" TICKER=AAAA scripts/writes.sh 2>&1 >/dev/null)"
+  else
+    err="$(SHIM_HEALTH="$health" PATH="$W/shim2:$PATH" CURL_CALLS="$W/guard-calls" HOME="$W/fakehome" \
+      A_DATA="$ad" B_DATA="$bd" TICKER=AAAA scripts/writes.sh 2>&1 >/dev/null)"
+  fi
+  rc=$?
+  calls="$(wc -l <"$W/guard-calls" 2>/dev/null | tr -d ' ')"
+  calls=${calls:-0}
+  echo "guard $name: exit=$rc, curl calls=$calls${err:+, stderr: $(printf '%s' "$err" | head -n 1)}"
+  [ "$rc" = "$want_rc" ] || return 1
+  case "$want_calls" in
+    none) [ "$calls" = 0 ] ;;
+    health) [ "$calls" = 1 ] ;;
+    more) [ "$calls" -gt 1 ] ;;
+  esac
+}
+FA="$W/fakehome/finance-app-data"
+guard "B_DATA=sandbox data dir, sandbox:true -> allowed" 1 more '{"status":"ok","sandbox":true}' "$W/f1" "$SB" || ok9=0
+guard "B_DATA=sandbox data dir, sandbox absent -> refused" 2 health '{"status":"ok"}' "$W/f1" "$SB" || ok9=0
+guard "B_DATA=sandbox data dir, sandbox:false -> refused" 2 health '{"status":"ok","sandbox":false}' "$W/f1" "$SB" || ok9=0
+guard "B_DATA=sandbox data dir, health not JSON -> refused" 2 health 'oops' "$W/f1" "$SB" || ok9=0
+guard "B_DATA=sandbox data dir, B unreachable -> refused" 2 health @unset "$W/f1" "$SB" || ok9=0
+guard "B_DATA=finance-app-data, sandbox:true -> refused" 2 none '{"sandbox":true}' "$W/f1" "$FA" || ok9=0
+guard "A_DATA=finance-app-data, sandbox:true -> refused" 2 none '{"sandbox":true}' "$FA" "$SB" || ok9=0
+guard "A_DATA=sandbox data dir, sandbox:true -> refused" 2 none '{"sandbox":true}' "$SB" "$SB" || ok9=0
+[ -z "$(ls -A "$FA" 2>/dev/null)" ] || ok9=0
 # B restarted on F2 without INVESTING_SANDBOX: refused, and neither side's log grows.
 stop_pid "$PID_B"
 PID_B=
@@ -348,9 +433,110 @@ else
   fail 10 "a binary still answers"
 fi
 
+# 11. deploy/run.sh from launchd's working directory (/) serves the repo's pack files, not only the embedded
+# copies. L4 parity found /api/research/packs `files: 0` and seven `embedded_ids` on the deployed service
+# against `files: 7` on finance-app: the relative default `research/packs` (src/config.rs) found nothing
+# under cwd=/. Real run.sh with a scratch env file and HOME on :18803; nothing but the pack status is read.
+step 11 "deploy/run.sh with cwd=/ on :$PORT_C: /api/research/packs reads files, not the embedded set"
+APP_ROOT="$PWD"
+mkdir -p "$W/home-C" "$W/f3"
+printf 'INVESTING_APP_TOKEN=%s\nINVESTING_BIND=127.0.0.1:%s\nINVESTING_DATA_DIR=%s\nPORTFOLIO_SPREADSHEET_ID=smoke\nGOOGLE_APPLICATION_CREDENTIALS=%s\nMACRO_DISABLE_FRED=1\nINVESTING_RESEARCH_DISABLE_SCHEDULER=1\nINVESTING_MACRO_WATCHER=0\n' \
+  "$TOKEN_B" "$PORT_C" "$W/f3" "$W/home-C/none.json" >"$W/run.env"
+if up "http://127.0.0.1:$PORT_C"; then
+  fail 11 "port $PORT_C is already in use"
+else
+  (cd / && exec env -i PATH="$PATH" HOME="$W/home-C" INVESTING_ENV_FILE="$W/run.env" "$APP_ROOT/deploy/run.sh") >>"$W/C.log" 2>&1 &
+  PID_C=$!
+  for _ in $(seq 120); do
+    up "http://127.0.0.1:$PORT_C" && break
+    kill -0 "$PID_C" 2>/dev/null || break
+    sleep 0.25
+  done
+  status="$(curl -s -m 5 -H "@$W/auth.B" "http://127.0.0.1:$PORT_C/api/research/packs" | jq -c '.status | {files, embedded_ids, invalid}' 2>/dev/null)"
+  echo "packs status: $status"
+  stop_pid "$PID_C"
+  PID_C=
+  if [ "$status" = '{"files":7,"embedded_ids":[],"invalid":[]}' ]; then
+    pass 11 "run.sh from cwd=/ loads the 7 pack files, no embedded fallback"
+  else
+    fail 11 "expected files 7, embedded_ids [] and invalid []; got $status"
+    tail -n 5 "$W/C.log"
+  fi
+fi
+
+# 12. writes.sh step 1 with a ticker real data does not list: a 422 on both sides is a SKIP on step 3, not a DIFF.
+# L4 found U=BBBB is not in the exchange list (422 not_listed both sides), so step 3 had no id to delete.
+# A curl shim stands in for both sides (no port is opened); A and B are told apart by port.
+step 12 "writes.sh U: 422 on both sides gives step 3 SKIP; split answers still DIFF; U is validated"
+mkdir -p "$W/shim3" "$W/s12a" "$W/s12b"
+cat >"$W/shim3/curl" <<'SH'
+#!/bin/sh
+out=; wfmt=; method=GET; url=
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -o) out=$2; shift 2; continue ;;
+    -w) wfmt=1; shift 2; continue ;;
+    -X) method=$2; shift 2; continue ;;
+    -m | -H | --data-binary | -F) shift 2; continue ;;
+  esac
+  url=$1
+  shift
+done
+case "$url" in
+*/api/health*) printf '{"sandbox":true}'; exit 0 ;;
+esac
+code=200
+body='{}'
+case "$method $url" in
+"POST "*/universe)
+  case "$url:$SHIM_A_UNIVERSE" in
+  *:18811/*:201) code=201; body='{"ticker":"ZZZZ"}' ;;
+  *) code=422; body='{"detail":[{"type":"not_listed"}]}' ;;
+  esac ;;
+*/refresh*) code=503 ;;
+esac
+[ -z "$out" ] || printf '%s' "$body" >"$out"
+[ -z "$wfmt" ] || printf '%s' "$code"
+exit 0
+SH
+chmod +x "$W/shim3/curl"
+# w12 VAR=VALUE...: writes.sh on the shim, A on :18811 and B on :18812, TICKER=AAAA.
+w12() {
+  env PATH="$W/shim3:$PATH" HOME="$W/fakehome" A_URL=http://127.0.0.1:18811 B_URL=http://127.0.0.1:18812 \
+    A_TOKEN=x B_TOKEN=y A_DATA="$W/s12a" B_DATA="$W/s12b" TICKER=AAAA "$@" scripts/writes.sh
+}
+ok12=1
+out="$(w12 SHIM_A_UNIVERSE=422 U=zzzz 2>&1)"
+printf '%s\n' "$out" | grep -E '^0[123] '
+l1="$(printf '%s\n' "$out" | grep '^01 ')"
+l3="$(printf '%s\n' "$out" | grep '^03 ')"
+ndiff="$(printf '%s\n' "$out" | grep -c "${tab}DIFF\$")"
+nsum="$(printf '%s\n' "$out" | sed -n 's/^writes: \([0-9]*\) differences$/\1/p')"
+case "$l1" in "01 POST /api/research/universe (ZZZZ)${tab}422${tab}422${tab}ok") ;; *) ok12=0 ;; esac
+case "$l3" in *"${tab}SKIP "*) ;; *) ok12=0 ;; esac
+[ "$ndiff" = "$nsum" ] || ok12=0
+echo "422 on both: DIFF lines=$ndiff, summary=$nsum"
+# A created it and B refused: not identical, so step 3 still reports DIFF.
+out="$(w12 SHIM_A_UNIVERSE=201 U=ZZZZ 2>&1)"
+l3="$(printf '%s\n' "$out" | grep '^03 ')"
+echo "A 201, B 422: $l3"
+case "$l3" in *"${tab}DIFF") ;; *) ok12=0 ;; esac
+# U is validated like TICKER, and may not be TICKER.
+for bad in 'U=a b' 'U=X' 'U=AAAA'; do
+  err="$(w12 SHIM_A_UNIVERSE=422 "$bad" 2>&1 >/dev/null)"
+  rc=$?
+  echo "$bad: exit=$rc, $(printf '%s' "$err" | head -n 1)"
+  [ "$rc" = 2 ] || ok12=0
+done
+if [ "$ok12" = 1 ]; then
+  pass 12 "422/422 on step 1 -> step 3 SKIP (not counted); 201/422 -> DIFF; bad U exits 2"
+else
+  fail 12 "expected step 1 ok 422/422 and step 3 SKIP, DIFF count = summary, 201/422 DIFF, bad U exit 2"
+fi
+
 echo
 if [ "$failed" -eq 0 ]; then
-  echo "tools-selftest: all 10 steps passed"
+  echo "tools-selftest: all 12 steps passed"
 else
   echo "tools-selftest: $failed step(s) failed"
 fi

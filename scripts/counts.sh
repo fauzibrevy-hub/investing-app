@@ -8,6 +8,12 @@
 # closed WAL / .backup copy). Immutable mode assumes NO WRITER: run against stopped snapshot
 # copies or a stopped server's dir. On a dir a running server writes to, a checkpointed idle
 # database can read a stale view; stop the server first (plan.md §3.1b deviation, review L1b #7).
+#
+# Two things finance-app only creates on first use may be absent, on either side: the drafts file
+# (its loader treats NotFound as an empty map, src/thesis/drafts.rs:31) and the research/{documents,
+# structure,pdf-filings} directories. Absent counts as 0 and is printed as a `note` line ahead of
+# the differences, so the evidence file shows it. A drafts file that exists but is not valid
+# JSON, or a path that exists but is not the right kind of file, still exits 2.
 set -euo pipefail
 
 usage() {
@@ -35,21 +41,25 @@ check_side() {
     "$DIR/research.sqlite" \
     "$DIR/research-log.jsonl" \
     "$DIR/research-idempotency.jsonl" \
-    "$DIR/macro_store.json" \
-    "$drafts"
+    "$DIR/macro_store.json"
   do
     if [ ! -f "$p" ]; then
       echo "counts.sh: missing file: $p" >&2
       exit 2
     fi
   done
+  # Absent is fine (collect_dir counts it as 0); present but the wrong kind is not.
+  if [ -e "$drafts" ] && [ ! -f "$drafts" ]; then
+    echo "counts.sh: not a file: $drafts" >&2
+    exit 2
+  fi
   for p in \
     "$DIR/research/documents" \
     "$DIR/research/structure" \
     "$DIR/research/pdf-filings"
   do
-    if [ ! -d "$p" ]; then
-      echo "counts.sh: missing directory: $p" >&2
+    if [ -e "$p" ] && [ ! -d "$p" ]; then
+      echo "counts.sh: not a directory: $p" >&2
       exit 2
     fi
   done
@@ -90,19 +100,34 @@ ORDER BY 1, 2;
 SQL
 }
 
+# count_files SIDE DIR NAME: files under DIR, or 0 with a note when DIR was never created.
+count_files() {
+  if [ -d "$2" ]; then
+    find "$2" -type f | wc -l | tr -d '[:space:]'
+  else
+    echo 0
+    printf 'note\t%s\t%s\tmissing (0)\n' "$1" "$3" >>"$tmp_dir/notes"
+  fi
+}
+
 collect_dir() {
-  local DIR="$1" drafts="$2"
+  local SIDE="$1" DIR="$2" drafts="$3"
   local log_lines idempotency_lines thesis_drafts macro_indicators macro_observations
   local files_documents files_structure files_pdf_filings
 
   log_lines="$(wc -l < "$DIR/research-log.jsonl" | tr -d '[:space:]')" || return 1
   idempotency_lines="$(wc -l < "$DIR/research-idempotency.jsonl" | tr -d '[:space:]')" || return 1
-  thesis_drafts="$(jq 'length' "$drafts")" || return 1
+  if [ -e "$drafts" ]; then
+    thesis_drafts="$(jq 'length' "$drafts")" || return 1
+  else
+    thesis_drafts=0
+    printf 'note\t%s\tthesis_drafts\tmissing (0)\n' "$SIDE" >>"$tmp_dir/notes"
+  fi
   macro_indicators="$(jq 'length' "$DIR/macro_store.json")" || return 1
   macro_observations="$(jq '[.[] | (.history // []) | length] | add // 0' "$DIR/macro_store.json")" || return 1
-  files_documents="$(find "$DIR/research/documents" -type f | wc -l | tr -d '[:space:]')" || return 1
-  files_structure="$(find "$DIR/research/structure" -type f | wc -l | tr -d '[:space:]')" || return 1
-  files_pdf_filings="$(find "$DIR/research/pdf-filings" -type f | wc -l | tr -d '[:space:]')" || return 1
+  files_documents="$(count_files "$SIDE" "$DIR/research/documents" files_documents)" || return 1
+  files_structure="$(count_files "$SIDE" "$DIR/research/structure" files_structure)" || return 1
+  files_pdf_filings="$(count_files "$SIDE" "$DIR/research/pdf-filings" files_pdf_filings)" || return 1
 
   printf 'log_lines\t-\t%s\n' "$log_lines"
   printf 'idempotency_lines\t-\t%s\n' "$idempotency_lines"
@@ -114,10 +139,10 @@ collect_dir() {
   printf 'files_pdf_filings\t-\t%s\n' "$files_pdf_filings"
 }
 
-if ! collect_sql "$DIR_A" > "$tmp_dir/a.sql" || ! collect_dir "$DIR_A" "$DRAFTS_A" > "$tmp_dir/a.dir"; then
+if ! collect_sql "$DIR_A" > "$tmp_dir/a.sql" || ! collect_dir A "$DIR_A" "$DRAFTS_A" > "$tmp_dir/a.dir"; then
   exit 2
 fi
-if ! collect_sql "$DIR_B" > "$tmp_dir/b.sql" || ! collect_dir "$DIR_B" "$DRAFTS_B" > "$tmp_dir/b.dir"; then
+if ! collect_sql "$DIR_B" > "$tmp_dir/b.sql" || ! collect_dir B "$DIR_B" "$DRAFTS_B" > "$tmp_dir/b.dir"; then
   exit 2
 fi
 
@@ -127,6 +152,9 @@ fi
 } > "$tmp_dir/keys"
 cat "$tmp_dir/a.sql" "$tmp_dir/a.dir" > "$tmp_dir/a.tsv"
 cat "$tmp_dir/b.sql" "$tmp_dir/b.dir" > "$tmp_dir/b.tsv"
+
+# One line per absent thing: note<TAB>side<TAB>metric<TAB>missing (0). Counted as 0, never a failure.
+[ ! -s "$tmp_dir/notes" ] || LC_ALL=C sort "$tmp_dir/notes"
 
 rc=0
 awk -F'\t' '

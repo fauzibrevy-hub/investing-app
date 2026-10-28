@@ -1,0 +1,33 @@
+01 POST /api/research/universe (UNTR)	201	201	ok
+02 PUT /api/research/universe/BUMI	200	200	ok
+03 DELETE /api/research/universe/{step 1}	204	204	ok
+04 PUT /api/research/BUMI/kpi/production_mt/2026/2	200	200	ok
+05 DELETE /api/research/BUMI/kpi/{step 4}	204	204	ok
+06 POST /api/research/BUMI/claims	201	201	ok
+07 PATCH /api/research/claims/{step 6}	200	200	ok
+08 POST /api/research/BUMI/documents	201	201	ok
+09 POST /api/research/evidence (steps 6, 8)	201	201	ok
+10 POST /api/research/BUMI/journal	201	201	ok
+11 POST /api/research/journal/{step 10}/annotations	201	201	ok
+12 POST /api/research/events/{first open}/dismiss	200	200	ok
+13 POST /api/research/BUMI/documents/upload	201	201	ok
+13 POST /api/research/proposals/{first}/accept	409	409	ok
+13 POST /api/research/proposals/{second}/reject	200	200	ok
+14 POST /api/research/BUMI/structure/draft	422	422	ok
+15 PUT /api/research/BUMI/structure/nodes/{first}	200	200	ok
+15 PUT /api/research/BUMI/structure/nodes/{second}	200	200	ok
+16 POST /api/research/BUMI/structure/nodes	201	201	ok
+16 DELETE /api/research/BUMI/structure/nodes/{step 16}	200	200	ok
+17 PUT /api/research/BUMI/scenarios	200	200	ok
+18 POST /api/research/BUMI/seen	204	204	ok
+19 PUT /api/research/BUMI/shares	200	200	ok
+19 DELETE /api/research/BUMI/shares?as_of={step 19}	204	204	ok
+20 POST /api/research/BUMI/calendar	201	201	ok
+20 DELETE /api/research/BUMI/calendar/{date}/{kind}	204	204	ok
+21 POST /api/research/packs/reload	200	200	ok
+22 POST /api/research/refresh?ticker=BUMI	503	503	ok
+23 POST /api/thesis/drafts	201	201	ok
+23 DELETE /api/thesis/drafts/{step 23}	204	204	ok
+24 POST /api/macro/trigger	200	200	ok
+writes: 0 differences
+writes exit 0

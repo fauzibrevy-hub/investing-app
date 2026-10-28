@@ -22,6 +22,18 @@ are filled in; launchd expands neither `$HOME` nor `~`), reloads the job and wai
 checkout and the service dies when it is deleted. `SKIP_BUILD=1` skips the builds. The weekly
 scraper job is a separate step: §5, `install-scraper.sh`, once, at cutover.
 
+`deploy/run.sh` sets `INVESTING_RESEARCH_PACKS_DIR` to `<checkout>/research/packs` unless the env file
+sets it: launchd starts the service in `/`, where the relative default finds no pack files and
+`GET /api/research/packs` would report `files: 0` and seven `embedded_ids`.
+
+First start: macOS asks whether `investing-app` may access files in Documents, because the vault lives
+in `~/Documents`. Click Allow. Until you do, `/api/thesis/*` answers nothing (curl status `000`, so
+`scripts/parity.sh` shows `DIFF` on every thesis path) while `/api/health` still answers 200.
+
+macOS ties that Documents permission to the binary's code identity, so a rebuild by `install.sh` can ask again (the same happens at L5). If `/api/thesis/*` hangs after a rebuild, check System Settings → Privacy & Security → Files & Folders before anything else.
+
+Parity is order-sensitive: run §3.4 step 5 once, in order, on a fresh snapshot (step 2). Re-running `parity.sh` after `writes.sh` shows timestamp-only `DIFF`s from the writes themselves, not a real difference.
+
 ## 2. Verify
 
 ```
