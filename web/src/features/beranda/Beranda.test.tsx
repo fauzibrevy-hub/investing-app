@@ -211,6 +211,10 @@ describe("Makro (MacroGrid)", () => {
     expect(two).toHaveTextContent("80,5");
     expect(two).toHaveTextContent("USD/barel");
     expect(two).toHaveTextContent("+1,85");
+    // F6: line 2 never wraps onto a third line; the unit gives way (ellipsis), the number and the change do not.
+    expect(two).not.toHaveClass("flex-wrap");
+    expect(two.querySelector('[aria-hidden="true"].truncate')).toHaveTextContent("USD/barel");
+    expect(oil.querySelector('[data-line="3"]')).toBeNull();
     expect(card("Suku bunga acuan").querySelector('[data-line="2"]')).toHaveTextContent(/^4,75.*%.*−0,25/);
     expect(card("Kurs rupiah")).not.toHaveTextContent("Rp");
     expect(card("Inflasi inti")).toHaveTextContent("belum ada");

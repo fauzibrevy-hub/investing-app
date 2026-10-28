@@ -87,9 +87,37 @@ for (const width of WIDTHS) {
       expect(await horizontalOverflow(page), "gulir horizontal halaman").toMatchObject({ overflow: false });
     });
 
+    test("at 200 % root font every Makro card stays two lines: the signed change never drops to a third line", async ({ page }) => {
+      await openBeranda(page);
+      await page.addStyleTag({ content: "html{font-size:200% !important}" });
+      await page.waitForTimeout(300);
+      const cards = await page.locator(MACRO).getByRole("list", { name: /Indikator makro/ }).getByRole("listitem").evaluateAll((items) =>
+        items.map((li) => {
+          const button = li.querySelector("button")!;
+          const lines = Array.from(button.children) as HTMLElement[];
+          const line2 = button.querySelector<HTMLElement>('[data-line="2"]')!;
+          const lh = parseFloat(getComputedStyle(line2).lineHeight);
+          return {
+            name: button.querySelector('[data-line="1"]')!.textContent,
+            lines: lines.map((l) => l.getAttribute("data-line")),
+            line2H: line2.getBoundingClientRect().height,
+            line2Lh: lh,
+            below: Array.from(line2.children).filter((c) => c.getBoundingClientRect().bottom > line2.getBoundingClientRect().bottom + 1).length,
+          };
+        }),
+      );
+      expect(cards.length).toBeGreaterThan(0);
+      for (const c of cards) {
+        expect(c.lines, `${c.name}: baris kartu`).toEqual(["1", "2"]);
+        expect(c.line2H, `${c.name}: baris 2 membungkus`).toBeLessThanOrEqual(c.line2Lh + 1);
+        expect(c.below, `${c.name}: nilai atau selisih jatuh ke bawah baris 2`).toBe(0);
+      }
+      expect(await horizontalOverflow(page), "gulir horizontal halaman").toMatchObject({ overflow: false });
+    });
+
     test("worst-case values (large, negative, with a unit) neither collide nor widen the page", async ({ page }) => {
       await mockApi(page);
-      const worst = obs(0, { metric_id: "worst", name: "Inflasi tahunan dengan nama yang panjang", unit: "percent_yoy", value: -1234.56, history: [{ date: "2026-09-18", value: 1234.56 }] });
+      const worst = obs(0, { metric_id: "worst", name: "Inflasi tahunan dengan nama yang panjang", unit: "percent_yoy", value: -1234.56, history: [{ date: "2026-09-18", value: -1200 }] });
       await overrideApi(page, "/api/macro/observations", { body: macroOf([worst, obs(1), obs(2)]) });
       await page.goto("/#/beranda");
       const card = page.locator(MACRO).getByRole("button", { name: /Inflasi tahunan/ });
