@@ -115,8 +115,31 @@ describe("Portofolio: tata letak", () => {
     expect(items.map((li) => li.textContent?.slice(0, 4))).toEqual(["AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF"]);
     const swatches = items.map((li) => (li.querySelector("[data-swatch]") as HTMLElement).dataset.swatch);
     expect(new Set(swatches).size).toBe(6);
-    expect(screen.getByRole("group", { name: /Segmen Nilai pasar/ })).toBeInTheDocument();
     expect(screen.getByText("6 emiten")).toBeInTheDocument();
+  });
+
+  it("donut hanya visual (inert + aria-hidden, tanpa tombol busur); legenda memegang aksi pilih ≥ 44 px dan menyorot irisan", async () => {
+    renderAt();
+    const legend = await screen.findByRole("list", { name: "Legenda komposisi" });
+    const arcs = Array.from(document.querySelectorAll("[data-segment]"));
+    expect(arcs).toHaveLength(2);
+    for (const arc of arcs) expect(arc.closest("[inert][aria-hidden='true']")).not.toBeNull();
+    expect(screen.queryByRole("button", { name: /^BUMI, / })).toBeNull();
+
+    const rows = within(legend).getAllByRole("button");
+    expect(rows.map((r) => r.textContent?.slice(0, 4))).toEqual(["BUMI", "SOCI"]);
+    for (const r of rows) {
+      expect(r.className).toContain("min-h-11");
+      expect(r).toHaveAttribute("aria-pressed", "false");
+    }
+    fireEvent.click(rows[1]);
+    expect(rows[1]).toHaveAttribute("aria-pressed", "true");
+    expect(rows[0]).toHaveAttribute("aria-pressed", "false");
+    expect(document.querySelector("[data-center-line='0']")).toHaveTextContent("SOCI");
+    expect((document.querySelector("[data-arc='0']") as SVGElement).getAttribute("opacity")).toBe("0.35");
+    fireEvent.click(rows[1]);
+    expect(rows[1]).toHaveAttribute("aria-pressed", "false");
+    expect(document.querySelector("[data-center-line='0']")).toHaveTextContent("Nilai pasar");
   });
 
   it("Posisi: baris urut nilai, subjudul lot · avg, P/L % bertanda; tombol dengan pitch 57 px", async () => {
@@ -221,6 +244,14 @@ describe("Portofolio: Sheet posisi", () => {
     const { dialog } = await openBumi();
     expect(within(dialog).getByText("BUMI Tbk")).toBeInTheDocument();
     expect(within(dialog).getByText("CORE")).toBeInTheDocument();
+  });
+
+  it("badan Sheet yang bisa tergulir punya wilayah fokus bernama (tabIndex 0), dan fokus bisa masuk ke sana", async () => {
+    const { dialog } = await openBumi();
+    const region = within(dialog).getByRole("group", { name: "Rincian posisi BUMI" });
+    expect(region).toHaveAttribute("tabindex", "0");
+    region.focus();
+    expect(region).toHaveFocus();
   });
 
   it("memuat setiap angka posisi sebagai label–nilai", async () => {

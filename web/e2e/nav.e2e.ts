@@ -285,7 +285,7 @@ test.describe("jangkauan S4 (prd.md §5 S4)", () => {
     await open(page, "/portofolio");
     await expect(page.getByRole("heading", { level: 1, name: "Portofolio", exact: true })).toBeVisible();
     // Ketukan 1: baris posisi membuka Sheet posisi.
-    await page.getByRole("button", { name: /^COAL\s/ }).click();
+    await page.getByRole("button", { name: /^COAL\s.*\blot\b/ }).click();
     const dialog = page.getByRole("dialog", { name: "COAL" });
     await expect(dialog).toBeVisible();
     // Ketukan 2: Buka halaman perusahaan membuka rute perusahaan dengan BackHeader ‹ Portofolio.

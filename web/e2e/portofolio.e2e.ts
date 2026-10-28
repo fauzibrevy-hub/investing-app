@@ -99,6 +99,9 @@ async function audit(page: Page) {
   expect((await axeSeriousCritical(page, { mobile: true })).blocking, "axe serious/critical").toEqual([]);
 }
 
+/** Baris daftar Posisi (bukan baris legenda Komposisi, yang juga tombol): subjudulnya memuat "lot". */
+const positionRow = (page: Page, ticker: string) => page.getByRole("button", { name: new RegExp(`^${ticker}\\s.*\\blot\\b`) });
+
 /** Setiap kemunculan `Rp` yang diikuti digit di halaman (harus 0 saat nominal disembunyikan). */
 async function visibleRpDigits(page: Page): Promise<string[]> {
   return page.evaluate(() => (document.body.innerText ?? "").match(/Rp\s*[\d.,]+/g) ?? []);
@@ -110,7 +113,7 @@ test.describe("Portofolio (#/portofolio)", () => {
     expect(unmocked).toEqual([]);
 
     for (const pos of FIXTURE.positions) {
-      await page.getByRole("button", { name: new RegExp(`^${pos.ticker}\\s`) }).click();
+      await positionRow(page, pos.ticker).click();
       const dialog = page.getByRole("dialog", { name: pos.ticker });
       await expect(dialog).toBeVisible();
       await page.waitForTimeout(300);
@@ -163,7 +166,7 @@ test.describe("Portofolio (#/portofolio)", () => {
     await expect(page.getByRole("region", { name: "Nilai portofolio" })).toContainText("Rp••• · +1,5%");
 
     // Buka Sheet posisi saat mata aktif: semua nilai Rp tetap tersembunyi, persen tetap tampil.
-    await page.getByRole("button", { name: /^COAL\s/ }).click();
+    await positionRow(page, "COAL").click();
     const dialog = page.getByRole("dialog", { name: "COAL" });
     await expect(dialog).toBeVisible();
     expect(await visibleRpDigits(page)).toEqual([]);
@@ -181,7 +184,7 @@ test.describe("Portofolio (#/portofolio)", () => {
 
   test("Buka halaman perusahaan membuka rute perusahaan dengan label kembali ‹ Portofolio dan kembali ke Portofolio", async ({ page }) => {
     await openPortofolio(page);
-    await page.getByRole("button", { name: /^COAL\s/ }).click();
+    await positionRow(page, "COAL").click();
     const dialog = page.getByRole("dialog", { name: "COAL" });
     await expect(dialog).toBeVisible();
 
@@ -286,7 +289,7 @@ test.describe("tangkapan layar docs/qa/l3c/", () => {
     await expect(page.getByRole("button", { name: "Sembunyikan nominal" })).toHaveAttribute("aria-pressed", "false");
 
     // 3. Sheet posisi terbuka
-    await page.getByRole("button", { name: /^COAL\s/ }).click();
+    await positionRow(page, "COAL").click();
     const dialog = page.getByRole("dialog", { name: "COAL" });
     await expect(dialog).toBeVisible();
     await page.waitForTimeout(300);

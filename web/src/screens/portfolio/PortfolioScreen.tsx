@@ -55,12 +55,18 @@ function portfolioStatus(r: Resource<StockPortfolio>): "ready" | "loading" | "er
 /** Σ nilai pasar posisi. `summary.current_valuation` sudah termasuk kas (= Σ valuation + cash_balance). */
 export const marketValue = (positions: Position[]) => positions.reduce((a, p) => a + p.valuation, 0);
 
-/** Warna per ticker mengikuti segmen donut (urut nilai pasar; kecil → cat-8). */
+/** Warna dan indeks segmen per ticker mengikuti donut (urut nilai pasar; kecil → "Lainnya", cat-8). */
 function tickerColors(positions: Position[]) {
   const segments = prepareSegments(positions.map((p) => ({ label: p.ticker, value: p.valuation })));
   const map = new Map<string, CatIndex>();
-  segments.forEach((s) => (s.merged.length ? s.merged.forEach((m) => map.set(m, s.cat)) : map.set(s.label, s.cat)));
-  return { segments, map };
+  const segmentOf = new Map<string, number>();
+  segments.forEach((s, i) => {
+    for (const t of s.merged.length ? s.merged : [s.label]) {
+      map.set(t, s.cat);
+      segmentOf.set(t, i);
+    }
+  });
+  return { segments, map, segmentOf };
 }
 
 const dataAge = (s: StockPortfolio["summary"] | undefined) => (s?.updated_at ? `Harga per ${s.updated_at.slice(0, 16).replace("T", " ")}` : null);
@@ -93,7 +99,9 @@ export function PortfolioScreen() {
   const status = portfolioStatus(pf);
   const s = pf.data?.summary;
   const positions = [...(pf.data?.positions ?? [])].sort((a, b) => b.valuation - a.valuation);
-  const { segments, map } = tickerColors(positions);
+  const { segments, map, segmentOf } = tickerColors(positions);
+  const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
+  const selectedSegment = selectedTicker !== null ? (segmentOf.get(selectedTicker) ?? null) : null;
   const statState = status === "ready" ? "ready" : status;
   const short = (v: number) => formatRupiah(v, { short: true, bare: true, hidden });
   const age = dataAge(s);
@@ -146,20 +154,36 @@ export function PortfolioScreen() {
 
       <section className="flex flex-col gap-2">
         <SectionHeader title="Komposisi" />
-        <DonutChart
-          title="Nilai pasar"
-          countLabel={(n) => `${n} emiten`}
-          data={segments.map((x) => ({ label: x.label, value: x.value }))}
-          status={status}
-          onRetry={pf.reload}
-        />
+        {/*
+          Donut hanya visual: busurnya (role="button", kecil untuk irisan tipis) tidak ikut dijangkau ketuk, papan ketik
+          atau pembaca layar. Aksi pilih ada di baris legenda (44 px) dan menyorot irisan lewat `selected`; angkanya
+          tetap terbaca di legenda dan daftar Posisi. React 18 belum mengenal `inert` sebagai prop bertipe.
+        */}
+        <div aria-hidden="true" {...{ inert: "" }}>
+          <DonutChart
+            title="Nilai pasar"
+            countLabel={(n) => `${n} emiten`}
+            data={segments.map((x) => ({ label: x.label, value: x.value }))}
+            status={status}
+            onRetry={pf.reload}
+            selected={selectedSegment}
+            onSelectedChange={() => undefined}
+          />
+        </div>
         {status === "ready" ? (
           <ul aria-label="Legenda komposisi" className="flex flex-col">
             {positions.map((p) => (
-              <li key={p.ticker} className="flex min-h-9 items-center gap-2 text-label">
-                <Swatch cat={map.get(p.ticker) ?? 8} />
-                <span className="min-w-0 flex-1 truncate font-bold text-text">{p.ticker}</span>
-                <span className="num text-text-2">{formatPercent(p.val_alloc_pct)}</span>
+              <li key={p.ticker}>
+                <button
+                  type="button"
+                  aria-pressed={selectedTicker === p.ticker}
+                  onClick={() => setSelectedTicker((t) => (t === p.ticker ? null : p.ticker))}
+                  className="-mx-2 flex min-h-11 w-[calc(100%+16px)] items-center gap-2 rounded-sm px-2 text-left text-label active:opacity-[0.85] aria-pressed:bg-surface-sunken"
+                >
+                  <Swatch cat={map.get(p.ticker) ?? 8} />
+                  <span className="min-w-0 flex-1 truncate font-bold text-text">{p.ticker}</span>
+                  <span className="num text-text-2">{formatPercent(p.val_alloc_pct)}</span>
+                </button>
               </li>
             ))}
           </ul>
@@ -257,7 +281,9 @@ export function PositionDetail({ p }: { p: Position }) {
   const full = (v: number) => formatRupiah(v, { hidden });
   const plClass = p.pl >= 0 ? "text-status-safe" : "text-status-over";
   return (
-    <div className="flex flex-col gap-4">
+    // Badan Sheet (`overflow-y-auto`) bisa tergulir di font besar; wilayah ini bisa difokus dan bernama, jadi papan ketik
+    // dapat menggulirnya (WCAG 2.1.1; axe scrollable-region-focusable).
+    <div tabIndex={0} role="group" aria-label={`Rincian posisi ${p.ticker}`} className="flex flex-col gap-4 focus-visible:[outline-offset:-2px]">
       <div className="flex flex-col">
         <p className="text-label text-text-2">{p.company_name}</p>
         <p className="text-caption text-text-2">{p.category}</p>
