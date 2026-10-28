@@ -39,8 +39,8 @@ describe("canon vocabulary (plan §7.4, design §7, A5.3)", () => {
     expect(spokenOutsideScenarios(container)).not.toMatch(FAIR_VALUE_RE);
   });
 
-  // Teks yang paling mungkin menyebut nilai per saham milik sistem ada di keterangan asal angka (drawer fakta), jadi satu angka dibuka di permukaan yang punya FactChip (Bandingkan; blok halaman perusahaan menyusul di L3b).
-  it.each(SURFACES.filter((s) => s.name === "Compare"))("$name: the opened provenance dialog is free of verdict words and fair-value wording", async (surface) => {
+  // Teks yang paling mungkin menyebut nilai per saham milik sistem ada di keterangan asal angka (drawer fakta), jadi satu angka dibuka di permukaan yang punya FactChip (Bandingkan dan blok halaman perusahaan).
+  it.each(SURFACES.filter((s) => /Compare|Company COAL (Kuartal|Keuangan)/.test(s.name)))("$name: the opened provenance dialog is free of verdict words and fair-value wording", async (surface) => {
     const { container } = await renderSurface(surface);
     const chip = container.querySelector<HTMLElement>('button[aria-haspopup="dialog"]');
     expect(chip, `${surface.name} tanpa FactChip untuk dibuka`).not.toBeNull();

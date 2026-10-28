@@ -25,6 +25,13 @@ const local = (name: string) => readJson(LOCAL, name);
 const golden = (name: string): unknown => readJson(CANON, name);
 const has = (name: string) => existsSync(`${CANON}${name}.json`);
 
+/** Jawaban dengan status sendiri (mis. 404 untuk dossier tesis yang belum ada); tanpa ini setiap jawaban berstatus 200. */
+class Reply {
+  constructor(
+    readonly status: number,
+    readonly body: unknown,
+  ) {}
+}
 type Handler = unknown | ((url: URL) => unknown);
 
 function tickerRoutes(ticker: string): Record<string, Handler> {
@@ -32,6 +39,7 @@ function tickerRoutes(ticker: string): Record<string, Handler> {
   return {
     [`/api/research/${ticker}`]: golden(`ticker-${ticker}`),
     [`/api/research/${ticker}/pack`]: own(`pack-${ticker}`, "pack-COAL"),
+    [`/api/research/${ticker}/structure`]: own(`structure-${ticker}`, "structure-COAL"),
     [`/api/research/${ticker}/claims`]: golden("claims-COAL"),
     [`/api/research/${ticker}/journal`]: golden("journal-COAL"),
     [`/api/research/${ticker}/documents`]: own(`documents-${ticker}`, "documents-COAL"),
@@ -90,7 +98,11 @@ export const API_ROUTES: Record<string, Handler> = {
   "/api/thesis/CCCC": thesis("detail_CCCC"),
   "/api/thesis/macro": thesis("macro"),
   "/api/thesis/drafts/vault": thesis("drafts_vault"),
-  "/api/thesis/drafts": { drafts: [], vault_drafts: thesis("drafts_vault").vault_drafts, total: thesis("drafts_vault").vault_drafts.length },
+  // Emiten riset: COAL punya dossier vault (bentuk golden AAAA dengan ticker COAL) dan satu draf; REST dan NONE tidak punya.
+  "/api/thesis/COAL": { ...thesis("detail_AAAA"), ticker: "COAL", company: "PT Batubara Contoh Tbk" },
+  "/api/thesis/REST": new Reply(404, { detail: "Dossier tidak ada" }),
+  "/api/thesis/NONE": new Reply(404, { detail: "Dossier tidak ada" }),
+  "/api/thesis/drafts": { drafts: [local("thesis-draft-coal")], vault_drafts: thesis("drafts_vault").vault_drafts, total: thesis("drafts_vault").vault_drafts.length },
   // Portofolio (L3c): posisi COAL dan REST, supaya halaman perusahaan posisi punya data canon.
   "/api/finance/stock-portfolio": local("stock-portfolio"),
   ...tickerRoutes("COAL"),
@@ -104,6 +116,12 @@ function dynamic(pathname: string): Handler | undefined {
   const evidence = /^\/api\/research\/claims\/([^/]+)\/evidence$/.exec(pathname);
   if (evidence) return { claim_id: evidence[1], ticker: "COAL", items: [] };
   if (/^\/api\/research\/facts\//.test(pathname)) return golden("facts-COAL");
+  const draft = /^\/api\/thesis\/drafts\/([^/]+)$/.exec(pathname);
+  if (draft) {
+    const id = decodeURIComponent(draft[1]);
+    if (id === "d-coal-1") return local("thesis-draft-coal");
+    return thesis("drafts_vault").vault_drafts.find((d: { id: string }) => d.id === id) ?? new Reply(404, { detail: "Draf tidak ada" });
+  }
   return undefined;
 }
 
@@ -121,8 +139,9 @@ export async function mockApi(page: Page, { health }: { health?: unknown } = {})
       return route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ detail: "not mocked" }) });
     }
     // Tulis (POST/PUT/DELETE) tidak dipakai oleh pemeriksaan ini; jawab 200 kosong.
-    const body = typeof handler === "function" ? (handler as (u: URL) => unknown)(url) : handler;
-    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+    const answer = typeof handler === "function" ? (handler as (u: URL) => unknown)(url) : handler;
+    const { status, body } = answer instanceof Reply ? answer : { status: 200, body: answer };
+    return route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) });
   });
   return unmocked;
 }
