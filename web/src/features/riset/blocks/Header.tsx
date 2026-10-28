@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { BackHeader } from "../../../shell/BackHeader";
 import { PackOverride } from "../../research/components/PackOverride";
 import { formatAge, formatValue } from "../../research/format";
 import type { DossierResponse } from "../../research/types";
@@ -14,15 +13,12 @@ export function filingText(filing: DossierResponse["latest_filing"]): string {
   return `Laporan ${filing.period} ${filing.fy} · ${age === "hari ini" ? age : `${age} lalu`}`;
 }
 
-/** Blok 0: kembali ke Riset, kode dan nama, paket (dengan **Ubah paket**), laporan terakhir, lencana dipegang. */
+/** Blok 0: kembali ke tab pemilik ("‹ <tab>", design.md §2.4), kode dan nama, paket (dengan **Ubah paket**), laporan terakhir, lencana dipegang. */
 export function Header({ ticker, dossier }: { ticker: string; dossier: DossierResponse }) {
   const { pack } = dossier;
   return (
     <header className="flex flex-col gap-1" data-block="header">
-      <Link to="/riset" className="-ml-1 inline-flex min-h-11 w-fit items-center gap-1 rounded-sm pl-1 pr-3 text-label font-bold text-accent">
-        <ChevronLeft aria-hidden="true" size={18} strokeWidth={1.75} />
-        Riset
-      </Link>
+      <BackHeader />
       <h1 className="flex flex-wrap items-baseline gap-x-2 text-title text-text">
         <span className="text-stat">{ticker}</span>
         {dossier.name ? <span className="min-w-0 break-words text-label font-semibold text-text-2">{dossier.name}</span> : null}

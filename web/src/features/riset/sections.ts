@@ -1,9 +1,9 @@
-export type BlockId = "struktur" | "angka" | "kuartal" | "sorotan" | "klaim" | "kosong" | "jurnal" | "harga" | "keuangan" | "footer";
+export type BlockId = "struktur" | "angka" | "kuartal" | "sorotan" | "klaim" | "kosong" | "jurnal" | "tesis" | "harga" | "keuangan" | "footer";
 
-/** Blok yang bisa dilipat dan apakah terbuka pada awalnya (ui-slicing.md §1: Jurnal dan Keuangan lipat). */
-export const COLLAPSIBLE: Partial<Record<BlockId, boolean>> = { jurnal: false, harga: true, keuangan: false };
+/** Blok yang bisa dilipat dan apakah terbuka pada awalnya (ui-slicing.md §1: Jurnal dan Keuangan lipat; design.md §3.4: Tesis lipat). */
+export const COLLAPSIBLE: Partial<Record<BlockId, boolean>> = { jurnal: false, tesis: false, harga: true, keuangan: false };
 
-const IDS: readonly BlockId[] = ["struktur", "angka", "kuartal", "sorotan", "klaim", "kosong", "jurnal", "harga", "keuangan", "footer"];
+const IDS: readonly BlockId[] = ["struktur", "angka", "kuartal", "sorotan", "klaim", "kosong", "jurnal", "tesis", "harga", "keuangan", "footer"];
 
 /** Nama `?section=` lama (tab dossier dan bagian kotak masuk) yang menunjuk ke blok baru. */
 const ALIASES: Record<string, BlockId> = {
@@ -19,6 +19,7 @@ const ALIASES: Record<string, BlockId> = {
   claims: "klaim",
   data: "kosong",
   jurnal: "jurnal",
+  thesis: "tesis",
 };
 
 /** `?section=` → blok yang digulirkan ke atas; `null` untuk nilai kosong atau tidak dikenal (sumber dan valuasi tidak lagi punya blok). */

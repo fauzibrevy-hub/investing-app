@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
 import { cn } from "../../../lib/cn";
 import { isProfitLine, signChangePhrase, yoyCellText } from "../change";
@@ -219,12 +219,15 @@ export function YoyValue({ metric, scale }: { metric: PackMetric; scale: Scale |
 
 /** Nilai pembanding: tautan ke paket emiten itu (asal angkanya), atau celah dengan alasan backend. */
 export function PeerValue({ metric, peer, scale }: { metric: PackMetric; peer: PackMetric["peers"][number]; scale: Scale | null }) {
+  // Halaman pembanding tetap milik tab yang membuka halaman ini (design.md §2.4 aturan 4).
+  const [params] = useSearchParams();
+  const from = params.get("from");
   const period = peer.fy && peer.q ? periodLabel(`${peer.fy}Q${peer.q}`) : "terbaru";
   if (peer.value === null) return <GapMark label={`${metric.label} ${peer.ticker}`} period={period} gap={peer.gap} metric={metric} />;
   const text = formatMetric(peer.value, metric.unit, scale);
   return (
     <Link
-      to={`/research/${peer.ticker}?section=paket`}
+      to={`/perusahaan/${peer.ticker}?section=paket${from ? `&from=${encodeURIComponent(from)}` : ""}`}
       aria-label={`Asal angka ${metric.label} ${peer.ticker} ${period}: ${text}, buka paket ${peer.ticker}`}
       className="num inline-flex min-h-11 min-w-11 items-center justify-end rounded-sm px-1 decoration-dotted underline-offset-2 hover:underline"
     >

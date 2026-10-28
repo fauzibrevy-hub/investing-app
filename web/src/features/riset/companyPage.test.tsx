@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import claims from "../../../../tests/fixtures/research/canon/claims-COAL.json";
 import documents from "../../../../tests/fixtures/research/canon/documents-COAL.json";
 import financials from "../../../../tests/fixtures/research/canon/financials-COAL-standalone.json";
@@ -10,7 +10,7 @@ import prices from "../../../../tests/fixtures/research/canon/prices-COAL-1y.jso
 import dossier from "../../../../tests/fixtures/research/canon/ticker-COAL.json";
 import structure from "../../../../tests/fixtures/research/canon/structure-COAL.json";
 import valuation from "../../../../tests/fixtures/research/canon/valuation-COAL.json";
-import { mockApi } from "../../test/mockApi";
+import { json, mockApi } from "../../test/mockApi";
 import { yoyCellText } from "../research/change";
 import { formatScaled } from "../research/format";
 import { noPageOverflowProblems } from "../research/screenAsserts.testutil";
@@ -23,16 +23,16 @@ const base = "/api/research/COAL";
 
 function renderPage(search = "") {
   return render(
-    <MemoryRouter initialEntries={[`/riset/COAL${search}`]}>
+    <MemoryRouter initialEntries={[`/perusahaan/COAL${search}`]}>
       <Routes>
-        <Route path="/riset/:ticker" element={<CompanyPage />} />
+        <Route path="/perusahaan/:ticker" element={<CompanyPage />} />
       </Routes>
     </MemoryRouter>,
   );
 }
 
 function mockCompany(packBody: unknown = pack) {
-  mockApi({
+  return mockApi({
     [base]: dossier,
     [`${base}/pack`]: packBody,
     [`${base}/financials`]: financials,
@@ -44,6 +44,8 @@ function mockCompany(packBody: unknown = pack) {
     // Peta kosong: golden mesin tanpa node.
     [`${base}/structure`]: { ...structure, nodes: [], counts: { proposed: 0, accepted: 0, rejected: 0 }, updated_at: null, draft: { ...structure.draft, available: false } },
     [`${base}/seen`]: {},
+    "/api/thesis/COAL": () => json({ detail: "Dossier COAL tidak ditemukan" }, 404),
+    "/api/thesis/drafts": { drafts: [], vault_drafts: [], total: 0 },
   });
 }
 
@@ -53,20 +55,20 @@ beforeEach(() => {
 });
 afterEach(() => setViewport(1280));
 
-describe("company page #/riset/:ticker (ui-slicing.md §1)", () => {
+describe("company page #/perusahaan/:ticker (ui-slicing.md §1, design.md §3.4)", () => {
   it("one column in the spec's block order with a single h1, headings in order", async () => {
     const { container } = renderPage();
     await screen.findByRole("heading", { level: 2, name: /Kuartal terakhir · Q2 26/ });
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("COAL");
     const titles = screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent);
     expect(titles.slice(0, 5)).toEqual(["Struktur bisnis", "Angka kunci", "Kuartal terakhir · Q2 26", "Membaik / Diawasi", "Klaim"]);
-    expect(titles.slice(-3)).toEqual(["Jurnal", "Harga", "Keuangan"]);
+    expect(titles.slice(-4)).toEqual(["Jurnal", "Tesis", "Harga", "Keuangan"]);
     expect(titles).toContain("Data belum ada");
     const page = container.firstElementChild as HTMLElement;
-    expect(page).toHaveClass("max-w-[720px]", "min-w-0");
-    // Akar halaman memakai `max-w-[720px]` (bukan `max-w-full`): yang diperiksa tabel di dalam penggulungnya.
+    expect(page).toHaveClass("w-full", "min-w-0");
+    // Kolom satu lebar cangkang (D13): yang diperiksa tabel di dalam penggulungnya.
     expect(noPageOverflowProblems(page).filter((p) => !p.startsWith("akar layar"))).toEqual([]);
-    expect(screen.getByRole("link", { name: /Riset/ })).toHaveAttribute("href", "/riset");
+    expect(screen.getByRole("link", { name: "Kembali ke Perusahaan" })).toHaveAttribute("href", "/perusahaan");
   });
 
   it("Jurnal and Keuangan start collapsed with the heading as the toggle, Harga starts open", async () => {
@@ -102,17 +104,56 @@ describe("company page #/riset/:ticker (ui-slicing.md §1)", () => {
     expect(jurnal).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("an unknown ticker says so and links back to Riset", async () => {
-    mockApi({ "/api/research/ZZZZ": () => new Response(JSON.stringify({ detail: "Unknown ticker" }), { status: 404, headers: { "Content-Type": "application/json" } }) });
+  it("Tesis sits between Jurnal and Harga, collapsed, and loads nothing until opened", async () => {
+    const fetchMock = mockCompany();
+    const thesisCalls = () => fetchMock.mock.calls.filter(([url]) => String(url).includes("/api/thesis/")).length;
+    renderPage();
+    const tesis = await screen.findByRole("button", { name: "Tesis" });
+    expect(tesis).toHaveAttribute("aria-expanded", "false");
+    expect(tesis.closest("section")).toHaveAttribute("id", "tesis");
+    expect(thesisCalls()).toBe(0);
+    fireEvent.click(tesis);
+    expect(await screen.findByText("Belum ada tesis untuk COAL")).toBeInTheDocument();
+    expect(thesisCalls()).toBe(2);
+  });
+
+  it.each(["tesis", "thesis"])("?section=%s opens the Tesis block and scrolls it to the top", async (section) => {
+    const scroll = vi.fn();
+    const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = scroll;
+    try {
+      renderPage(`?section=${section}`);
+      const tesis = await screen.findByRole("button", { name: "Tesis" });
+      expect(tesis).toHaveAttribute("aria-expanded", "true");
+      await waitFor(() => expect(scroll.mock.contexts).toContain(document.getElementById("tesis")));
+      expect(scroll).toHaveBeenCalledWith({ block: "start" });
+    } finally {
+      Element.prototype.scrollIntoView = original;
+    }
+  });
+
+  it("a ticker outside the research universe shows the thesis-only state (prd.md O1): header, Tesis open, Tambah ke riset", async () => {
+    mockApi({
+      "/api/research/ZZZZ": () => json({ detail: "Unknown ticker" }, 404),
+      "/api/thesis/ZZZZ": () => json({ detail: "Dossier ZZZZ tidak ditemukan" }, 404),
+      "/api/thesis/drafts": { drafts: [{ id: "d1", ticker: "ZZZZ", title: "Draf ZZZZ", thesis_statement: "s", thesis_type: "narrative", is_primary: false, scenario_status: "Menunggu", story_status: "Belum terkonfirmasi", falsifiers: [], triggers_add: [], triggers_exit: [], notes: "", created_at: "2026-10-20", updated_at: "2026-10-20" }], vault_drafts: [], total: 1 },
+    });
     render(
-      <MemoryRouter initialEntries={["/riset/ZZZZ"]}>
+      <MemoryRouter initialEntries={["/perusahaan/zzzz?from=portofolio&section=tesis"]}>
         <Routes>
-          <Route path="/riset/:ticker" element={<CompanyPage />} />
+          <Route path="/perusahaan/:ticker" element={<CompanyPage />} />
         </Routes>
       </MemoryRouter>,
     );
-    expect(await screen.findByText("ZZZZ tidak ada di daftar riset")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Kembali ke Riset" })).toHaveAttribute("href", "/riset");
+    expect(await screen.findByText("ZZZZ belum ada di daftar riset")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("ZZZZ");
+    expect(screen.getByRole("link", { name: "Kembali ke Portofolio" })).toHaveAttribute("href", "/portofolio");
+    expect(screen.getByRole("link", { name: "Tambah ke riset" })).toHaveAttribute("href", "/perusahaan/tambah?ticker=ZZZZ&from=portofolio");
+    // Tesis terbuka dan bukan tombol lipat; tidak ada blok riset lain.
+    expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual(["Tesis"]);
+    expect(screen.queryByRole("button", { name: "Tesis" })).toBeNull();
+    expect(await screen.findByRole("list", { name: "Draf tesis ZZZZ" })).toHaveTextContent("Draf ZZZZ");
+    expect(screen.getByRole("button", { name: "Tulis draf tesis" })).toBeInTheDocument();
   });
 });
 
@@ -290,6 +331,8 @@ describe("?section= targets", () => {
     expect(sectionTarget("claims")).toBe("klaim");
     expect(sectionTarget("financials")).toBe("keuangan");
     expect(sectionTarget("struktur")).toBe("struktur");
+    expect(sectionTarget("tesis")).toBe("tesis");
+    expect(sectionTarget("thesis")).toBe("tesis");
     expect(sectionTarget("valuasi")).toBeNull();
     expect(sectionTarget(null)).toBeNull();
   });
