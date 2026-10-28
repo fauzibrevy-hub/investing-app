@@ -76,11 +76,15 @@ describe("Perlu perhatian (inbox)", () => {
     const items = within(region).getAllByRole("listitem");
     expect(items).toHaveLength(5);
     expect(items[0].querySelector('[data-line="1"]')).toHaveTextContent(/COAL\s*Level\s*hari ini/);
+    // C8: a row may take two lines (line 2 clamps, it does not truncate) and keeps its 60 px height.
     expect(items[0].querySelector('[data-line="2"]')).toHaveClass("line-clamp-2");
+    expect(items[0].querySelector('[data-line="2"]')).not.toHaveClass("truncate");
+    for (const li of items) expect(li).toHaveClass("min-h-[60px]");
     fireEvent.click(within(block("Perlu perhatian")).getByRole("button", { name: `Lihat semua (${DESK.inbox.length})` }));
     expect(within(region).getAllByRole("listitem")).toHaveLength(DESK.inbox.length);
     const chips = screen.getByRole("group", { name: "Filter kotak masuk" });
-    expect(chips).toHaveClass("hscroll", "scroll-px-[var(--gutter-left)]");
+    // C8: the chip row keeps the 18 px gutter at rest (`px`) and when snapping (`scroll-px`).
+    expect(chips).toHaveClass("hscroll", "px-[var(--gutter-left)]", "scroll-px-[var(--gutter-left)]");
     expect(within(chips).getAllByRole("button").map((b) => b.textContent)).toEqual(DESK.filters.map((f) => `${f.label} ${f.count}`));
     fireEvent.click(within(chips).getByRole("button", { name: /^Klaim/ }));
     expect(within(region).getAllByRole("listitem")).toHaveLength(1);
