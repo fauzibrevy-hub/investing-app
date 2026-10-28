@@ -71,11 +71,11 @@ describe("research feature independence (design §9, plan §7.4)", () => {
     await renderSurface(surface);
     const requested = fetchMock.mock.calls.map(([input]) => String(input));
     expect(requested.length).toBeGreaterThan(0);
-    const thesisReads = surface.name === "Perusahaan" ? [`${FOREIGN_PREFIXES[0]}/summary`, `${FOREIGN_PREFIXES[0]}/drafts`] : [];
-    expect(requested.filter((url) => !url.startsWith("/api/research/") && url !== MACRO_READ && !thesisReads.includes(url))).toEqual([]);
+    const tesisReads = surface.name === "Perusahaan" ? [`${FOREIGN_PREFIXES[0]}/summary`, `${FOREIGN_PREFIXES[0]}/drafts`] : [];
+    expect(requested.filter((url) => !url.startsWith("/api/research/") && url !== MACRO_READ && !tesisReads.includes(url))).toEqual([]);
     // Pada Beranda kisi Makro membaca daftar observasi; pada Perusahaan blok Tesis lain membaca ringkasan & draf tesis.
     expect(requested.filter((url) => url.startsWith(MACRO_PREFIX))).toEqual(surface.name === "Beranda" ? [MACRO_READ] : []);
-    expect(requested.filter((url) => FOREIGN_PREFIXES.some((prefix) => url.includes(prefix)))).toEqual(thesisReads);
+    expect(requested.filter((url) => FOREIGN_PREFIXES.some((prefix) => url.includes(prefix)))).toEqual(tesisReads);
     cleanup();
   });
 });
