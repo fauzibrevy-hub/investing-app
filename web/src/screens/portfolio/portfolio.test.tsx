@@ -152,6 +152,15 @@ describe("Portofolio: tata letak", () => {
     expect(within(rows[0]).getByText("−14,3%")).toHaveClass("text-status-over");
   });
 
+  it("Posisi: subjudul lot · avg boleh turun baris tetapi tidak pernah dipotong (tanpa truncate), swatch tanpa margin lebar", async () => {
+    renderAt();
+    await screen.findByText("1.100.000");
+    const row = positionRow("BUMI") as HTMLElement;
+    const subtitle = within(row).getByText("1 lot · avg 4.150");
+    expect(subtitle.className).not.toMatch(/truncate|text-ellipsis|whitespace-nowrap/);
+    expect(row.querySelector("[data-swatch]")?.className).not.toMatch(/\bmx-/);
+  });
+
   it("hanya membaca portofolio Sheets: satu permintaan, tanpa tautan rute lama", async () => {
     const fetchMock = mockApi({ "/api/finance/stock-portfolio": data });
     renderAt();
@@ -166,7 +175,7 @@ describe("Portofolio: tata letak", () => {
     renderAt();
     expect(await screen.findByText("+30 pp")).toBeInTheDocument(); // BUMI 60 vs 30
     expect(screen.getByText("+25 pp")).toBeInTheDocument(); // SOCI 40 vs 15
-    expect(screen.getByText("BUMI · 60% / target 30%")).toBeInTheDocument();
+    expect(screen.getByText("60% / target 30%")).toBeInTheDocument(); // bobot dan target di keterangan yang bisa turun baris
   });
 
   it("tab PORTOFOLIO kosong → empty state, gagal → Coba lagi", async () => {

@@ -102,6 +102,25 @@ async function audit(page: Page) {
 /** Baris daftar Posisi (bukan baris legenda Komposisi, yang juga tombol): subjudulnya memuat "lot". */
 const positionRow = (page: Page, ticker: string) => page.getByRole("button", { name: new RegExp(`^${ticker}\\s.*\\blot\\b`) });
 
+/**
+ * Elemen yang teks langsungnya memuat angka dan terpotong (elipsis atau `overflow` tersembunyi dengan isi lebih lebar
+ * dari kotaknya). Nominal tidak pernah dipotong (finance-app design.md §7): label boleh, angka tidak.
+ */
+async function truncatedNumbers(page: Page): Promise<string[]> {
+  return page.evaluate(() => {
+    const out: string[] = [];
+    for (const el of Array.from(document.body.querySelectorAll<HTMLElement>("*"))) {
+      const own = Array.from(el.childNodes).filter((n) => n.nodeType === 3).map((n) => n.textContent ?? "").join("");
+      if (!/\d/.test(own) || el.closest("[aria-hidden='true']")) continue;
+      const cs = getComputedStyle(el);
+      if (cs.display === "none" || cs.visibility === "hidden") continue;
+      const clips = cs.textOverflow === "ellipsis" || ["hidden", "clip"].includes(cs.overflowX);
+      if (clips && el.scrollWidth > el.clientWidth + 1) out.push(`${el.tagName.toLowerCase()} "${own.trim().slice(0, 40)}" (${el.scrollWidth} > ${el.clientWidth})`);
+    }
+    return out;
+  });
+}
+
 /** Setiap kemunculan `Rp` yang diikuti digit di halaman (harus 0 saat nominal disembunyikan). */
 async function visibleRpDigits(page: Page): Promise<string[]> {
   return page.evaluate(() => (document.body.innerText ?? "").match(/Rp\s*[\d.,]+/g) ?? []);
@@ -256,6 +275,31 @@ test.describe("Portofolio (#/portofolio)", () => {
     await expect(page.getByRole("list", { name: "Legenda komposisi" }).getByRole("listitem")).toHaveCount(4);
     await checkDistinctHues(4);
   });
+});
+
+test.describe("angka tidak terpotong (design.md §6)", () => {
+  for (const { width, font } of [
+    { width: 393, font: 200 },
+    { width: 320, font: 100 },
+    { width: 320, font: 200 },
+  ]) {
+    test(`lebar ${width} px, font akar ${font}%: subjudul Posisi utuh dan tidak ada angka yang terpotong`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 852 });
+      await openPortofolio(page);
+      if (font !== 100) {
+        await page.addStyleTag({ content: `html{font-size:${font}% !important}` });
+        await page.waitForTimeout(300);
+      }
+      for (const pos of FIXTURE.positions) {
+        const subtitle = positionRow(page, pos.ticker).locator("span", { hasText: /lot · avg/ }).last();
+        await expect(subtitle).toHaveText(`${idInt(pos.lots)} lot · avg ${idInt(pos.avg_price)}`);
+        const fits = await subtitle.evaluate((el) => el.scrollWidth <= el.clientWidth + 1 && getComputedStyle(el).textOverflow !== "ellipsis");
+        expect(fits, `subjudul ${pos.ticker} terpotong`).toBe(true);
+      }
+      expect(await truncatedNumbers(page), "angka terpotong").toEqual([]);
+      expect(await horizontalOverflow(page), "gulir horizontal halaman").toMatchObject({ overflow: false });
+    });
+  }
 });
 
 test.describe("tangkapan layar docs/qa/l3c/", () => {

@@ -12,7 +12,7 @@ import { SectionHeader } from "../../components/SectionHeader";
 import { Sheet } from "../../components/Sheet";
 import { Skeleton } from "../../components/Skeleton";
 import { StatRow } from "../../components/StatRow";
-import { ListState, TransactionRow, TransactionRowSkeleton } from "../../components/TransactionRow";
+import { ListState, TransactionRowSkeleton } from "../../components/TransactionRow";
 import { catColor, type CatIndex } from "../../lib/categories";
 import { cn } from "../../lib/cn";
 import { formatPercent, formatPp, formatRupiah, HIDDEN_FULL } from "../../lib/money";
@@ -197,16 +197,7 @@ export function PortfolioScreen() {
             Array.from({ length: 4 }, (_, i) => <TransactionRowSkeleton key={i} />)
           ) : status === "ready" ? (
             positions.map((p) => (
-              <TransactionRow
-                key={p.ticker}
-                variant="position"
-                title={p.ticker}
-                subtitle={subtitleOf(p, hidden)}
-                leading={<Swatch cat={map.get(p.ticker) ?? 8} className="mx-3" />}
-                value={p.valuation}
-                plPercent={p.pl_pct}
-                onClick={() => setOpenTicker(p.ticker)}
-              />
+              <PositionRow key={p.ticker} p={p} cat={map.get(p.ticker) ?? 8} subtitle={subtitleOf(p, hidden)} onClick={() => setOpenTicker(p.ticker)} />
             ))
           ) : status === "error" ? (
             <ListState status="error" onRetry={pf.reload} />
@@ -231,21 +222,39 @@ export function PortfolioScreen() {
   );
 }
 
+/**
+ * Baris posisi: ukuran dan pitch seperti `TransactionRow` (57 px), tetapi lokal supaya subjudul "200 lot · avg 4.150"
+ * turun ke baris berikutnya alih-alih dipotong (angka tidak pernah dipotong, finance-app design.md §7), dan swatch hanya
+ * selebar dirinya (sejajar dengan legenda di atasnya).
+ */
+function PositionRow({ p, cat, subtitle, onClick }: { p: Position; cat: CatIndex; subtitle: string; onClick: () => void }) {
+  const gain = p.pl_pct >= 0;
+  return (
+    <button type="button" onClick={onClick} className="-mx-2 flex min-h-[57px] w-[calc(100%+16px)] items-center gap-2 rounded-sm px-2 py-1 text-left active:opacity-[0.85]">
+      <Swatch cat={cat} />
+      <span className="flex min-w-0 flex-1 flex-col">
+        <span className="text-body-strong text-text [overflow-wrap:anywhere]">{p.ticker}</span>
+        <span className="text-label text-text-2">{subtitle}</span>
+      </span>
+      <span className="flex shrink-0 flex-col items-end text-right">
+        <Money value={p.valuation} className="text-body-strong text-text" />
+        <span className={cn("num text-caption font-bold", gain ? "text-status-safe" : "text-status-over")}>{formatPercent(p.pl_pct, { signed: true })}</span>
+      </span>
+    </button>
+  );
+}
+
 function AllocationList({ positions, colors, status }: { positions: Position[]; colors: Map<string, CatIndex>; status: string }) {
   if (status === "loading") return <BudgetBar name="" cat={8} status="loading" />;
   if (status !== "ready") return null;
   return (
     <div className="flex flex-col gap-1">
       {positions.map((p) => (
-        <BudgetBar
-          key={p.ticker}
-          name={`${p.ticker} · ${formatPercent(p.val_alloc_pct)} / target ${formatPercent(p.target_alloc_pct)}`}
-          cat={colors.get(p.ticker) ?? 8}
-          spent={p.val_alloc_pct}
-          limit={100}
-          marker={p.target_alloc_pct / 100}
-          rightText={formatPp(p.drift_pct)}
-        />
+        <div key={p.ticker} className="flex flex-col">
+          {/* Nama baris `BudgetBar` dipotong elipsis; angka bobot/target ada di keterangan yang boleh turun baris. */}
+          <BudgetBar name={p.ticker} cat={colors.get(p.ticker) ?? 8} spent={p.val_alloc_pct} limit={100} marker={p.target_alloc_pct / 100} rightText={formatPp(p.drift_pct)} />
+          <p className="num text-caption text-text-2">{`${formatPercent(p.val_alloc_pct)} / target ${formatPercent(p.target_alloc_pct)}`}</p>
+        </div>
       ))}
     </div>
   );
