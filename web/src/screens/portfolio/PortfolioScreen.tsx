@@ -120,7 +120,7 @@ export function PortfolioScreen() {
         </header>
 
         <section aria-label="Nilai portofolio" className="flex flex-col gap-1">
-          <p className="text-label text-text-2">Nilai portofolio (Rp), termasuk kas</p>
+          <p className="text-label text-text-2">Nilai portofolio, termasuk kas</p>
           {status === "loading" ? (
             <div className="mt-1 flex flex-col gap-2">
               <Skeleton width={240} height={40} />

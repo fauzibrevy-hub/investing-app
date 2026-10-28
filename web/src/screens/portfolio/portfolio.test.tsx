@@ -74,10 +74,10 @@ describe("Portofolio: tata letak", () => {
     renderAt();
     const hero = await screen.findByRole("region", { name: "Nilai portofolio" });
     expect(await within(hero).findByText("1.100.000")).toBeInTheDocument();
-    expect(within(hero).getByText("Nilai portofolio (Rp), termasuk kas")).toBeInTheDocument();
+    expect(within(hero).getByText("Nilai portofolio, termasuk kas")).toBeInTheDocument();
     const line = within(hero).getByText("+Rp100 rb · +11,1%");
     expect(line.closest("p")).toHaveClass("text-status-safe");
-    expect(hero.textContent?.match(/Rp/g)).toHaveLength(2); // satuan di label, nominal di baris P/L
+    expect(hero.textContent?.match(/Rp/g)).toHaveLength(1); // satu-satunya Rp di blok: baris P/L (design.md §3.2 blok 2)
   });
 
   it("hero rugi: baris P/L bertanda minus berwarna status-over", async () => {
