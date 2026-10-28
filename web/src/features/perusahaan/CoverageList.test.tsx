@@ -39,6 +39,14 @@ describe("CoverageList (plan.md §3.3 contract, design.md §3.3 blocks 2–4)", 
     expect(tickers(screen.getByRole("list", { name: "Pembanding" }))).toEqual(["COPR"]);
   });
 
+  it("a collapsible block title starts at the column edge like the others, with its arrow after the text (C8)", () => {
+    renderList(DESK);
+    const toggle = screen.getByRole("button", { name: "Pembanding (1)" });
+    expect(toggle.firstChild?.nodeType).toBe(Node.TEXT_NODE);
+    expect(toggle.lastElementChild?.tagName.toLowerCase()).toBe("svg");
+    expect(toggle).not.toHaveClass("-ml-1");
+  });
+
   it("omits Manual and Pembanding when they are empty", () => {
     renderList(withCoverage(rows("held")));
     expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual(["Dipegang"]);
