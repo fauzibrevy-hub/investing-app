@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight, Plus } from "lucide-react";
 import { useDesk } from "../research/api";
+import { useSheetTrigger } from "../research/components/useSheetTrigger";
 import { DeskFooter } from "../research/desk/DeskFooter";
 import type { DeskResponse } from "../research/types";
 import { Block, LoadError, Loading, PAGE } from "../riset/ui";
@@ -15,7 +16,8 @@ function TesisLain({ desk }: { desk: DeskResponse }) {
   const summary = useThesisSummary();
   const drafts = useThesisDrafts();
   const [open, setOpen] = useState(false);
-  const [vaultOpen, setVaultOpen] = useState(false);
+  // Safari iOS tidak memfokuskan tombol yang diketuk: pemicu dicatat supaya fokus kembali ke baris ini (design.md §6).
+  const vaultSheet = useSheetTrigger();
   // Satu sumber gagal tidak mengosongkan yang lain (prd.md §7): tampil dari yang berhasil, kegagalan disebut.
   const failed = (summary.status === "error" && !summary.data) || (drafts.status === "error" && !drafts.data);
   const retry = () => {
@@ -42,7 +44,7 @@ function TesisLain({ desk }: { desk: DeskResponse }) {
             ))}
             {vault > 0 ? (
               <li className="border-b border-border-hairline last:border-b-0">
-                <button type="button" aria-haspopup="dialog" onClick={() => setVaultOpen(true)} className="flex min-h-14 w-full min-w-0 items-center justify-between gap-2 py-2 text-left text-table active:bg-surface-sunken">
+                <button type="button" aria-haspopup="dialog" onClick={(e) => vaultSheet.open(true, e.currentTarget)} className="flex min-h-14 w-full min-w-0 items-center justify-between gap-2 py-2 text-left text-table active:bg-surface-sunken">
                   <span className="min-w-0 truncate text-body-strong text-text">{`Draf vault (${vault})`}</span>
                   <ChevronRight aria-hidden="true" size={18} strokeWidth={1.75} className="shrink-0 text-text-2" />
                 </button>
@@ -52,7 +54,7 @@ function TesisLain({ desk }: { desk: DeskResponse }) {
         </Block>
       ) : null}
       {failed ? <LoadError message="Gagal memuat tesis lain" onRetry={retry} /> : null}
-      <VaultDraftsSheet open={vaultOpen} onClose={() => setVaultOpen(false)} />
+      <VaultDraftsSheet open={vaultSheet.value !== null} onClose={vaultSheet.close} />
     </>
   );
 }

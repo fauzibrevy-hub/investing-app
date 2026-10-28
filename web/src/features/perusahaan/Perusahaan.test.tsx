@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import desk from "../../../../tests/fixtures/research/canon/desk.json";
@@ -158,6 +158,20 @@ describe("Perusahaan #/perusahaan (design.md §3.3)", () => {
       const dialog = await screen.findByRole("dialog", { name: "Draf vault" });
       expect(await within(dialog).findByRole("button", { name: /Minyak naik/ })).toBeInTheDocument();
       expect(calls(f, "/api/thesis/drafts/vault")).toBe(1);
+    });
+
+    it("closing the VaultDraftsSheet returns focus to the Draf vault row even when the tap did not focus it (iOS Safari)", async () => {
+      mockApi(routes({ "/api/thesis/drafts/vault": vault }));
+      renderScreen();
+      fireEvent.click(await screen.findByRole("button", { name: /Tesis lain/ }));
+      const row = screen.getByRole("button", { name: "Draf vault (2)" });
+      // `fireEvent.click` tidak memfokuskan tombol, seperti ketukan di WebKit iOS.
+      expect(document.activeElement).not.toBe(row);
+      fireEvent.click(row);
+      const dialog = await screen.findByRole("dialog", { name: "Draf vault" });
+      fireEvent.click(within(dialog).getByRole("button", { name: "Tutup" }));
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+      expect(screen.getByRole("button", { name: "Draf vault (2)" })).toHaveFocus();
     });
 
     it("only vault drafts: the block shows with the Draf vault row alone; no tickers, no vault drafts: hidden", async () => {
