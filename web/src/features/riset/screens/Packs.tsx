@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "../../../components/Button";
 import { cn } from "../../../lib/cn";
+import { BackHeader } from "../../../shell/BackHeader";
 import { reloadPacks, usePacks, useRules, useUniverse } from "../../research/api";
 import { driverStatusText } from "../../research/components/gapReason";
 import { ScreenFooter } from "../../research/desk/DeskFooter";
 import { formatDate, formatValue } from "../../research/format";
 import type { DriverStatus, MetricDirection, MetricLayer, PackDefinition, PackDefinitionMetric, PackDriver, PacksStatus, RulesResponse, UniverseItem } from "../../research/types";
 import { metricLabels, readableFormula } from "../packFormula";
-import { BackLink, Block, Empty, FIELD, LoadError, Loading, PAGE } from "../ui";
+import { Block, Empty, FIELD, LoadError, Loading, PAGE } from "../ui";
 
 const LAYERS: Record<MetricLayer, string> = { xbrl: "XBRL", kpi: "KPI", driver: "Pendorong" };
 const DIRECTIONS: Record<MetricDirection, string> = { higher: "lebih tinggi lebih baik", lower: "lebih rendah lebih baik", neutral: "netral" };
@@ -202,7 +203,7 @@ function SourceCard({ status, rules }: { status: PacksStatus; rules?: RulesRespo
 }
 
 /**
- * Paket & aturan `#/riset/packs?pack=` (ui-slicing.md §5): daftar paket menjadi satu pilihan di atas; paket terpilih
+ * Paket & aturan `#/alat/paket?pack=` (ui-slicing.md §5): daftar paket menjadi satu pilihan di atas; paket terpilih
  * tampil sebagai satu kartu per dimensi dengan metrik tiga baris dan rumus di balik **Rumus**; pendorong dengan status
  * sumbernya; aturan di bawah; **Muat ulang** tetap. Data: `GET /packs`, `GET /rules`.
  */
@@ -224,7 +225,7 @@ export function Packs() {
   return (
     <div className={PAGE}>
       <header className="flex flex-col gap-1">
-        <BackLink />
+        <BackHeader />
         <h1 className="text-title text-text">Paket & aturan</h1>
       </header>
       {ordered.length ? (

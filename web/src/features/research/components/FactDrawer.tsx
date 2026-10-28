@@ -1,10 +1,7 @@
-import { useCallback, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { X } from "lucide-react";
+import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import { Button } from "../../../components/Button";
 import { Sheet } from "../../../components/Sheet";
 import { Skeleton } from "../../../components/Skeleton";
-import { useIsDesktop } from "../../../lib/useMediaQuery";
-import { cn } from "../../../lib/cn";
 import { useFactDetail } from "../api";
 import { formatDate, formatExact, formatValue } from "../format";
 import type { FactDetail, FactTarget, FinancialsView } from "../types";
@@ -216,54 +213,24 @@ export interface FactDrawerProps {
   returnFocusTo?: HTMLElement | null;
 }
 
-function DesktopPanel({ onClose, returnFocusTo, focusKey, children }: { onClose: () => void; returnFocusTo?: HTMLElement | null; focusKey: string; children: ReactNode }) {
-  const titleId = useId();
-  const panel = useRef<HTMLDivElement>(null);
-  useFocusTrap(panel, true, onClose, { returnFocusTo, refocusKey: focusKey });
-  return (
-    <div
-      ref={panel}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      tabIndex={-1}
-      className={cn("fixed inset-y-0 right-0 z-40 flex w-[380px] max-w-full flex-col bg-bg shadow-popover outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent")}
-    >
-      <div className="flex h-14 shrink-0 items-center justify-between gap-2 pl-4 pr-2">
-        <h2 id={titleId} className="truncate text-title text-text">
-          Asal angka
-        </h2>
-        <Button variant="icon" aria-label="Tutup" icon={<X />} onClick={onClose} />
-      </div>
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">{children}</div>
-    </div>
-  );
-}
-
 /**
- * Panel kanan 380 px dengan jebakan fokus dan Esc di desktop, `Sheet` di mobile (design.md §6, §8).
+ * `Sheet` bawah di semua lebar, dengan jebakan fokus dan Esc (design.md §6, §8; D13: tidak ada panel desktop).
  * Memuat `GET /facts/{filing_id}/{element}?ctx=&dims=` dari target chip. Tanpa target: tidak dirender.
  */
 export function FactDrawer({ target, onClose, onSelect, returnFocusTo }: FactDrawerProps) {
-  const desktop = useIsDesktop();
   const res = useFactDetail(target);
   if (!target) return null;
   const focusKey = `${target.filing_id}|${target.element}|${target.ctx}|${target.dims}`;
-  const body = <FactDrawerBody status={res.status} detail={res.data} errorMessage={res.error?.message} onRetry={res.reload} onSelect={onSelect} />;
-  return desktop ? (
-    <DesktopPanel onClose={onClose} returnFocusTo={returnFocusTo} focusKey={focusKey}>
-      {body}
-    </DesktopPanel>
-  ) : (
+  return (
     <Sheet open title="Asal angka" onClose={onClose}>
-      <MobileTrap onClose={onClose} returnFocusTo={returnFocusTo} focusKey={focusKey} />
-      {body}
+      <FocusTrap onClose={onClose} returnFocusTo={returnFocusTo} focusKey={focusKey} />
+      <FactDrawerBody status={res.status} detail={res.data} errorMessage={res.error?.message} onRetry={res.reload} onSelect={onSelect} />
     </Sheet>
   );
 }
 
 /** `Sheet` menangani Esc dan fokus masuk, tetapi tidak menjebak Tab dan memulihkan fokus ke elemen yang aktif saat dibuka. */
-function MobileTrap({ onClose, returnFocusTo, focusKey }: { onClose: () => void; returnFocusTo?: HTMLElement | null; focusKey: string }) {
+function FocusTrap({ onClose, returnFocusTo, focusKey }: { onClose: () => void; returnFocusTo?: HTMLElement | null; focusKey: string }) {
   const marker = useRef<HTMLSpanElement>(null);
   useFocusTrap(marker, true, onClose, { closest: '[role="dialog"]', handleEscape: false, returnFocusTo, refocusKey: focusKey });
   return <span ref={marker} hidden />;

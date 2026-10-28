@@ -1,25 +1,16 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { json, mockApi } from "../../../test/mockApi";
+import { setViewport } from "../testing/viewport";
 import { FactChip } from "./FactChip";
 import { FactDrawer, FactDrawerBody, FactDrawerProvider } from "./FactDrawer";
 import type { FactDetail } from "../types";
 import { useFactDrawer } from "./factDrawerContext";
 import { FACT_DETAIL, OPERAND_TARGET, TARGET } from "./fixtures";
 
-const realMatchMedia = window.matchMedia;
-
-function setDesktop(desktop: boolean) {
-  window.matchMedia = ((query: string) =>
-    ({ matches: desktop && query.includes("min-width: 1024px"), media: query, addEventListener() {}, removeEventListener() {} }) as unknown as MediaQueryList) as typeof window.matchMedia;
-}
-
 const factPath = (t: { filing_id: string; element: string }) => `/api/research/facts/${encodeURIComponent(t.filing_id)}/${encodeURIComponent(t.element)}`;
 
-beforeEach(() => setDesktop(true));
-afterEach(() => {
-  window.matchMedia = realMatchMedia;
-});
+afterEach(() => setViewport(1280));
 
 describe("FactDrawer", () => {
   it("closed without a target: renders nothing and requests nothing", () => {
@@ -38,12 +29,13 @@ describe("FactDrawer", () => {
     expect(status.querySelectorAll("[data-skeleton]").length).toBeGreaterThan(0);
   });
 
-  it("default (desktop): a 380 px modal dialog with every design.md §6 field", async () => {
+  it("a modal Sheet with every design.md §6 field", async () => {
     const fetchMock = mockApi({ [factPath(TARGET)]: FACT_DETAIL });
     render(<FactDrawer target={TARGET} onClose={vi.fn()} />);
     const dialog = await screen.findByRole("dialog", { name: "Asal angka" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
-    expect(dialog).toHaveClass("w-[380px]", "right-0");
+    expect(dialog).toHaveClass("max-w-mobile");
+    expect(dialog).not.toHaveClass("w-[380px]");
     await within(dialog).findByText("Nilai sebagaimana dilaporkan");
 
     const url = new URL(String(fetchMock.mock.calls[0][0]), "http://localhost");
@@ -107,11 +99,12 @@ describe("FactDrawer", () => {
     document.body.append(trigger);
     const { unmount } = render(<FactDrawer target={TARGET} onClose={onClose} returnFocusTo={trigger} />);
     const dialog = await screen.findByRole("dialog");
-    expect(dialog).toHaveFocus();
+    expect(dialog.contains(document.activeElement)).toBe(true);
     fireEvent.keyDown(document, { key: "Escape" });
     expect(onClose).toHaveBeenCalledTimes(1);
     unmount();
-    expect(trigger).toHaveFocus();
+    // The Sheet restores its own focus first; the trigger takes it back on the next task.
+    await waitFor(() => expect(trigger).toHaveFocus());
     trigger.remove();
   });
 
@@ -137,12 +130,12 @@ describe("FactDrawer", () => {
     expect(dialog.contains(document.activeElement)).toBe(true);
   });
 
-  it("mobile: the same content in a Sheet", async () => {
-    setDesktop(false);
+  it.each([393, 1024, 1440])("phone layout only (D13): still a Sheet, never a side panel, at %i px", async (width) => {
+    setViewport(width);
     mockApi({ [factPath(TARGET)]: FACT_DETAIL });
     render(<FactDrawer target={TARGET} onClose={vi.fn()} />);
     const dialog = await screen.findByRole("dialog", { name: "Asal angka" });
-    expect(dialog).not.toHaveClass("w-[380px]");
+    expect(dialog).not.toHaveClass("w-[380px]", "right-0");
     expect(dialog).toHaveClass("max-w-mobile");
     await within(dialog).findByText("Nilai sebagaimana dilaporkan");
   });
@@ -366,9 +359,7 @@ describe("FactDrawerProvider", () => {
   });
 });
 
-describe("FactDrawer on mobile (Sheet)", () => {
-  beforeEach(() => setDesktop(false));
-
+describe("FactDrawer Sheet", () => {
   it("Esc closes the sheet", async () => {
     mockApi({ [factPath(TARGET)]: FACT_DETAIL });
     const onClose = vi.fn();
