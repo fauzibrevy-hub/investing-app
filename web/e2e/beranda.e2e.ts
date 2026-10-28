@@ -3,12 +3,13 @@ import { fileURLToPath } from "node:url";
 import { expect, test, type Page } from "@playwright/test";
 import { axeSeriousCritical, horizontalOverflow, smallTargets, textCollisions } from "./audits";
 import { mockApi, overrideApi } from "./mockApi";
+import { fullPageShot } from "./shots";
 
 /**
  * Beranda `#/beranda` (design.md §3.1; plan §3.3 e2e L3a): the Makro grid and the inbox sheets on the phone widths
  * 320 and 393 px, ported from finance-app's `macro.e2e.ts` and `overlays.e2e.ts`. Mocks only (mockApi.ts, D15); the
  * synthetic observations are built here from the shape of `e2e/fixtures/macro-observations.json`, not imported from `src/`.
- * Screenshots of the open inbox sheet and of the 200 % root font go to `docs/qa/l3a/`.
+ * Screenshots of the viewport with the tab bar, of the open inbox sheet and of the 200 % root font go to `docs/qa/l3a/`.
  */
 const SHOTS = fileURLToPath(new URL("../../docs/qa/l3a/", import.meta.url));
 mkdirSync(SHOTS, { recursive: true });
@@ -236,6 +237,12 @@ for (const width of WIDTHS) {
 test.describe("screenshots", () => {
   test.use({ viewport: { width: 393, height: 852 } });
 
+  test("Beranda viewport with the tab bar at the bottom edge", async ({ page }) => {
+    await openBeranda(page);
+    await expect(page.locator('nav[aria-label="Navigasi utama"]')).toBeVisible();
+    await page.screenshot({ path: `${SHOTS}beranda-tab-bar.png`, scale: "css" });
+  });
+
   test("Beranda with an inbox sheet open", async ({ page }) => {
     await openBeranda(page);
     await page.locator(`${INBOX} [data-event-id] button`).first().click();
@@ -249,7 +256,7 @@ test.describe("screenshots", () => {
     await page.addStyleTag({ content: "html{font-size:200% !important}" });
     await page.waitForTimeout(300);
     await audit(page);
-    await page.screenshot({ path: `${SHOTS}beranda-font200.png`, fullPage: true, scale: "css" });
+    await fullPageShot(page, `${SHOTS}beranda-font200.png`);
   });
 });
 

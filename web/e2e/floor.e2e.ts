@@ -3,11 +3,12 @@ import { fileURLToPath } from "node:url";
 import { expect, test, type Page } from "@playwright/test";
 import { axeSeriousCritical, horizontalOverflow, smallTargets, textCollisions } from "./audits";
 import { mockApi } from "./mockApi";
+import { fullPageShot } from "./shots";
 
 /**
  * The automated phone floor (D16, plan §3.2, §4 L2): every route of design.md §2.2 on the 393 px iPhone 15
  * emulation, with no page overflow, tap targets of at least 44 x 44 px and no serious or critical axe finding;
- * one screenshot per route under `docs/qa/<slice>/` (linked in the PR body, D17). The routes with a real screen also
+ * one screenshot per route under `docs/qa/<slice>/` (linked in the PR body, D17; full page, without the fixed tab bar). The routes with a real screen also
  * pass the text-collision audit and the whole floor again at a 200 % root font (design.md §6).
  * L3a owns this table (plan §3.3): each later lane edits only its own lines. `shot` is on for the routes whose screen
  * is real in this slice; the others are still placeholders (L3b, L3c) and take their screenshot in their own slice.
@@ -55,7 +56,7 @@ for (const { route, name, heading, shot } of ROUTES) {
     expect(unmocked, "jalur API yang diminta tetapi tidak ditiru").toEqual([]);
 
     if (!shot) return;
-    await page.screenshot({ path: `${SHOTS}${name}.png`, fullPage: true, scale: "css" });
+    await fullPageShot(page, `${SHOTS}${name}.png`);
     await page.addStyleTag({ content: FONT_200 });
     await page.waitForTimeout(300);
     await page.waitForLoadState("networkidle");
