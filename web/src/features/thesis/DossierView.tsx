@@ -3,7 +3,7 @@ import { SectionHeader } from "../../components/SectionHeader";
 import { cn } from "../../lib/cn";
 import type { ThesisDetail } from "./types";
 import { shortDate } from "./format";
-import { Markdown } from "./Markdown";
+import { Inline, Markdown } from "./Markdown";
 
 export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -64,7 +64,7 @@ export function DossierView({ detail: d }: { detail: ThesisDetail }) {
               <ul className="m-0 flex list-disc flex-col gap-1 pl-5">
                 {e.bullets.map((b, j) => (
                   <li key={j} className={cn("text-label text-text", b.level === 1 && "ml-4")}>
-                    {b.text}
+                    <Inline text={b.text} />
                   </li>
                 ))}
               </ul>

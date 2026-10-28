@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Markdown } from "./Markdown";
+import { Inline, Markdown } from "./Markdown";
 
 describe("Markdown (vault text)", () => {
   it("renders paragraphs, lists, headings as bold text, and inline emphasis without raw HTML", () => {
@@ -20,5 +20,14 @@ describe("Markdown (vault text)", () => {
     const { container } = render(<Markdown text={"net_debt_ebitda naik, 2 * 3 * 4"} />);
     expect(container.querySelector("em")).toBeNull();
     expect(container).toHaveTextContent("net_debt_ebitda naik, 2 * 3 * 4");
+  });
+
+  it("renders a single line inline: bold with a trailing colon, italic and code, never as raw HTML", () => {
+    const { container } = render(<Inline text={"**Tindak lanjut:** cek *margin* `x` <i>y</i>"} />);
+    expect(container.querySelector("strong")).toHaveTextContent("Tindak lanjut:");
+    expect(container.querySelector("em")).toHaveTextContent("margin");
+    expect(container.querySelector("code")).toHaveTextContent("x");
+    expect(container.querySelector("i")).toBeNull();
+    expect(container).toHaveTextContent("Tindak lanjut: cek margin x <i>y</i>");
   });
 });

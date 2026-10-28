@@ -16,6 +16,11 @@ function inline(text: string): ReactNode[] {
   });
 }
 
+/** Satu baris teks dengan penekanan inline (butir review log, dll.), tanpa pembungkus blok. */
+export function Inline({ text }: { text: string }) {
+  return <>{inline(text)}</>;
+}
+
 const BULLET = /^\s*[-*+]\s+/;
 const NUMBERED = /^\s*\d+[.)]\s+/;
 const HEADING = /^#{1,6}\s+/;
