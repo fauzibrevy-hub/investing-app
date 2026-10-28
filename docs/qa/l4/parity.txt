@@ -1,0 +1,95 @@
+ok /api/research/desk
+ok /api/research/compare
+ok /api/research/calibration
+ok /api/research/packs
+ok /api/research/rules
+ok /api/research/filings
+ok /api/research/universe
+ok /api/research/lookup?q=BRIS
+ok /api/research/lookup?q=BUMI
+ok /api/research/lookup?q=LEAD
+ok /api/research/lookup?q=SOCI
+ok /api/research/BRIS
+ok /api/research/BRIS/financials?view=standalone
+ok /api/research/BRIS/financials?view=ttm
+ok /api/research/BRIS/financials?view=annual
+ok /api/research/BRIS/pack
+ok /api/research/BRIS/valuation
+ok /api/research/BRIS/prices
+ok /api/research/BRIS/structure
+ok /api/research/BRIS/claims
+ok /api/research/BRIS/journal
+ok /api/research/BRIS/proposals
+ok /api/research/BRIS/calendar
+ok /api/research/BRIS/documents
+ok /api/research/BUMI
+ok /api/research/BUMI/financials?view=standalone
+ok /api/research/BUMI/financials?view=ttm
+ok /api/research/BUMI/financials?view=annual
+ok /api/research/BUMI/pack
+ok /api/research/BUMI/valuation
+ok /api/research/BUMI/prices
+ok /api/research/BUMI/structure
+ok /api/research/BUMI/claims
+ok /api/research/BUMI/journal
+ok /api/research/BUMI/proposals
+ok /api/research/BUMI/calendar
+ok /api/research/BUMI/documents
+ok /api/research/LEAD
+ok /api/research/LEAD/financials?view=standalone
+ok /api/research/LEAD/financials?view=ttm
+ok /api/research/LEAD/financials?view=annual
+ok /api/research/LEAD/pack
+ok /api/research/LEAD/valuation
+ok /api/research/LEAD/prices
+ok /api/research/LEAD/structure
+ok /api/research/LEAD/claims
+ok /api/research/LEAD/journal
+ok /api/research/LEAD/proposals
+ok /api/research/LEAD/calendar
+ok /api/research/LEAD/documents
+ok /api/research/SOCI
+ok /api/research/SOCI/financials?view=standalone
+ok /api/research/SOCI/financials?view=ttm
+ok /api/research/SOCI/financials?view=annual
+ok /api/research/SOCI/pack
+ok /api/research/SOCI/valuation
+ok /api/research/SOCI/prices
+ok /api/research/SOCI/structure
+ok /api/research/SOCI/claims
+ok /api/research/SOCI/journal
+ok /api/research/SOCI/proposals
+ok /api/research/SOCI/calendar
+ok /api/research/SOCI/documents
+ok /api/research/facts/BRIS_2022_FY/idx-cor%3AProfitLossBeforeIncomeTax?ctx=2022-01-01_2022-12-31&dims=
+SKIP /api/research/claims/{id}/evidence (BRIS) (no id in A's list response)
+SKIP /api/research/claims/{id}/evals (BRIS) (no id in A's list response)
+SKIP /api/research/journal/{id} (BRIS) (no id in A's list response)
+ok /api/research/facts/BUMI_2022_FY/idx-cor%3ASalesAndRevenue?ctx=2022-01-01_2022-12-31&dims=
+SKIP /api/research/claims/{id}/evidence (BUMI) (no id in A's list response)
+SKIP /api/research/claims/{id}/evals (BUMI) (no id in A's list response)
+SKIP /api/research/journal/{id} (BUMI) (no id in A's list response)
+ok /api/research/facts/LEAD_2022_FY/idx-cor%3ASalesAndRevenue?ctx=2022-01-01_2022-12-31&dims=
+SKIP /api/research/claims/{id}/evidence (LEAD) (no id in A's list response)
+SKIP /api/research/claims/{id}/evals (LEAD) (no id in A's list response)
+SKIP /api/research/journal/{id} (LEAD) (no id in A's list response)
+ok /api/research/facts/SOCI_2022_FY/idx-cor%3ASalesAndRevenue?ctx=2022-01-01_2022-12-31&dims=
+SKIP /api/research/claims/{id}/evidence (SOCI) (no id in A's list response)
+SKIP /api/research/claims/{id}/evals (SOCI) (no id in A's list response)
+SKIP /api/research/journal/{id} (SOCI) (no id in A's list response)
+SKIP /api/thesis/drafts/{id} (no id in A's list response)
+ok /api/finance/stock-portfolio
+ok /api/thesis/summary
+ok /api/thesis/macro
+ok /api/thesis/BRIS
+ok /api/thesis/BUMI
+ok /api/thesis/LEAD
+ok /api/thesis/SOCI
+ok /api/thesis/drafts
+ok /api/thesis/drafts/vault
+ok /api/macro/observations
+ok /api/macro/registry
+ok /api/macro/scoring
+ok /api/macro/stream
+parity: 0 of 80 paths differ
+parity exit 0
