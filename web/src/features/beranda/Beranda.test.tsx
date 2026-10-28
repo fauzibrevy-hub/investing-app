@@ -160,6 +160,23 @@ describe("Kalender", () => {
     expect(within(cal).queryByRole("button", { name: /Lihat semua/ })).toBeNull();
   });
 
+  it("each row links to the company page, owned by Beranda (from=beranda), as a target of at least 44 px (design.md §2.4 rule 4)", async () => {
+    mockApi({ "/api/research/desk": DESK, "/api/macro/observations": MACRO });
+    renderBeranda();
+    await screen.findByRole("group", { name: "Kotak masuk" });
+    const items = within(block("Kalender")).getAllByRole("listitem");
+    for (const [i, li] of items.entries()) {
+      const link = within(li).getByRole("link");
+      expect(link).toHaveAttribute("href", `/perusahaan/${DESK.calendar[i].ticker}?from=beranda`);
+      expect(link).toHaveClass("min-h-[60px]", "w-full");
+      expect(li).toHaveClass("min-h-[60px]");
+      expect(li).not.toHaveClass("h-[60px]");
+    }
+    expect(within(items[0]).getByRole("link")).toHaveAccessibleName(/BANK/);
+    fireEvent.click(within(items[0]).getByRole("link"));
+    expect(await screen.findByTestId("at")).toHaveTextContent(`/perusahaan/${DESK.calendar[0].ticker}?from=beranda`);
+  });
+
   it("up to five items: no Lihat semua", async () => {
     mockApi({ "/api/research/desk": { ...DESK, calendar: DESK.calendar.slice(0, 2) }, "/api/macro/observations": MACRO });
     renderBeranda();

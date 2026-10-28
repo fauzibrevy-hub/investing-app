@@ -190,6 +190,18 @@ for (const width of WIDTHS) {
       await dialog.getByRole("button", { name: "Buka halaman perusahaan" }).click();
       await expect.poll(() => new URL(page.url()).hash).toMatch(/^#\/perusahaan\/COAL\?.*from=beranda/);
     });
+
+    test("calendar: each row is a company link with from=beranda, at least 60 px tall, and it opens", async ({ page }) => {
+      await openBeranda(page);
+      const links = page.locator('section[data-block="kalender"] li a');
+      expect(await links.count()).toBeGreaterThan(0);
+      for (const a of await links.all()) {
+        await expect(a).toHaveAttribute("href", /^#\/perusahaan\/[A-Z]+\?from=beranda$/);
+        expect((await a.boundingBox())!.height, "tinggi baris kalender").toBeGreaterThanOrEqual(60);
+      }
+      await links.first().click();
+      await expect.poll(() => new URL(page.url()).hash).toMatch(/^#\/perusahaan\/[A-Z]+\?from=beranda$/);
+    });
   });
 }
 
