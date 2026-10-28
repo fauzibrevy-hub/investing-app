@@ -50,8 +50,8 @@ async function renderList() {
 
 const base = "/api/research/COAL";
 
-/** A map card is named in visible order, kind first (WCAG 2.5.3): "Segmen Segmen batubara", "Pelanggan USULAN Pembeli di Asia". The "+N cabang" chip starts with "+", so it never matches. */
-const cardName = (label: string) => new RegExp(`^(?!\\+).* ${label}$`);
+/** A map card is named in visible order, kind first (WCAG 2.5.3): "Segmen Segmen batubara", "Pelanggan USULAN Pembeli di Asia", then the note or the metric value when the card shows one. The "+N cabang" chip starts with "+", so it never matches. */
+const cardName = (label: string) => new RegExp(`^(?!\\+).* ${label}( .*)?$`);
 
 describe("structure tree: proposed vs accepted, and the accept action", () => {
   let nodes: StructureNode[];
@@ -390,6 +390,32 @@ describe("structure mind map: cards, sheet, gestures and the list fallback", () 
     expect(button).toHaveAccessibleName("Pelanggan USULAN Pembeli di Asia");
     expect(viewport()).toHaveClass("touch-none");
     expect(viewport()).toHaveAttribute("tabindex", "0");
+  });
+
+  it("a card's accessible name covers every visible word of the card (WCAG 2.5.3, axe label-content-name-mismatch)", async () => {
+    renderBlock();
+    await screen.findByRole("button", { name: cardName("Segmen batubara") });
+    await waitFor(() => expect(card("n2") as HTMLElement).toHaveTextContent(/Produksi 6/));
+    fireEvent.click(screen.getByRole("button", { name: /^\+\d+ cabang di Segmen batubara$/ }));
+    await waitFor(() => expect(card("n5")).not.toBeNull());
+    const words = (t: string) => t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim().split(" ");
+    const covers = (name: string, visible: string) => {
+      const n = words(name);
+      const v = words(visible);
+      return n.some((_, i) => v.every((w, j) => n[i + j] === w));
+    };
+    // The note is part of the name on a card that shows it, the linked metric's value on one that shows that instead.
+    const names: [string, string | RegExp][] = [
+      ["n1", "Segmen Segmen batubara Penambangan dan pemasaran batubara termal di Kalimantan."],
+      ["n2", /^Produk USULAN Batubara termal ekspor Produksi 6/],
+      ["n5", "Kepemilikan PEMILIK PT Contoh Tbk (pemilik)"],
+    ];
+    for (const [id, name] of names) {
+      const el = card(id) as HTMLElement;
+      expect(el).toHaveAccessibleName(name);
+      // Every visible word is a contiguous run of the name's words, so the kind never fuses with the label ("SegmenSegmen").
+      if (typeof name === "string") expect(covers(name, el.textContent ?? ""), `${id}: "${el.textContent}" vs "${name}"`).toBe(true);
+    }
   });
 
   it("tapping a card opens the sheet with its full note, source and actions; Terima saves and closes it", async () => {

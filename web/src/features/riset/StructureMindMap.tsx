@@ -685,9 +685,8 @@ function NodeCard({ n, uid, compact, metric, onFocus, onOpen, onToggle }: NodeCa
   const id = (part: string) => `${uid}-${n.id}-${part}`;
   // Kartu ringkas memuat satu baris di bawah label: nilai metrik bila ada, kalau tidak catatan. Sisanya ada di sheet.
   const showNote = Boolean(node.note) && !(compact && metric);
-  // Nama kartu = teks yang terlihat, urutan terlihat: jenis, PEMILIK, USULAN, lalu label (WCAG 2.5.3). Label tidak dibaca dua kali; catatan dan nilai metrik jadi deskripsi.
-  const named = [id("kindlabel"), node.owner ? id("owner") : null, proposed ? id("proposed") : null, id("label")].filter(Boolean).join(" ");
-  const described = [showNote ? id("note") : null, metric ? id("metric") : null].filter(Boolean).join(" ") || undefined;
+  // Nama kartu = seluruh teks yang terlihat, urutan terlihat: jenis, PEMILIK, USULAN, label, lalu catatan atau nilai metrik (WCAG 2.5.3; axe `label-content-name-mismatch` menuntut semua kata terlihat ada di nama).
+  const named = [id("kindlabel"), node.owner ? id("owner") : null, proposed ? id("proposed") : null, id("label"), showNote ? id("note") : null, metric ? id("metric") : null].filter(Boolean).join(" ");
   // Panah menunjuk ke arah anak saat tertutup (menjauh dari pusat; di kanvas sempit ke bawah), dan ke arah induk saat terbuka.
   const Chevron = compact ? (n.expanded ? ChevronUp : ChevronDown) : left === n.expanded ? ChevronRight : ChevronLeft;
   return (
@@ -698,7 +697,6 @@ function NodeCard({ n, uid, compact, metric, onFocus, onOpen, onToggle }: NodeCa
         data-state={node.state}
         data-mm-node=""
         aria-labelledby={named}
-        aria-describedby={described}
         onClick={(e) => onOpen(e.currentTarget)}
         onFocus={() => onFocus(n)}
         style={{ left: n.x, top: n.y, width: n.w, height: n.h, borderColor: color, borderStyle: proposed ? "dashed" : "solid" }}
@@ -710,18 +708,22 @@ function NodeCard({ n, uid, compact, metric, onFocus, onOpen, onToggle }: NodeCa
       >
         <span className={cn("flex w-full min-w-0 shrink-0 items-center gap-1.5 text-axis font-semibold text-text-2", compact && "h-4", left && "flex-row-reverse")}>
           <span aria-hidden="true" className="inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: color }} />
-          <span id={id("kindlabel")} className="min-w-0 truncate">{node.kind_label}</span>
+          {/* Spasi antar bagian: anak flex tak punya teks di antaranya, sehingga teks tampil yang dibaca axe menyatu ("SegmenSegmen"). */}
+          <span id={id("kindlabel")} className="min-w-0 truncate">{node.kind_label}</span>{" "}
           {node.owner ? <span id={id("owner")} className={CARD_BADGE}>PEMILIK</span> : null}
+          {node.owner ? " " : null}
           {proposed ? <span id={id("proposed")} className={CARD_BADGE}>USULAN</span> : null}
-        </span>
+          {proposed ? " " : null}
+        </span>{" "}
         <span id={id("label")} className={cn("line-clamp-2 w-full shrink-0 break-words text-label font-bold text-text", compact && "leading-[17px]")}>
           {displayText(node.label)}
-        </span>
+        </span>{" "}
         {showNote ? (
           <span id={id("note")} className={cn("w-full break-words text-caption text-text-2", compact ? "line-clamp-1 leading-4" : "line-clamp-2")}>
             {displayText(node.note ?? "")}
           </span>
         ) : null}
+        {showNote ? " " : null}
         {metric ? (
           <span id={id("metric")} className={cn("num w-full shrink-0 truncate text-caption font-semibold text-text", compact ? "leading-4" : "mt-auto")}>
             {metric}
