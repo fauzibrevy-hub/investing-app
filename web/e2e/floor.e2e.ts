@@ -11,7 +11,7 @@ import { fullPageShot } from "./shots";
  * one screenshot per route under `docs/qa/<slice>/` (linked in the PR body, D17; full page, without the fixed tab bar). The routes with a real screen also
  * pass the text-collision audit and the whole floor again at a 200 % root font (design.md §6).
  * L3a owns this table (plan §3.3): each later lane edits only its own lines. `shot` is on for the routes whose screen
- * is real; the L3c route is still a placeholder and takes their screenshot in their own slice.
+ * is real and whose screenshot this table takes; /portofolio is real (L3c) and its screenshots come from its own e2e under `docs/qa/l3c/`.
  */
 const shotsDir = (slice: string) => fileURLToPath(new URL(`../../docs/qa/${slice}/`, import.meta.url));
 
