@@ -29,7 +29,7 @@ const EXCLUSIONS: Array<{ name: string; why: string; match: (el: Element) => boo
   {
     name: "rule-parameter",
     why: "parameter aturan dan asumsi model (kartu Aturan, horizon dan pertumbuhan terminal DCF), bukan fakta laporan",
-    match: (el) => !!el.closest('[aria-label="Aturan"]') || /^(Horizon \(tahun\)|Pertumbuhan terminal)/.test(el.closest("dd")?.previousElementSibling?.textContent ?? ""),
+    match: (el) => !!el.closest('[aria-label="Aturan"], section[data-block="aturan"]') || /^(Horizon \(tahun\)|Pertumbuhan terminal)/.test(el.closest("dd")?.previousElementSibling?.textContent ?? ""),
   },
   { name: "provenance-badge", why: "angka dengan lencana asal (manual, turunan FY) di sebelahnya", match: (el) => !!el.parentElement?.querySelector(":scope > [data-provenance]") },
 ];
@@ -108,17 +108,9 @@ describe("every shown number opens its provenance (A5.5, S5)", () => {
     const { container } = await renderSurface(surface);
     const offenders = unsourcedNumbers(container);
     expect(offenders, `angka tanpa asal di ${surface.name}: ${offenders.join("; ")}`).toEqual([]);
-    // Bukan lolos karena kosong: permukaan data punya target asal angka (Desk, Paket dan Sumber menampilkan hitungan dan teks, bukan angka laporan).
-    if (!/Desk|Packs|Sumber|Paket/.test(surface.name)) {
+    // Bukan lolos karena kosong: permukaan data punya target asal angka (Beranda, Alat, Kalibrasi dan Paket menampilkan hitungan, data makro, harga dan teks, bukan angka laporan).
+    if (!/Beranda|Alat|Calibration|Packs/.test(surface.name)) {
       expect(container.querySelectorAll(PROVENANCE).length, `${surface.name} tanpa target asal angka`).toBeGreaterThan(0);
     }
-  });
-
-  it.each(SURFACES.filter((s) => /^Dossier/.test(s.name) && !/NONE/.test(s.name)))("$name: the claims, journal and calendar pane is mounted and visible, and its numbers are checked too", async (surface) => {
-    const { container } = await renderSurface(surface);
-    const pane = container.ownerDocument.querySelector('aside[aria-label="Klaim dan jurnal"]');
-    expect(pane, `${surface.name} tanpa pane Klaim dan Jurnal`).not.toBeNull();
-    expect(pane!.hasAttribute("hidden"), `${surface.name}: pane tersembunyi, angkanya lolos dari pemeriksaan`).toBe(false);
-    expect(unsourcedNumbers(pane as HTMLElement)).toEqual([]);
   });
 });

@@ -41,6 +41,15 @@ function badges(root: HTMLElement): Element[] {
   return [...root.querySelectorAll("span")].filter((el) => el.classList.contains("rounded-sm") && el.classList.contains("bg-surface-sunken") && !el.closest("button, a"));
 }
 
+/**
+ * A dash that stands for a gap is not bare when its own cell says why: `aria-hidden` mark inside `[data-gap]` with a
+ * `title` and a `sr-only` reason beside it (Bandingkan's empty cell; `FactChip` writes "Belum ada" instead).
+ */
+function isExplainedGap(el: Element | null): boolean {
+  const cell = el?.closest("[data-gap]");
+  return !!cell && el?.getAttribute("aria-hidden") === "true" && !!cell.getAttribute("title") && !!cell.querySelector(":scope > .sr-only")?.textContent?.trim();
+}
+
 const MINUS = "−";
 
 beforeEach(() => {
@@ -72,6 +81,13 @@ describe("canon display rules in research tables (design §7, A5.3)", () => {
     expect(unitAnywhere, `satuan menempel di sel di ${surface.name}: ${unitAnywhere.join("; ")}`).toEqual([]);
   });
 
+  it("an explained gap dash passes, a bare dash does not", () => {
+    const host = document.createElement("div");
+    host.innerHTML = `<span title="Belum diisi" data-gap=""><span aria-hidden="true">—</span><span class="sr-only">Pendapatan COAL: Belum diisi</span></span><span data-gap=""><span aria-hidden="true">—</span></span><span><span aria-hidden="true">—</span><span class="sr-only">x</span></span><span>—</span>`;
+    const dashes = [...host.querySelectorAll("span")].filter((el) => el.textContent === "—" && el.children.length === 0);
+    expect(dashes.map(isExplainedGap)).toEqual([true, false, false, false]);
+  });
+
   it("the unit pattern flags attached units and passes plain numbers and words", () => {
     for (const bad of ["12,3%", "5 ×", "Rp1.000", "Rp 1.000", "3×"]) expect(UNIT_IN_CELL.test(bad), bad).toBe(true);
     for (const ok of ["1.234,5", "Produksi", "12 hari", "−3,2"]) expect(UNIT_IN_CELL.test(ok), ok).toBe(false);
@@ -87,7 +103,8 @@ describe("canon display rules in research tables (design §7, A5.3)", () => {
       negatives += (container.textContent ?? "").split(MINUS).length - 1;
       cleanup();
     }
-    expect(numeric).toBeGreaterThan(100);
+    // L3a mounts only Bandingkan as a numeric table; L3b adds the company page sections and raises this floor.
+    expect(numeric).toBeGreaterThan(20);
     expect(negatives).toBeGreaterThan(0);
   });
 
@@ -125,16 +142,8 @@ describe("canon display rules in research tables (design §7, A5.3)", () => {
     const bare: string[] = [];
     for (let n = walker.nextNode(); n; n = walker.nextNode()) {
       if (n.parentElement?.closest(".sr-only, .sr-only-table, [hidden]")) continue;
-      if (/^\s*(—|–|-|n\/a|N\/A)\s*$/.test(n.textContent ?? "")) bare.push(`<${n.parentElement?.tagName} class="${n.parentElement?.className}">`);
+      if (/^\s*(—|–|-|n\/a|N\/A)\s*$/.test(n.textContent ?? "") && !isExplainedGap(n.parentElement)) bare.push(`<${n.parentElement?.tagName} class="${n.parentElement?.className}">`);
     }
     expect(bare, `strip kosong atau n/a di ${surface.name}`).toEqual([]);
-  });
-
-  it("badges are found on the surfaces that have them (provenance on Keuangan, kind on Sumber)", async () => {
-    const keuangan = await renderSurface(SURFACES.find((s) => s.name === "Dossier Keuangan")!);
-    expect(badges(keuangan.container).length).toBeGreaterThan(0);
-    cleanup();
-    const sumber = await renderSurface(SURFACES.find((s) => s.name === "Dossier Sumber")!);
-    expect(badges(sumber.container).length).toBeGreaterThan(0);
   });
 });

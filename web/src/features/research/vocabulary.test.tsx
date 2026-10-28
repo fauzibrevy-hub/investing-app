@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { SURFACES, mockCanonBackend, renderSurface } from "./canonSurfaces.testutil";
 import { expectNoVerdictWordsExcept } from "./screenAsserts.testutil";
@@ -39,8 +39,8 @@ describe("canon vocabulary (plan §7.4, design §7, A5.3)", () => {
     expect(spokenOutsideScenarios(container)).not.toMatch(FAIR_VALUE_RE);
   });
 
-  // Teks yang paling mungkin menyebut nilai per saham milik sistem ada di keterangan asal angka (drawer fakta), jadi satu angka dibuka per permukaan.
-  it.each(SURFACES.filter((s) => /Keuangan|Compare|Ringkasan/.test(s.name)))("$name: the opened provenance dialog is free of verdict words and fair-value wording", async (surface) => {
+  // Teks yang paling mungkin menyebut nilai per saham milik sistem ada di keterangan asal angka (drawer fakta), jadi satu angka dibuka di permukaan yang punya FactChip (Bandingkan; blok halaman perusahaan menyusul di L3b).
+  it.each(SURFACES.filter((s) => s.name === "Compare"))("$name: the opened provenance dialog is free of verdict words and fair-value wording", async (surface) => {
     const { container } = await renderSurface(surface);
     const chip = container.querySelector<HTMLElement>('button[aria-haspopup="dialog"]');
     expect(chip, `${surface.name} tanpa FactChip untuk dibuka`).not.toBeNull();
@@ -48,12 +48,5 @@ describe("canon vocabulary (plan §7.4, design §7, A5.3)", () => {
     await screen.findByRole("dialog");
     expectNoVerdictWordsExcept(document);
     expect(spokenOutsideScenarios(document.body)).not.toMatch(FAIR_VALUE_RE);
-  });
-
-  it("Valuasi: the scenario table is where per-share values live, and it is not itself called a fair value", async () => {
-    const surface = SURFACES.find((s) => s.name === "Dossier Valuasi")!;
-    const { container } = await renderSurface(surface);
-    const table = within(container).getByRole("table", { name: /Skenario nilai per saham/ });
-    expect(table.textContent).not.toMatch(FAIR_VALUE_RE);
   });
 });

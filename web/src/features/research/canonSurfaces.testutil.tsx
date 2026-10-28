@@ -1,16 +1,18 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { afterEach, expect, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
+import { expect, vi } from "vitest";
+import { AppRoutes } from "../../App";
 import { json, mockApi } from "../../test/mockApi";
 import { MACRO } from "./desk/macro.testutil";
-import { ResearchRoutes } from "./routes";
-import { DOSSIER_SECTIONS } from "./shortcuts";
 import { golden, hasGolden } from "./testing/canon";
 import { proposalsResponse } from "./testing/extract";
+import { setViewport } from "./testing/viewport";
 
 /**
- * Permukaan Riset yang dirender terhadap golden canon (bukan test sendiri; dipakai oleh `vocabulary`, `provenance`,
- * `independence` dan `display`). Setiap permukaan memakai `ResearchRoutes` pada jalurnya, jadi routing ikut teruji.
+ * Permukaan yang dirender terhadap golden canon (bukan test sendiri; dipakai oleh `vocabulary`, `provenance`,
+ * `independence` dan `display`). Setiap permukaan memakai tabel rute `App` (`AppRoutes`) pada jalur design.md §2.2,
+ * jadi routing ikut teruji. L3a memasang Beranda, Alat dan tiga alatnya; L3b menambah blok halaman perusahaan,
+ * Perusahaan dan Tambah; L3c menambah Portofolio (plan.md §3.3 "Tests").
  * Backend ditiru per `pathname`; jalur yang tidak punya golden dijawab 404, dan `renderSurface` gagal bila permukaan
  * sampai menampilkan keadaan galat, supaya mock yang kurang tidak lolos diam-diam.
  */
@@ -21,26 +23,20 @@ export interface Surface {
   landmark: () => Promise<unknown>;
 }
 
-const SECTION_LANDMARK: Record<string, () => Promise<unknown>> = {
-  ringkasan: () => screen.findByRole("region", { name: "Apa yang berubah" }),
-  paket: () => screen.findAllByRole("table"),
-  keuangan: () => screen.findAllByRole("table"),
-  valuasi: () => screen.findByRole("table", { name: /Skenario nilai per saham/ }),
-  harga: () => screen.findByRole("img", { name: /harga/i }),
-  sumber: () => screen.findByRole("heading", { name: /Sumber/ }),
-};
-
 export const SURFACES: Surface[] = [
-  { name: "Desk", path: "/research", landmark: () => screen.findByRole("region", { name: "Papan cakupan" }) },
-  ...DOSSIER_SECTIONS.map((s): Surface => ({ name: `Dossier ${s.label}`, path: `/research/COAL?section=${s.id}`, landmark: SECTION_LANDMARK[s.id] })),
-  { name: "Compare", path: "/research/compare?pack=coal_mining", landmark: () => screen.findByRole("region", { name: /Tabel perbandingan/ }) },
-  { name: "Calibration", path: "/research/compare/calibration", landmark: () => screen.findByRole("region", { name: /Tabel kalibrasi/ }) },
-  { name: "Packs", path: "/research/packs", landmark: () => screen.findByRole("navigation", { name: "Daftar paket" }) },
-  // Emiten lain dan paket kosong: label dan satuan yang berbeda dari batubara, dan keadaan tanpa paket (NONE).
-  { name: "Dossier REST Keuangan", path: "/research/REST?section=keuangan", landmark: SECTION_LANDMARK.keuangan },
-  { name: "Dossier REST Paket", path: "/research/REST?section=paket", landmark: SECTION_LANDMARK.paket },
-  { name: "Dossier REST Valuasi", path: "/research/REST?section=valuasi", landmark: () => screen.findAllByRole("region", { name: "Valuasi" }) },
-  { name: "Dossier NONE Paket", path: "/research/NONE?section=paket", landmark: () => screen.findByRole("heading", { name: "Tanpa paket" }) },
+  {
+    name: "Beranda",
+    path: "/beranda",
+    // Kotak masuk (desk) dan kisi Makro (observasi) dimuat terpisah; keduanya harus sudah tampil.
+    landmark: async () => {
+      await screen.findByRole("group", { name: "Kotak masuk" });
+      return screen.findByRole("list", { name: /Indikator makro/ });
+    },
+  },
+  { name: "Alat", path: "/alat", landmark: () => screen.findByRole("list", { name: "Alat" }) },
+  { name: "Compare", path: "/alat/bandingkan?pack=coal_mining", landmark: () => screen.findByRole("region", { name: /Tabel perbandingan/ }) },
+  { name: "Calibration", path: "/alat/kalibrasi", landmark: () => screen.findByRole("list", { name: "Butir kalibrasi" }) },
+  { name: "Packs", path: "/alat/paket", landmark: () => screen.findByRole("combobox", { name: "Paket" }) },
 ];
 
 /** Golden yang dipakai permukaan: teks dari backend (label metrik paket, nama emiten), bukan kata milik layar. */
@@ -81,7 +77,7 @@ export function mockCanonBackend(extra: Record<string, unknown> = {}) {
     "/api/research/calibration": golden("calibration"),
     "/api/research/compare": golden("compare-coal_mining"),
     "/api/research/filings": golden("filings-COAL"),
-    // Kartu konteks makro di Desk: satu-satunya jalur di luar /api/research/ yang dibaca fitur ini (independence.test.ts).
+    // Kisi Makro di Beranda: satu-satunya jalur di luar /api/research/ yang dibaca fitur ini (independence.test.ts).
     "/api/macro/observations": MACRO,
     ...tickerRoutes("COAL"),
     ...tickerRoutes("REST"),
@@ -98,32 +94,12 @@ export function unmockedPaths(fetchMock: { mock: { calls: unknown[][] } }): stri
   return [...new Set(paths)].filter((path) => !knownPaths.has(path));
 }
 
-/** Lebar ≥ 1440 px (pane Klaim & Jurnal terpasang dan terlihat) atau sempit (strip dan overlay); jsdom tidak punya layout. */
-export function setViewport(wide: boolean) {
-  window.matchMedia = ((query: string) =>
-    ({
-      matches: wide && /min-width:\s*(1024|1440)px/.test(query),
-      media: query,
-      onchange: null,
-      addEventListener() {},
-      removeEventListener() {},
-      addListener() {},
-      removeListener() {},
-      dispatchEvent: () => false,
-    }) as MediaQueryList) as typeof window.matchMedia;
-}
-
-// Viewport lebar hanya berlaku di dalam test yang merender permukaan; layar lain (mis. App penuh) kembali ke stub setup.
-afterEach(() => setViewport(false));
-
 /** Merender satu permukaan sampai datanya tampil dan tidak ada yang masih memuat atau galat. */
-export async function renderSurface(surface: Surface, { wide = true }: { wide?: boolean } = {}) {
-  setViewport(wide);
+export async function renderSurface(surface: Surface) {
+  setViewport(393);
   const view = render(
     <MemoryRouter initialEntries={[surface.path]}>
-      <Routes>
-        <Route path="/research/*" element={<ResearchRoutes />} />
-      </Routes>
+      <AppRoutes />
     </MemoryRouter>,
   );
   await surface.landmark();

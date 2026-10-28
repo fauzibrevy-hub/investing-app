@@ -6,7 +6,7 @@ import { SURFACES, mockCanonBackend, renderSurface } from "./canonSurfaces.testu
 const FOREIGN_PREFIXES = [["/api/", "the", "sis"], ["/api/", "idx"]].map((p) => p.join(""));
 
 /**
- * Satu-satunya jalur di luar `/api/research/` yang boleh dibaca fitur ini: kartu konteks makro di Desk (prd.md §9, R7.4),
+ * Satu-satunya jalur di luar `/api/research/` yang boleh dibaca fitur ini: kisi Makro di Beranda (prd.md §9, R7.4),
  * hanya baca. Jalur makro lain (`/trigger`, `/stream`, `/scoring`) tetap terlarang.
  */
 const MACRO_READ = "/api/macro/observations";
@@ -44,9 +44,9 @@ describe("research feature independence (design §9, plan §7.4)", () => {
 
   it("scans the whole feature directory, not an empty glob", () => {
     const files = Object.keys(SOURCES);
-    expect(files.length).toBeGreaterThan(40);
+    expect(files.length).toBeGreaterThan(25);
     expect(files).toContain("./api.ts");
-    expect(files).toContain("./dossier/sections/Overview.tsx");
+    expect(files).toContain("./components/FactDrawer.tsx");
   });
 
   it("no file under web/src/features/research imports from web/src/screens", () => {
@@ -54,7 +54,7 @@ describe("research feature independence (design §9, plan §7.4)", () => {
     expect(hits).toEqual([]);
   });
 
-  it("the only macro API the feature names is the read-only observations list, used by the Desk context card alone", () => {
+  it("the only macro API the feature names is the read-only observations list, read by Beranda's Makro grid through `useMacro` alone", () => {
     const hits = production().flatMap(([file, src]) => (src.includes(MACRO_PREFIX) ? [file] : []));
     expect(hits).toEqual(["./desk/useMacro.ts"]);
     const source = Object.entries(SOURCES).find(([file]) => file === "./desk/useMacro.ts")![1];
@@ -66,14 +66,14 @@ describe("research feature independence (design §9, plan §7.4)", () => {
     expect(hits).toEqual([]);
   });
 
-  it.each(SURFACES)("$name: every request goes to /api/research/ (the Desk also reads the macro observations) and at least one is made", async (surface) => {
+  it.each(SURFACES)("$name: every request goes to /api/research/ (Beranda also reads the macro observations) and at least one is made", async (surface) => {
     const fetchMock = mockCanonBackend();
     await renderSurface(surface);
     const requested = fetchMock.mock.calls.map(([input]) => String(input));
     expect(requested.length).toBeGreaterThan(0);
     expect(requested.filter((url) => !url.startsWith("/api/research/") && url !== MACRO_READ)).toEqual([]);
-    // Pada Desk kartu konteks makro membaca daftar observasi; permukaan lain tak menyentuh API makro.
-    expect(requested.filter((url) => url.startsWith(MACRO_PREFIX))).toEqual(surface.name === "Desk" ? [MACRO_READ] : []);
+    // Pada Beranda kisi Makro membaca daftar observasi; permukaan lain tak menyentuh API makro.
+    expect(requested.filter((url) => url.startsWith(MACRO_PREFIX))).toEqual(surface.name === "Beranda" ? [MACRO_READ] : []);
     expect(requested.filter((url) => FOREIGN_PREFIXES.some((prefix) => url.includes(prefix)))).toEqual([]);
     cleanup();
   });
