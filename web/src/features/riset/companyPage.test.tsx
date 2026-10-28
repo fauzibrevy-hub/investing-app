@@ -155,7 +155,7 @@ describe("company page #/perusahaan/:ticker (ui-slicing.md §1, design.md §3.4)
     expect(await screen.findByRole("list", { name: "Draf tesis ZZZZ" })).toHaveTextContent("Draf ZZZZ");
     expect(screen.getByRole("button", { name: "Tulis draf tesis" })).toBeInTheDocument();
     // Footer di akhir halaman (design.md §3): hanya penafian, tanpa umur data karena tak ada dossier riset.
-    const footer = screen.getByRole("contentinfo");
+    const footer = screen.getByText("Bukan saran investasi").closest("footer")!;
     expect(footer).toHaveTextContent(/^Bukan saran investasi$/);
     expect(footer).not.toHaveTextContent(/Umur data|Harga|Laporan/);
     expect(footer.previousElementSibling, "footer menutup halaman setelah blok Tesis").toBe(document.querySelector('section[data-block="tesis"]'));
