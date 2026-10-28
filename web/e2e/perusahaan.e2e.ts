@@ -130,6 +130,7 @@ for (const width of WIDTHS) {
       await expect(page.getByRole("button", { name: "Tesis", exact: true }), "blok Tesis selalu terbuka").toHaveCount(0);
       await expect(page.locator('section[data-block="tesis"]')).toContainText("Review log");
       expect(await blockTitles(page)).toEqual(["Tesis"]);
+      await expect(page.getByRole("contentinfo"), "footer menutup halaman hanya-tesis").toHaveText("Bukan saran investasi");
       await audit(page);
       if (width === 393) await fullPageShot(page, `${SHOTS}perusahaan-hanya-tesis.png`);
       await page.getByRole("link", { name: "Tambah ke riset" }).click();

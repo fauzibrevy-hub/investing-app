@@ -5,6 +5,7 @@ import { Skeleton } from "../../components/Skeleton";
 import { BackHeader } from "../../shell/BackHeader";
 import { markSeen, useDossier } from "../research/api";
 import { FactDrawerProvider } from "../research/components/FactDrawer";
+import { DeskFooter } from "../research/desk/DeskFooter";
 import { ThesisBlock } from "../thesis/ThesisBlock";
 import { AngkaKunci } from "./blocks/AngkaKunci";
 import { DataBelumAda } from "./blocks/DataBelumAda";
@@ -41,6 +42,8 @@ function ThesisOnly({ ticker, from }: { ticker: string; from: string | null }) {
         </Link>
       </header>
       <ThesisBlock ticker={ticker} open />
+      {/* Tanpa dossier riset tak ada umur data: footer hanya memuat penafian (design.md §3). */}
+      <DeskFooter />
     </div>
   );
 }
