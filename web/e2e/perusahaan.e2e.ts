@@ -1,5 +1,6 @@
 import { mkdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { axeSeriousCritical, horizontalOverflow, smallTargets, textCollisions } from "./audits";
 import { mockApi, overrideApi } from "./mockApi";
@@ -36,6 +37,23 @@ async function audit(page: Page) {
   expect(await textCollisions(page), "tabrakan teks").toEqual([]);
   expect(await smallTargets(page), "sasaran ketuk < 44 px").toEqual([]);
   expect((await axeSeriousCritical(page, { mobile: true })).blocking, "axe serious/critical").toEqual([]);
+}
+
+/**
+ * Audit sebuah overlay (Sheet atau laci): pemeriksaan halaman yang murah tetap seluruh halaman, tetapi axe hanya memindai
+ * lapisan dialog. Latar di belakang Sheet modal `inert` dan tidak berubah, dan halamannya sudah dipindai penuh oleh tes
+ * blok di bawah ini. Pemindaian axe seluruh halaman perusahaan COAL memakan ~1 dtk saat CPU lengang dan berlipat saat
+ * CPU rebutan; tes yang membukanya berkali-kali melewati batas 30 dtk di `audits.ts` `axeSeriousCritical` (akar flake
+ * `FactDrawer` dan `Hapus`). Aturan dan tag axe sama dengan `axeSeriousCritical` di `audits.ts`.
+ */
+async function auditOverlay(page: Page) {
+  await page.waitForLoadState("networkidle");
+  expect(await horizontalOverflow(page), "gulir horizontal halaman").toMatchObject({ overflow: false });
+  expect(await textCollisions(page), "tabrakan teks").toEqual([]);
+  expect(await smallTargets(page), "sasaran ketuk < 44 px").toEqual([]);
+  const result = await new AxeBuilder({ page }).include('[role="dialog"]').disableRules(["target-size"]).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]).analyze();
+  const blocking = result.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => `${v.id}: ${v.nodes.slice(0, 3).map((n) => n.target.join(" ")).join(", ")}`);
+  expect(blocking, "axe serious/critical pada dialog").toEqual([]);
 }
 
 /** Elemen `main` yang melewati tepi layar di luar kotak gulir sendiri. */
@@ -99,14 +117,14 @@ for (const width of WIDTHS) {
       const dialog = page.getByRole("dialog");
       await expect(dialog.getByRole("list", { name: "Draf vault" }).getByRole("listitem")).toHaveCount(2);
       await expect(dialog.getByText("Minyak naik")).toBeVisible();
-      await audit(page);
+      await auditOverlay(page);
       if (width === 393) await page.screenshot({ path: `${SHOTS}perusahaan-draf-vault.png`, scale: "css" });
 
       await dialog.locator("[data-vault-draft]").first().click();
       await expect(dialog.getByText("Harga minyak naik karena supply.")).toBeVisible();
       await expect(dialog.getByText(/baca saja/)).toBeVisible();
       await expect(dialog.getByRole("button", { name: /Hapus/ }), "draf vault tidak bisa dihapus").toHaveCount(0);
-      await audit(page);
+      await auditOverlay(page);
       await dialog.getByRole("button", { name: "Kembali ke daftar draf vault" }).click();
       await expect(dialog.getByRole("list", { name: "Draf vault" })).toBeVisible();
     });
@@ -246,7 +264,7 @@ for (const width of WIDTHS) {
       await company(page, "COAL", "klaim");
       await page.locator("button[data-claim-status]").first().click();
       await expect(page.getByRole("dialog")).toBeVisible();
-      await audit(page);
+      await auditOverlay(page);
     });
 
     test("Keuangan: FactDrawer opens from a table figure", async ({ page }) => {
@@ -254,7 +272,7 @@ for (const width of WIDTHS) {
       await company(page, "COAL", "keuangan");
       await page.getByRole("table").first().getByRole("button", { name: /^Asal angka/ }).first().click();
       await expect(page.getByRole("dialog")).toBeVisible();
-      await audit(page);
+      await auditOverlay(page);
     });
 
     test("Angka kunci: a key figure opens its origin", async ({ page }) => {
@@ -300,11 +318,11 @@ for (const width of WIDTHS) {
       await page.getByRole("button", { name: /Batubara tahan harga rendah/ }).click();
       const detail = page.getByRole("dialog", { name: "Draf tesis" });
       await expect(detail.getByText("Biaya tunai per ton naik di atas 45 USD")).toBeVisible();
-      await audit(page);
+      await auditOverlay(page);
       await detail.getByRole("button", { name: "Hapus draf" }).click();
       const confirm = page.getByRole("dialog", { name: "Hapus draf?" });
       await expect(confirm).toBeVisible();
-      await audit(page);
+      await auditOverlay(page);
       // Batal tidak menghapus; Hapus mengirim DELETE.
       await confirm.getByRole("button", { name: "Batal" }).click();
       await expect(confirm).toBeHidden();
@@ -333,7 +351,7 @@ for (const width of WIDTHS) {
       await sticky("awal");
       await sheet.getByLabel("Catatan").scrollIntoViewIfNeeded();
       await sticky("setelah gulir");
-      await audit(page);
+      await auditOverlay(page);
       if (width === 393) await page.screenshot({ path: `${SHOTS}perusahaan-COAL-editor.png`, scale: "css" });
 
       await save.click();
