@@ -2,10 +2,10 @@ import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export interface ToolRowProps {
-  /** Route of the tool screen (design.md §2.2). */
+  /** Rute layar alat (design.md §2.2). */
   to: string;
   name: string;
-  /** One line: what the tool is for. */
+  /** Satu kalimat: untuk apa alat ini. */
   purpose: string;
 }
 
