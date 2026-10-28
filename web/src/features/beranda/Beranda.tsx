@@ -1,93 +1,32 @@
 import { useCallback, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
-import { Button } from "../../../components/Button";
-import { Sheet } from "../../../components/Sheet";
-import { cn } from "../../../lib/cn";
-import { useDesk } from "../../research/api";
-import { calendarWhen } from "../../research/components/CalendarItem";
-import { CoverageMeter } from "../../research/components/CoverageMeter";
-import { ClaimCountsLine } from "../../research/components/claimStatus";
-import { MacroContextCard } from "../../research/desk/MacroContextCard";
-import { DeskFooter } from "../../research/desk/DeskFooter";
-import { TYPE_WORD, useInbox } from "../../research/desk/useInbox";
-import { formatAge, formatDate, formatDay, periodLabel } from "../../research/format";
-import type { CoverageRow, DeskResponse } from "../../research/types";
-import { Block, Empty, LoadError, Loading, PAGE } from "../ui";
-import { groupCoverage, latestReportQuarter } from "./landingData";
+import { useNavigate } from "react-router-dom";
+import { RefreshCw } from "lucide-react";
+import { Button } from "../../components/Button";
+import { Sheet } from "../../components/Sheet";
+import { useDesk } from "../research/api";
+import { calendarWhen } from "../research/components/CalendarItem";
+import { DeskFooter } from "../research/desk/DeskFooter";
+import { TYPE_WORD, useInbox } from "../research/desk/useInbox";
+import { useMacroObservations } from "../research/desk/useMacro";
+import { formatAge, formatDate } from "../research/format";
+import type { DeskResponse, ResearchEvent } from "../research/types";
+import { Block, Empty, LoadError, Loading, PAGE } from "../riset/ui";
+import { MacroGrid } from "./MacroGrid";
 
-/** Berapa butir kotak masuk yang tampil sebelum **Lihat semua** (ui-slicing.md §2 blok 3). */
+/** Berapa butir kotak masuk yang tampil sebelum **Lihat semua** (design.md §3.1 blok 2). */
 export const INBOX_FIRST = 5;
-/** Berapa butir kalender yang tampil (blok 4). */
+/** Berapa butir kalender yang tampil sebelum **Lihat semua** (blok 3). */
 export const CALENDAR_FIRST = 5;
 
-function CompanyRow({ row }: { row: CoverageRow }) {
-  const latest = latestReportQuarter(row);
-  const kpiDone = row.kpi.entered + row.kpi.unknown;
-  const next = row.next_report;
-  return (
-    <li data-company={row.ticker} className="border-b border-border-hairline last:border-b-0">
-      <Link to={`/riset/${row.ticker}`} className="flex min-h-16 flex-col justify-center gap-0.5 py-2 active:bg-surface-sunken">
-        <span data-line="1" className="flex min-w-0 items-baseline gap-2 text-table">
-          <span className="shrink-0 text-body-strong text-text">{row.ticker}</span>
-          <span className="min-w-0 truncate text-text-2">{row.pack.label ?? "Tanpa paket"}</span>
-          <span className="ml-auto shrink-0 whitespace-nowrap text-caption text-text-2">{latest ? periodLabel(latest) : "belum ada laporan"}</span>
-        </span>
-        <span data-line="2" className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-0.5 text-caption text-text-2">
-          <ClaimCountsLine counts={row.claims} hideZero />
-          <span className="inline-flex items-center gap-1.5">
-            KPI
-            <CoverageMeter populated={kpiDone} total={row.kpi.expected} label={`Cakupan KPI ${row.ticker}`} />
-          </span>
-          {next ? <span className={cn(next.overdue && "font-semibold text-status-warn")}>{`Laporan berikut: ${periodLabel(next.label)}, batas ${formatDay(next.deadline)}${next.overdue ? " (lewat)" : ""}`}</span> : null}
-        </span>
-      </Link>
-    </li>
-  );
-}
-
-function Companies({ desk }: { desk: DeskResponse }) {
-  const [showPeers, setShowPeers] = useState(false);
-  const { held, manual, peers } = groupCoverage(desk.coverage);
-  const own = [...held, ...manual];
-  return (
-    <Block id="perusahaan" title="Perusahaan saya">
-      {own.length === 0 ? (
-        <Empty
-          action={
-            <Link to="/riset/add" className="inline-flex min-h-11 items-center text-label font-bold text-accent">
-              Tambah emiten
-            </Link>
-          }
-        >
-          Belum ada emiten di Riset. Tambah satu kode emiten untuk mulai mencatat strukturnya, klaim, dan jurnalnya.
-        </Empty>
-      ) : (
-        <ul aria-label="Perusahaan saya">
-          {own.map((r) => (
-            <CompanyRow key={r.ticker} row={r} />
-          ))}
-        </ul>
-      )}
-      {peers.length ? (
-        <>
-          <Button variant="ghost" aria-expanded={showPeers} onClick={() => setShowPeers((v) => !v)} className="self-start -ml-3">
-            {`Pembanding (${peers.length})`}
-          </Button>
-          {showPeers ? (
-            <ul aria-label="Pembanding">
-              {peers.map((r) => (
-                <CompanyRow key={r.ticker} row={r} />
-              ))}
-            </ul>
-          ) : null}
-        </>
-      ) : null}
-    </Block>
-  );
-}
-
 const KIND_TEXT = "Peristiwa";
+
+/** Halaman perusahaan di blok butir itu; Beranda tetap pemiliknya (design.md §2.4 aturan 4). */
+function companyHref(e: ResearchEvent & { ticker: string }): string {
+  const q = new URLSearchParams();
+  if (e.section) q.set("section", e.section);
+  q.set("from", "beranda");
+  return `/perusahaan/${e.ticker}?${q}`;
+}
 
 function InboxBlock({ desk, reload }: { desk: DeskResponse; reload: () => void }) {
   const navigate = useNavigate();
@@ -103,7 +42,7 @@ function InboxBlock({ desk, reload }: { desk: DeskResponse; reload: () => void }
   const total = chip ? countOf(filter, chip.count) : null;
   const truncated = total !== null && total > shown.length;
   return (
-    <Block id="kotak-masuk" title="Kotak masuk">
+    <Block id="perlu-perhatian" title="Perlu perhatian">
       {/* `scroll-px`: tanpa itu `scroll-snap-align: start` menggulirkan chip pertama ke tepi layar dan gutter 18 px hilang. */}
       <div role="group" aria-label="Filter kotak masuk" className="hscroll -mx-[var(--gutter-left)] flex scroll-px-[var(--gutter-left)] gap-2 px-[var(--gutter-left)]">
         {desk.filters.map((f) => {
@@ -150,8 +89,15 @@ function InboxBlock({ desk, reload }: { desk: DeskResponse; reload: () => void }
         footer={
           opened ? (
             <div className="flex flex-col gap-2">
-              <Button variant="primary" fullWidth disabled={!opened.ticker} onClick={() => navigate(`/riset/${opened.ticker}${opened.section ? `?section=${opened.section}` : ""}`)}>
-                Buka riset
+              <Button
+                variant="primary"
+                fullWidth
+                disabled={!opened.ticker}
+                onClick={() => {
+                  if (opened.ticker) navigate(companyHref({ ...opened, ticker: opened.ticker }));
+                }}
+              >
+                Buka halaman perusahaan
               </Button>
               <Button
                 variant="sunken"
@@ -189,15 +135,16 @@ function InboxBlock({ desk, reload }: { desk: DeskResponse; reload: () => void }
   );
 }
 
-function CalendarBlock({ desk, open, onToggle }: { desk: DeskResponse; open: boolean; onToggle: () => void }) {
-  const next = desk.calendar.slice(0, CALENDAR_FIRST);
+function CalendarBlock({ desk }: { desk: DeskResponse }) {
+  const [all, setAll] = useState(false);
+  const items = all ? desk.calendar : desk.calendar.slice(0, CALENDAR_FIRST);
   return (
-    <Block id="kalender" title="Kalender" open={open} onToggle={onToggle}>
-      {next.length === 0 ? (
+    <Block id="kalender" title="Kalender">
+      {items.length === 0 ? (
         <Empty>Tidak ada jadwal 90 hari ke depan.</Empty>
       ) : (
         <ul>
-          {next.map((item) => (
+          {items.map((item) => (
             <li key={`${item.ticker}-${item.kind}-${item.date}-${item.label}`} className="h-[60px] border-b border-border-hairline last:border-b-0">
               <div className="flex h-full min-w-0 flex-col justify-center">
                 <span data-line="1" className="flex min-w-0 items-baseline gap-2 text-table">
@@ -217,65 +164,50 @@ function CalendarBlock({ desk, open, onToggle }: { desk: DeskResponse; open: boo
           ))}
         </ul>
       )}
-    </Block>
-  );
-}
-
-const MORE: Array<{ to: string; label: string }> = [
-  { to: "/riset/compare", label: "Bandingkan" },
-  { to: "/riset/compare/calibration", label: "Kalibrasi" },
-  { to: "/riset/packs", label: "Paket & aturan" },
-];
-
-function More() {
-  return (
-    <Block id="lainnya" title="Lainnya">
-      <ul>
-        {MORE.map((m) => (
-          <li key={m.to} className="border-b border-border-hairline last:border-b-0">
-            <Link to={m.to} className="flex min-h-11 items-center justify-between gap-2 text-body text-text">
-              {m.label}
-              <ChevronRight aria-hidden="true" size={18} strokeWidth={1.75} className="text-text-2" />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {!all && desk.calendar.length > CALENDAR_FIRST ? (
+        <Button variant="ghost" onClick={() => setAll(true)} className="-ml-3 self-start">
+          {`Lihat semua (${desk.calendar.length})`}
+        </Button>
+      ) : null}
     </Block>
   );
 }
 
 /**
- * Landing `#/riset` (ui-slicing.md §2): header dengan **Tambah**, perusahaan saya, kotak masuk (lima pertama), kalender
- * (lipat), tautan lainnya, konteks makro, footer. Semua dari `GET /desk`; tidak ada papan cakupan mendatar.
+ * Beranda `#/beranda` (design.md §3.1): yang perlu perhatian pemilik sekarang. Header dengan **Muat ulang**, kotak masuk
+ * (lima pertama), kalender (lima berikutnya), Makro, footer. Kotak masuk dan kalender dari `GET /api/research/desk`,
+ * Makro dari `GET /api/macro/observations` saja (D12); daftar perusahaan ada di layar Perusahaan.
  */
-export function Landing() {
+export function Beranda() {
   const desk = useDesk();
-  const [calendarOpen, setCalendarOpen] = useState(false);
+  const macro = useMacroObservations();
   const data = desk.data;
+  const reloadAll = () => {
+    desk.reload();
+    macro.reload();
+  };
   let body;
-  if (desk.status === "error" && !data) body = <LoadError message="Gagal memuat Riset" onRetry={desk.reload} />;
-  else if (!data) body = <Loading label="Memuat Riset…" rows={3} height={64} />;
+  if (desk.status === "error" && !data) body = <LoadError message="Gagal memuat Beranda" onRetry={desk.reload} />;
+  else if (!data) body = <Loading label="Memuat Beranda…" rows={3} height={60} />;
   else
     body = (
       <>
-        {desk.error ? <LoadError message="Gagal memuat ulang Riset" onRetry={desk.reload} /> : null}
-        <Companies desk={data} />
+        {desk.error ? <LoadError message="Gagal memuat ulang Beranda" onRetry={desk.reload} /> : null}
         <InboxBlock desk={data} reload={desk.reload} />
-        <CalendarBlock desk={data} open={calendarOpen} onToggle={() => setCalendarOpen((o) => !o)} />
+        <CalendarBlock desk={data} />
       </>
     );
   return (
     <div className={PAGE}>
       <header className="flex min-h-11 items-center justify-between gap-3">
-        <h1 className="text-title text-text">Riset</h1>
-        <Link to="/riset/add" className="on-accent inline-flex h-11 items-center rounded-pill bg-accent px-5 text-label font-bold text-text-on-accent">
-          Tambah
-        </Link>
+        <h1 className="text-title text-text">Beranda</h1>
+        <Button variant="icon" aria-label="Muat ulang" icon={<RefreshCw strokeWidth={1.75} />} loading={desk.refreshing || macro.refreshing} onClick={reloadAll} />
       </header>
       {body}
-      <More />
-      <MacroContextCard />
+      <MacroGrid macro={macro} />
       <DeskFooter ages={data?.ages} />
     </div>
   );
 }
+
+export default Beranda;
