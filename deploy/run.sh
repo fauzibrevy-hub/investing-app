@@ -22,7 +22,11 @@ APP_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 : "${INVESTING_BIND:=127.0.0.1:8789}"
 : "${INVESTING_WEB_DIST:=$APP_ROOT/web/dist}"
 : "${INVESTING_DATA_DIR:=$HOME/investing-app-data}"
-export INVESTING_BIND INVESTING_WEB_DIST INVESTING_DATA_DIR
+# The packs default in src/config.rs is the relative `research/packs`; launchd starts this with cwd=/,
+# so without an absolute default the service silently serves only its embedded copies (L4 parity:
+# /api/research/packs files 0, 7 embedded_ids, against files 7 on finance-app).
+: "${INVESTING_RESEARCH_PACKS_DIR:=$APP_ROOT/research/packs}"
+export INVESTING_BIND INVESTING_WEB_DIST INVESTING_DATA_DIR INVESTING_RESEARCH_PACKS_DIR
 
 BIN="$APP_ROOT/target/release/investing-app"
 if [ ! -x "$BIN" ]; then

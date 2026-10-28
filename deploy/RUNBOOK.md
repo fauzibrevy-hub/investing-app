@@ -22,6 +22,10 @@ are filled in; launchd expands neither `$HOME` nor `~`), reloads the job and wai
 checkout and the service dies when it is deleted. `SKIP_BUILD=1` skips the builds. The weekly
 scraper job is a separate step: §5, `install-scraper.sh`, once, at cutover.
 
+`deploy/run.sh` sets `INVESTING_RESEARCH_PACKS_DIR` to `<checkout>/research/packs` unless the env file
+sets it: launchd starts the service in `/`, where the relative default finds no pack files and
+`GET /api/research/packs` would report `files: 0` and seven `embedded_ids`.
+
 ## 2. Verify
 
 ```

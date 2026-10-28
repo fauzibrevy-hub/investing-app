@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/tools-selftest.sh (plan.md §3.1b, steps 1-10): proves counts.sh, parity.sh and writes.sh
+# scripts/tools-selftest.sh (plan.md §3.1b, steps 1-11): proves counts.sh, parity.sh and writes.sh
 # on fixtures. No live data: two binaries on 127.0.0.1:18801 (A) and :18802 (B, sandbox), each with
 # a scratch HOME, a mktemp data dir and a throwaway token. No network beyond what macro/trigger does
 # with MACRO_DISABLE_FRED=1. Binaries are stopped by PID, never by name (other worktrees run the
@@ -11,6 +11,7 @@ cd "$(dirname "$0")/.." || exit 2
 
 PORT_A=18801
 PORT_B=18802
+PORT_C=18803
 A_URL="http://127.0.0.1:$PORT_A"
 B_URL="http://127.0.0.1:$PORT_B"
 BIN=./target/release/investing-app
@@ -45,6 +46,7 @@ snapshot() {
 
 PID_A=
 PID_B=
+PID_C=
 W=
 # stop_pid PID: TERM, then KILL after 5 s; only the PID this script started.
 stop_pid() {
@@ -60,6 +62,7 @@ stop_pid() {
 cleanup() {
   stop_pid "$PID_A"
   stop_pid "$PID_B"
+  stop_pid "$PID_C"
   [ -z "$W" ] || rm -rf "$W"
 }
 trap cleanup EXIT
@@ -430,9 +433,40 @@ else
   fail 10 "a binary still answers"
 fi
 
+# 11. deploy/run.sh from launchd's working directory (/) serves the repo's pack files, not only the embedded
+# copies. L4 parity found /api/research/packs `files: 0` and seven `embedded_ids` on the deployed service
+# against `files: 7` on finance-app: the relative default `research/packs` (src/config.rs) found nothing
+# under cwd=/. Real run.sh with a scratch env file and HOME on :18803; nothing but the pack status is read.
+step 11 "deploy/run.sh with cwd=/ on :$PORT_C: /api/research/packs reads files, not the embedded set"
+APP_ROOT="$PWD"
+mkdir -p "$W/home-C" "$W/f3"
+printf 'INVESTING_APP_TOKEN=%s\nINVESTING_BIND=127.0.0.1:%s\nINVESTING_DATA_DIR=%s\nPORTFOLIO_SPREADSHEET_ID=smoke\nGOOGLE_APPLICATION_CREDENTIALS=%s\nMACRO_DISABLE_FRED=1\nINVESTING_RESEARCH_DISABLE_SCHEDULER=1\nINVESTING_MACRO_WATCHER=0\n' \
+  "$TOKEN_B" "$PORT_C" "$W/f3" "$W/home-C/none.json" >"$W/run.env"
+if up "http://127.0.0.1:$PORT_C"; then
+  fail 11 "port $PORT_C is already in use"
+else
+  (cd / && exec env -i PATH="$PATH" HOME="$W/home-C" INVESTING_ENV_FILE="$W/run.env" "$APP_ROOT/deploy/run.sh") >>"$W/C.log" 2>&1 &
+  PID_C=$!
+  for _ in $(seq 120); do
+    up "http://127.0.0.1:$PORT_C" && break
+    kill -0 "$PID_C" 2>/dev/null || break
+    sleep 0.25
+  done
+  status="$(curl -s -m 5 -H "@$W/auth.B" "http://127.0.0.1:$PORT_C/api/research/packs" | jq -c '.status | {files, embedded_ids, invalid}' 2>/dev/null)"
+  echo "packs status: $status"
+  stop_pid "$PID_C"
+  PID_C=
+  if [ "$status" = '{"files":7,"embedded_ids":[],"invalid":[]}' ]; then
+    pass 11 "run.sh from cwd=/ loads the 7 pack files, no embedded fallback"
+  else
+    fail 11 "expected files 7, embedded_ids [] and invalid []; got $status"
+    tail -n 5 "$W/C.log"
+  fi
+fi
+
 echo
 if [ "$failed" -eq 0 ]; then
-  echo "tools-selftest: all 10 steps passed"
+  echo "tools-selftest: all 11 steps passed"
 else
   echo "tools-selftest: $failed step(s) failed"
 fi

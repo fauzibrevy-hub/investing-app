@@ -188,6 +188,8 @@ ORDER BY 1, 2;
 | `/api/macro/observations` | `del(.as_of)` | request time (`scripts/parity.sh:70`) |
 | `/api/macro/scoring` | `del(.as_of, .score_vintage)` | request time (`scripts/parity.sh:71`) |
 
+`/api/research/packs` `files` and `embedded_ids` are not dropped: the 7 pack files in `research/packs/` are byte-identical to finance-app `4ef2dd9`'s and the embedded copies are `include_str!` of them, so once the deployed service reads the files (`deploy/run.sh` sets `INVESTING_RESEARCH_PACKS_DIR` to the checkout) both fields match (L4, 2026-10-28).
+
 L1b confirms each jq path against the self-test run and removes any drop that matches nothing; a new drop needs a reason line and the owner's OK in the L1b PR.
 
 **`scripts/writes.sh`** (prd.md A3). Env `A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER`. Refuses `:8787`, and refuses unless B's `/api/health` has `"sandbox": true` (unreachable, non-JSON, key absent or false all refuse, exit 2). A data dir that is or links to `~/finance-app-data` is refused on both sides, always. `~/investing-app-data` is refused as `A_DATA`; as `B_DATA` it is allowed only past that health check, because at L4 it IS the sandbox's own data dir (§3.4 step 5), thrown away at L5 step 3 (found at L4, 2026-10-28; the L1b guard refused it unconditionally). Sends each request to A, then to B, each side using the ids its own earlier responses returned; request bodies are copied from the finance-app test named, so the expected status is known. Prints `label<TAB>a<TAB>b<TAB>ok|DIFF|SKIP`; exit 0 when every pair matches.
@@ -245,7 +247,10 @@ Checked 2026-10-27 on the fixture: `TICKER=AAAA` gives ticker AAAA, 40 nodes, no
 9. Guards: `A_URL=http://127.0.0.1:8787 scripts/parity.sh` and the same for `writes.sh` exit 2 before any request; `writes.sh` with B started without `INVESTING_SANDBOX` exits 2.
     Step 4 also covers never-created drafts and documents: 0 = 0 with `missing (0)` notes on both sides; one side without a drafts file against a side with a draft is a difference; a drafts path that is a directory exits 2.
     Step 9 also runs `writes.sh` under a curl shim and a scratch `$HOME`: `B_DATA` = `investing-app-data` with `"sandbox": true` passes the guard; with the key absent, `false`, non-JSON or B unreachable it exits 2 after the one health read; `finance-app-data` exits 2 with no request even when health says `sandbox: true`.
-10. Stop both binaries; the script exits 0 only when every step above matched.
+10. Stop both binaries.
+11. `deploy/run.sh` started with cwd `/` and a scratch env file on `127.0.0.1:18803`: `GET /api/research/packs` has `files: 7`, `embedded_ids: []`, `invalid: []` (L4 found `files: 0` and seven `embedded_ids` on the deployed service because the relative `research/packs` default found nothing under launchd's cwd; `run.sh` now sets an absolute `INVESTING_RESEARCH_PACKS_DIR`).
+
+The script exits 0 only when every step above matched.
 
 ### 3.2 L2 Web shell
 
