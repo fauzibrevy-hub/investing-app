@@ -29,9 +29,9 @@ async function floor(page: Page, { collisions }: { collisions: boolean }) {
 }
 
 /** `name` is the screenshot file; `heading` the screen title the route must show. */
-const ROUTES: { route: string; name: string; heading: string; shot: boolean }[] = [
+const ROUTES: { route: string; name: string; heading: string; shot: boolean | string }[] = [
   { route: "/beranda", name: "beranda", heading: "Beranda", shot: true },
-  { route: "/portofolio", name: "portofolio", heading: "Portofolio", shot: false },
+  { route: "/portofolio", name: "portofolio", heading: "Portofolio", shot: "l3c" },
   { route: "/perusahaan", name: "perusahaan", heading: "Perusahaan", shot: false },
   { route: "/perusahaan/tambah", name: "perusahaan-tambah", heading: "Tambah emiten", shot: false },
   { route: "/perusahaan/COAL", name: "perusahaan-COAL", heading: "COAL", shot: false },
@@ -42,7 +42,6 @@ const ROUTES: { route: string; name: string; heading: string; shot: boolean }[] 
 ];
 
 mkdirSync(SHOTS, { recursive: true });
-
 for (const { route, name, heading, shot } of ROUTES) {
   test(`lantai otomatis ${route}`, async ({ page }) => {
     const unmocked = await mockApi(page);
@@ -52,11 +51,13 @@ for (const { route, name, heading, shot } of ROUTES) {
     await page.evaluate(() => document.fonts.ready);
 
     // `shot` = a real screen in this slice: text collisions are checked too, and the floor repeats at 200 % root font.
-    await floor(page, { collisions: shot });
+    await floor(page, { collisions: Boolean(shot) });
     expect(unmocked, "jalur API yang diminta tetapi tidak ditiru").toEqual([]);
 
     if (!shot) return;
-    await fullPageShot(page, `${SHOTS}${name}.png`);
+    const dir = typeof shot === "string" ? fileURLToPath(new URL(`../../docs/qa/${shot}/`, import.meta.url)) : SHOTS;
+    mkdirSync(dir, { recursive: true });
+    await fullPageShot(page, `${dir}${name}.png`);
     await page.addStyleTag({ content: FONT_200 });
     await page.waitForTimeout(300);
     await page.waitForLoadState("networkidle");
