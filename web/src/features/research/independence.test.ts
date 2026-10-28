@@ -44,7 +44,7 @@ describe("research feature independence (design §9, plan §7.4)", () => {
 
   it("scans the whole feature directory, not an empty glob", () => {
     const files = Object.keys(SOURCES);
-    expect(files.length).toBeGreaterThan(25);
+    expect(files.length).toBeGreaterThan(50);
     expect(files).toContain("./api.ts");
     expect(files).toContain("./components/FactDrawer.tsx");
   });
@@ -71,10 +71,11 @@ describe("research feature independence (design §9, plan §7.4)", () => {
     await renderSurface(surface);
     const requested = fetchMock.mock.calls.map(([input]) => String(input));
     expect(requested.length).toBeGreaterThan(0);
-    expect(requested.filter((url) => !url.startsWith("/api/research/") && url !== MACRO_READ)).toEqual([]);
-    // Pada Beranda kisi Makro membaca daftar observasi; permukaan lain tak menyentuh API makro.
+    const thesisReads = surface.name === "Perusahaan" ? [`${FOREIGN_PREFIXES[0]}/summary`, `${FOREIGN_PREFIXES[0]}/drafts`] : [];
+    expect(requested.filter((url) => !url.startsWith("/api/research/") && url !== MACRO_READ && !thesisReads.includes(url))).toEqual([]);
+    // Pada Beranda kisi Makro membaca daftar observasi; pada Perusahaan blok Tesis lain membaca ringkasan & draf tesis.
     expect(requested.filter((url) => url.startsWith(MACRO_PREFIX))).toEqual(surface.name === "Beranda" ? [MACRO_READ] : []);
-    expect(requested.filter((url) => FOREIGN_PREFIXES.some((prefix) => url.includes(prefix)))).toEqual([]);
+    expect(requested.filter((url) => FOREIGN_PREFIXES.some((prefix) => url.includes(prefix)))).toEqual(thesisReads);
     cleanup();
   });
 });

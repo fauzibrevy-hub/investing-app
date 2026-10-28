@@ -43,11 +43,13 @@ function badges(root: HTMLElement): Element[] {
 
 /**
  * A dash that stands for a gap is not bare when its own cell says why: `aria-hidden` mark inside `[data-gap]` with a
- * `title` and a `sr-only` reason beside it (Bandingkan's empty cell; `FactChip` writes "Belum ada" instead).
+ * `title` and a `sr-only` reason beside it (Bandingkan and Kuartal terakhir empty cells), or `SourcedStat`'s empty
+ * `StatRow` (`aria-label="…: belum ada data"`) followed by its visible `gapReason` caption.
  */
 function isExplainedGap(el: Element | null): boolean {
   const cell = el?.closest("[data-gap]");
-  return !!cell && el?.getAttribute("aria-hidden") === "true" && !!cell.getAttribute("title") && !!cell.querySelector(":scope > .sr-only")?.textContent?.trim();
+  if (cell) return el?.getAttribute("aria-hidden") === "true" && !!cell.getAttribute("title") && !!cell.querySelector(":scope > .sr-only")?.textContent?.trim();
+  return Boolean(el?.getAttribute("aria-label")?.endsWith(": belum ada data") && el.parentElement?.nextElementSibling?.textContent?.trim());
 }
 
 const MINUS = "−";
@@ -83,9 +85,9 @@ describe("canon display rules in research tables (design §7, A5.3)", () => {
 
   it("an explained gap dash passes, a bare dash does not", () => {
     const host = document.createElement("div");
-    host.innerHTML = `<span title="Belum diisi" data-gap=""><span aria-hidden="true">—</span><span class="sr-only">Pendapatan COAL: Belum diisi</span></span><span data-gap=""><span aria-hidden="true">—</span></span><span><span aria-hidden="true">—</span><span class="sr-only">x</span></span><span>—</span>`;
+    host.innerHTML = `<span title="Belum diisi" data-gap=""><span aria-hidden="true">—</span><span class="sr-only">Pendapatan COAL: Belum diisi</span></span><div><div><span aria-label="P/E TTM: belum ada data">—</span></div><span>Belum ada laba 12 bulan</span></div><div><div><span aria-label="P/E TTM: belum ada data">—</span></div></div><span data-gap=""><span aria-hidden="true">—</span></span><span><span aria-hidden="true">—</span><span class="sr-only">x</span></span><span>—</span>`;
     const dashes = [...host.querySelectorAll("span")].filter((el) => el.textContent === "—" && el.children.length === 0);
-    expect(dashes.map(isExplainedGap)).toEqual([true, false, false, false]);
+    expect(dashes.map(isExplainedGap)).toEqual([true, true, false, false, false, false]);
   });
 
   it("the unit pattern flags attached units and passes plain numbers and words", () => {
@@ -103,8 +105,7 @@ describe("canon display rules in research tables (design §7, A5.3)", () => {
       negatives += (container.textContent ?? "").split(MINUS).length - 1;
       cleanup();
     }
-    // L3a mounts only Bandingkan as a numeric table; L3b adds the company page sections and raises this floor.
-    expect(numeric).toBeGreaterThan(20);
+    expect(numeric).toBeGreaterThan(100);
     expect(negatives).toBeGreaterThan(0);
   });
 

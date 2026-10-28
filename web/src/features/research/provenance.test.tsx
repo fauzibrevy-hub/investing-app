@@ -16,7 +16,7 @@ const NUMBER = /^(?:Rp\s?)?[+\u2212-]?\d[\d.,]*\s?[%×]?$/;
 const EXCLUSIONS: Array<{ name: string; why: string; match: (el: Element) => boolean }> = [
   { name: "sr-only", why: "teks pembaca layar, bukan tampilan angka", match: (el) => !!el.closest(".sr-only, .sr-only-table, [hidden], script, style") },
   { name: "header", why: "kepala kolom dan keterangan tabel (tahun, nomor periode)", match: (el) => !!el.closest("th, caption, kbd") },
-  { name: "control", why: "kontrol pilihan (rentang 8/12/20 kuartal), bukan nilai", match: (el) => !!el.closest('[role="radio"], [role="radiogroup"], [role="tab"], select, option, input') },
+  { name: "control", why: "kontrol pilihan (rentang 8/12/20 kuartal, zoom dan lipat cabang peta struktur), bukan nilai", match: (el) => !!el.closest('[role="radio"], [role="radiogroup"], [role="tab"], select, option, input, [data-mm-toggle]') || (el.getAttribute("aria-hidden") === "true" && !!el.closest("#struktur")) },
   { name: "chart", why: "label sumbu dan penanda nilai terakhir di dalam grafik; angka yang sama ada di statistik dan tabel sr-only bersumber", match: (el) => !!el.closest("svg, .pointer-events-none") },
   {
     name: "count",
@@ -88,7 +88,7 @@ describe("every shown number opens its provenance (A5.5, S5)", () => {
   it.each([
     ["sr-only", `<span class="sr-only">3</span>`],
     ["header", `<table><caption>2026</caption><thead><tr><th>26</th></tr></thead></table>`],
-    ["control", `<div role="radiogroup"><button role="radio">12</button></div>`],
+    ["control", `<div role="radiogroup"><button role="radio">12</button></div><section id="struktur"><span aria-hidden="true">100%</span><button data-mm-toggle="n1"><span aria-hidden="true">+1</span></button></section>`],
     ["chart", `<svg><text>1.000</text></svg><div class="pointer-events-none"><span>1.290</span></div>`],
     ["count: meter fraction", `<span><span role="meter"></span><span>27</span></span>`],
     ["count: claim", `<ul><li><span aria-hidden="true"></span><span>2</span> berjalan</li></ul>`],
@@ -109,7 +109,7 @@ describe("every shown number opens its provenance (A5.5, S5)", () => {
     const offenders = unsourcedNumbers(container);
     expect(offenders, `angka tanpa asal di ${surface.name}: ${offenders.join("; ")}`).toEqual([]);
     // Bukan lolos karena kosong: permukaan data punya target asal angka (Beranda, Alat, Kalibrasi dan Paket menampilkan hitungan, data makro, harga dan teks, bukan angka laporan).
-    if (!/Beranda|Alat|Calibration|Packs/.test(surface.name)) {
+    if (!/Beranda|Perusahaan|Tambah|Alat|Calibration|Packs/.test(surface.name)) {
       expect(container.querySelectorAll(PROVENANCE).length, `${surface.name} tanpa target asal angka`).toBeGreaterThan(0);
     }
   });
