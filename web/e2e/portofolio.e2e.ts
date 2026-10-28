@@ -127,6 +127,15 @@ async function visibleRpDigits(page: Page): Promise<string[]> {
 }
 
 test.describe("Portofolio (#/portofolio)", () => {
+  test("umur data tampil di bawah judul dan di footer (summary.updated_at ada di fixture)", async ({ page }) => {
+    await openPortofolio(page);
+    expect(FIXTURE.summary.updated_at, "fixture memuat updated_at").toBeTruthy();
+    const age = `Harga per ${FIXTURE.summary.updated_at!.slice(0, 16).replace("T", " ")}`;
+    await expect(page.getByText(age, { exact: true })).toHaveCount(2);
+    await expect(page.locator("header").getByText(age, { exact: true })).toBeVisible();
+    await expect(page.locator("footer").getByText(age, { exact: true })).toBeVisible();
+  });
+
   test("Sheet posisi menampilkan seluruh 11 angka sesuai e2e/fixtures/stock-portfolio.json", async ({ page }) => {
     const unmocked = await openPortofolio(page);
     expect(unmocked).toEqual([]);
