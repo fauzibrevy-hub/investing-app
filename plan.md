@@ -337,8 +337,10 @@ With these moves, L3b's closure reaches no file under `dossier/` and none of `De
 **Old routes.** Each lane rewrites the `#/riset`, `#/research`, `#/portfolio`, `#/thesis`, `#/idx` literals in the files it owns to design.md §2.2 routes, adding `from=` per §2.4 rule 4; `riset/ui.tsx:88` `BackLink to="/riset"` gives way to `BackHeader` (L3a). Files with old literals at `4ef2dd9` (non-test, carried): `riset/screens/{Landing,Compare,Calibration}.tsx`, `riset/ui.tsx` (L3a); `riset/CompanyPage.tsx`, `riset/blocks/Header.tsx`, `riset/screens/Add.tsx`, `research/add/StepTicker.tsx`, `research/components/MetricRow.tsx` (`/research/<T>?section=paket`), `screens/thesis/ThesisScreen.tsx` (L3b); `screens/portfolio/PortfolioScreen.tsx` (L3c). After L3c this prints nothing (comment lines are filtered; relative imports and `/api/…` paths do not match):
 
 ```
-git grep -nE '(^|[^i.])/(riset|research|portfolio|thesis|idx)([/?"`$]|$)' -- web/src ':!*.test.*' ':!*.testutil.*' | grep -vE ':[0-9]+:[[:space:]]*(\*|//|/\*)'
+git grep -nE '(^|[^A-Za-z0-9_.-])/(riset|research|portfolio|thesis|idx)([/?"`$]|$)' -- web/src ':!*.test.*' ':!*.testutil.*' | grep -vE ':[0-9]+:[[:space:]]*(\*|//|/\*)'
 ```
+
+Decision 2026-10-28 (owner): the pattern skips path segments such as `features/riset/` and fixture paths, so only route literals match.
 
 On finance-app `4ef2dd9` the same command lists the literals above plus files that are not carried.
 
