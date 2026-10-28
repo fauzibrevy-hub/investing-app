@@ -1,10 +1,11 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { formatPercent, formatRupiah } from "../../../lib/money";
+import { BackHeader } from "../../../shell/BackHeader";
 import { useCalibration, useUniverse } from "../../research/api";
 import { ScreenFooter } from "../../research/desk/DeskFooter";
 import { formatDate } from "../../research/format";
 import type { CalibrationKind, CalibrationRow } from "../../research/types";
-import { BackLink, Empty, FIELD, LoadError, Loading, PAGE } from "../ui";
+import { Empty, FIELD, LoadError, Loading, PAGE } from "../ui";
 
 type KindFilter = "semua" | CalibrationKind;
 
@@ -38,7 +39,7 @@ function Card({ row }: { row: CalibrationRow }) {
       <span className="num text-label text-text-2">
         {outcome.text}
         {outcome.gap ? (
-          <Link to={`/riset/${row.ticker}?section=harga`} aria-label={`Lihat harga ${row.ticker}`} className="ml-2 inline-flex min-h-11 items-center font-bold text-accent">
+          <Link to={`/perusahaan/${row.ticker}?section=harga&from=alat`} aria-label={`Lihat harga ${row.ticker}`} className="ml-2 inline-flex min-h-11 items-center font-bold text-accent">
             Lihat harga
           </Link>
         ) : null}
@@ -49,7 +50,7 @@ function Card({ row }: { row: CalibrationRow }) {
 }
 
 /**
- * Kalibrasi `#/riset/compare/calibration` (ui-slicing.md §4): tingkat Berlaku vs Patah per ticker sebagai teks di atas
+ * Kalibrasi `#/alat/kalibrasi` (ui-slicing.md §4): tingkat Berlaku vs Patah per ticker sebagai teks di atas
  * (tanpa warna), lalu butir sebagai kartu dua baris; dua pilihan, ticker dan jenis. Data: `GET /calibration`.
  */
 export function Calibration() {
@@ -73,7 +74,7 @@ export function Calibration() {
   else if (!data) body = <Loading label="Memuat kalibrasi…" rows={3} height={96} />;
   else if (data.items.length === 0)
     body = (
-      <Empty action={<Link to="/riset" className="inline-flex min-h-11 items-center text-label font-bold text-accent">Ke Riset</Link>}>
+      <Empty action={<Link to="/perusahaan" className="inline-flex min-h-11 items-center text-label font-bold text-accent">Ke Perusahaan</Link>}>
         Belum ada klaim, level, atau keputusan untuk dikalibrasi. Tulis klaim di halaman perusahaan, atau catat level dan keputusan di jurnalnya.
       </Empty>
     );
@@ -89,7 +90,7 @@ export function Calibration() {
   return (
     <div className={PAGE}>
       <header className="flex flex-col gap-1">
-        <BackLink />
+        <BackHeader />
         <h1 className="text-title text-text">Kalibrasi</h1>
       </header>
       {data ? (

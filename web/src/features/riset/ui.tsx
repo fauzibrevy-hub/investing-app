@@ -1,6 +1,5 @@
 import { useId, type ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Skeleton } from "../../components/Skeleton";
 import { cn } from "../../lib/cn";
@@ -84,23 +83,13 @@ export function Empty({ children, action }: { children: ReactNode; action?: Reac
   );
 }
 
-/** **‹ Riset** (44 px): kembali ke landing dari layar Riset lain. */
-export function BackLink({ to = "/riset", children = "Riset" }: { to?: string; children?: ReactNode }) {
-  return (
-    <Link to={to} className="-ml-1 inline-flex min-h-11 w-fit items-center gap-1 rounded-sm pl-1 pr-3 text-label font-bold text-accent">
-      <ChevronLeft aria-hidden="true" size={18} strokeWidth={1.75} />
-      {children}
-    </Link>
-  );
-}
-
 /**
- * Satu kolom, lebar maksimum 720 px di tengah; gutter 18 px di iPhone datang dari cangkang. `overflow-x-clip` (bukan
+ * Satu kolom selebar kolom cangkang (maks. 480 px, design.md §1, D13); gutter 18 px datang dari cangkang. `overflow-x-clip` (bukan
  * `hidden`, jadi `sticky` tetap bekerja) menjaga halaman tidak lebih lebar dari layar: elemen yang meluap terpotong di
  * tepi kolom, bukan memperlebar viewport tata letak dan membuat halaman bergeser ke samping. `overflow-clip-margin`
  * 18 px membiarkan baris gulir yang meluas ke gutter (`-mx-[var(--gutter-left)]`) tetap tergambar sampai tepi layar.
  */
-export const PAGE = "mx-auto flex w-full min-w-0 max-w-[720px] flex-col gap-8 overflow-x-clip [overflow-clip-margin:18px]";
+export const PAGE = "flex w-full min-w-0 flex-col gap-8 overflow-x-clip [overflow-clip-margin:18px]";
 
 /** Kelas bersama untuk input dan select 48 px. */
 export const FIELD = "h-12 w-full rounded-sm border border-transparent bg-surface-sunken px-3 text-body text-text";

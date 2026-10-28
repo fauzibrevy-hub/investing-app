@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "../../../components/Button";
 import { cn } from "../../../lib/cn";
+import { BackHeader } from "../../../shell/BackHeader";
 import { useCompare, usePacks, useUniverse } from "../../research/api";
 import { FactDrawerProvider } from "../../research/components/FactDrawer";
 import { FactChip } from "../../research/components/FactChip";
@@ -11,7 +12,7 @@ import { chooseScale, formatMultiple, formatPct, formatScaled, formatValue, peri
 import type { CellFlag, CompareCell, CompareResponse, CompareRow, PackDefinition, Role } from "../../research/types";
 import { MIXED_HEADER, columnScales, columnUnit, moneyRowHeader } from "../compareScale";
 import { isBankPack, isNonBankCore, kpiMoneyUnit, quarterTableLabel } from "../lastQuarter";
-import { BackLink, Empty, FIELD, LoadError, Loading, PAGE } from "../ui";
+import { Empty, FIELD, LoadError, Loading, PAGE } from "../ui";
 
 const MAX_TICKERS = 12;
 const ROLE_WORDS: Record<Role, string> = { held: "dipegang", manual: "manual", peer: "pembanding" };
@@ -64,7 +65,7 @@ function Cell({ cell, row, format }: { cell: CompareCell; row: CompareRow; forma
   if (cell.fact) return <FactChip value={cell.value} text={format(cell.value)} target={cell.fact} label={label} period={period} flags={flags} badges={row.metric.layer === "kpi" ? ["manual"] : []} />;
   return (
     <Link
-      to={`/riset/${cell.ticker}?section=kuartal`}
+      to={`/perusahaan/${cell.ticker}?section=kuartal&from=alat`}
       aria-label={`Asal angka ${label} ${period}: ${format(cell.value)}, rincian di halaman ${cell.ticker}`}
       className="num inline-flex min-h-11 min-w-11 items-center justify-end px-1 text-right text-text underline decoration-dotted underline-offset-4 hover:decoration-solid"
     >
@@ -102,7 +103,7 @@ function CompareTable({ data }: { data: CompareResponse }) {
             </th>
             {data.tickers.map((t) => (
               <th key={t.ticker} scope="col" className="min-w-[72px] px-2 py-1 text-right align-bottom">
-                <Link to={`/riset/${t.ticker}`} title={t.name ?? ROLE_WORDS[t.role]} className="inline-flex min-h-11 min-w-11 flex-col items-end justify-center text-table font-bold text-accent">
+                <Link to={`/perusahaan/${t.ticker}?from=alat`} title={t.name ?? ROLE_WORDS[t.role]} className="inline-flex min-h-11 min-w-11 flex-col items-end justify-center text-table font-bold text-accent">
                   {t.ticker}
                   {mixedMoney && scales.get(t.ticker) ? <span className="text-table-head font-normal uppercase text-text-2">{columnUnit(scales.get(t.ticker)!)}</span> : null}
                 </Link>
@@ -156,7 +157,7 @@ function Gaps({ data }: { data: CompareResponse }) {
               <span className="font-semibold text-text">{`${row.metric.label} · ${cell.ticker}`}</span>
               {`: ${why}`}
             </span>
-            <Link to={`/riset/${cell.ticker}?section=kuartal`} aria-label={`${action} ${row.metric.label} ${cell.ticker}`} className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center px-2 text-caption font-bold text-accent">
+            <Link to={`/perusahaan/${cell.ticker}?section=kuartal&from=alat`} aria-label={`${action} ${row.metric.label} ${cell.ticker}`} className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center px-2 text-caption font-bold text-accent">
               {action}
             </Link>
           </li>
@@ -174,7 +175,7 @@ function candidates(packId: string | undefined, members: Array<{ ticker: string;
 }
 
 /**
- * Bandingkan `#/riset/compare` (ui-slicing.md §3): pilih paket dan emiten (chip yang membungkus, tidak menggulir), lalu
+ * Bandingkan `#/alat/bandingkan` (ui-slicing.md §3): pilih paket dan emiten (chip yang membungkus, tidak menggulir), lalu
  * satu tabel yang menggulir di dalam kotaknya dengan kolom metrik tetap. Data: `GET /compare`.
  */
 export function Compare() {
@@ -209,7 +210,7 @@ export function Compare() {
   let body;
   if (packs.status === "error" && !ready) body = <LoadError message="Gagal memuat daftar paket" onRetry={packs.reload} />;
   else if (!ready && packs.status === "loading") body = <Loading label="Memuat paket…" rows={1} height={240} />;
-  else if (!ready) body = <Empty action={<Link to="/riset/packs" className="inline-flex min-h-11 items-center text-label font-bold text-accent">Lihat paket</Link>}>Belum ada paket untuk dibandingkan.</Empty>;
+  else if (!ready) body = <Empty action={<Link to="/alat/paket" className="inline-flex min-h-11 items-center text-label font-bold text-accent">Lihat paket</Link>}>Belum ada paket untuk dibandingkan.</Empty>;
   else if (compare.status === "error" && !data) body = <LoadError message="Gagal memuat perbandingan" onRetry={compare.reload} />;
   else if (!data) body = <Loading label="Memuat perbandingan…" rows={1} height={240} />;
   else if (data.rows.length === 0) body = <Empty>Belum ada metrik untuk dibandingkan.</Empty>;
@@ -225,7 +226,7 @@ export function Compare() {
     <FactDrawerProvider>
       <div className={PAGE}>
         <header className="flex flex-col gap-1">
-          <BackLink />
+          <BackHeader />
           <h1 className="text-title text-text">Bandingkan</h1>
         </header>
         <div className="flex flex-col gap-3">
