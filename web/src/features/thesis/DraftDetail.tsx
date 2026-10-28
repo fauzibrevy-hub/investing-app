@@ -3,8 +3,9 @@ import { Trash2 } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Sheet } from "../../components/Sheet";
 import { api, ApiError, MESSAGES } from "../../lib/api";
-import { invalidate, useResource } from "../../lib/useResource";
-import type { Draft } from "../../screens/thesis/types";
+import { invalidate } from "../../lib/useResource";
+import { THESIS_BASE, useThesisDraft } from "./api";
+import type { Draft } from "./types";
 import { Empty, LoadError, Loading } from "../riset/ui";
 import { Section } from "./DossierView";
 import { shortDate } from "./format";
@@ -15,7 +16,7 @@ import { Markdown } from "./Markdown";
  * **Hapus draf** (ghost, `status-over`) meminta konfirmasi dulu; draf vault tidak pernah sampai di sini (Perusahaan "Draf vault").
  */
 export function DraftDetail({ id, onDeleted }: { id: string; onDeleted: () => void }) {
-  const r = useResource<Draft>(`/api/thesis/drafts/${encodeURIComponent(id)}`);
+  const r = useThesisDraft<Draft>(id);
   const [confirm, setConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,9 +28,9 @@ export function DraftDetail({ id, onDeleted }: { id: string; onDeleted: () => vo
     setDeleting(true);
     setError(null);
     try {
-      await api.delete(`/api/thesis/drafts/${encodeURIComponent(id)}`);
+      await api.delete(`${THESIS_BASE}/drafts/${encodeURIComponent(id)}`);
       setConfirm(false);
-      invalidate("/api/thesis/");
+      invalidate(`${THESIS_BASE}/`);
       onDeleted();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : MESSAGES.server);

@@ -15,7 +15,7 @@ export const useThesisDrafts = (): Resource<DraftsResponse> => useResource<Draft
 export const useVaultDrafts = (enabled: boolean): Resource<DraftsResponse> => useResource<DraftsResponse>(enabled ? `${THESIS_BASE}/drafts/vault` : null);
 
 /** `GET /api/thesis/drafts/{id}`: draf biasa atau draf vault (`is_readonly`). `null` menunda. */
-export const useThesisDraft = (id: string | null): Resource<Draft | VaultDraft> => useResource<Draft | VaultDraft>(id ? `${THESIS_BASE}/drafts/${enc(id)}` : null);
+export const useThesisDraft = <T extends Draft | VaultDraft = Draft | VaultDraft>(id: string | null): Resource<T> => useResource<T>(id ? `${THESIS_BASE}/drafts/${enc(id)}` : null);
 
 /** `GET /api/thesis/{T}`: dossier vault; 404 berarti belum ada dossier. */
 export const useThesisDetail = (ticker: string | null): Resource<ThesisDetail> => useResource<ThesisDetail>(ticker ? `${THESIS_BASE}/${enc(ticker.toUpperCase())}` : null);

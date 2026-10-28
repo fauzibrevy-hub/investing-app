@@ -1,8 +1,7 @@
 import { Plus } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Sheet } from "../../components/Sheet";
-import { useResource } from "../../lib/useResource";
-import type { DraftsResponse, ThesisDetail } from "../../screens/thesis/types";
+import { useThesisDetail, useThesisDrafts } from "./api";
 import { useSheetTrigger } from "../research/components/useSheetTrigger";
 import { Block, Empty, LoadError, Loading } from "../riset/ui";
 import { DossierView } from "./DossierView";
@@ -13,8 +12,8 @@ import { shortDate } from "./format";
 const LOAD_ERROR = "Gagal memuat tesis";
 
 function TesisBody({ ticker }: { ticker: string }) {
-  const dossier = useResource<ThesisDetail>(`/api/thesis/${encodeURIComponent(ticker)}`);
-  const drafts = useResource<DraftsResponse>("/api/thesis/drafts");
+  const dossier = useThesisDetail(ticker);
+  const drafts = useThesisDrafts();
   const editor = useSheetTrigger();
   const detail = useSheetTrigger<string>();
 

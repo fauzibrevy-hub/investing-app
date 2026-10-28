@@ -6,7 +6,8 @@ import { Sheet } from "../../components/Sheet";
 import { api, ApiError, MESSAGES } from "../../lib/api";
 import { cn } from "../../lib/cn";
 import { invalidate } from "../../lib/useResource";
-import { SCENARIOS, STORY_STATUSES, THESIS_TYPES, type DraftInput } from "../../screens/thesis/types";
+import { THESIS_BASE } from "./api";
+import { SCENARIOS, STORY_STATUSES, THESIS_TYPES, type DraftInput } from "./types";
 import { FIELD } from "../riset/ui";
 
 /** Isian yang belum terkirim, satu kunci per ticker (finance-app memakai awalan `finance.`; asal app ini terpisah). */
@@ -109,7 +110,7 @@ export function DraftEditorSheet({ ticker, onClose }: { ticker: string; onClose:
     setSaving(true);
     const clean = (xs: string[]) => xs.map((x) => x.trim()).filter(Boolean);
     try {
-      await api.post("/api/thesis/drafts", {
+      await api.post(`${THESIS_BASE}/drafts`, {
         ...form,
         ticker,
         title: form.title.trim(),
@@ -119,7 +120,7 @@ export function DraftEditorSheet({ ticker, onClose }: { ticker: string; onClose:
         triggers_exit: clean(form.triggers_exit),
       });
       writeLocal(ticker, null);
-      invalidate("/api/thesis/");
+      invalidate(`${THESIS_BASE}/`);
       onClose();
     } catch (err) {
       const apiErr = err instanceof ApiError ? err : null;

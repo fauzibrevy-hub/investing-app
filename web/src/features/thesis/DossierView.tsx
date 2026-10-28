@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { SectionHeader } from "../../components/SectionHeader";
 import { cn } from "../../lib/cn";
-import type { ThesisDetail } from "../../screens/thesis/types";
+import type { ThesisDetail } from "./types";
 import { shortDate } from "./format";
 import { Markdown } from "./Markdown";
 
