@@ -1,0 +1,16 @@
+{
+  "id": "d-coal-1",
+  "ticker": "COAL",
+  "title": "Batubara tahan harga rendah",
+  "thesis_statement": "Biaya tunai rendah menjaga **margin** saat harga acuan turun.",
+  "thesis_type": "fundamental",
+  "is_primary": true,
+  "scenario_status": "Menunggu",
+  "story_status": "Belum terkonfirmasi",
+  "falsifiers": ["Biaya tunai per ton naik di atas 45 USD", "Kontrak utama tidak diperpanjang"],
+  "triggers_add": ["Harga turun 15% tanpa perubahan biaya"],
+  "triggers_exit": ["Margin kotor di bawah 20% dua kuartal berturut-turut"],
+  "notes": "Catatan contoh sintetis.",
+  "created_at": "2026-10-20T03:00:00+00:00",
+  "updated_at": "2026-10-27T03:00:00+00:00"
+}

@@ -2,6 +2,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import desk from "../../../../../tests/fixtures/research/canon/desk.json";
+import packs from "../../../../../tests/fixtures/research/canon/packs.json";
 import { AppRoutes } from "../../../App";
 import { mockApi } from "../../../test/mockApi";
 import { MACRO } from "../../research/desk/macro.testutil";
@@ -12,14 +13,19 @@ import { groupCoverage, latestReportQuarter, previousQuarter } from "./landingDa
 /**
  * What is left of finance-app's Riset screens test (plan.md §3.3 "Tests"): the Landing cases moved to
  * `beranda/Beranda.test.tsx` and `perusahaan/CoverageList.test.tsx`, the Bandingkan, Kalibrasi and Paket cases to
- * `tools.test.tsx` (on `/alat/*`), and the Tambah case belongs to L3b. This file keeps `landingData` and the one
- * inbox case the new tests do not repeat, now on `#/beranda`.
+ * `tools.test.tsx` (on `/alat/*`), and the Tambah case is ported to `/perusahaan/tambah` below (with `?ticker=` prefill
+ * cases in `Add.test.tsx`). This file keeps `landingData`, the inbox count wording case on `#/beranda`, and the Tambah layout case.
  */
 const DESK = desk as unknown as DeskResponse;
 
 beforeEach(() => {
   setViewport(393);
-  mockApi({ "/api/research/desk": DESK, "/api/macro/observations": MACRO });
+  mockApi({
+    "/api/research/desk": DESK,
+    "/api/macro/observations": MACRO,
+    "/api/research/packs": packs,
+    "/api/research/lookup": { as_of: "2026-10-24T09:00:00+00:00", query: "", list_available: true, exact: null, items: [] },
+  });
 });
 afterEach(() => setViewport(1280));
 
@@ -61,5 +67,21 @@ describe("landingData", () => {
     expect(g.held.map((r) => r.ticker)).toEqual(["BANK", "COAL", "NONE"]);
     expect(g.manual.map((r) => r.ticker)).toEqual(["BUST", "REST"]);
     expect(g.peers.map((r) => r.ticker)).toEqual(["COPR"]);
+  });
+});
+
+describe("Tambah emiten #/perusahaan/tambah (§6)", () => {
+  it("full-width with 'Langkah 1 dari 4' text, no step list, and a sticky primary action", async () => {
+    render(
+      <MemoryRouter initialEntries={["/perusahaan/tambah"]}>
+        <AppRoutes />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByRole("heading", { level: 2, name: "Langkah 1 dari 4: Emiten" })).toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Langkah" })).toBeNull();
+    const bar = document.querySelector("[data-sticky-actions]") as HTMLElement;
+    expect(bar).toHaveClass("sticky");
+    expect(within(bar).getByRole("button", { name: "Lanjut" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Kembali ke Perusahaan" })).toHaveAttribute("href", "/perusahaan");
   });
 });

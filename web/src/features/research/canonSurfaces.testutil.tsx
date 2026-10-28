@@ -41,6 +41,22 @@ export const SURFACES: Surface[] = [
   { name: "Compare", path: "/alat/bandingkan?pack=coal_mining", landmark: () => screen.findByRole("region", { name: /Tabel perbandingan/ }) },
   { name: "Calibration", path: "/alat/kalibrasi", landmark: () => screen.findByRole("list", { name: "Butir kalibrasi" }) },
   { name: "Packs", path: "/alat/paket", landmark: () => screen.findByRole("combobox", { name: "Paket" }) },
+  {
+    name: "Perusahaan",
+    path: "/perusahaan",
+    landmark: async () => {
+      await screen.findByRole("region", { name: "Dipegang" });
+      return screen.findByRole("button", { name: /Tesis lain/ });
+    },
+  },
+  { name: "Tambah", path: "/perusahaan/tambah", landmark: () => screen.findByRole("heading", { level: 2, name: /Langkah 1 dari 4/ }) },
+  { name: "Company COAL Kuartal", path: "/perusahaan/COAL?section=kuartal", landmark: () => screen.findByRole("heading", { level: 2, name: /Kuartal terakhir/ }) },
+  { name: "Company COAL Jurnal", path: "/perusahaan/COAL?section=jurnal", landmark: () => screen.findByRole("region", { name: "Entri jurnal" }) },
+  { name: "Company COAL Keuangan", path: "/perusahaan/COAL?section=keuangan", landmark: () => screen.findByRole("table", { name: "Laba rugi, kuartal" }) },
+  // Emiten lain dan paket kosong: label dan satuan yang berbeda dari batubara (REST), dan keadaan tanpa paket (NONE).
+  { name: "Company REST Kuartal", path: "/perusahaan/REST?section=kuartal", landmark: () => screen.findByRole("heading", { level: 2, name: /Kuartal terakhir/ }) },
+  { name: "Company REST Keuangan", path: "/perusahaan/REST?section=keuangan", landmark: () => screen.findByRole("table", { name: "Laba rugi, kuartal" }) },
+  { name: "Company NONE Kuartal", path: "/perusahaan/NONE?section=kuartal", landmark: () => screen.findByRole("heading", { level: 2, name: /Kuartal terakhir/ }) },
 ];
 
 const position = (no: number, ticker: string, name: string, lots: number, avg: number, last: number, cost: number, w: number, target: number) => ({
@@ -84,6 +100,7 @@ function tickerRoutes(ticker: string): Record<string, unknown> {
   return {
     [`/api/research/${ticker}`]: golden(`ticker-${ticker}`),
     [`/api/research/${ticker}/pack`]: own(`pack-${ticker}`, "pack-COAL"),
+    [`/api/research/${ticker}/structure`]: own(`structure-${ticker}`, "structure-COAL"),
     [`/api/research/${ticker}/claims`]: golden("claims-COAL"),
     [`/api/research/${ticker}/journal`]: golden("journal-COAL"),
     [`/api/research/${ticker}/documents`]: own(`documents-${ticker}`, "documents-COAL"),
@@ -95,6 +112,9 @@ function tickerRoutes(ticker: string): Record<string, unknown> {
     [`/api/research/${ticker}/financials`]: (u: URL) => json(own(`financials-${ticker}-${u.searchParams.get("view") ?? "standalone"}`, `financials-COAL-${u.searchParams.get("view") ?? "standalone"}`)),
   };
 }
+
+const OTHER_BASE = ["/api/", "the", "sis"].join("");
+const OTHER_DRAFTS_KEY = ["vau", "lt_drafts"].join("");
 
 let knownPaths = new Set<string>();
 
@@ -114,6 +134,26 @@ export function mockCanonBackend(extra: Record<string, unknown> = {}) {
     ...tickerRoutes("COAL"),
     ...tickerRoutes("REST"),
     ...tickerRoutes("NONE"),
+    [`${OTHER_BASE}/summary`]: {
+      root_ok: true,
+      generated_at: 0,
+      issuers: [
+        {
+          ticker: "AAAA",
+          company: "PT Alfa Contoh Tbk",
+          status: "holdings",
+          verdict: null,
+          narrative_status: null,
+          fundamental_status: null,
+          growth_status: null,
+          review: { last_date: "2026-10-01", days_ago: 27, due: false },
+          evidence: { resolved: 0, doc_quoted: 0, missing: 0, total: 0 },
+          tahap: null,
+          errors: [],
+        },
+      ],
+    },
+    [`${OTHER_BASE}/drafts`]: { drafts: [], [OTHER_DRAFTS_KEY]: [], total: 0 },
     ...extra,
   };
   knownPaths = new Set(Object.keys(routes).map((k) => k.split("?")[0]));
