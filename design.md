@@ -97,7 +97,7 @@ New code in L2 (`web/src/shell/navState.ts` + `BackHeader`); finance-app has non
 5. **On every location change.** Save `window.scrollY` under the hash being left, set `lastHash[owner] = new hash`, render, then on the next animation frame scroll to the saved `scrollY` for the new hash (0 if none). Screens read through the `useResource` cache, so a revisited screen renders at full height before the restore.
 6. **Tap on another tab.** Go to that tab's `lastHash` (its root if empty).
 7. **Tap on the active tab.** Go to the tab's root, scroll to 0, forget the root's saved `scrollY`.
-8. **Back control.** Label "‹ " + owner tab label; accessible name "Kembali ke <owner tab>". Action: `navigate(-1)` when the previous history entry is in this app (`window.history.state?.idx > 0`), else go to the owner tab's root. Scroll comes back through rule 5.
+8. **Back control.** Label "‹ " + owner tab label; accessible name "Kembali ke <owner tab>". Action: `navigate(-1)` only when the previous history entry (`history.state.idx - 1`) was rendered in this app with the same owner tab (the store records each entry's owner by `idx`). Otherwise (a cold deep link, or a pushed screen reached again through tab memory after a tab tap) navigate with `replace` to the owner tab's stored route: the last root-level hash visited in that tab, else its root. Scroll comes back through rule 5. Decision 2026-10-27 (Hermes default, owner may override in review).
 9. **Cold deep link** (no `from`, no in-app history): the route's own tab owns it, so a company page shows "‹ Perusahaan" and goes to `#/perusahaan`; a tool shows "‹ Alat".
 10. **`?section=`** still scrolls to the block (finance-app `CompanyPage.tsx:49`) and wins over a saved `scrollY` on the first render of that hash.
 
