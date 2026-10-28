@@ -2,7 +2,18 @@ import { useMemo, useRef, useState } from "react";
 import { ApiError, newIdempotencyKey } from "../../../lib/api";
 import { dismissEvent } from "../api";
 import { formatDate } from "../format";
-import type { DeskResponse, EventFilter, ResearchEvent } from "../types";
+import type { DeskResponse, EventFilter, EventKind, ResearchEvent } from "../types";
+
+/** Kata jenis di baris 1 (design.md §5.1): satu kata pendek, bukan penilaian. */
+export const TYPE_WORD: Record<EventKind, string> = {
+  filing_new: "Laporan",
+  accounting_flag: "Akuntansi",
+  claim_status: "Klaim",
+  level_crossed: "Level",
+  restatement: "Penyajian ulang",
+  kpi_due: "KPI",
+  stale_data: "Data basi",
+};
 
 /** Hari WIB sebagai kunci kelompok; `formatDate` membaca stempel RFC 3339 sebagai hari WIB. */
 const dayOf = (event: ResearchEvent) => formatDate(event.at);

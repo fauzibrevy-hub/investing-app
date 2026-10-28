@@ -1,7 +1,6 @@
 import { TrendChart } from "../../../components/charts/TrendChart";
-import { MONTHS_ID_SHORT } from "../../../lib/finance";
 import { formatNumber } from "../../../lib/numbers";
-import { formatDataTime } from "../../../lib/time";
+import { MONTHS_ID_SHORT, formatDataTime } from "../../../lib/time";
 import { freshnessWords, shortUnit, unitWords, type Observation } from "./useMacro";
 
 /** "2026-10-20" → "20 Okt". */

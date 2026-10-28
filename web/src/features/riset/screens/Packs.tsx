@@ -4,7 +4,7 @@ import { Button } from "../../../components/Button";
 import { cn } from "../../../lib/cn";
 import { reloadPacks, usePacks, useRules, useUniverse } from "../../research/api";
 import { driverStatusText } from "../../research/components/gapReason";
-import { ScreenFooter } from "../../research/desk/DeskScreen";
+import { ScreenFooter } from "../../research/desk/DeskFooter";
 import { formatDate, formatValue } from "../../research/format";
 import type { DriverStatus, MetricDirection, MetricLayer, PackDefinition, PackDefinitionMetric, PackDriver, PacksStatus, RulesResponse, UniverseItem } from "../../research/types";
 import { metricLabels, readableFormula } from "../packFormula";

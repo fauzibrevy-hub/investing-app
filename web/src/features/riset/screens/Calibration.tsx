@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { formatPercent, formatRupiah } from "../../../lib/money";
 import { useCalibration, useUniverse } from "../../research/api";
-import { ScreenFooter } from "../../research/desk/DeskScreen";
+import { ScreenFooter } from "../../research/desk/DeskFooter";
 import { formatDate } from "../../research/format";
 import type { CalibrationKind, CalibrationRow } from "../../research/types";
 import { BackLink, Empty, FIELD, LoadError, Loading, PAGE } from "../ui";

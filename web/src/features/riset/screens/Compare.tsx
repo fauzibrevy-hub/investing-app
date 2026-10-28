@@ -6,7 +6,7 @@ import { useCompare, usePacks, useUniverse } from "../../research/api";
 import { FactDrawerProvider } from "../../research/components/FactDrawer";
 import { FactChip } from "../../research/components/FactChip";
 import { gapReasonText } from "../../research/components/gapReason";
-import { ScreenFooter } from "../../research/desk/DeskScreen";
+import { ScreenFooter } from "../../research/desk/DeskFooter";
 import { chooseScale, formatMultiple, formatPct, formatScaled, formatValue, periodLabel, unitHeader, type Scale } from "../../research/format";
 import type { CellFlag, CompareCell, CompareResponse, CompareRow, PackDefinition, Role } from "../../research/types";
 import { MIXED_HEADER, columnScales, columnUnit, moneyRowHeader } from "../compareScale";
