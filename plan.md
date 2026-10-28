@@ -411,7 +411,7 @@ Runs on the owner's Mac, from `~/investing-app`, in a shell where the §1 `snaps
    export B_URL=http://127.0.0.1:8789 B_TOKEN B_DATA="$HOME/investing-app-data"
    scripts/parity.sh | tee docs/qa/l4/parity.txt
    scripts/counts.sh "$A_DATA" "$B_DATA" | tee docs/qa/l4/counts.txt
-   TICKER=BUMI scripts/writes.sh | tee docs/qa/l4/writes.txt
+   TICKER=BUMI U=<listed ticker not in the universe> scripts/writes.sh | tee docs/qa/l4/writes.txt
    ```
 
 6. **(owner)** Stop the second instance (`kill %1`, or `pkill -f investing-app-parity/fa-src/target/release/finance-app`) and `rm -rf ~/investing-app-parity`.

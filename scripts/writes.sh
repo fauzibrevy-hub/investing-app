@@ -2,6 +2,9 @@
 # scripts/writes.sh (plan.md §3.1b, prd.md A3): every A3 write, sent to A and then to B, compared by status.
 # Env (all required): A_URL A_TOKEN A_DATA B_URL B_TOKEN B_DATA TICKER. A = the second finance-app instance,
 # B = the investing-app sandbox; *_DATA is each side's data dir (step 14 writes its draft file there).
+# Optional: U, the ticker steps 1 and 3 add to and remove from the universe (default BBBB, or CCCC when
+# TICKER is BBBB). On real data it must be a listed ticker that is not in the universe yet: an unlisted
+# one is a 422 not_listed on both sides, and then step 3 reads SKIP (nothing was created).
 # Prints label<TAB>a<TAB>b<TAB>ok|DIFF|SKIP <reason>. Exit 0 when every pair matches, 1 otherwise,
 # 2 on usage, a refused URL (:8787), an A_DATA or B_DATA that is (or links to) $HOME/finance-app-data,
 # an A_DATA that is (or links to) $HOME/investing-app-data, or a B whose /api/health lacks
@@ -32,6 +35,13 @@ A_URL=${A_URL%/}
 B_URL=${B_URL%/}
 TICKER=$(printf '%s' "$TICKER" | tr '[:lower:]' '[:upper:]')
 [[ $TICKER =~ ^[A-Z0-9]{2,10}$ ]] || usage "TICKER=$TICKER is not a ticker"
+if [ -z "${U:-}" ]; then
+  U=BBBB
+  [ "$TICKER" != BBBB ] || U=CCCC
+fi
+U=$(printf '%s' "$U" | tr '[:lower:]' '[:upper:]')
+[[ $U =~ ^[A-Z0-9]{2,10}$ ]] || usage "U=$U is not a ticker"
+[ "$U" != "$TICKER" ] || usage "U=$U is the same as TICKER: step 3 would delete TICKER from the universe"
 for d in "$A_DATA" "$B_DATA"; do
   [ -d "$d" ] || usage "data dir $d does not exist"
 done
@@ -175,9 +185,6 @@ coal_pdf() {
 
 T=$TICKER
 R=/api/research
-U=BBBB
-[ "$T" != BBBB ] || U=CCCC
-
 # Bodies are copied from the finance-app (4ef2dd9) test named on each step, its ticker replaced by
 # $T (or $U), so the expected status is the one that test asserts.
 
@@ -185,11 +192,19 @@ U=BBBB
 # 13 and 14 meet pack metrics on any ticker; BUMI's own pack already is coal_mining.
 pair "01 POST $R/universe ($U)" POST "$R/universe" "$R/universe" \
   "{\"ticker\": \"$U\", \"pack_override\": \"it_distribution\", \"business_note\": \"Distributor sintetis\"}"
+s1a=$sa
+s1b=$sb
 ua=$(path "$R/universe/" "$(at a .ticker)")
 ub=$(path "$R/universe/" "$(at b .ticker)")
 pair "02 PUT $R/universe/$T" PUT "$R/universe/$T" "$R/universe/$T" \
   '{"pack_override": "coal_mining", "business_note": "Baru"}'
-pair "03 DELETE $R/universe/{step 1}" DELETE "$ua" "$ub"
+# Both sides refused step 1 the same way (a 422 not_listed for a ticker real data does not list): nothing
+# was created, so there is nothing to delete. SKIP, not DIFF.
+if [ "$s1a" = "$s1b" ] && [ "${s1a#2}" = "$s1a" ]; then
+  skip "03 DELETE $R/universe/{step 1}" "step 1 gave $s1a on both sides, nothing created"
+else
+  pair "03 DELETE $R/universe/{step 1}" DELETE "$ua" "$ub"
+fi
 
 # 4-5 research_kpi.rs: the DELETE names the cell the PUT answered with.
 pair "04 PUT $R/$T/kpi/production_mt/2026/2" PUT "$R/$T/kpi/production_mt/2026/2" "$R/$T/kpi/production_mt/2026/2" \

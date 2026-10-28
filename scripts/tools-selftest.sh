@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/tools-selftest.sh (plan.md §3.1b, steps 1-11): proves counts.sh, parity.sh and writes.sh
+# scripts/tools-selftest.sh (plan.md §3.1b, steps 1-12): proves counts.sh, parity.sh and writes.sh
 # on fixtures. No live data: two binaries on 127.0.0.1:18801 (A) and :18802 (B, sandbox), each with
 # a scratch HOME, a mktemp data dir and a throwaway token. No network beyond what macro/trigger does
 # with MACRO_DISABLE_FRED=1. Binaries are stopped by PID, never by name (other worktrees run the
@@ -464,9 +464,79 @@ else
   fi
 fi
 
+# 12. writes.sh step 1 with a ticker real data does not list: a 422 on both sides is a SKIP on step 3, not a DIFF.
+# L4 found U=BBBB is not in the exchange list (422 not_listed both sides), so step 3 had no id to delete.
+# A curl shim stands in for both sides (no port is opened); A and B are told apart by port.
+step 12 "writes.sh U: 422 on both sides gives step 3 SKIP; split answers still DIFF; U is validated"
+mkdir -p "$W/shim3" "$W/s12a" "$W/s12b"
+cat >"$W/shim3/curl" <<'SH'
+#!/bin/sh
+out=; wfmt=; method=GET; url=
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -o) out=$2; shift 2; continue ;;
+    -w) wfmt=1; shift 2; continue ;;
+    -X) method=$2; shift 2; continue ;;
+    -m | -H | --data-binary | -F) shift 2; continue ;;
+  esac
+  url=$1
+  shift
+done
+case "$url" in
+*/api/health*) printf '{"sandbox":true}'; exit 0 ;;
+esac
+code=200
+body='{}'
+case "$method $url" in
+"POST "*/universe)
+  case "$url:$SHIM_A_UNIVERSE" in
+  *:18811/*:201) code=201; body='{"ticker":"ZZZZ"}' ;;
+  *) code=422; body='{"detail":[{"type":"not_listed"}]}' ;;
+  esac ;;
+*/refresh*) code=503 ;;
+esac
+[ -z "$out" ] || printf '%s' "$body" >"$out"
+[ -z "$wfmt" ] || printf '%s' "$code"
+exit 0
+SH
+chmod +x "$W/shim3/curl"
+# w12 VAR=VALUE...: writes.sh on the shim, A on :18811 and B on :18812, TICKER=AAAA.
+w12() {
+  env PATH="$W/shim3:$PATH" HOME="$W/fakehome" A_URL=http://127.0.0.1:18811 B_URL=http://127.0.0.1:18812 \
+    A_TOKEN=x B_TOKEN=y A_DATA="$W/s12a" B_DATA="$W/s12b" TICKER=AAAA "$@" scripts/writes.sh
+}
+ok12=1
+out="$(w12 SHIM_A_UNIVERSE=422 U=zzzz 2>&1)"
+printf '%s\n' "$out" | grep -E '^0[123] '
+l1="$(printf '%s\n' "$out" | grep '^01 ')"
+l3="$(printf '%s\n' "$out" | grep '^03 ')"
+ndiff="$(printf '%s\n' "$out" | grep -c "${tab}DIFF\$")"
+nsum="$(printf '%s\n' "$out" | sed -n 's/^writes: \([0-9]*\) differences$/\1/p')"
+case "$l1" in "01 POST /api/research/universe (ZZZZ)${tab}422${tab}422${tab}ok") ;; *) ok12=0 ;; esac
+case "$l3" in *"${tab}SKIP "*) ;; *) ok12=0 ;; esac
+[ "$ndiff" = "$nsum" ] || ok12=0
+echo "422 on both: DIFF lines=$ndiff, summary=$nsum"
+# A created it and B refused: not identical, so step 3 still reports DIFF.
+out="$(w12 SHIM_A_UNIVERSE=201 U=ZZZZ 2>&1)"
+l3="$(printf '%s\n' "$out" | grep '^03 ')"
+echo "A 201, B 422: $l3"
+case "$l3" in *"${tab}DIFF") ;; *) ok12=0 ;; esac
+# U is validated like TICKER, and may not be TICKER.
+for bad in 'U=a b' 'U=X' 'U=AAAA'; do
+  err="$(w12 SHIM_A_UNIVERSE=422 "$bad" 2>&1 >/dev/null)"
+  rc=$?
+  echo "$bad: exit=$rc, $(printf '%s' "$err" | head -n 1)"
+  [ "$rc" = 2 ] || ok12=0
+done
+if [ "$ok12" = 1 ]; then
+  pass 12 "422/422 on step 1 -> step 3 SKIP (not counted); 201/422 -> DIFF; bad U exits 2"
+else
+  fail 12 "expected step 1 ok 422/422 and step 3 SKIP, DIFF count = summary, 201/422 DIFF, bad U exit 2"
+fi
+
 echo
 if [ "$failed" -eq 0 ]; then
-  echo "tools-selftest: all 11 steps passed"
+  echo "tools-selftest: all 12 steps passed"
 else
   echo "tools-selftest: $failed step(s) failed"
 fi
