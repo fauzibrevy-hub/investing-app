@@ -118,6 +118,14 @@ describe("Portofolio: tata letak", () => {
     expect(screen.getByText("6 emiten")).toBeInTheDocument();
   });
 
+  it("layar memetakan peringkat ke urutan hue yang berbeda lewat pembungkus lokal (--hue-* di luar, --cat-* di dalam)", async () => {
+    renderAt();
+    const root = (await screen.findByRole("heading", { level: 1, name: "Portofolio" })).closest("header")?.parentElement as HTMLElement;
+    expect(root.style.getPropertyValue("--cat-2")).toBe("var(--hue-7)");
+    expect(root.style.getPropertyValue("--cat-7")).toBe("var(--hue-5)");
+    expect((root.parentElement as HTMLElement).style.getPropertyValue("--hue-7")).toBe("var(--cat-7)");
+  });
+
   it("donut hanya visual (inert + aria-hidden, tanpa tombol busur); legenda memegang aksi pilih ≥ 44 px dan menyorot irisan", async () => {
     renderAt();
     const legend = await screen.findByRole("list", { name: "Legenda komposisi" });

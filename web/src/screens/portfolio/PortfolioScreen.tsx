@@ -13,7 +13,7 @@ import { Sheet } from "../../components/Sheet";
 import { Skeleton } from "../../components/Skeleton";
 import { StatRow } from "../../components/StatRow";
 import { ListState, TransactionRowSkeleton } from "../../components/TransactionRow";
-import { catColor, type CatIndex } from "../../lib/categories";
+import { catColor, DISTINCT_HUE_REMAP, DISTINCT_HUE_SOURCE, type CatIndex } from "../../lib/categories";
 import { cn } from "../../lib/cn";
 import { formatPercent, formatPp, formatRupiah, HIDDEN_FULL } from "../../lib/money";
 import { formatNumber } from "../../lib/numbers";
@@ -108,116 +108,118 @@ export function PortfolioScreen() {
   const opened = positions.find((p) => p.ticker === openTicker) ?? null;
 
   return (
-    <div className={PAGE}>
-      <header>
-        <SectionHeader
-          variant="screen"
-          title="Portofolio"
-          trailing={<Button variant="icon" aria-label={hidden ? "Tampilkan nominal" : "Sembunyikan nominal"} aria-pressed={hidden} icon={hidden ? <EyeOff /> : <Eye />} onClick={toggle} className="-mr-1.5" />}
-        />
-        {age ? <p className="text-caption text-text-2">{age}</p> : null}
-      </header>
-
-      <section aria-label="Nilai portofolio" className="flex flex-col gap-1">
-        <p className="text-label text-text-2">Nilai portofolio (Rp), termasuk kas</p>
-        {status === "loading" ? (
-          <div className="mt-1 flex flex-col gap-2">
-            <Skeleton width={240} height={40} />
-            <Skeleton width={200} height={20} />
-          </div>
-        ) : status === "error" ? (
-          <ListState status="error" onRetry={pf.reload} className="items-start" />
-        ) : status === "empty" ? (
-          <ListState status="empty" message="Belum ada posisi di tab PORTOFOLIO" className="items-start" />
-        ) : s ? (
-          <>
-            <Money value={s.current_valuation} bare className="block whitespace-nowrap text-hero text-text" />
-            <PlLine pl={s.total_pl} pct={s.total_pl_pct} />
-          </>
-        ) : null}
-      </section>
-
-      <section className="flex flex-col gap-2">
-        <SectionHeader title="Ringkasan (Rp)" />
-        <div role="group" aria-label="Ringkasan portofolio" className="grid grid-cols-3 gap-2">
-          {[
-            ["Modal", s ? short(s.total_cost) : undefined],
-            ["Nilai pasar", s ? short(marketValue(positions)) : undefined],
-            ["Kas", s ? short(s.cash_balance) : undefined],
-          ].map(([label, value]) => (
-            <Card key={label} tone="summary" className="!p-3">
-              <StatRow onTint label={label as string} value={value} status={statState} />
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section className="flex flex-col gap-2">
-        <SectionHeader title="Komposisi" />
-        {/*
-          Donut hanya visual: busurnya (role="button", kecil untuk irisan tipis) tidak ikut dijangkau ketuk, papan ketik
-          atau pembaca layar. Aksi pilih ada di baris legenda (44 px) dan menyorot irisan lewat `selected`; angkanya
-          tetap terbaca di legenda dan daftar Posisi. React 18 belum mengenal `inert` sebagai prop bertipe.
-        */}
-        <div aria-hidden="true" {...{ inert: "" }}>
-          <DonutChart
-            title="Nilai pasar"
-            countLabel={(n) => `${n} emiten`}
-            data={segments.map((x) => ({ label: x.label, value: x.value }))}
-            status={status}
-            onRetry={pf.reload}
-            selected={selectedSegment}
-            onSelectedChange={() => undefined}
+    <div className="contents" style={DISTINCT_HUE_SOURCE}>
+      <div className={PAGE} style={DISTINCT_HUE_REMAP}>
+        <header>
+          <SectionHeader
+            variant="screen"
+            title="Portofolio"
+            trailing={<Button variant="icon" aria-label={hidden ? "Tampilkan nominal" : "Sembunyikan nominal"} aria-pressed={hidden} icon={hidden ? <EyeOff /> : <Eye />} onClick={toggle} className="-mr-1.5" />}
           />
-        </div>
-        {status === "ready" ? (
-          <ul aria-label="Legenda komposisi" className="flex flex-col">
-            {positions.map((p) => (
-              <li key={p.ticker}>
-                <button
-                  type="button"
-                  aria-pressed={selectedTicker === p.ticker}
-                  onClick={() => setSelectedTicker((t) => (t === p.ticker ? null : p.ticker))}
-                  className="-mx-2 flex min-h-11 w-[calc(100%+16px)] items-center gap-2 rounded-sm px-2 text-left text-label active:opacity-[0.85] aria-pressed:bg-surface-sunken"
-                >
-                  <Swatch cat={map.get(p.ticker) ?? 8} />
-                  <span className="min-w-0 flex-1 truncate font-bold text-text">{p.ticker}</span>
-                  <span className="num text-text-2">{formatPercent(p.val_alloc_pct)}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </section>
+          {age ? <p className="text-caption text-text-2">{age}</p> : null}
+        </header>
 
-      <section className="flex flex-col gap-2">
-        <SectionHeader title="Posisi (Rp)" />
-        <div className="flex flex-col">
+        <section aria-label="Nilai portofolio" className="flex flex-col gap-1">
+          <p className="text-label text-text-2">Nilai portofolio (Rp), termasuk kas</p>
           {status === "loading" ? (
-            Array.from({ length: 4 }, (_, i) => <TransactionRowSkeleton key={i} />)
-          ) : status === "ready" ? (
-            positions.map((p) => (
-              <PositionRow key={p.ticker} p={p} cat={map.get(p.ticker) ?? 8} subtitle={subtitleOf(p, hidden)} onClick={() => setOpenTicker(p.ticker)} />
-            ))
+            <div className="mt-1 flex flex-col gap-2">
+              <Skeleton width={240} height={40} />
+              <Skeleton width={200} height={20} />
+            </div>
           ) : status === "error" ? (
-            <ListState status="error" onRetry={pf.reload} />
-          ) : (
-            <ListState status="empty" message="Belum ada posisi" />
-          )}
-        </div>
-      </section>
+            <ListState status="error" onRetry={pf.reload} className="items-start" />
+          ) : status === "empty" ? (
+            <ListState status="empty" message="Belum ada posisi di tab PORTOFOLIO" className="items-start" />
+          ) : s ? (
+            <>
+              <Money value={s.current_valuation} bare className="block whitespace-nowrap text-hero text-text" />
+              <PlLine pl={s.total_pl} pct={s.total_pl_pct} />
+            </>
+          ) : null}
+        </section>
 
-      <section className="flex flex-col gap-2">
-        <SectionHeader title="Alokasi vs target" />
-        <AllocationList positions={positions} colors={map} status={status} />
-      </section>
+        <section className="flex flex-col gap-2">
+          <SectionHeader title="Ringkasan (Rp)" />
+          <div role="group" aria-label="Ringkasan portofolio" className="grid grid-cols-3 gap-2">
+            {[
+              ["Modal", s ? short(s.total_cost) : undefined],
+              ["Nilai pasar", s ? short(marketValue(positions)) : undefined],
+              ["Kas", s ? short(s.cash_balance) : undefined],
+            ].map(([label, value]) => (
+              <Card key={label} tone="summary" className="!p-3">
+                <StatRow onTint label={label as string} value={value} status={statState} />
+              </Card>
+            ))}
+          </div>
+        </section>
 
-      <footer className="flex flex-col gap-1 border-t border-border-hairline pt-3 text-caption text-text-2">
-        {age ? <p>{age}</p> : null}
-        <p>Bukan saran investasi</p>
-      </footer>
+        <section className="flex flex-col gap-2">
+          <SectionHeader title="Komposisi" />
+          {/*
+            Donut hanya visual: busurnya (role="button", kecil untuk irisan tipis) tidak ikut dijangkau ketuk, papan ketik
+            atau pembaca layar. Aksi pilih ada di baris legenda (44 px) dan menyorot irisan lewat `selected`; angkanya
+            tetap terbaca di legenda dan daftar Posisi. React 18 belum mengenal `inert` sebagai prop bertipe.
+          */}
+          <div aria-hidden="true" {...{ inert: "" }}>
+            <DonutChart
+              title="Nilai pasar"
+              countLabel={(n) => `${n} emiten`}
+              data={segments.map((x) => ({ label: x.label, value: x.value }))}
+              status={status}
+              onRetry={pf.reload}
+              selected={selectedSegment}
+              onSelectedChange={() => undefined}
+            />
+          </div>
+          {status === "ready" ? (
+            <ul aria-label="Legenda komposisi" className="flex flex-col">
+              {positions.map((p) => (
+                <li key={p.ticker}>
+                  <button
+                    type="button"
+                    aria-pressed={selectedTicker === p.ticker}
+                    onClick={() => setSelectedTicker((t) => (t === p.ticker ? null : p.ticker))}
+                    className="-mx-2 flex min-h-11 w-[calc(100%+16px)] items-center gap-2 rounded-sm px-2 text-left text-label active:opacity-[0.85] aria-pressed:bg-surface-sunken"
+                  >
+                    <Swatch cat={map.get(p.ticker) ?? 8} />
+                    <span className="min-w-0 flex-1 truncate font-bold text-text">{p.ticker}</span>
+                    <span className="num text-text-2">{formatPercent(p.val_alloc_pct)}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </section>
 
-      <PositionSheet p={opened} onClose={() => setOpenTicker(null)} />
+        <section className="flex flex-col gap-2">
+          <SectionHeader title="Posisi (Rp)" />
+          <div className="flex flex-col">
+            {status === "loading" ? (
+              Array.from({ length: 4 }, (_, i) => <TransactionRowSkeleton key={i} />)
+            ) : status === "ready" ? (
+              positions.map((p) => (
+                <PositionRow key={p.ticker} p={p} cat={map.get(p.ticker) ?? 8} subtitle={subtitleOf(p, hidden)} onClick={() => setOpenTicker(p.ticker)} />
+              ))
+            ) : status === "error" ? (
+              <ListState status="error" onRetry={pf.reload} />
+            ) : (
+              <ListState status="empty" message="Belum ada posisi" />
+            )}
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <SectionHeader title="Alokasi vs target" />
+          <AllocationList positions={positions} colors={map} status={status} />
+        </section>
+
+        <footer className="flex flex-col gap-1 border-t border-border-hairline pt-3 text-caption text-text-2">
+          {age ? <p>{age}</p> : null}
+          <p>Bukan saran investasi</p>
+        </footer>
+
+        <PositionSheet p={opened} onClose={() => setOpenTicker(null)} />
+      </div>
     </div>
   );
 }

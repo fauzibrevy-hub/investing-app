@@ -229,10 +229,12 @@ test.describe("Portofolio (#/portofolio)", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Portofolio", exact: true })).toBeVisible();
   });
 
-  test("warna donut: setiap irisan memiliki warna dan hue yang jelas berbeda (bukan satu keluarga hue)", async ({ page }) => {
-    // Uji pada 4 emiten (seperti portofolio pemilik: BRIS, BUMI, LEAD, SOCI) maupun fixture bawaan.
+  test("warna donut: tiap irisan punya hue berbeda pada 2, 4, 5 dan 6 emiten (tidak pernah dua biru sebelum hue lain habis)", async ({ page }) => {
     await openPortofolio(page);
 
+    // Palet 8 token (design.md §1.3) hanya punya 4 hue yang saling ≥ 30°; sesudahnya jarak terbaik yang mungkin 25° (5) dan
+    // 17,9° (6), lihat `hues.test.ts`. Batas per jumlah emiten dipin di sini.
+    const minGap: Record<number, number> = { 2: 30, 4: 30, 5: 25, 6: 17 };
     const checkDistinctHues = async (expectedCount: number) => {
       const slices = await page.evaluate(() => {
         const arcs = Array.from(document.querySelectorAll<SVGPathElement>("svg path[data-arc]"));
@@ -250,34 +252,34 @@ test.describe("Portofolio (#/portofolio)", () => {
       expect(new Set(slices.swatchCats).size, "setiap swatch token kategori unik").toBe(expectedCount);
 
       const hues = slices.arcStrokes.map((c) => rgbToHue(c).h);
+      expect(hues.filter((h) => h > 190 && h < 250).length, "paling banyak satu biru").toBeLessThanOrEqual(1);
       for (let i = 0; i < hues.length; i++) {
         for (let j = i + 1; j < hues.length; j++) {
           expect(
             hueDistance(hues[i], hues[j]),
-            `jarak hue irisan ${i} (${slices.arcStrokes[i]}, ${hues[i].toFixed(1)}°) vs ${j} (${slices.arcStrokes[j]}, ${hues[j].toFixed(1)}°)`,
-          ).toBeGreaterThanOrEqual(15);
+            `${expectedCount} emiten: jarak hue irisan ${i} (${slices.arcStrokes[i]}, ${hues[i].toFixed(1)}°) vs ${j} (${slices.arcStrokes[j]}, ${hues[j].toFixed(1)}°)`,
+          ).toBeGreaterThanOrEqual(minGap[expectedCount]);
         }
       }
     };
 
     await checkDistinctHues(FIXTURE.positions.length);
 
-    // Uji dengan 4 emiten: memastikan 4 irisan berada di keluarga hue yang berbeda.
-    const fourPositions = ["BRIS", "BUMI", "LEAD", "SOCI"].map((ticker, i) => ({
-      ...FIXTURE.positions[0],
-      no: i + 1,
-      ticker,
-      full_code: `IDX:${ticker}`,
-      company_name: `${ticker} Tbk`,
-      valuation: (4 - i) * 25_000_000,
-      val_alloc_pct: (4 - i) * 10,
-    }));
-    await overrideApi(page, "/api/finance/stock-portfolio", {
-      body: { ...FIXTURE, positions: fourPositions },
-    });
-    await page.reload();
-    await expect(page.getByRole("list", { name: "Legenda komposisi" }).getByRole("listitem")).toHaveCount(4);
-    await checkDistinctHues(4);
+    for (const count of [4, 5, 6]) {
+      const positions = ["AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF"].slice(0, count).map((ticker, i) => ({
+        ...FIXTURE.positions[0],
+        no: i + 1,
+        ticker,
+        full_code: `IDX:${ticker}`,
+        company_name: `${ticker} Tbk`,
+        valuation: (count - i) * 10_000_000,
+        val_alloc_pct: (count - i) * 5,
+      }));
+      await overrideApi(page, "/api/finance/stock-portfolio", { body: { ...FIXTURE, positions } });
+      await page.reload();
+      await expect(page.getByRole("list", { name: "Legenda komposisi" }).getByRole("listitem")).toHaveCount(count);
+      await checkDistinctHues(count);
+    }
   });
 });
 
