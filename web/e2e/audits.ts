@@ -30,8 +30,12 @@ export async function horizontalOverflow(page: Page): Promise<{ width: number; s
 }
 
 /**
- * Tabrakan teks: dua anak langsung dari induk yang sama, keduanya terlihat, berposisi normal (bukan absolute, fixed
- * atau sticky: itu melayang di atas isi), keduanya bertulisan, dan kotaknya beririsan lebih dari 1 px di kedua sumbu.
+ * Tabrakan teks: dua anak langsung dari induk yang sama, keduanya terlihat, keduanya bertulisan, dan kotak barisnya
+ * beririsan lebih dari 1 px di kedua sumbu. Dibandingkan per kotak baris (`getClientRects`), bukan kotak pembatas:
+ * elemen inline yang membungkus ke beberapa baris punya kotak pembatas berupa gabungan baris-barisnya, yang "menimpa"
+ * saudara inline di baris yang sama padahal kalimatnya mengalir biasa. Elemen blok punya satu kotak, jadi perilakunya
+ * tidak berubah. Elemen berposisi absolute, fixed atau sticky melayang di atas isi (bilah, hamparan) dan tidak dibandingkan
+ * dengan saudara yang mengalir; dua saudara yang sama-sama melayang ditempatkan sengaja dan tidak boleh saling menimpa.
  */
 export async function textCollisions(page: Page): Promise<Collision[]> {
   return page.evaluate(() => {
@@ -40,27 +44,27 @@ export async function textCollisions(page: Page): Promise<Collision[]> {
       const text = (h.innerText ?? "").replace(/\s+/g, " ").trim().slice(0, 40);
       return `${el.tagName.toLowerCase()}${h.className && typeof h.className === "string" ? "." + h.className.split(/\s+/).slice(0, 3).join(".") : ""} "${text}"`;
     };
+    /** Kotak baris elemen (satu untuk elemen blok), tanpa yang ≤ 1 px; `null` bila tak terlihat atau tak bertulisan. */
     const live = (el: Element) => {
       const cs = getComputedStyle(el);
       if (cs.display === "none" || cs.visibility === "hidden" || cs.opacity === "0") return null;
-      if (["absolute", "fixed", "sticky"].includes(cs.position)) return null;
-      const r = el.getBoundingClientRect();
-      if (r.width <= 1 || r.height <= 1) return null;
       if (!((el as HTMLElement).innerText ?? "").trim()) return null;
-      return r;
+      const rects = Array.from(el.getClientRects()).filter((r) => r.width > 1 && r.height > 1);
+      if (rects.length === 0) return null;
+      return { rects, floating: ["absolute", "fixed", "sticky"].includes(cs.position) };
     };
     const out: { parent: string; a: string; b: string }[] = [];
     for (const parent of Array.from(document.body.querySelectorAll("*"))) {
       const kids = Array.from(parent.children)
-        .map((el) => ({ el, r: live(el) }))
-        .filter((k): k is { el: Element; r: DOMRect } => k.r !== null);
+        .map((el) => ({ el, box: live(el) }))
+        .filter((k): k is { el: Element; box: NonNullable<ReturnType<typeof live>> } => k.box !== null);
       for (let i = 0; i < kids.length; i++) {
         for (let j = i + 1; j < kids.length; j++) {
-          const a = kids[i].r;
-          const b = kids[j].r;
-          const w = Math.min(a.right, b.right) - Math.max(a.left, b.left);
-          const h = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
-          if (w > 1 && h > 1) out.push({ parent: label(parent), a: label(kids[i].el), b: label(kids[j].el) });
+          if (kids[i].box.floating !== kids[j].box.floating) continue;
+          const hit = kids[i].box.rects.some((a) =>
+            kids[j].box.rects.some((b) => Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1),
+          );
+          if (hit) out.push({ parent: label(parent), a: label(kids[i].el), b: label(kids[j].el) });
         }
       }
     }
