@@ -1,0 +1,31 @@
+watch window: 09:28:11 -> 10:28:11
+health ticks not ok: 0
+new ERROR|panicked lines since step 6: 3
+[2m2026-10-28T14:57:26.574568Z[0m [31mERROR[0m [1mhttp[0m[1m{[0m[3mmethod[0m[2m=[0mPOST [3mpath[0m[2m=[0m/api/research/refresh[1m}[0m[2m:[0m [2mtower_http::trace::on_failure[0m[2m:[0m response failed [3mclassification[0m[2m=[0mStatus code: 503 Service Unavailable [3mlate
+[2m2026-10-28T15:06:40.169953Z[0m [31mERROR[0m [1mhttp[0m[1m{[0m[3mmethod[0m[2m=[0mPOST [3mpath[0m[2m=[0m/api/research/refresh[1m}[0m[2m:[0m [2mtower_http::trace::on_failure[0m[2m:[0m response failed [3mclassification[0m[2m=[0mStatus code: 503 Service Unavailable [3mlate
+[2m2026-10-28T15:08:06.668036Z[0m [31mERROR[0m [1mhttp[0m[1m{[0m[3mmethod[0m[2m=[0mPOST [3mpath[0m[2m=[0m/api/research/refresh[1m}[0m[2m:[0m [2mtower_http::trace::on_failure[0m[2m:[0m response failed [3mclassification[0m[2m=[0mStatus code: 503 Service Unavailable [3mlate
+--- /api/health?deep=1 research_* sources
+research_store	{"ok":true,"detail":"schema v12","last_at":"2026-10-29T03:28:34.086026+00:00","age_days":0}
+research_prices	{"ok":true,"detail":"prices fetched 0 d ago","last_at":"2026-10-29T02:29:33.635479+00:00","age_days":0}
+research_xbrl	{"ok":true,"detail":"xbrl directory fetched 0 d ago","last_at":"2026-10-29T03:28:34.086026+00:00","age_days":0}
+research_filings	{"ok":false,"detail":"141 filings for 6 tickers (1 from original PDF), newest SOCI 2026 Q3; 1 unreadable: ~/investing-app-data/research/pdf-filings/BUMI_2024_Q1.json (
+research_facts	{"ok":true,"detail":"80834 facts, 22734 derived cells; last ingest 0 d ago","facts":80834,"derived":22734,"last_at":"2026-10-29T03:28:34.086026+00:00","age_days":0}
+research_reconciliation	{"ok":true,"detail":"all derived years reconcile with their FY or are recorded restatements; 15 restated ticker-year(s): BRIS FY2020, BRIS FY2021, BRIS FY2022, BRIS FY2023, BRI
+research_kpi	{"ok":true,"detail":"163 values (80 unknown) for 2 tickers; last entry 2 d ago","values":163,"unknown":80,"tickers":2,"last_at":"2026-10-26T20:33:10.144990+00:00","age_days":2}
+research_drivers	{"ok":true,"detail":"7 of 7 sourced series stored; last fetch 0 d ago; TBD (no free source): sbn_10y, hba","stored":7,"missing":[],"stale":[],"tbd":["sbn_10y","hba"],"last_at":"2026-1
+research_documents	{"ok":true,"detail":"folder not created yet (no upload so far); 0 document rows","files":null,"documents":0}
+research_proposals	{"ok":true,"detail":"no extraction yet","pending":0,"total":0,"last_at":null,"age_days":null}
+research_packs	{"ok":true,"detail":"7 packs from ~/investing-app/research/packs","loaded":7,"invalid":0}
+research_emitens	{"ok":true,"detail":"emitens.csv"}
+research_scraper_job	ok
+--- source_runs (last 5)
+xbrl_dir||2026-10-29T03:28:34.069951+00:00|2026-10-29T03:28:34.086026+00:00|1|0|
+portfolio||2026-10-29T03:28:32.770310+00:00|2026-10-29T03:28:34.068512+00:00|1|4|
+xbrl_dir||2026-10-29T03:18:32.427451+00:00|2026-10-29T03:18:32.456385+00:00|1|0|
+portfolio||2026-10-29T03:18:31.171441+00:00|2026-10-29T03:18:32.420846+00:00|1|4|
+xbrl_dir||2026-10-29T03:08:30.820070+00:00|2026-10-29T03:08:30.838903+00:00|1|0|
+--- finance-app research files mtime (step 8 vs now; must be equal)
+1793086764 ~/finance-app-data/research-log.jsonl
+1793240627 ~/finance-app-data/macro_store.json
+1793086764 ~/finance-app-data/research-log.jsonl
+1793240627 ~/finance-app-data/macro_store.json
