@@ -270,6 +270,25 @@ async fn a_flate_bomb_is_stopped_by_the_memory_limit_and_answers_422() {
     refused_and_still_serving(&e, "bomb", &bomb, Duration::from_secs(30)).await;
 }
 
+/// Four bombs at once, as under a loaded `check.sh`: the memory they need together pushes macOS
+/// to compress their inflated spaces, so each child's resident peak stayed under 512 MiB
+/// (a peak footprint of 1.28 GB each) and an RSS-only limit let every one through.
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn concurrent_flate_bombs_are_all_stopped_whatever_the_memory_pressure() {
+    let bomb = flate_bomb_pdf(600);
+    let runs = (0..4).map(|_| {
+        let bomb = bomb.clone();
+        tokio::spawn(async move { isolated::pages(Format::Pdf, bomb, &Limits::default()).await })
+    });
+    for (i, run) in runs.collect::<Vec<_>>().into_iter().enumerate() {
+        let got = run.await.unwrap();
+        assert!(
+            matches!(got, Err(DocError::Unreadable(_))),
+            "bomb {i}: {got:?}"
+        );
+    }
+}
+
 #[tokio::test]
 async fn the_child_stops_a_bomb_under_a_small_memory_limit() {
     let bomb = flate_bomb_pdf(200);
