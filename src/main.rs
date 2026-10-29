@@ -197,6 +197,11 @@ fn research_ingest(args: &[String]) -> i32 {
     }
 }
 
+/// Counts heap bytes so the text extractor child can cap its heap (`research::extract::isolated`).
+#[global_allocator]
+static ALLOC: investing_app::research::extract::isolated::CountingAlloc =
+    investing_app::research::extract::isolated::CountingAlloc;
+
 #[tokio::main]
 async fn main() {
     let argv: Vec<String> = std::env::args().collect();

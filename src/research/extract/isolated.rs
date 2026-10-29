@@ -11,16 +11,21 @@
 //! - a crash (stack overflow, abort, panic outside the guards) is a non-zero exit;
 //! - a wall-clock budget kills a child that runs too long;
 //! - the output is read up to a cap and the child is killed when it writes more;
-//! - the child watches its own peak memory and exits past a limit (and on Linux also gets
-//!   `RLIMIT_AS`; macOS does not enforce that one, hence the watchdog). Best effort: the
-//!   limit is checked every few milliseconds, so a stream that inflates in one huge step can
-//!   overshoot before it is seen.
+//! - the child's heap is capped: the server binary's allocator (`CountingAlloc`) counts the
+//!   bytes it hands out and, in the child, refuses an allocation past the limit, which aborts
+//!   the child. That is exact and independent of how the OS counts memory: resident memory
+//!   (RSS) is not, because macOS compresses idle pages, and under memory pressure a 600 MiB
+//!   flate bomb of spaces peaked at 1.28 GB of memory with an RSS under 512 MiB;
+//! - the child also watches its own peak RSS (memory outside the heap) and exits past the same
+//!   limit, and on Linux gets `RLIMIT_AS`. Best effort: checked every few milliseconds.
 //!
 //! Every such failure is `DocError::Unreadable`, which the API answers as 422
 //! `file_unreadable`. The child gets an empty environment (no secrets, no `.env`).
 
+use std::alloc::{GlobalAlloc, Layout, System};
 use std::path::PathBuf;
 use std::process::Stdio;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
 
 use serde::{Deserialize, Serialize};
@@ -181,6 +186,7 @@ pub fn child_main(args: &[String]) -> i32 {
         _ => 512,
     };
     guard(max_rss_mb);
+    cap_heap(max_rss_mb.saturating_mul(1024 * 1024));
     let mut bytes = Vec::new();
     if std::io::stdin().read_to_end(&mut bytes).is_err() {
         return 2;
@@ -246,4 +252,125 @@ fn guard(max_rss_mb: u64) {
             unsafe { libc::_exit(4) };
         }
     });
+}
+
+/// Heap bytes this process holds, and the most it may hold (no cap outside the child).
+static HEAP_HELD: AtomicUsize = AtomicUsize::new(0);
+static HEAP_CAP: AtomicUsize = AtomicUsize::new(usize::MAX);
+
+/// Caps the heap of this process at `bytes`; past it an allocation fails, and Rust aborts the
+/// process on a failed allocation (a non-zero exit, answered as 422). The child only.
+fn cap_heap(bytes: u64) {
+    HEAP_CAP.store(
+        usize::try_from(bytes).unwrap_or(usize::MAX),
+        Ordering::Relaxed,
+    );
+}
+
+/// The server binary's global allocator: the system one, counting what it hands out so the
+/// extraction child's heap can be capped exactly (`cap_heap`). Without a cap it only counts.
+pub struct CountingAlloc;
+
+impl CountingAlloc {
+    /// Books `n` more bytes, or refuses when that would pass the cap.
+    fn take(n: usize) -> bool {
+        let held = HEAP_HELD.fetch_add(n, Ordering::Relaxed);
+        if held.saturating_add(n) > HEAP_CAP.load(Ordering::Relaxed) {
+            HEAP_HELD.fetch_sub(n, Ordering::Relaxed);
+            return false;
+        }
+        true
+    }
+
+    fn give(n: usize) {
+        HEAP_HELD.fetch_sub(n, Ordering::Relaxed);
+    }
+}
+
+// SAFETY: every call goes to `System` with the caller's arguments unchanged; the counter only
+// decides whether an allocation is attempted at all, and a refused one returns null, which
+// the `GlobalAlloc` contract allows.
+unsafe impl GlobalAlloc for CountingAlloc {
+    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+        if !Self::take(layout.size()) {
+            return std::ptr::null_mut();
+        }
+        let p = System.alloc(layout);
+        if p.is_null() {
+            Self::give(layout.size());
+        }
+        p
+    }
+
+    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
+        if !Self::take(layout.size()) {
+            return std::ptr::null_mut();
+        }
+        let p = System.alloc_zeroed(layout);
+        if p.is_null() {
+            Self::give(layout.size());
+        }
+        p
+    }
+
+    unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
+        System.dealloc(ptr, layout);
+        Self::give(layout.size());
+    }
+
+    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
+        let old = layout.size();
+        if new_size > old {
+            if !Self::take(new_size - old) {
+                return std::ptr::null_mut();
+            }
+            let p = System.realloc(ptr, layout, new_size);
+            if p.is_null() {
+                Self::give(new_size - old);
+            }
+            p
+        } else {
+            let p = System.realloc(ptr, layout, new_size);
+            if !p.is_null() {
+                Self::give(old - new_size);
+            }
+            p
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The counter is the process-wide one, so this is the only test that touches it.
+    #[test]
+    fn the_counting_allocator_books_every_byte_and_refuses_past_the_cap() {
+        let a = CountingAlloc;
+        let small = Layout::from_size_align(1024, 8).unwrap();
+        let held = HEAP_HELD.load(Ordering::Relaxed);
+        cap_heap((held + 4096) as u64);
+        // SAFETY: each pointer is freed once, with the layout it was allocated with.
+        unsafe {
+            let p = a.alloc(small);
+            assert!(!p.is_null());
+            assert_eq!(HEAP_HELD.load(Ordering::Relaxed), held + 1024);
+            let p = a.realloc(p, small, 3072);
+            assert!(!p.is_null());
+            assert_eq!(HEAP_HELD.load(Ordering::Relaxed), held + 3072);
+            // 3072 + 2048 is past the cap: refused, nothing booked.
+            let big = Layout::from_size_align(2048, 8).unwrap();
+            assert!(a.alloc(big).is_null());
+            assert!(a.alloc_zeroed(big).is_null());
+            assert!(a
+                .realloc(p, Layout::from_size_align(3072, 8).unwrap(), 8192)
+                .is_null());
+            assert_eq!(HEAP_HELD.load(Ordering::Relaxed), held + 3072);
+            let p = a.realloc(p, Layout::from_size_align(3072, 8).unwrap(), 512);
+            assert_eq!(HEAP_HELD.load(Ordering::Relaxed), held + 512);
+            a.dealloc(p, Layout::from_size_align(512, 8).unwrap());
+        }
+        assert_eq!(HEAP_HELD.load(Ordering::Relaxed), held);
+        cap_heap(u64::MAX);
+    }
 }

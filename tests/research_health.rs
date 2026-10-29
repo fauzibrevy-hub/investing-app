@@ -37,18 +37,12 @@ fn app_with_status(status: Option<String>) -> TestApp {
     t
 }
 
-/// (started, finished) of a run that happened after the last Sunday 03:00 slot, so health does
-/// not call it `missed` whatever day the suite runs on.
-fn since_slot() -> (String, String) {
-    let now = Local::now();
-    let slot = last_scheduled_run(now);
-    let span = now - slot;
-    let at = |d: Duration| {
-        (slot + d)
-            .with_timezone(&Utc)
-            .to_rfc3339_opts(SecondsFormat::Secs, true)
-    };
-    (at(span / 2), at(span * 3 / 4))
+/// (started, finished) of a run that ended minutes before `now`: under a day old on any
+/// weekday at any hour, and never `missed` (a start before the last Sunday 03:00 slot means
+/// the slot is minutes old, well inside the grace period).
+fn just_finished(now: DateTime<Utc>) -> (String, String) {
+    let at = |d: Duration| (now - d).to_rfc3339_opts(SecondsFormat::Secs, true);
+    (at(Duration::minutes(10)), at(Duration::minutes(3)))
 }
 
 async fn job(t: &TestApp) -> Value {
@@ -58,7 +52,7 @@ async fn job(t: &TestApp) -> Value {
 
 #[tokio::test]
 async fn a_recent_successful_run_shows_time_exit_status_and_age() {
-    let (started, fin) = since_slot();
+    let (started, fin) = just_finished(Utc::now());
     let t = app_with_status(Some(status_json(&started, Some(&fin), Some(0), "done")));
     let j = job(&t).await;
     assert_eq!(j["ok"], true, "{j}");
@@ -626,6 +620,45 @@ fn a_status_older_than_the_last_slot_is_missed_after_the_grace_period() {
         local(2026, 10, 28, 12, 0),
     );
     assert_eq!(j["state"], "ok", "{j}");
+}
+
+#[test]
+fn a_recent_successful_run_is_ok_with_age_zero_on_every_weekday_and_hour() {
+    let t = app_with_status(None);
+    let status_file = t.dir.path().join("research/scraper-status.json");
+    // Monday 2026-10-26 to Sunday 2026-11-01; the hours straddle the Sunday 03:00 slot and the
+    // end of its grace period, the minutes the hour boundaries.
+    let mut checked = 0;
+    for day in 0..7 {
+        for hour in [0, 2, 3, 8, 9, 12, 23] {
+            for minute in [0, 5, 59] {
+                let now = local(2026, 10, 26, hour, minute) + Duration::days(day);
+                let (started, fin) = just_finished(now.with_timezone(&Utc));
+                std::fs::write(
+                    &status_file,
+                    status_json(&started, Some(&fin), Some(0), "done"),
+                )
+                .unwrap();
+                let j = scraper_job_entry_at(&t.cfg, now);
+                assert_eq!(
+                    (j["state"].as_str(), j["ok"].as_bool()),
+                    (Some("ok"), Some(true)),
+                    "{now}: {j}"
+                );
+                assert_eq!(j["exit_code"], 0, "{now}: {j}");
+                assert_eq!(j["finished_at"], fin, "{now}: {j}");
+                assert_eq!(j["last_at"], fin, "{now}: {j}");
+                assert_eq!(j["age_days"], 0, "{now}: {j}");
+                assert_eq!(j["age_hours"], 0, "{now}: {j}");
+                assert!(
+                    j["detail"].as_str().unwrap().contains("exit 0"),
+                    "{now}: {j}"
+                );
+                checked += 1;
+            }
+        }
+    }
+    assert_eq!(checked, 7 * 7 * 3);
 }
 
 #[test]

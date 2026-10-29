@@ -1,0 +1,11 @@
+step 6 start time: 2026-10-29 09:28:11
+health :8789      {"status":"ok"}
+/ :8789           200
+health :8445      {"status":"ok"}
+/ :8445           200
+refresh BUMI      202
+finance :8787     200
+finance / :8443   200
+investing scraper loaded: yes
+finance scraper loaded: no
+jobs: com.menganto.finance com.menganto.investing.scraper com.menganto.investing 
