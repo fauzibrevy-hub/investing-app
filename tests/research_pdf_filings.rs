@@ -793,6 +793,238 @@ fn two_pdf_files_for_one_filing_id_keep_the_first() {
         .contains("duplicate filing id BUMI_2024_Q1"));
 }
 
+#[test]
+fn an_identical_copy_beside_the_file_stays_a_duplicate_and_the_filing_keeps_its_path() {
+    let dir = tempfile::tempdir().unwrap();
+    let pdf_dir = write_pdf_dir(dir.path(), &fixture());
+    std::fs::copy(
+        pdf_dir.join("BUMI_2024_Q1.json"),
+        pdf_dir.join("BUMI_2024_Q1_copy.json"),
+    )
+    .unwrap();
+    let store = Store::open(&dir.path().join("research.sqlite")).unwrap();
+    let first = ingest_data_dir(&store, dir.path());
+    assert_eq!(first.ingested, ["BUMI_2024_Q1"]);
+    assert_eq!(first.unparsed.len(), 1);
+    assert!(first.unparsed[0]
+        .1
+        .contains("duplicate filing id BUMI_2024_Q1"));
+    let path = store
+        .filing("BUMI_2024_Q1")
+        .unwrap()
+        .unwrap()
+        .filing
+        .source_path;
+    // Both files are still read: the filing does not hop between them pass after pass.
+    for _ in 0..2 {
+        let again = ingest_data_dir(&store, dir.path());
+        assert!(again.ingested.is_empty(), "{:?}", again.ingested);
+        let row = store.filing("BUMI_2024_Q1").unwrap().unwrap();
+        assert_eq!(row.filing.source_path, path);
+        assert_eq!(store.ingest_errors().unwrap().len(), 1);
+    }
+}
+
+// ---- a moved data dir (L5 cutover step 3, rollback R3) ----
+
+/// Reads the `XBRL` and `pdf-filings` dirs of one data dir.
+fn ingest_data_dir(store: &Store, data: &Path) -> xbrl::IngestReport {
+    let xbrl_dir = data.join("XBRL");
+    std::fs::create_dir_all(&xbrl_dir).unwrap();
+    xbrl::ingest_new_with_pdf(
+        store,
+        &xbrl_dir,
+        Some(&data.join("pdf-filings")),
+        now(),
+        None,
+    )
+    .unwrap()
+}
+
+/// The store copied as is into another data dir: its filings keep their old absolute paths.
+fn copy_store(from: &Path, to: &Path) -> Store {
+    for name in ["research.sqlite", "research.sqlite-wal"] {
+        if from.join(name).exists() {
+            std::fs::copy(from.join(name), to.join(name)).unwrap();
+        }
+    }
+    Store::open(&to.join("research.sqlite")).unwrap()
+}
+
+fn path_text(p: PathBuf) -> String {
+    p.to_string_lossy().into_owned()
+}
+
+#[test]
+fn a_pdf_filing_whose_data_dir_moved_follows_its_file() {
+    let old = tempfile::tempdir().unwrap();
+    let new = tempfile::tempdir().unwrap();
+    write_pdf_dir(old.path(), &fixture());
+    let store = Store::open(&old.path().join("research.sqlite")).unwrap();
+    assert_eq!(
+        ingest_data_dir(&store, old.path()).ingested,
+        ["BUMI_2024_Q1"]
+    );
+    let before = store.filing("BUMI_2024_Q1").unwrap().unwrap();
+    drop(store);
+
+    // The same file in the new data dir; the old one is still on disk but no longer read.
+    let new_pdf_dir = write_pdf_dir(new.path(), &fixture());
+    let store = copy_store(old.path(), new.path());
+    let report = ingest_data_dir(&store, new.path());
+    assert!(report.unparsed.is_empty(), "{:?}", report.unparsed);
+    assert!(store.ingest_errors().unwrap().is_empty());
+    let row = store.filing("BUMI_2024_Q1").unwrap().unwrap();
+    assert_eq!(
+        row.filing.source_path,
+        path_text(new_pdf_dir.join("BUMI_2024_Q1.json"))
+    );
+    assert_eq!(row.filing.file_hash, before.filing.file_hash);
+    assert_eq!(row.filing.source_kind, SourceKind::Pdf);
+    assert_eq!(row.fact_count, before.fact_count);
+    assert_eq!(store.pdf_filing_count().unwrap(), 1);
+
+    // Settled: the next pass finds the file unchanged.
+    let again = ingest_data_dir(&store, new.path());
+    assert!(again.ingested.is_empty());
+    assert!(again.unparsed.is_empty());
+    assert_eq!(again.unchanged, 1);
+}
+
+#[test]
+fn an_xbrl_filing_whose_data_dir_moved_follows_its_file() {
+    let old = tempfile::tempdir().unwrap();
+    let new = tempfile::tempdir().unwrap();
+    q1_xbrl(&old.path().join("XBRL"), 311_000_000.0);
+    let store = Store::open(&old.path().join("research.sqlite")).unwrap();
+    assert_eq!(
+        ingest_data_dir(&store, old.path()).ingested,
+        ["BUMI_2024_Q1"]
+    );
+    drop(store);
+
+    q1_xbrl(&new.path().join("XBRL"), 311_000_000.0);
+    let store = copy_store(old.path(), new.path());
+    let report = ingest_data_dir(&store, new.path());
+    assert!(report.unparsed.is_empty(), "{:?}", report.unparsed);
+    assert!(store.ingest_errors().unwrap().is_empty());
+    let row = store.filing("BUMI_2024_Q1").unwrap().unwrap();
+    assert!(
+        row.filing
+            .source_path
+            .starts_with(&path_text(new.path().join("XBRL"))),
+        "{}",
+        row.filing.source_path
+    );
+    assert_eq!(row.filing.source_kind, SourceKind::Xbrl);
+    assert_eq!(row.fact_count, 1);
+}
+
+#[test]
+fn a_moved_file_already_reported_as_a_duplicate_clears_on_the_next_pass() {
+    let old = tempfile::tempdir().unwrap();
+    let new = tempfile::tempdir().unwrap();
+    let old_pdf_dir = write_pdf_dir(old.path(), &fixture());
+    let store = Store::open(&old.path().join("research.sqlite")).unwrap();
+    ingest_data_dir(&store, old.path());
+    drop(store);
+
+    // The store as the first pass after the move left it: the moved file recorded as a
+    // duplicate of its own old path, under the same hash.
+    let new_pdf_dir = write_pdf_dir(new.path(), &fixture());
+    let store = copy_store(old.path(), new.path());
+    let hash = store
+        .filing("BUMI_2024_Q1")
+        .unwrap()
+        .unwrap()
+        .filing
+        .file_hash;
+    let new_path = path_text(new_pdf_dir.join("BUMI_2024_Q1.json"));
+    store
+        .record_ingest_error(
+            &new_path,
+            &hash,
+            &format!(
+                "duplicate filing id BUMI_2024_Q1: already ingested from {}",
+                path_text(old_pdf_dir.join("BUMI_2024_Q1.json"))
+            ),
+            NOW,
+        )
+        .unwrap();
+
+    let report = ingest_data_dir(&store, new.path());
+    assert!(report.unparsed.is_empty(), "{:?}", report.unparsed);
+    assert!(store.ingest_errors().unwrap().is_empty());
+    assert_eq!(
+        store
+            .filing("BUMI_2024_Q1")
+            .unwrap()
+            .unwrap()
+            .filing
+            .source_path,
+        new_path
+    );
+}
+
+#[test]
+fn a_different_file_of_the_same_id_in_the_new_data_dir_stays_a_duplicate() {
+    let old = tempfile::tempdir().unwrap();
+    let new = tempfile::tempdir().unwrap();
+    let old_pdf_dir = write_pdf_dir(old.path(), &fixture());
+    let store = Store::open(&old.path().join("research.sqlite")).unwrap();
+    ingest_data_dir(&store, old.path());
+    drop(store);
+
+    // Same filing, other bytes (compact JSON): not the stored file, so not a move.
+    let new_pdf_dir = new.path().join("pdf-filings");
+    std::fs::create_dir_all(&new_pdf_dir).unwrap();
+    std::fs::write(
+        new_pdf_dir.join("BUMI_2024_Q1.json"),
+        serde_json::to_vec(&fixture()).unwrap(),
+    )
+    .unwrap();
+    let store = copy_store(old.path(), new.path());
+    let report = ingest_data_dir(&store, new.path());
+    assert!(report.ingested.is_empty());
+    assert_eq!(report.unparsed.len(), 1);
+    assert!(report.unparsed[0]
+        .1
+        .contains("duplicate filing id BUMI_2024_Q1"));
+    assert_eq!(store.ingest_errors().unwrap().len(), 1);
+    assert_eq!(
+        store
+            .filing("BUMI_2024_Q1")
+            .unwrap()
+            .unwrap()
+            .filing
+            .source_path,
+        path_text(old_pdf_dir.join("BUMI_2024_Q1.json"))
+    );
+}
+
+#[test]
+fn after_a_move_an_xbrl_filing_still_replaces_the_pdf_one() {
+    let old = tempfile::tempdir().unwrap();
+    let new = tempfile::tempdir().unwrap();
+    write_pdf_dir(old.path(), &fixture());
+    let store = Store::open(&old.path().join("research.sqlite")).unwrap();
+    ingest_data_dir(&store, old.path());
+    drop(store);
+
+    write_pdf_dir(new.path(), &fixture());
+    q1_xbrl(&new.path().join("XBRL"), 311_000_000.0);
+    let store = copy_store(old.path(), new.path());
+    let report = ingest_data_dir(&store, new.path());
+    assert_eq!(report.ingested, ["BUMI_2024_Q1"]);
+    assert_eq!(report.pdf_superseded, ["BUMI_2024_Q1", "BUMI_2024_Q1"]);
+    assert!(report.unparsed.is_empty(), "{:?}", report.unparsed);
+    assert!(store.ingest_errors().unwrap().is_empty());
+    let row = store.filing("BUMI_2024_Q1").unwrap().unwrap();
+    assert_eq!(row.filing.source_kind, SourceKind::Xbrl);
+    assert_eq!(row.fact_count, 1);
+    assert_eq!(store.pdf_filing_count().unwrap(), 0);
+}
+
 // ---- derivation: the gap the filing closes ----
 
 #[test]

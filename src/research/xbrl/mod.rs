@@ -9,7 +9,7 @@ pub mod parse;
 pub mod pdf;
 pub mod ratio;
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeSet, HashMap, HashSet};
 use std::path::{Path, PathBuf};
 
 use chrono::{DateTime, NaiveDate, Utc};
@@ -360,7 +360,7 @@ fn load_changed(
     path: &Path,
     started: &str,
     force: bool,
-    known: &std::collections::HashMap<String, String>,
+    known: &HashMap<String, String>,
     cache: Option<&mut FileMeta>,
     report: &mut IngestReport,
 ) -> Result<Option<Loaded>, StoreError> {
@@ -398,6 +398,62 @@ fn load_changed(
     }))
 }
 
+fn path_texts(files: &[PathBuf]) -> HashSet<String> {
+    files
+        .iter()
+        .map(|p| p.to_string_lossy().into_owned())
+        .collect()
+}
+
+/// Why the file at `path` must not replace `existing`, the stored filing of the same id, if
+/// it must not. The same bytes under another path are the same filing whose file moved (a
+/// moved data dir, a rename) once this pass no longer lists the stored path: the filing
+/// follows its file. Anything else is a second file for one filing id, reported not merged.
+fn duplicate_of(
+    source: &str,
+    existing: &Filing,
+    path: &str,
+    hash: &str,
+    listed: &HashSet<String>,
+) -> Option<String> {
+    if existing.source_path == path {
+        return None;
+    }
+    if existing.file_hash == hash && !listed.contains(&existing.source_path) {
+        tracing::info!(
+            "{source} {path}: filing {} moved from {}",
+            existing.id,
+            existing.source_path
+        );
+        return None;
+    }
+    Some(format!(
+        "duplicate filing id {}: already ingested from {}",
+        existing.id, existing.source_path
+    ))
+}
+
+/// An ingest error recorded for the bytes of a stored filing is no broken file: it is a
+/// moved file reported as a duplicate of its old path. Such a file is read again rather
+/// than skipped as unchanged, so the move is recognised and the error cleared.
+fn retry_moved(store: &Store, known: &mut HashMap<String, String>) -> Result<(), StoreError> {
+    let errors = store.ingest_errors()?;
+    if errors.is_empty() {
+        return Ok(());
+    }
+    let stored: HashSet<String> = store
+        .filings(None)?
+        .into_iter()
+        .map(|r| r.filing.file_hash)
+        .collect();
+    for e in errors {
+        if stored.contains(&e.file_hash) {
+            known.remove(&e.source_path);
+        }
+    }
+    Ok(())
+}
+
 fn ingest_pass(
     store: &Store,
     dir: &Path,
@@ -407,7 +463,8 @@ fn ingest_pass(
     force: bool,
 ) -> Result<IngestReport, StoreError> {
     let started = now.to_rfc3339();
-    let known = store.known_file_hashes()?;
+    let mut known = store.known_file_hashes()?;
+    retry_moved(store, &mut known)?;
     let mut report = IngestReport::default();
     let mut tickers = BTreeSet::new();
     let (files, dir_errors) = list_files_checked(dir);
@@ -415,6 +472,7 @@ fn ingest_pass(
         tracing::warn!("research xbrl {d}: {e}");
         report.unparsed.push((d, e));
     }
+    let listed = path_texts(&files);
     for path in files {
         report.scanned += 1;
         let Some(Loaded {
@@ -457,11 +515,9 @@ fn ingest_pass(
                             p.filing.id
                         );
                         report.pdf_superseded.push(p.filing.id.clone());
-                    } else if existing.filing.source_path != path_str {
-                        let msg = format!(
-                            "duplicate filing id {}: already ingested from {}",
-                            p.filing.id, existing.filing.source_path
-                        );
+                    } else if let Some(msg) =
+                        duplicate_of("research xbrl", &existing.filing, &path_str, &hash, &listed)
+                    {
                         tracing::warn!("research xbrl {path_str}: {msg}");
                         store.record_ingest_error(&path_str, &hash, &msg, &started)?;
                         report.unparsed.push((path_str, msg));
@@ -542,7 +598,7 @@ fn ingest_pdf_files(
     dir: &Path,
     started: &str,
     force: bool,
-    known: &std::collections::HashMap<String, String>,
+    known: &HashMap<String, String>,
     mut cache: Option<&mut FileMeta>,
     report: &mut IngestReport,
     tickers: &mut BTreeSet<String>,
@@ -552,6 +608,7 @@ fn ingest_pdf_files(
         tracing::warn!("research pdf filings {d}: {e}");
         report.unparsed.push((d, e));
     }
+    let listed = path_texts(&files);
     for path in files {
         report.scanned += 1;
         let Some(Loaded {
@@ -583,11 +640,13 @@ fn ingest_pdf_files(
                         report.pdf_superseded.push(p.filing.id);
                         continue;
                     }
-                    if existing.filing.source_path != path_str {
-                        let msg = format!(
-                            "duplicate filing id {}: already ingested from {}",
-                            p.filing.id, existing.filing.source_path
-                        );
+                    if let Some(msg) = duplicate_of(
+                        "research pdf filings",
+                        &existing.filing,
+                        &path_str,
+                        &hash,
+                        &listed,
+                    ) {
                         tracing::warn!("research pdf filings {path_str}: {msg}");
                         store.record_ingest_error(&path_str, &hash, &msg, started)?;
                         report.unparsed.push((path_str, msg));
