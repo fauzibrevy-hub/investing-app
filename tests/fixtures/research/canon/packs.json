@@ -3,7 +3,7 @@
     "source": "embedded",
     "dir": "",
     "files": 0,
-    "loaded": 7,
+    "loaded": 8,
     "invalid": [],
     "embedded_ids": [
       "core",
@@ -12,7 +12,8 @@
       "heavy_equipment_contracting",
       "shipping",
       "shipping_tanker",
-      "it_distribution"
+      "it_distribution",
+      "media_scma"
     ],
     "loaded_at": "",
     "ok": true
@@ -2056,6 +2057,380 @@
           "proxy": null
         }
       ]
+    },
+    {
+      "id": "media_scma",
+      "version": "2026.10-1",
+      "label": "Media & streaming",
+      "industry_codes": [],
+      "taxonomies": [
+        "general"
+      ],
+      "members": [],
+      "dimensions": [
+        {
+          "id": "bauran",
+          "label": "Bauran pendapatan",
+          "kind": "volume",
+          "metrics": [
+            {
+              "id": "tv_segment_revenue",
+              "label": "Pendapatan segmen televisi",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Pendapatan eksternal segmen Televisi & platform multimedia lainnya dari catatan segmen; bisnis inti FTA yang bergantung pada iklan.",
+              "note": "Skema empat segmen sejak LK 2024 (2023 disajikan ulang); kuartal mandiri dari selisih kumulatif.",
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "digital_segment_revenue",
+              "label": "Pendapatan segmen digital",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Pendapatan eksternal segmen Digital (Vidio, KLY) dari catatan segmen; harus tumbuh lebih cepat dari turunnya iklan TV.",
+              "note": "Basis LK (pendapatan eksternal), bukan angka 'Digital media' di Investors' Release yang lebih besar; kuartal mandiri dari selisih kumulatif.",
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "vidio_revenue_growth_pct",
+              "label": "Pertumbuhan pendapatan Vidio",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Pertumbuhan pendapatan konsolidasi Vidio terhadap periode yang sama tahun lalu; satu-satunya angka Vidio sendiri yang diungkap; dimasukkan sebagai basis year-to-date sesuai rilis.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                -100.0,
+                300.0
+              ]
+            },
+            {
+              "id": "ad_revenue",
+              "label": "Pendapatan iklan bruto",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Pendapatan iklan sebelum potongan penjualan dari catatan pendapatan; pasar iklan FTA menyusut, jadi ini yang harus ditutup oleh digital.",
+              "note": "Tertag di XBRL sebagai SalesAndRevenue pada TypeRevenueAxis=ServiceRevenue1Member; kuartal mandiri dari selisih kumulatif.",
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "pemirsa",
+          "label": "Pangsa pemirsa",
+          "kind": "pricing",
+          "metrics": [
+            {
+              "id": "audience_share_pct",
+              "label": "Pangsa pemirsa gabungan (all time)",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Pangsa pemirsa gabungan Indosiar, SCTV dan Mentari sepanjang hari; tarif iklan mengikuti pangsa ini; dimasukkan sebagai basis year-to-date sesuai rilis.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "prime_time_share_ivm_pct",
+              "label": "Pangsa prime time Indosiar",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Slot prime time memberi tarif iklan tertinggi; Indosiar kanal nomor satu; dimasukkan sebagai basis year-to-date sesuai rilis.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "prime_time_share_sctv_pct",
+              "label": "Pangsa prime time SCTV",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Kanal kedua grup di slot prime time; dimasukkan sebagai basis year-to-date sesuai rilis.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            }
+          ]
+        },
+        {
+          "id": "biaya",
+          "label": "Biaya",
+          "kind": "cost",
+          "metrics": [
+            {
+              "id": "program_cost_ratio",
+              "label": "Beban program & penyiaran / pendapatan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Beban pokok SCMA adalah amortisasi konten, hak siar olahraga dan penyiaran; menentukan margin kotor.",
+              "note": null,
+              "formula": "100 * ttm(CostOfRevenue) / ttm(Revenue)",
+              "bindings": {
+                "CostOfRevenue": [
+                  "idx-cor:CostOfSalesAndRevenue"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "opex_ratio",
+              "label": "Beban usaha / pendapatan",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Beban penjualan dan umum relatif terhadap pendapatan; pemangkasan biaya Vidio terlihat di sini.",
+              "note": null,
+              "formula": "100 * (ttm(Selling) + ttm(GeneralAdmin)) / ttm(Revenue)",
+              "bindings": {
+                "GeneralAdmin": [
+                  "idx-cor:GeneralAndAdministrativeExpenses"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ],
+                "Selling": [
+                  "idx-cor:SellingExpenses",
+                  "0"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "digital",
+          "label": "Profitabilitas digital",
+          "kind": "quality",
+          "metrics": [
+            {
+              "id": "digital_segment_result",
+              "label": "Hasil segmen digital",
+              "layer": "kpi",
+              "unit": "IDR miliar",
+              "direction": "higher",
+              "why": "Laba atau rugi segmen Digital dari catatan segmen; ukuran paling dekat untuk apakah Vidio masih membakar laba grup.",
+              "note": "Skema empat segmen sejak LK 2024 (2023 disajikan ulang); kuartal mandiri dari selisih kumulatif.",
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "vidio_ebitda_change_pct",
+              "label": "Perbaikan EBITDA Vidio",
+              "layer": "kpi",
+              "unit": "%",
+              "direction": "higher",
+              "why": "Perubahan EBITDA Vidio terhadap periode yang sama tahun lalu seperti dicetak di rilis; angka rupiahnya tidak diungkap, dan di atas 100% berarti rugi sudah berbalik menjadi laba; basis year-to-date sesuai rilis.",
+              "note": null,
+              "formula": null,
+              "bindings": null,
+              "period": null,
+              "cadence": "quarterly",
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "pelanggan",
+          "label": "Pelanggan dan piutang",
+          "kind": "quality",
+          "metrics": [
+            {
+              "id": "major_customer_share",
+              "label": "Porsi pelanggan di atas 10%",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Pendapatan dari pelanggan yang masing-masing di atas 10% (agensi iklan PT Wira Pamungkas Pariwara); konsentrasi pada satu agen.",
+              "note": null,
+              "formula": "100 * ttm(MajorCustomers) / ttm(Revenue)",
+              "bindings": {
+                "MajorCustomers": [
+                  "idx-cor:SalesAndRevenueMoreThan10Percent"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": [
+                0.0,
+                100.0
+              ]
+            },
+            {
+              "id": "receivable_days",
+              "label": "Hari piutang",
+              "layer": "xbrl",
+              "unit": "hari",
+              "direction": "lower",
+              "why": "Berapa lama agensi iklan membayar; naik berarti kas tertahan atau agensi melemah.",
+              "note": null,
+              "formula": "365 * avg4q(ReceivablesTp + ReceivablesRp) / ttm(Revenue)",
+              "bindings": {
+                "ReceivablesRp": [
+                  "idx-cor:TradeReceivablesRelatedParties",
+                  "0"
+                ],
+                "ReceivablesTp": [
+                  "idx-cor:TradeReceivablesThirdParties",
+                  "idx-cor:TradeReceivablesNet"
+                ],
+                "Revenue": [
+                  "idx-cor:SalesAndRevenue"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        },
+        {
+          "id": "neraca",
+          "label": "Neraca",
+          "kind": "balance",
+          "metrics": [
+            {
+              "id": "content_inventory_days",
+              "label": "Hari persediaan konten",
+              "layer": "xbrl",
+              "unit": "hari",
+              "direction": "neutral",
+              "why": "Persediaan konten program dibanding beban program; naik lebih cepat dari beban berarti biaya konten tertahan di neraca.",
+              "note": null,
+              "formula": "365 * avg4q(Inventories) / ttm(CostOfRevenue)",
+              "bindings": {
+                "CostOfRevenue": [
+                  "idx-cor:CostOfSalesAndRevenue"
+                ],
+                "Inventories": [
+                  "idx-cor:Inventories",
+                  "idx-cor:CurrentInventories"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "dividends_to_ocf",
+              "label": "Dividen tunai / arus kas operasi",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Di atas 100% berarti dividen dibayar dari kas lama atau utang, bukan dari arus kas operasi tahun itu.",
+              "note": null,
+              "formula": "100 * Dividends / Ocf",
+              "bindings": {
+                "Dividends": [
+                  "idx-cor:DividendsPaidFromFinancingActivities"
+                ],
+                "Ocf": [
+                  "idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"
+                ]
+              },
+              "period": "ttm",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            },
+            {
+              "id": "goodwill_intangibles_to_equity",
+              "label": "Goodwill dan aset takberwujud / ekuitas",
+              "layer": "xbrl",
+              "unit": "%",
+              "direction": "lower",
+              "why": "Goodwill dan merek bergantung pada uji penurunan nilai; porsi ekuitas yang bisa hilang lewat penurunan nilai, bukan lewat kas.",
+              "note": null,
+              "formula": "100 * (Goodwill + Intangibles) / Equity",
+              "bindings": {
+                "Equity": [
+                  "idx-cor:Equity"
+                ],
+                "Goodwill": [
+                  "idx-cor:Goodwill",
+                  "0"
+                ],
+                "Intangibles": [
+                  "idx-cor:IntangibleAssetsOtherThanGoodwill",
+                  "0"
+                ]
+              },
+              "period": "instant",
+              "cadence": null,
+              "driver": null,
+              "range": null
+            }
+          ]
+        }
+      ],
+      "drivers": []
     },
     {
       "id": "shipping",
