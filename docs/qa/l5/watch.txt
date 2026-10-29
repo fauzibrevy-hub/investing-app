@@ -8,7 +8,7 @@ new ERROR|panicked lines since step 6: 3
 research_store	{"ok":true,"detail":"schema v12","last_at":"2026-10-29T03:28:34.086026+00:00","age_days":0}
 research_prices	{"ok":true,"detail":"prices fetched 0 d ago","last_at":"2026-10-29T02:29:33.635479+00:00","age_days":0}
 research_xbrl	{"ok":true,"detail":"xbrl directory fetched 0 d ago","last_at":"2026-10-29T03:28:34.086026+00:00","age_days":0}
-research_filings	{"ok":false,"detail":"141 filings for 6 tickers (1 from original PDF), newest SOCI 2026 Q3; 1 unreadable: ~/investing-app-data/research/pdf-filings/BUMI_2024_Q1.json (
+research_filings	{"ok":false,"detail":"141 filings for 6 tickers (1 from original PDF), newest SOCI 2026 Q3; 1 unreadable: <investing-app data dir>/research/pdf-filings/BUMI_2024_Q1.json (
 research_facts	{"ok":true,"detail":"80834 facts, 22734 derived cells; last ingest 0 d ago","facts":80834,"derived":22734,"last_at":"2026-10-29T03:28:34.086026+00:00","age_days":0}
 research_reconciliation	{"ok":true,"detail":"all derived years reconcile with their FY or are recorded restatements; 15 restated ticker-year(s): BRIS FY2020, BRIS FY2021, BRIS FY2022, BRIS FY2023, BRI
 research_kpi	{"ok":true,"detail":"163 values (80 unknown) for 2 tickers; last entry 2 d ago","values":163,"unknown":80,"tickers":2,"last_at":"2026-10-26T20:33:10.144990+00:00","age_days":2}
@@ -25,7 +25,7 @@ xbrl_dir||2026-10-29T03:18:32.427451+00:00|2026-10-29T03:18:32.456385+00:00|1|0|
 portfolio||2026-10-29T03:18:31.171441+00:00|2026-10-29T03:18:32.420846+00:00|1|4|
 xbrl_dir||2026-10-29T03:08:30.820070+00:00|2026-10-29T03:08:30.838903+00:00|1|0|
 --- finance-app research files mtime (step 8 vs now; must be equal)
-1793086764 ~/finance-app-data/research-log.jsonl
-1793240627 ~/finance-app-data/macro_store.json
-1793086764 ~/finance-app-data/research-log.jsonl
-1793240627 ~/finance-app-data/macro_store.json
+1793086764 <finance-app data dir>/research-log.jsonl
+1793240627 <finance-app data dir>/macro_store.json
+1793086764 <finance-app data dir>/research-log.jsonl
+1793240627 <finance-app data dir>/macro_store.json

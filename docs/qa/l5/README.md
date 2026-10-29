@@ -8,6 +8,8 @@ Recorded on 2026-10-29 for plan.md §3.5 and the L5 row of §4. Files:
 - [watch-ticks.txt](watch-ticks.txt): step 9 health ticks, one every five minutes
 - [watch-errors-corrected.txt](watch-errors-corrected.txt): step 9 ERROR count after the filter fix
 
+Note: in `watch.txt` the two data-dir paths are redacted to `<finance-app data dir>` and `<investing-app data dir>` for the D1 hygiene rule. Nothing else in the file changed.
+
 ## Who ran what
 
 - Owner: steps 1, 6 and 7 (`launchctl` and `install-scraper`). Step 6 started at 09:28:11 WIB.
