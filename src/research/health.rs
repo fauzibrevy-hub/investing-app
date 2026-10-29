@@ -41,20 +41,25 @@ fn last_ok(conn: &Connection, source: &str) -> Option<String> {
 }
 
 fn run_age_days(finished: &str) -> Option<i64> {
+    run_age_days_at(finished, chrono::Utc::now())
+}
+
+fn run_age_days_at(finished: &str, now: chrono::DateTime<chrono::Utc>) -> Option<i64> {
     let t = chrono::DateTime::parse_from_rfc3339(finished).ok()?;
-    Some(
-        (chrono::Utc::now() - t.with_timezone(&chrono::Utc))
-            .num_days()
-            .max(0),
-    )
+    Some((now - t.with_timezone(&chrono::Utc)).num_days().max(0))
 }
 
 /// Adds `last_at` (RFC 3339 or null) and `age_days` (whole days or null) to a health entry
 /// (A7.2: every research source reports its status and its age as data, not only in `detail`).
-fn with_age(mut v: Value, last_at: Option<&str>) -> Value {
+fn with_age(v: Value, last_at: Option<&str>) -> Value {
+    with_age_at(v, last_at, chrono::Utc::now())
+}
+
+/// `with_age` against the clock `now`, so an entry built at a pinned clock ages by it too.
+fn with_age_at(mut v: Value, last_at: Option<&str>, now: chrono::DateTime<chrono::Utc>) -> Value {
     v["last_at"] = last_at.map_or(Value::Null, |t| json!(t));
     v["age_days"] = last_at
-        .and_then(run_age_days)
+        .and_then(|t| run_age_days_at(t, now))
         .map_or(Value::Null, |d| json!(d));
     v
 }
@@ -260,7 +265,7 @@ pub fn scraper_job_entry_at(cfg: &Config, now_local: chrono::DateTime<chrono::Lo
         .and_then(|t| age_hours(t, now))
         .map_or(Value::Null, |h| json!(h));
     v["idx_age_days"] = idx_age.map_or(Value::Null, |d| json!(d));
-    with_age(v, last_at)
+    with_age_at(v, last_at, now)
 }
 
 fn count(conn: &Connection, sql: &str) -> rusqlite::Result<i64> {
