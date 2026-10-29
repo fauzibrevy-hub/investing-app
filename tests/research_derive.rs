@@ -5,7 +5,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use chrono::{Datelike, NaiveDate};
-use investing_app::research::derive::{derive, FactIn, Flag};
+use investing_app::research::derive::{derive, restatement_tolerance, FactIn, Flag};
 use investing_app::research::xbrl::CtxKind;
 use proptest::prelude::*;
 
@@ -79,8 +79,17 @@ fn year() -> impl Strategy<Value = [f64; 4]> {
     [quarter(), quarter(), quarter(), quarter()]
 }
 
+/// Cases per property: 200, or `PROPTEST_CASES` for a longer search (an explicit count in the
+/// config would otherwise override the variable).
+fn cases() -> u32 {
+    std::env::var("PROPTEST_CASES")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(200)
+}
+
 proptest! {
-    #![proptest_config(ProptestConfig::with_cases(200))]
+    #![proptest_config(ProptestConfig::with_cases(cases()))]
 
     #[test]
     fn sum_of_standalone_equals_fy_and_ttm_q4_is_fy(years in prop::collection::vec(year(), 1..4), decimals in -6i32..=0) {
@@ -164,21 +173,60 @@ proptest! {
 
     #[test]
     fn restatements_never_change_the_displayed_original(y0 in year(), y1 in year(), bump in 1i64..1_000) {
-        let decimals = -6;
-        let mut facts = series(&[y0, y1], 2024, decimals);
-        // Restate the Q2 2024 comparative inside the Q2 2025 filing by more than the rounding.
-        let target = facts
-            .iter_mut()
-            .find(|f| f.filing_id == "ZZZZ_2025_Q2" && f.end == d("2024-06-30"))
-            .unwrap();
-        let original = target.value;
-        target.value += bump as f64 * 1e6;
-        let dv = derive(&facts);
-        let q2 = dv.cells.iter().find(|c| c.fy == 2024 && c.q == 2).unwrap();
-        prop_assert!(q2.flags.contains(&Flag::Restated));
-        let q1 = dv.cells.iter().find(|c| c.fy == 2024 && c.q == 1).unwrap();
-        prop_assert!((q2.standalone.unwrap() + q1.standalone.unwrap() - original).abs() < 1e-3);
-        prop_assert_eq!(dv.restatements.len(), 1);
-        prop_assert_eq!(dv.restatements[0].original, original);
+        restated_comparative_keeps_the_original(y0, y1, bump)?;
+    }
+}
+
+/// Restates the Q2 2024 comparative inside the Q2 2025 filing by `bump` millions (more than
+/// the rounding) and checks the displayed original survives. A bump that lands on exactly
+/// −original is a sign conflict, not a restatement (research plan §4.4, "Sign conflict";
+/// `derive` module docs): flagged `sign_conflict` instead of `restated`, the original still
+/// displayed and the restatement row still written.
+fn restated_comparative_keeps_the_original(
+    y0: [f64; 4],
+    y1: [f64; 4],
+    bump: i64,
+) -> Result<(), TestCaseError> {
+    let decimals = -6;
+    let mut facts = series(&[y0, y1], 2024, decimals);
+    let target = facts
+        .iter_mut()
+        .find(|f| f.filing_id == "ZZZZ_2025_Q2" && f.end == d("2024-06-30"))
+        .unwrap();
+    let original = target.value;
+    target.value += bump as f64 * 1e6;
+    let later = target.value;
+    let dv = derive(&facts);
+    let q2 = dv.cells.iter().find(|c| c.fy == 2024 && c.q == 2).unwrap();
+    let sign_flip = (later + original).abs() <= restatement_tolerance(Some(decimals));
+    let (flag, not) = if sign_flip {
+        (Flag::SignConflict, Flag::Restated)
+    } else {
+        (Flag::Restated, Flag::SignConflict)
+    };
+    prop_assert!(
+        q2.flags.contains(&flag) && !q2.flags.contains(&not),
+        "{original} -> {later}: {:?}",
+        q2.flags
+    );
+    let q1 = dv.cells.iter().find(|c| c.fy == 2024 && c.q == 1).unwrap();
+    prop_assert!((q2.standalone.unwrap() + q1.standalone.unwrap() - original).abs() < 1e-3);
+    prop_assert_eq!(dv.restatements.len(), 1);
+    prop_assert_eq!(dv.restatements[0].original, original);
+    prop_assert_eq!(dv.restatements[0].restated, later);
+    Ok(())
+}
+
+/// The counterexample proptest found (2026-10-29): YTD Q2 2024 rounds to −480M and the bump
+/// of 960M makes the comparative +480M. The zero quarters do not matter (bump 959 restates);
+/// the exact sign flip does, also with no rounding and no zero quarter (−250M to +250M).
+#[test]
+fn a_comparative_restated_to_minus_the_original_is_a_sign_conflict_and_keeps_the_original() {
+    for (y0, y1, bump) in [
+        ([-38_500_000.0, -441_000_000.0, 0.0, 0.0], [0.0; 4], 960),
+        ([-38_500_000.0, -441_000_000.0, 0.0, 0.0], [0.0; 4], 959),
+        ([120e6, -370e6, 15e6, 40e6], [10e6, 20e6, 30e6, 40e6], 500),
+    ] {
+        restated_comparative_keeps_the_original(y0, y1, bump).unwrap();
     }
 }
