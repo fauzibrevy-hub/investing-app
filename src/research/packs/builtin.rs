@@ -42,6 +42,10 @@ pub const BUILTIN: &[(&str, &str)] = &[
         "it_distribution.toml",
         include_str!("../../../research/packs/it_distribution.toml"),
     ),
+    (
+        "media_scma.toml",
+        include_str!("../../../research/packs/media_scma.toml"),
+    ),
 ];
 
 /// What the last load produced.
@@ -209,10 +213,12 @@ mod tests {
                 "core",
                 "heavy_equipment_contracting",
                 "it_distribution",
+                "media_scma",
                 "shipping",
                 "shipping_tanker"
             ]
         );
+        assert!(set.get("media_scma").unwrap().industry_codes.is_empty());
         assert_eq!(set.for_industry_code("G111").unwrap().id, "bank_sharia");
         assert_eq!(set.for_industry_code("A121").unwrap().id, "coal_mining");
         assert_eq!(

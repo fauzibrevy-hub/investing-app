@@ -1,0 +1,238 @@
+# media_scma.toml: Media & streaming (SCMA: FTA SCTV, Indosiar, Mentari plus OTT Vidio). The pack
+# claims no industry code (`industry_codes = []`), so SCMA gets it only through its per-ticker
+# `pack_override` and no other ticker changes pack. It holds only what SCMA discloses.
+# Formulas bind undimensioned facts SCMA's IDX XBRL tags: the face statements in every filing,
+# and from FY2023 the total revenue from customers above 10% (2023 Q2 and Q3 carry it only on a
+# party axis, so those windows show a gap). Depreciation is not tagged, so no EBITDA-based row
+# is defined here. Dividends paid are not tagged in a quarter with no payment (every Q1 so
+# far), so the dividend ratio reads the derived TTM and Q1 shows a gap rather than a zero.
+# From FY2022 the filings also tag gross advertising revenue as `SalesAndRevenue` on
+# `TypeRevenueAxis=ServiceRevenue1Member` ("Pendapatan iklan" in every filing to 1H2026), but
+# dimensioned bindings read instants only, so that duration is a KPI cell (`ad_revenue`).
+# KPIs come from the quarterly Investors' Release (audience share, Vidio growth, YTD basis as
+# reported) and the notes of the financial statements (segment note, four-segment scheme from
+# LK 2024 with 2023 restated; revenue note; quarters entered standalone, Q2 = 1H - Q1). Vidio
+# subscribers, ARPU and EBITDA in rupiah are never disclosed, so they have no row. No driver:
+# there is no free series for Indonesian TV or digital ad spend.
+
+id = "media_scma"
+version = "2026.10-1"
+label = "Media & streaming"
+industry_codes = []
+taxonomies = ["general"]
+
+[[dimension]]
+id = "bauran"
+label = "Bauran pendapatan"
+kind = "volume"
+
+  [[dimension.metric]]
+  id = "tv_segment_revenue"
+  label = "Pendapatan segmen televisi"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Pendapatan eksternal segmen Televisi & platform multimedia lainnya dari catatan segmen; bisnis inti FTA yang bergantung pada iklan."
+  note = "Skema empat segmen sejak LK 2024 (2023 disajikan ulang); kuartal mandiri dari selisih kumulatif."
+  cadence = "quarterly"
+  extract_aliases = ["Televisi dan platform multimedia lainnya", "FTA and other multimedia platform"]
+
+  [[dimension.metric]]
+  id = "digital_segment_revenue"
+  label = "Pendapatan segmen digital"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Pendapatan eksternal segmen Digital (Vidio, KLY) dari catatan segmen; harus tumbuh lebih cepat dari turunnya iklan TV."
+  note = "Basis LK (pendapatan eksternal), bukan angka 'Digital media' di Investors' Release yang lebih besar; kuartal mandiri dari selisih kumulatif."
+  cadence = "quarterly"
+  extract_aliases = ["segmen digital", "digital segment revenue"]
+
+  [[dimension.metric]]
+  id = "vidio_revenue_growth_pct"
+  label = "Pertumbuhan pendapatan Vidio"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Pertumbuhan pendapatan konsolidasi Vidio terhadap periode yang sama tahun lalu; satu-satunya angka Vidio sendiri yang diungkap; dimasukkan sebagai basis year-to-date sesuai rilis."
+  cadence = "quarterly"
+  extract_aliases = ["Vidio revenue growth", "Vidio's revenue grew"]
+  range = [-100, 300]
+
+  [[dimension.metric]]
+  id = "ad_revenue"
+  label = "Pendapatan iklan bruto"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Pendapatan iklan sebelum potongan penjualan dari catatan pendapatan; pasar iklan FTA menyusut, jadi ini yang harus ditutup oleh digital."
+  note = "Tertag di XBRL sebagai SalesAndRevenue pada TypeRevenueAxis=ServiceRevenue1Member; kuartal mandiri dari selisih kumulatif."
+  cadence = "quarterly"
+  extract_aliases = ["Pendapatan iklan", "advertising revenue"]
+
+[[dimension]]
+id = "pemirsa"
+label = "Pangsa pemirsa"
+kind = "pricing"
+
+  [[dimension.metric]]
+  id = "audience_share_pct"
+  label = "Pangsa pemirsa gabungan (all time)"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Pangsa pemirsa gabungan Indosiar, SCTV dan Mentari sepanjang hari; tarif iklan mengikuti pangsa ini; dimasukkan sebagai basis year-to-date sesuai rilis."
+  cadence = "quarterly"
+  extract_aliases = ["combined audience share", "All Time audience share"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "prime_time_share_ivm_pct"
+  label = "Pangsa prime time Indosiar"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Slot prime time memberi tarif iklan tertinggi; Indosiar kanal nomor satu; dimasukkan sebagai basis year-to-date sesuai rilis."
+  cadence = "quarterly"
+  extract_aliases = ["IVM Prime Time share", "Indosiar Prime Time share"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "prime_time_share_sctv_pct"
+  label = "Pangsa prime time SCTV"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Kanal kedua grup di slot prime time; dimasukkan sebagai basis year-to-date sesuai rilis."
+  cadence = "quarterly"
+  extract_aliases = ["SCTV Prime Time share"]
+  range = [0, 100]
+
+[[dimension]]
+id = "biaya"
+label = "Biaya"
+kind = "cost"
+
+  [[dimension.metric]]
+  id = "program_cost_ratio"
+  label = "Beban program & penyiaran / pendapatan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Beban pokok SCMA adalah amortisasi konten, hak siar olahraga dan penyiaran; menentukan margin kotor."
+  period = "ttm"
+  formula = "100 * ttm(CostOfRevenue) / ttm(Revenue)"
+  elements.CostOfRevenue = ["idx-cor:CostOfSalesAndRevenue"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "opex_ratio"
+  label = "Beban usaha / pendapatan"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Beban penjualan dan umum relatif terhadap pendapatan; pemangkasan biaya Vidio terlihat di sini."
+  period = "ttm"
+  formula = "100 * (ttm(Selling) + ttm(GeneralAdmin)) / ttm(Revenue)"
+  elements.Selling = ["idx-cor:SellingExpenses", "0"]
+  elements.GeneralAdmin = ["idx-cor:GeneralAndAdministrativeExpenses"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+[[dimension]]
+id = "digital"
+label = "Profitabilitas digital"
+kind = "quality"
+
+  [[dimension.metric]]
+  id = "digital_segment_result"
+  label = "Hasil segmen digital"
+  layer = "kpi"
+  unit = "IDR miliar"
+  direction = "higher"
+  why = "Laba atau rugi segmen Digital dari catatan segmen; ukuran paling dekat untuk apakah Vidio masih membakar laba grup."
+  note = "Skema empat segmen sejak LK 2024 (2023 disajikan ulang); kuartal mandiri dari selisih kumulatif."
+  cadence = "quarterly"
+  extract_aliases = ["digital segment result", "laba (rugi) segmen digital"]
+
+  [[dimension.metric]]
+  id = "vidio_ebitda_change_pct"
+  label = "Perbaikan EBITDA Vidio"
+  layer = "kpi"
+  unit = "%"
+  direction = "higher"
+  why = "Perubahan EBITDA Vidio terhadap periode yang sama tahun lalu seperti dicetak di rilis; angka rupiahnya tidak diungkap, dan di atas 100% berarti rugi sudah berbalik menjadi laba; basis year-to-date sesuai rilis."
+  cadence = "quarterly"
+  extract_aliases = ["Vidio's EBITDA has improved", "Vidio EBITDA improvement"]
+
+[[dimension]]
+id = "pelanggan"
+label = "Pelanggan dan piutang"
+kind = "quality"
+
+  [[dimension.metric]]
+  id = "major_customer_share"
+  label = "Porsi pelanggan di atas 10%"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Pendapatan dari pelanggan yang masing-masing di atas 10% (agensi iklan PT Wira Pamungkas Pariwara); konsentrasi pada satu agen."
+  period = "ttm"
+  formula = "100 * ttm(MajorCustomers) / ttm(Revenue)"
+  elements.MajorCustomers = ["idx-cor:SalesAndRevenueMoreThan10Percent"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+  range = [0, 100]
+
+  [[dimension.metric]]
+  id = "receivable_days"
+  label = "Hari piutang"
+  layer = "xbrl"
+  unit = "hari"
+  direction = "lower"
+  why = "Berapa lama agensi iklan membayar; naik berarti kas tertahan atau agensi melemah."
+  period = "ttm"
+  formula = "365 * avg4q(ReceivablesTp + ReceivablesRp) / ttm(Revenue)"
+  elements.ReceivablesTp = ["idx-cor:TradeReceivablesThirdParties", "idx-cor:TradeReceivablesNet"]
+  elements.ReceivablesRp = ["idx-cor:TradeReceivablesRelatedParties", "0"]
+  elements.Revenue = ["idx-cor:SalesAndRevenue"]
+
+[[dimension]]
+id = "neraca"
+label = "Neraca"
+kind = "balance"
+
+  [[dimension.metric]]
+  id = "content_inventory_days"
+  label = "Hari persediaan konten"
+  layer = "xbrl"
+  unit = "hari"
+  direction = "neutral"
+  why = "Persediaan konten program dibanding beban program; naik lebih cepat dari beban berarti biaya konten tertahan di neraca."
+  period = "ttm"
+  formula = "365 * avg4q(Inventories) / ttm(CostOfRevenue)"
+  elements.Inventories = ["idx-cor:Inventories", "idx-cor:CurrentInventories"]
+  elements.CostOfRevenue = ["idx-cor:CostOfSalesAndRevenue"]
+
+  [[dimension.metric]]
+  id = "dividends_to_ocf"
+  label = "Dividen tunai / arus kas operasi"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Di atas 100% berarti dividen dibayar dari kas lama atau utang, bukan dari arus kas operasi tahun itu."
+  period = "ttm"
+  formula = "100 * Dividends / Ocf"
+  elements.Dividends = ["idx-cor:DividendsPaidFromFinancingActivities"]
+  elements.Ocf = ["idx-cor:NetCashFlowsReceivedFromUsedInOperatingActivities"]
+
+  [[dimension.metric]]
+  id = "goodwill_intangibles_to_equity"
+  label = "Goodwill dan aset takberwujud / ekuitas"
+  layer = "xbrl"
+  unit = "%"
+  direction = "lower"
+  why = "Goodwill dan merek bergantung pada uji penurunan nilai; porsi ekuitas yang bisa hilang lewat penurunan nilai, bukan lewat kas."
+  period = "instant"
+  formula = "100 * (Goodwill + Intangibles) / Equity"
+  elements.Goodwill = ["idx-cor:Goodwill", "0"]
+  elements.Intangibles = ["idx-cor:IntangibleAssetsOtherThanGoodwill", "0"]
+  elements.Equity = ["idx-cor:Equity"]

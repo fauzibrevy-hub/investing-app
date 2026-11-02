@@ -495,8 +495,80 @@ async fn a2_4_pack_override_re_renders_without_restart_and_shows_the_filing_defa
     // Reload re-reads the directory (empty here, so the embedded packs serve) without a restart.
     let (s, r) = call(&t, Method::POST, "/api/research/packs/reload", "rl-1", None).await;
     assert_eq!(s, StatusCode::OK, "{r}");
-    assert_eq!(r["reloaded"], 7);
+    assert_eq!(r["reloaded"], 8);
     assert_eq!(r["status"]["ok"], true);
+}
+
+/// SCMA's pack claims no industry code: only the ticker given the override shows it, its
+/// KPIs take entries, and every other ticker keeps its filing pack.
+#[tokio::test]
+async fn media_scma_applies_to_one_ticker_only_through_the_override() {
+    let dir = tempfile::tempdir().unwrap();
+    let t = seed(dir.path());
+    let (s, v) = call(
+        &t,
+        Method::PUT,
+        "/api/research/universe/NONE",
+        "media-1",
+        Some(json!({"pack_override": "media_scma"})),
+    )
+    .await;
+    assert_eq!(s, StatusCode::OK, "{v}");
+    let (_, p) = t.get("/api/research/NONE/pack").await;
+    assert_eq!(p["pack"]["id"], "media_scma");
+    assert_eq!(p["pack"]["label"], "Media & streaming");
+    assert_eq!(p["pack"]["source"], "override");
+    assert!(p["pack"]["filing_default"].is_null());
+    let ids = metric_ids(&p);
+    for id in [
+        "tv_segment_revenue",
+        "digital_segment_revenue",
+        "vidio_revenue_growth_pct",
+        "ad_revenue",
+        "audience_share_pct",
+        "prime_time_share_ivm_pct",
+        "prime_time_share_sctv_pct",
+        "program_cost_ratio",
+        "opex_ratio",
+        "digital_segment_result",
+        "vidio_ebitda_change_pct",
+        "major_customer_share",
+        "receivable_days",
+        "content_inventory_days",
+        "dividends_to_ocf",
+        "goodwill_intangibles_to_equity",
+    ] {
+        assert!(ids.contains(&id.to_string()), "{id}");
+    }
+    assert!(!ids.contains(&"vessel_count".to_string()));
+    assert!(p["missing_drivers"].as_array().unwrap().is_empty());
+
+    let (s, v) = call(
+        &t,
+        Method::PUT,
+        "/api/research/NONE/kpi/audience_share_pct/2026/2",
+        "media-2",
+        Some(json!({"value": 37.1, "document": "Investors' Release 1H 2026 h1, basis YTD", "document_date": "2026-08-13"})),
+    )
+    .await;
+    assert_eq!(s, StatusCode::OK, "{v}");
+    let (_, p) = t.get("/api/research/NONE/pack").await;
+    let share = metric(&p, "audience_share_pct");
+    assert_eq!(share["cadence"], "quarterly");
+    assert_eq!(share["cells"][11]["state"], "entered");
+    assert_eq!(share["cells"][11]["value"], 37.1);
+
+    let (_, v) = t.get("/api/research/packs").await;
+    let media = v["packs"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|p| p["id"] == "media_scma")
+        .unwrap();
+    assert_eq!(media["industry_codes"], json!([]));
+    assert_eq!(media["members"], json!(["NONE"]));
+    let (_, c) = t.get("/api/research/COAL/pack").await;
+    assert_eq!(c["pack"]["id"], "coal_mining");
 }
 
 #[tokio::test]
@@ -540,7 +612,7 @@ async fn packs_list_and_health_report_definitions_members_and_load_status() {
     assert_eq!(v["status"]["ok"], true);
     assert_eq!(v["status"]["source"], "embedded");
     let packs = v["packs"].as_array().unwrap();
-    assert_eq!(packs.len(), 7);
+    assert_eq!(packs.len(), 8);
     let tanker = packs.iter().find(|p| p["id"] == "shipping_tanker").unwrap();
     assert_eq!(tanker["industry_codes"], json!([]));
     let shipping = packs.iter().find(|p| p["id"] == "shipping").unwrap();
@@ -570,7 +642,7 @@ async fn packs_list_and_health_report_definitions_members_and_load_status() {
     assert!(h["sources"]["research_packs"]["detail"]
         .as_str()
         .unwrap()
-        .contains("7 packs"));
+        .contains("8 packs"));
     assert_eq!(h["sources"]["research_kpi"]["ok"], true);
     assert!(h["sources"]["research_kpi"]["detail"]
         .as_str()
@@ -598,5 +670,5 @@ async fn an_invalid_pack_file_is_reported_on_health_and_the_embedded_copy_serves
         .unwrap()
         .iter()
         .any(|i| i == "coal_mining"));
-    assert_eq!(v["packs"].as_array().unwrap().len(), 7);
+    assert_eq!(v["packs"].as_array().unwrap().len(), 8);
 }
