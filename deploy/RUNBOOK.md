@@ -32,14 +32,18 @@ The service runs from the install root, never from the checkout, so `cargo clean
   previous -> releases/<id>       what §4 rollback goes back to
 ```
 
-The switch is atomic (a new symlink renamed over `current`); a failed copy or check leaves `current`
-as it was. After a healthy start it keeps 3 releases (current, previous and the newest other) and
-deletes the rest. A release id ending in `-dirty` was built from a checkout with uncommitted changes.
+The port is checked in preflight, before anything is built or written, and again right before the
+switch. A port held by another process, a failed copy or check, or an invalid plist stops the
+install before the switch: `current`, the plist in `~/Library/LaunchAgents` and the running job stay
+as they were, and the staged release is removed. The switch itself is atomic (a new symlink renamed
+over `current`), and only then is the plist moved into place and the job reloaded. After a healthy
+start it keeps 3 releases (current, previous and the newest other) and deletes the rest. A release id
+ending in `-dirty` was built from a checkout with uncommitted changes.
 
 | Variable | Default | Why you would set it |
 | --- | --- | --- |
 | `INVESTING_INSTALL_ROOT` | `~/.local/opt/investing-app` | where releases live; absolute path |
-| `INVESTING_LABEL` | `com.menganto.investing` | a spare instance (§2.1); needs its own install root and env file, and that env file its own `INVESTING_DATA_DIR` and `INVESTING_BIND` |
+| `INVESTING_LABEL` | `com.menganto.investing` | a spare instance (§2.1): only `com.menganto.investing.<name>` (not `.scraper`); needs its own install root and env file, and that env file its own `INVESTING_DATA_DIR` and `INVESTING_BIND` |
 | `INVESTING_ENV_FILE` | `~/.hermes/secrets/investing-app.env` | a throwaway env file for a trial run |
 | `SKIP_BUILD` | `0` | install the existing `target/release` and `web/dist` as a new release without building |
 
@@ -92,7 +96,9 @@ To try an install, a break or a rollback without touching `com.menganto.investin
 worktree (`~/dev-worktrees/investing-app/<slug>`), not from `~/investing-app`. It gets its own label,
 plist, logs, port 8799, env file with dummy values, data dir and install root, and its env file keeps
 the vault, the scraper paths and the credentials away from the real ones; never copy the real env file.
-`install.sh` refuses a non-default label that shares the live install root, env file, data dir or port.
+`install.sh` refuses any label outside `com.menganto.investing.*` (and the scraper's), and a
+non-default label that shares the live install root, env file, data dir or port. Always finish with
+step 5: a plist left in `~/Library/LaunchAgents` has `RunAtLoad` and starts again at the next login.
 
 ```bash
 # 1. Temp dirs and dummy values

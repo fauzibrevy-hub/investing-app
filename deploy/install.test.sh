@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Tests for the release layout (deploy/release-lib.sh) and for deploy/run.sh started from it, with
-# fake artifacts in a temp dir: no cargo, no launchctl, no network, nothing outside the temp dir.
+# Tests for the release layout (deploy/release-lib.sh), for deploy/run.sh started from it, and for
+# the order of deploy/install.sh (what a refused install leaves behind), with fake artifacts in a
+# temp dir: no cargo, no real launchctl (a fake one records calls), no network, nothing outside the
+# temp dir (install.sh runs with HOME pointing into it).
 # Not part of CI or scripts/check.sh; run it by hand after changing deploy/:
 #
 #   bash deploy/install.test.sh
@@ -148,6 +150,115 @@ check "prune after a rollback keeps current, previous and the newest other" \
   same "$(releases)" "$(id 4) $(id 5) $(id 6) "
 release_prune "$root" 3
 check "prune is idempotent" same "$(releases)" "$(id 4) $(id 5) $(id 6) "
+
+# --- install.sh: refused installs change nothing -----------------------------------------------
+# The real install.sh in a fake checkout (SKIP_BUILD=1), with HOME inside the temp dir and fake
+# launchctl and lsof first on PATH. launchctl records its calls, says "not loaded" to `print` and
+# fails everything else, so no job is ever loaded. lsof reports a foreign listener (pid 4242) on
+# every call (LSOF_MODE=always), from the second call on (second: the port is taken while the
+# build runs), or never.
+repo="$work/repo"
+mkdir -p "$repo/deploy" "$repo/target/release" "$repo/web/dist" "$repo/research/packs" "$work/bin"
+cp "$here/install.sh" "$here/release-lib.sh" "$here/run.sh" "$here/com.menganto.investing.plist" "$repo/deploy/"
+cp "$build/investing-app" "$repo/target/release/investing-app"
+cp "$build/web/dist/index.html" "$repo/web/dist/"
+touch "$repo/Cargo.toml"
+echo '{}' >"$repo/web/package.json"
+cat >"$work/bin/launchctl" <<'EOF'
+#!/bin/sh
+echo "$*" >>"$LAUNCHCTL_LOG"
+[ "$1" = print ] && exit 113
+exit 1
+EOF
+cat >"$work/bin/lsof" <<'EOF'
+#!/bin/sh
+n=$(($(cat "$LSOF_COUNT" 2>/dev/null || echo 0) + 1))
+echo "$n" >"$LSOF_COUNT"
+case "$LSOF_MODE" in
+  always) echo 4242 ;;
+  second) if [ "$n" -ge 2 ]; then echo 4242; fi ;;
+esac
+exit 0
+EOF
+cat >"$work/bin/cargo" <<'EOF'
+#!/bin/sh
+echo "unexpected: $0 $*" >&2
+exit 1
+EOF
+cp "$work/bin/cargo" "$work/bin/npm"
+chmod 755 "$work/bin/"*
+
+ienv="$work/inst-env/investing.env"
+reset_install() { # [env file INVESTING_BIND port, or nothing for no env file]
+  rm -rf "${work:?}/inst" "$work/inst-data" "$work/inst-env" "${work:?}/home" "$work/launchctl.log" "$work/lsof.count"
+  mkdir -p "$work/home"
+  if [ -n "${1:-}" ]; then
+    mkdir -p "$work/inst-env"
+    printf 'INVESTING_APP_TOKEN=x\nPORTFOLIO_SPREADSHEET_ID=x\nINVESTING_BIND=127.0.0.1:%s\nINVESTING_DATA_DIR=%s\n' \
+      "$1" "$work/inst-data" >"$ienv"
+    cp "$ienv" "$work/env.before"
+  fi
+}
+run_install() { # <LSOF_MODE> [NAME=value ...]: install.sh output; its exit code in $work/rc
+  local mode=$1 rc=0
+  shift
+  env -i PATH="$work/bin:/usr/bin:/bin:/usr/sbin:/sbin" HOME="$work/home" TMPDIR="$work" \
+    LAUNCHCTL_LOG="$work/launchctl.log" LSOF_COUNT="$work/lsof.count" LSOF_MODE="$mode" \
+    INVESTING_LABEL=com.menganto.investing.test INVESTING_INSTALL_ROOT="$work/inst" \
+    INVESTING_ENV_FILE="$ienv" INVESTING_DATA_DIR="$work/inst-data" SKIP_BUILD=1 \
+    "$@" bash "$repo/deploy/install.sh" >"$work/out" 2>&1 || rc=$?
+  echo "$rc" >"$work/rc"
+}
+refused_with() { [ "$(cat "$work/rc")" != 0 ] && grep -qF "$1" "$work/out"; }
+no_release() { [ -z "$(release_link "$work/inst" current)" ] && [ -z "$(ls -A "$work/inst/releases" 2>/dev/null)" ]; }
+no_plist() { [ -z "$(ls -A "$work/home/Library/LaunchAgents" 2>/dev/null)" ]; }
+no_temp_plist() { ! ls "$work"/*.plist.* >/dev/null 2>&1; }
+only_print_calls() { ! grep -qvE '^print ' "$work/launchctl.log" 2>/dev/null; }
+env_unchanged() { cmp -s "$ienv" "$work/env.before"; }
+label_refused() { [ "$(cat "$work/rc")" != 0 ] && grep -q "INVESTING_LABEL" "$work/out" && [ ! -e "$work/inst" ] && [ ! -e "$work/launchctl.log" ]; }
+has_current_bin() { [ -x "$work/inst/current/bin/investing-app" ]; }
+
+reset_install 18799
+run_install always
+check "port held: refused" refused_with "port 18799 is held by pid 4242"
+check "  no release, no current" no_release
+check "  no plist in LaunchAgents" no_plist
+check "  launchctl only asked (print), never bootout/bootstrap" only_print_calls
+check "  env file unchanged" env_unchanged
+
+reset_install 18799
+run_install second
+check "port taken during the build: refused at the switch" refused_with "port 18799 is held by pid 4242"
+check "  staged release removed, no current" no_release
+check "  no plist in LaunchAgents" no_plist
+check "  no leftover temp plist" no_temp_plist
+check "  launchctl only asked (print)" only_print_calls
+
+reset_install
+run_install never
+check "no env file: refused before anything is written" refused_with "needs its own INVESTING_DATA_DIR"
+check "  no release, no plist" no_release
+check "  no plist in LaunchAgents" no_plist
+
+for bad in com.menganto.finance com.menganto.finance.staging com.menganto.investing.scraper \
+  "com.menganto.investing.a b" com.menganto.investing. com.menganto.investingx; do
+  reset_install 18799
+  run_install never INVESTING_LABEL="$bad"
+  check "INVESTING_LABEL=$bad refused, nothing written" label_refused
+done
+
+# Port free: the install gets as far as launchctl (fake, fails), so the switch and the plist are
+# exercised: current is the new release, the plist is in place, bootstrap was called with it.
+reset_install 18799
+run_install never
+check "port free: runs to launchctl bootstrap (fake, fails)" refused_with "launchctl bootstrap failed"
+check "  current is the new release" has_current_bin
+check "  plist in LaunchAgents with the test label" \
+  grep -q '<string>com.menganto.investing.test</string>' "$work/home/Library/LaunchAgents/com.menganto.investing.test.plist"
+check "  plist points the packs at the checkout" \
+  grep -q "<string>$repo/research/packs</string>" "$work/home/Library/LaunchAgents/com.menganto.investing.test.plist"
+check "  bootstrap was called with that plist" \
+  grep -qF "bootstrap gui/$UID $work/home/Library/LaunchAgents/com.menganto.investing.test.plist" "$work/launchctl.log"
 
 # --- release ids --------------------------------------------------------------------------------
 check "release_id is <UTC ts>-<short sha>[-dirty]" \

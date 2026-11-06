@@ -4,9 +4,12 @@
 #   ./deploy/install.sh               # build, install a new release, (re)load com.menganto.investing
 #   ./deploy/install.sh --rollback    # current -> previous release, restart, same health checks
 #
-# What it does, in order: preflight -> build binary -> build UI -> copy both into a new release
-# under the install root and point `current` at it -> data dir -> render plist -> (re)load service
-# -> health check (the listener must be the new release) -> prune old releases.
+# What it does, in order: preflight (incl. the port) -> build binary -> build UI -> copy both into
+# a new release under the install root -> data dir -> render the plist to a temp file -> port check
+# again -> point `current` at the new release and move the plist into place -> (re)load service
+# -> health check (the listener must be the new release) -> prune old releases. A failure before
+# the switch leaves `current`, the plist in ~/Library/LaunchAgents and the running job as they were
+# (the staged release is removed).
 #
 # The service runs from the install root (INVESTING_INSTALL_ROOT, default ~/.local/opt/investing-app),
 # never from this checkout: once installed, `cargo clean`, a deleted target/ or web/dist, or a
@@ -29,7 +32,7 @@ MODE=install
 case "${1:-}" in
   "") ;;
   --rollback) MODE=rollback ;;
-  -h | --help) sed -n '2,21p' "$0"; exit 0 ;;
+  -h | --help) sed -n '2,24p' "$0"; exit 0 ;;
   *) fail "unknown argument: $1 (use --rollback or nothing)" ;;
 esac
 
@@ -52,7 +55,29 @@ SKIP_BUILD="${SKIP_BUILD:-0}"
 KEEP_RELEASES=3
 BIN_NAME="investing-app"
 DOMAIN="gui/$(id -u)"
+
+# Only this app's labels: any other label would overwrite and boot out another job's plist
+# (com.menganto.finance, …). The weekly scraper job's label is not this service.
+case "$LABEL" in
+  "$DEFAULT_LABEL") ;;
+  "$DEFAULT_LABEL.scraper") fail "INVESTING_LABEL $LABEL is the scraper job (deploy/install-scraper.sh)" ;;
+  "$DEFAULT_LABEL." | "$DEFAULT_LABEL".*[!A-Za-z0-9._-]*)
+    fail "INVESTING_LABEL: only letters, digits, '.', '_' and '-' after $DEFAULT_LABEL.: $LABEL" ;;
+  "$DEFAULT_LABEL".*) ;;
+  *) fail "INVESTING_LABEL must be $DEFAULT_LABEL or $DEFAULT_LABEL.<name>, not $LABEL" ;;
+esac
+
 PLIST_DST="$HOME/Library/LaunchAgents/$LABEL.plist"
+PLIST_TMP=""
+STAGED="" # a release copied but not yet current; removed when the run fails before the switch
+on_exit() {
+  [ -z "$PLIST_TMP" ] || rm -f "$PLIST_TMP"
+  if [ -n "$STAGED" ]; then
+    rm -rf "$STAGED"
+    echo "removed the staged release; current and $PLIST_DST are unchanged" >&2
+  fi
+}
+trap on_exit EXIT
 if [ "$LABEL" = "$DEFAULT_LABEL" ]; then LOG_NAME="investing-app"; else LOG_NAME="$LABEL"; fi
 ERR_LOG="$HOME/Library/Logs/$LOG_NAME.err.log"
 
@@ -92,7 +117,7 @@ check_port_free() {
   local port="$1" own p
   own="$(launchctl print "$DOMAIN/$LABEL" 2>/dev/null | awk '/^\tpid = /{print $3}' || true)" # empty when not loaded
   for p in $(lsof -nP -iTCP:"$port" -sTCP:LISTEN -t 2>/dev/null | sort -u); do
-    [ "$p" = "$own" ] || fail "port $port is held by pid $p, not by $LABEL; set another INVESTING_BIND in $ENV_FILE"
+    [ "$p" = "$own" ] || fail "port $port is held by pid $p, not by $LABEL; free it or set another INVESTING_BIND in $ENV_FILE"
   done
 }
 
@@ -129,15 +154,20 @@ show_links() {
 if [ "$MODE" = "rollback" ]; then
   say "rollback $LABEL in $INSTALL_ROOT"
   [ -f "$PLIST_DST" ] || fail "$PLIST_DST missing; run ./deploy/install.sh first"
-  release_rollback "$INSTALL_ROOT" "$BIN_NAME" || fail "rollback refused; current is unchanged"
-  show_links
   # Restart a running job; start a stopped one (§5 rollbacks stop the service for the data step
-  # first, and the new release must not start again before the old one does).
-  if launchctl print "$DOMAIN/$LABEL" >/dev/null 2>&1; then
-    launchctl kickstart -k "$DOMAIN/$LABEL"
-  else
+  # first, and the new release must not start again before the old one does). A stopped job's
+  # port is checked before `current` moves.
+  LOADED=0
+  launchctl print "$DOMAIN/$LABEL" >/dev/null 2>&1 && LOADED=1
+  if [ "$LOADED" = "0" ]; then
     BIND="$(run_bind)"
     check_port_free "${BIND##*:}"
+  fi
+  release_rollback "$INSTALL_ROOT" "$BIN_NAME" || fail "rollback refused; current is unchanged"
+  show_links
+  if [ "$LOADED" = "1" ]; then
+    launchctl kickstart -k "$DOMAIN/$LABEL"
+  else
     launchctl bootstrap "$DOMAIN" "$PLIST_DST"
   fi
   wait_healthy "$INSTALL_ROOT/current"
@@ -163,6 +193,11 @@ grep -q '^PORTFOLIO_SPREADSHEET_ID=' "$ENV_FILE" || fail "PORTFOLIO_SPREADSHEET_
 if grep -q '^INVESTING_WEB_DIST=' "$ENV_FILE"; then
   warn "INVESTING_WEB_DIST is set in $ENV_FILE and overrides the release's web/dist; remove the line unless it is meant to"
 fi
+# Before anything is built, copied or written: with the port held by another process the new job
+# could not start, and a plist left behind would retry it at every login (RunAtLoad, KeepAlive).
+BIND="$(run_bind)"
+check_port_free "${BIND##*:}"
+echo "port ${BIND##*:}: free or held by $LABEL"
 
 if [ "$SKIP_BUILD" != "1" ]; then
   say "build backend (release)"
@@ -181,17 +216,16 @@ SHA="$(git -C "$APP_ROOT" rev-parse HEAD 2>/dev/null || echo unknown)"
 mkdir -p "$INSTALL_ROOT"
 release_stage "$INSTALL_ROOT" "$RELEASE_ID" "$APP_ROOT/target/release/$BIN_NAME" \
   "$APP_ROOT/web/dist" "$APP_ROOT/deploy/run.sh" "$SHA" || fail "release not staged; current is unchanged"
-release_activate "$INSTALL_ROOT" "$RELEASE_ID" || fail "could not switch current to $RELEASE_ID"
-echo "installed $INSTALL_ROOT/releases/$RELEASE_ID"
-show_links
+STAGED="$INSTALL_ROOT/releases/$RELEASE_ID"
+echo "staged $STAGED (not current yet)"
 
 say "data directory"
 mkdir -p "$DATA_DIR"
 
 say "render plist"
-mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
+# Rendered outside ~/Library/LaunchAgents; it moves there only at the switch below.
 sed_value() { printf '%s' "$1" | sed -e 's/[\\|&]/\\&/g'; }
-PLIST_TMP="$PLIST_DST.tmp"
+PLIST_TMP="$(mktemp "${TMPDIR:-/tmp}/$LABEL.plist.XXXXXX")"
 /usr/bin/sed -e "s|__LABEL__|$(sed_value "$LABEL")|g" \
   -e "s|__HOME__|$(sed_value "$HOME")|g" \
   -e "s|__INSTALL_ROOT__|$(sed_value "$INSTALL_ROOT")|g" \
@@ -200,15 +234,23 @@ PLIST_TMP="$PLIST_DST.tmp"
   -e "s|__LOG_NAME__|$(sed_value "$LOG_NAME")|g" \
   "$APP_ROOT/deploy/$DEFAULT_LABEL.plist" > "$PLIST_TMP"
 chmod 644 "$PLIST_TMP"
-plutil -lint "$PLIST_TMP" >/dev/null || { rm -f "$PLIST_TMP"; fail "rendered plist is not valid; $PLIST_DST left as it was"; }
-mv -f "$PLIST_TMP" "$PLIST_DST"
-echo "wrote $PLIST_DST"
+plutil -lint "$PLIST_TMP" >/dev/null || fail "rendered plist is not valid; $PLIST_DST left as it was"
 
-say "load service"
+say "switch and load service"
+# Again, right before the switch: the build may have taken minutes.
 BIND="$(run_bind)"
 check_port_free "${BIND##*:}"
+release_activate "$INSTALL_ROOT" "$RELEASE_ID" || fail "could not switch current to $RELEASE_ID"
+STAGED=""
+echo "installed $INSTALL_ROOT/releases/$RELEASE_ID"
+show_links
+mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
+mv -f "$PLIST_TMP" "$PLIST_DST"
+PLIST_TMP=""
+echo "wrote $PLIST_DST"
 launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null || true
-launchctl bootstrap "$DOMAIN" "$PLIST_DST"
+launchctl bootstrap "$DOMAIN" "$PLIST_DST" ||
+  fail "launchctl bootstrap failed; roll back: ./deploy/install.sh --rollback, with the same INVESTING_* variables"
 echo "loaded $LABEL"
 
 say "wait for health"
