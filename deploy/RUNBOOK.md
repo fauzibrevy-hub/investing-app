@@ -15,16 +15,44 @@ never creates or edits it and never prints its values.
 cd ~/investing-app && git pull && ./deploy/install.sh
 ```
 
-It builds the release binary and the UI, creates the data directory, renders
-`deploy/com.menganto.investing.plist` into `~/Library/LaunchAgents/` (`__HOME__` and `__APP_ROOT__`
-are filled in; launchd expands neither `$HOME` nor `~`), reloads the job and waits for
-`/api/health` and `/`. Install from the canonical clone, not a worktree: the plist points at that
-checkout and the service dies when it is deleted. `SKIP_BUILD=1` skips the builds. The weekly
-scraper job is a separate step: §5, `install-scraper.sh`, once, at cutover.
+It builds the release binary and the UI, copies both into a new release under the install root and
+points `current` at it, creates the data directory, renders `deploy/com.menganto.investing.plist`
+into `~/Library/LaunchAgents/` (launchd expands neither `$HOME` nor `~`, so the paths are filled in),
+reloads the job and waits until `/api/health` answers 200 from a process started from the new
+release, then requires `/` 200. The weekly scraper job is a separate step: §5, `install-scraper.sh`,
+once, at cutover.
 
-`deploy/run.sh` sets `INVESTING_RESEARCH_PACKS_DIR` to `<checkout>/research/packs` unless the env file
-sets it: launchd starts the service in `/`, where the relative default finds no pack files and
-`GET /api/research/packs` would report `files: 0` and seven `embedded_ids`.
+The service runs from the install root, never from the checkout, so `cargo clean`, a deleted
+`target/` or `web/dist`, or a rebuild in `~/investing-app` cannot take it down:
+
+```
+~/.local/opt/investing-app/
+  releases/<UTC-ts>-<shortsha>/   bin/investing-app, web/dist/, run.sh, RELEASE (sha, build time)
+  current  -> releases/<id>       what the plist starts (current/run.sh)
+  previous -> releases/<id>       what §4 rollback goes back to
+```
+
+The port is checked in preflight, before anything is built or written, and again right before the
+switch. A port held by another process, a failed copy or check, or an invalid plist stops the
+install before the switch: `current`, the plist in `~/Library/LaunchAgents` and the running job stay
+as they were, and the staged release is removed. The switch itself is atomic (a new symlink renamed
+over `current`), and only then is the plist moved into place and the job reloaded. After a healthy
+start it keeps 3 releases (current, previous and the newest other) and deletes the rest. A release id
+ending in `-dirty` was built from a checkout with uncommitted changes.
+
+| Variable | Default | Why you would set it |
+| --- | --- | --- |
+| `INVESTING_INSTALL_ROOT` | `~/.local/opt/investing-app` | where releases live; absolute path |
+| `INVESTING_LABEL` | `com.menganto.investing` | a spare instance (§2.1): only `com.menganto.investing.<name>` (not `.scraper`); needs its own install root and env file, and that env file its own `INVESTING_DATA_DIR` and `INVESTING_BIND` |
+| `INVESTING_ENV_FILE` | `~/.hermes/secrets/investing-app.env` | a throwaway env file for a trial run |
+| `SKIP_BUILD` | `0` | install the existing `target/release` and `web/dist` as a new release without building |
+
+Research packs are the one thing still read from the checkout, on purpose: the plist sets
+`INVESTING_RESEARCH_PACKS_DIR` to `<checkout>/research/packs` of the checkout `install.sh` ran from,
+unless the env file sets it. Without an absolute path launchd starts the service in `/`, where the
+relative default finds no pack files and `GET /api/research/packs` would report `files: 0` and only
+`embedded_ids`. So install from the canonical clone, not a worktree. If the env file sets
+`INVESTING_WEB_DIST`, `install.sh` warns: it overrides the UI of the release.
 
 First start: macOS asks whether `investing-app` may access files in Documents, because the vault lives
 in `~/Documents`. Click Allow. Until you do, `/api/thesis/*` answers nothing (curl status `000`, so
@@ -32,24 +60,84 @@ in `~/Documents`. Click Allow. Until you do, `/api/thesis/*` answers nothing (cu
 
 macOS ties that Documents permission to the binary's code identity, so a rebuild by `install.sh` can ask again (the same happens at L5). If `/api/thesis/*` hangs after a rebuild, check System Settings → Privacy & Security → Files & Folders before anything else.
 
+**First install with the install root (once).** Until it runs, the service still starts
+`~/investing-app/deploy/run.sh`, which keeps starting the checkout's own build, so a `git pull` alone
+changes nothing. The first `./deploy/install.sh` then creates `~/.local/opt/investing-app`,
+re-renders the plist to start `current/run.sh` and restarts the service. The binary now starts from
+a new path, so expect the Documents prompt above once more. Check with the `ps` line in §2. There is
+no `previous` yet, so `--rollback` refuses after this first install; going back to the old layout is
+`git checkout <old sha> && ./deploy/install.sh` (the old installer renders the old plist), after
+which `~/.local/opt/investing-app` can be deleted. If this first install stops with `launchctl bootstrap failed`
+(it already waits for the old job to unload and tries three times), the job is not loaded: run the
+`launchctl bootstrap` command the message prints, then the §2 checks; if that fails too, go back to
+the old layout as above.
+
 Parity is order-sensitive: run §3.4 step 5 once, in order, on a fresh snapshot (step 2). Re-running `parity.sh` after `writes.sh` shows timestamp-only `DIFF`s from the writes themselves, not a real difference.
 
 ## 2. Verify
 
 ```
+L=com.menganto.investing PORT=8789 ROOT=~/.local/opt/investing-app LOG=investing-app   # spare instance: §2.1
 U="gui/$(id -u)"
-curl -s http://127.0.0.1:8789/api/health        # {"status":"ok",...}
-curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8789/   # 200: the UI, not only health
-launchctl print "$U/com.menganto.investing" | grep -E 'state =|runs =|last exit'
-lsof -nP -iTCP:8789 -sTCP:LISTEN
-ps -o pid,lstart=,command= -p "$(lsof -nP -iTCP:8789 -sTCP:LISTEN -t)"   # path must be the clone, not a worktree
-curl -s -H "Authorization: Bearer $TOKEN" "http://127.0.0.1:8789/api/health?deep=1"   # research_* entries
-tail -n 20 ~/Library/Logs/investing-app.err.log
+curl -s http://127.0.0.1:$PORT/api/health; echo        # {"status":"ok",...}
+curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:$PORT/   # 200: the UI, not only health
+launchctl print "$U/$L" | grep -E 'state =|pid =|runs =|last exit'
+lsof -nP -iTCP:$PORT -sTCP:LISTEN
+ps -o pid,lstart=,command= -p "$(lsof -nP -iTCP:$PORT -sTCP:LISTEN -t)"   # path must be under $ROOT/releases/
+readlink "$ROOT/current" "$ROOT/previous"                                 # releases/<ts>-<sha>
+curl -s -H "Authorization: Bearer $TOKEN" "http://127.0.0.1:$PORT/api/health?deep=1"   # research_* entries
+tail -n 20 ~/Library/Logs/$LOG.err.log
 ```
 
 Over Tailscale (once): `tailscale serve --bg --https=8445 http://127.0.0.1:8789`, then
 `curl -sf https://<mac>.<tailnet>.ts.net:8445/api/health`. While `INVESTING_SANDBOX` is set in the
 env file, health carries `"sandbox": true`.
+
+### 2.1 Spare instance (staging) next to the live one
+
+To try an install, a break or a rollback without touching `com.menganto.investing`. Run it from a
+worktree (`~/dev-worktrees/investing-app/<slug>`), not from `~/investing-app`. It gets its own label,
+plist, logs, port 8799, env file with dummy values, data dir and install root, and its env file keeps
+the vault, the scraper paths and the credentials away from the real ones; never copy the real env file.
+`install.sh` refuses any label outside `com.menganto.investing.*` (and the scraper's), and a
+non-default label that shares the live install root, env file, data dir or port. Always finish with
+step 5: a plist left in `~/Library/LaunchAgents` has `RunAtLoad` and starts again at the next login.
+
+```bash
+# 1. Temp dirs and dummy values
+T=$(mktemp -d "${TMPDIR:-/tmp}/investing-staging.XXXXXX"); T=$(cd "$T" && pwd -P)
+mkdir -p "$T/data" "$T/vault" "$T/scraper"; printf '{}\n' > "$T/credentials.json"
+( umask 077; printf '%s\n' "INVESTING_APP_TOKEN=$(openssl rand -hex 32)" PORTFOLIO_SPREADSHEET_ID=staging-dummy \
+    "GOOGLE_APPLICATION_CREDENTIALS=$T/credentials.json" INVESTING_BIND=127.0.0.1:8799 \
+    "INVESTING_DATA_DIR=$T/data" "INVESTING_VAULT_ROOT=$T/vault" "INVESTING_IDX_SCRAPER_DIR=$T/scraper" \
+    "INVESTING_IDX_DB_PATH=$T/scraper/idx.sqlite" "INVESTING_IDX_EMITENS_CSV=$T/scraper/emitens.csv" \
+    INVESTING_RESEARCH_DISABLE_SCHEDULER=1 MACRO_DISABLE_FRED=1 INVESTING_MACRO_WATCHER=0 \
+    INVESTING_SANDBOX=1 > "$T/investing.env" )
+export INVESTING_LABEL=com.menganto.investing.staging INVESTING_INSTALL_ROOT="$T/opt" \
+  INVESTING_ENV_FILE="$T/investing.env" INVESTING_DATA_DIR="$T/data"
+L=$INVESTING_LABEL PORT=8799 ROOT=$INVESTING_INSTALL_ROOT LOG=$INVESTING_LABEL
+
+# 2. Install, then run the §2 checks (without the L=… line; skip the deep-health line)
+./deploy/install.sh
+
+# 3. Break test: the running service must not need the checkout's build output
+mv target/release/investing-app "$T/bin.away"; mv web/dist "$T/dist.away"
+launchctl kickstart -k gui/$(id -u)/$L      # then the §2 checks: new pid, 200 and 200
+mv "$T/bin.away" target/release/investing-app; mv "$T/dist.away" web/dist
+
+# 4. Second install, then rollback (§4)
+SKIP_BUILD=1 ./deploy/install.sh            # current = the new release, previous = the first
+./deploy/install.sh --rollback              # current = the first again, 200 and 200
+
+# 5. Remove it
+launchctl bootout gui/$(id -u)/$L
+rm -f ~/Library/LaunchAgents/$L.plist ~/Library/Logs/$L.out.log ~/Library/Logs/$L.err.log
+unset INVESTING_LABEL INVESTING_INSTALL_ROOT INVESTING_ENV_FILE INVESTING_DATA_DIR
+rm -rf "$T"
+```
+
+The `releases/`, `current` and `previous` logic itself is tested without launchd:
+`bash deploy/install.test.sh` (fake artifacts in a temp dir; not part of `scripts/check.sh` or CI).
 
 ## 3. Restart and stop
 
@@ -60,13 +148,31 @@ launchctl bootout "$U/com.menganto.investing"        # stop (the job has KeepAli
 launchctl bootstrap "$U" ~/Library/LaunchAgents/com.menganto.investing.plist   # start again
 ```
 
+A spare instance (§2.1) uses its own label and `~/Library/LaunchAgents/<label>.plist` instead; its
+logs are `~/Library/Logs/<label>.out.log` and `.err.log`.
+
 Stop the service before copying or restoring `research.sqlite` (§5 backup): a live WAL database
 copied file by file can be inconsistent. After a stop, `curl -s -m 2 http://127.0.0.1:8789/api/health`
 must fail.
 
 ## 4. Rollback
 
-Cutover and rollback to finance-app as the research writer are plan.md §3.5 ("Rollback"); follow it
+**The release that ran before the last install:**
+
+```
+cd ~/investing-app && ./deploy/install.sh --rollback
+```
+
+It points `current` at `previous` (and `previous` at the release it left, so running it again goes
+forward), restarts the job with `kickstart -k` (or starts it when it is stopped), and fails unless `/api/health` and `/` return 200
+from a process started from that release. It needs no build and nothing from the checkout except
+the packs directory. For a spare instance, run it with the same `INVESTING_*` variables as its
+install. It swaps code only: the env file and the data directory stay as they are, so a release that
+changed the store schema needs its data step first (§5, "Riset redesign" and "Original filing from
+PDF"). Older than `previous`: `ls ~/.local/opt/investing-app/releases` lists the kept ones; anything
+else is a reinstall of that commit, `git checkout <sha> && ./deploy/install.sh`.
+
+**Cutover.** Cutover and rollback to finance-app as the research writer are plan.md §3.5 ("Rollback"); follow it
 there rather than from memory. In short: it stops `com.menganto.investing` and its scraper, boots
 `com.menganto.finance` back, carries investing-app's data back into `~/finance-app-data` and rebuilds
 finance-app's `research.sqlite` from the log. Before cutover nothing needs rolling back: stop this
@@ -210,12 +316,12 @@ cp ~/investing-app-data/research-log.jsonl ~/investing-app-data/pre-riset-redesi
 sqlite3 ~/investing-app-data/pre-riset-redesign/research.sqlite 'pragma integrity_check; pragma user_version'   # ok, 10
 ```
 
-Keep the old binary (`target/release/investing-app`) too if you want a fast rollback.
+The old binary stays in the install root: after the deploy it is `previous` (§4), which `./deploy/install.sh --rollback` starts.
 
 **After deploy, once.** With the service still stopped, run `--reingest`, then start the service:
 
 ```
-~/investing-app/target/release/investing-app research-ingest --xbrl-dir ~/tools/idx-financial-scraper/data/XBRL --db ~/investing-app-data/research.sqlite --reingest
+~/.local/opt/investing-app/current/bin/investing-app research-ingest --xbrl-dir ~/tools/idx-financial-scraper/data/XBRL --db ~/investing-app-data/research.sqlite --reingest
 ```
 
 It changes the BRIS non-performing financing (NPF) scale only. Before, BRIS NPF rows sat at wrong scales under unit IDR; after, every NPF row is unit `pure` in percent points (0.33 to 2.42 on the rehearsal data). Non-NPF facts are unchanged; derived cells and restatement rows for NPF change as a side effect. The capex and profit-share sign fix needs no command: rules version 2026.10-r4 re-derives stored cells at startup.
@@ -228,7 +334,7 @@ It changes the BRIS non-performing financing (NPF) scale only. Before, BRIS NPF 
 2. Fix the data, one of:
    - Set the version back: `sqlite3 ~/investing-app-data/research.sqlite 'PRAGMA wal_checkpoint(TRUNCATE); PRAGMA user_version=10;'`. Data written since the deploy stays; the unused `structure_maps` table is harmless.
    - Restore the backup: move `research.sqlite` and its `-wal` and `-shm` aside together, copy the backup in, check `user_version` is 10. Changes since the deploy stay only in the log.
-3. Install the old binary (`git checkout <old sha> && ./deploy/install.sh`, or the saved old binary) and start the service.
+3. Start the old binary: `./deploy/install.sh --rollback` (§4) when it is still `previous`; it starts the stopped service from that release. Otherwise `git checkout <old sha> && ./deploy/install.sh`.
 
 Check: deep health shows `research_store` "schema v10", and a pack call returns 200. Only the PRAGMA route was rehearsed, on a copy; the file-restore commands and `install.sh` were not (finance-app's `install.sh`, in the build this section was first written for).
 
@@ -258,7 +364,7 @@ The service reads it on every scheduler tick, so a file added later is picked up
 re-derives every ticker; then start the service:
 
 ```
-~/investing-app/target/release/investing-app research-ingest --xbrl-dir ~/tools/idx-financial-scraper/data/XBRL --db ~/investing-app-data/research.sqlite --reingest
+~/.local/opt/investing-app/current/bin/investing-app research-ingest --xbrl-dir ~/tools/idx-financial-scraper/data/XBRL --db ~/investing-app-data/research.sqlite --reingest
 ```
 
 It prints `pdf filings <dir>: 1 in store` and the usual reconciliation lines (rehearsal on a copy of the
@@ -288,7 +394,7 @@ them), set the version back and install the old binary:
 sqlite3 ~/investing-app-data/research.sqlite "DELETE FROM facts WHERE filing_id IN (SELECT id FROM filings WHERE source_kind='pdf'); DELETE FROM filings WHERE source_kind='pdf'; PRAGMA wal_checkpoint(TRUNCATE); PRAGMA user_version=11;"
 ```
 
-Then start the old build and run its `--reingest` once so the derived cells are rebuilt without Q1 (or, in
+Then start the old build (`./deploy/install.sh --rollback`, §4) and run its `--reingest` once so the derived cells are rebuilt without Q1 (or, in
 the same sqlite3 call before the version is set, also remove BUMI's derived and restatement rows: the old
 build re-derives a ticker that has facts and no derived rows at start). The added columns are harmless to
 the old build, and deploying the new build again later is safe: migration 012 skips a column the table

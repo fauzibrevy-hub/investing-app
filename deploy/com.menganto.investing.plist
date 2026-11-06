@@ -4,24 +4,39 @@
   Investing app (fauzibrevy-hub/investing-app) — user LaunchAgent.
 
   This is a template: launchd expands neither $HOME nor ~, so deploy/install.sh substitutes the
-  literal strings __HOME__ and __APP_ROOT__ with the real home directory and checkout path while
-  rendering the copy it actually loads into ~/Library/LaunchAgents. Everything else is static, and
-  no secret lives here — the token is read by deploy/run.sh from
-  ~/.hermes/secrets/investing-app.env.
+  literal strings __LABEL__, __HOME__, __INSTALL_ROOT__, __ENV_FILE__, __APP_ROOT__ and
+  __LOG_NAME__ while rendering the copy it actually loads into ~/Library/LaunchAgents/<label>.plist.
+  Everything else is static, and no secret lives here — the token is read by run.sh from the env
+  file.
+
+  The job starts __INSTALL_ROOT__/current/run.sh (default ~/.local/opt/investing-app), a copy made
+  by install.sh, never a file in the git checkout: cleaning or rebuilding the checkout cannot stop
+  it. The checkout is still read for one thing, on purpose: INVESTING_RESEARCH_PACKS_DIR below
+  (an env file line of the same name wins). __LABEL__ defaults to com.menganto.investing; a spare
+  instance (INVESTING_LABEL) gets its own plist, logs, install root and env file, so it never
+  rewrites or boots out the live job.
 
   KeepAlive + RunAtLoad: the service returns after a reboot and after a crash.
 -->
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.menganto.investing</string>
+    <string>__LABEL__</string>
 
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
         <string>-lc</string>
-        <string>exec "__APP_ROOT__/deploy/run.sh"</string>
+        <string>exec "__INSTALL_ROOT__/current/run.sh"</string>
     </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>INVESTING_ENV_FILE</key>
+        <string>__ENV_FILE__</string>
+        <key>INVESTING_RESEARCH_PACKS_DIR</key>
+        <string>__APP_ROOT__/research/packs</string>
+    </dict>
 
     <key>RunAtLoad</key>
     <true/>
@@ -36,10 +51,10 @@
     <integer>10</integer>
 
     <key>StandardOutPath</key>
-    <string>__HOME__/Library/Logs/investing-app.out.log</string>
+    <string>__HOME__/Library/Logs/__LOG_NAME__.out.log</string>
 
     <key>StandardErrorPath</key>
-    <string>__HOME__/Library/Logs/investing-app.err.log</string>
+    <string>__HOME__/Library/Logs/__LOG_NAME__.err.log</string>
 
     <key>ProcessType</key>
     <string>Background</string>
