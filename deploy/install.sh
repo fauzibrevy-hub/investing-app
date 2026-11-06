@@ -72,7 +72,8 @@ PLIST_TMP=""
 STAGED="" # a release copied but not yet current; removed when the run fails before the switch
 on_exit() {
   [ -z "$PLIST_TMP" ] || rm -f "$PLIST_TMP"
-  if [ -n "$STAGED" ]; then
+  # Never the release `current` points at, whatever step failed.
+  if [ -n "$STAGED" ] && [ "$(release_link "$INSTALL_ROOT" current)" != "${STAGED##*/}" ]; then
     rm -rf "$STAGED"
     echo "removed the staged release; current and $PLIST_DST are unchanged" >&2
   fi
@@ -121,6 +122,37 @@ check_port_free() {
   done
 }
 
+# What to do when the new release is current but the job is not up. With no previous release (the
+# first install with the install root) --rollback refuses, so it names the RUNBOOK way back.
+recover_hint() {
+  if [ -n "$(release_link "$INSTALL_ROOT" previous)" ]; then
+    printf 'roll back: ./deploy/install.sh --rollback, with the same INVESTING_* variables'
+  else
+    printf 'no previous release to roll back to: retry launchctl bootstrap %s %s, or go back as in RUNBOOK §1 "First install with the install root"' "$DOMAIN" "$PLIST_DST"
+  fi
+}
+
+# launchctl bootout returns before launchd has removed the job, and a bootstrap right after it can
+# fail ("Bootstrap failed: 5: Input/output error", seen once on staging). Wait up to 10 s for the
+# label to go; then try bootstrap three times, 1 s apart, showing launchctl's error each time.
+unload_job() {
+  launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null || true
+  for _ in $(seq 1 20); do
+    launchctl print "$DOMAIN/$LABEL" >/dev/null 2>&1 || return 0
+    sleep 0.5
+  done
+  echo "WARN: $LABEL is still loaded 10 s after bootout" >&2
+}
+load_job() {
+  local try err
+  for try in 1 2 3; do
+    if err="$(launchctl bootstrap "$DOMAIN" "$PLIST_DST" 2>&1)"; then return 0; fi
+    echo "launchctl bootstrap (try $try of 3): ${err:-no error text}" >&2
+    [ "$try" = 3 ] || sleep 1
+  done
+  return 1
+}
+
 # Wait until /api/health answers 200 from a process started from <release dir>, then require / 200.
 # The trap the / check exists for: a wrong UI path serves /api/health fine and 404s the UI.
 wait_healthy() {
@@ -138,7 +170,7 @@ wait_healthy() {
     fi
     sleep 0.5
   done
-  [ "$ok" = "1" ] || fail "no healthy $BIN_NAME from $rel at $base (listener: ${cmd:-none}; see $ERR_LOG). Roll back: ./deploy/install.sh --rollback, with the same INVESTING_* variables"
+  [ "$ok" = "1" ] || fail "no healthy $BIN_NAME from $rel at $base (listener: ${cmd:-none}; see $ERR_LOG); $(recover_hint)"
   code="$(curl -s -o /dev/null -w '%{http_code}' -m 5 "$base/")"
   [ "$code" = "200" ] || fail "UI is not served at $base/ (HTTP $code); check INVESTING_WEB_DIST in $ENV_FILE"
   echo "OK  $base/api/health 200"
@@ -168,7 +200,7 @@ if [ "$MODE" = "rollback" ]; then
   if [ "$LOADED" = "1" ]; then
     launchctl kickstart -k "$DOMAIN/$LABEL"
   else
-    launchctl bootstrap "$DOMAIN" "$PLIST_DST"
+    load_job || fail "launchctl bootstrap failed; $(recover_hint)"
   fi
   wait_healthy "$INSTALL_ROOT/current"
   exit 0
@@ -240,7 +272,14 @@ say "switch and load service"
 # Again, right before the switch: the build may have taken minutes.
 BIND="$(run_bind)"
 check_port_free "${BIND##*:}"
-release_activate "$INSTALL_ROOT" "$RELEASE_ID" || fail "could not switch current to $RELEASE_ID"
+ACTIVATED=0
+release_activate "$INSTALL_ROOT" "$RELEASE_ID" || ACTIVATED=$?
+case "$ACTIVATED" in
+  0) ;;
+  # `current` moved; carry on so the job runs what `current` says, but say what is off.
+  2) echo "WARN: previous was not updated; --rollback would not return to the release that ran before" >&2 ;;
+  *) fail "could not switch current to $RELEASE_ID" ;;
+esac
 STAGED=""
 echo "installed $INSTALL_ROOT/releases/$RELEASE_ID"
 show_links
@@ -248,9 +287,8 @@ mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
 mv -f "$PLIST_TMP" "$PLIST_DST"
 PLIST_TMP=""
 echo "wrote $PLIST_DST"
-launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null || true
-launchctl bootstrap "$DOMAIN" "$PLIST_DST" ||
-  fail "launchctl bootstrap failed; roll back: ./deploy/install.sh --rollback, with the same INVESTING_* variables"
+unload_job
+load_job || fail "launchctl bootstrap failed; $(recover_hint)"
 echo "loaded $LABEL"
 
 say "wait for health"

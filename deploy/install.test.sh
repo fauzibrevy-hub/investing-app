@@ -151,6 +151,18 @@ check "prune after a rollback keeps current, previous and the newest other" \
 release_prune "$root" 3
 check "prune is idempotent" same "$(releases)" "$(id 4) $(id 5) $(id 6) "
 
+# `previous` cannot be set after `current` moved: return 2 (not 1), so a caller knows `current` is
+# the new release and must not delete it.
+ro="$work/ro"
+release_stage "$ro" "$(id 1)" "$build/investing-app" "$build/web/dist" "$here/run.sh" sha1 && release_activate "$ro" "$(id 1)"
+release_stage "$ro" "$(id 2)" "$build/investing-app" "$build/web/dist" "$here/run.sh" sha2
+mkdir "$ro/previous"
+chmod 555 "$ro/previous"
+if release_activate "$ro" "$(id 2)" 2>/dev/null; then rc=0; else rc=$?; fi
+chmod 755 "$ro/previous"
+check "release_activate: previous not settable returns 2, current already moved" \
+  same "$rc $(release_link "$ro" current)" "2 $(id 2)"
+
 # --- install.sh: refused installs change nothing -----------------------------------------------
 # The real install.sh in a fake checkout (SKIP_BUILD=1), with HOME inside the temp dir and fake
 # launchctl and lsof first on PATH. launchctl records its calls, says "not loaded" to `print` and
@@ -166,9 +178,21 @@ touch "$repo/Cargo.toml"
 echo '{}' >"$repo/web/package.json"
 cat >"$work/bin/launchctl" <<'EOF'
 #!/bin/sh
+# print: "loaded" for LAUNCHCTL_LINGER more calls after a bootout (launchd removes a job
+# asynchronously), then "not loaded" (113). bootstrap always fails, with launchd's error text.
 echo "$*" >>"$LAUNCHCTL_LOG"
-[ "$1" = print ] && exit 113
-exit 1
+case "$1" in
+  print)
+    n=$(cat "$LAUNCHCTL_STATE" 2>/dev/null || echo 0)
+    if [ "$n" -gt 0 ]; then
+      echo $((n - 1)) >"$LAUNCHCTL_STATE"
+      exit 0
+    fi
+    exit 113 ;;
+  bootout) echo "${LAUNCHCTL_LINGER:-0}" >"$LAUNCHCTL_STATE" ;;
+  bootstrap) echo "Bootstrap failed: 5: Input/output error" >&2; exit 5 ;;
+  *) exit 1 ;;
+esac
 EOF
 cat >"$work/bin/lsof" <<'EOF'
 #!/bin/sh
@@ -190,7 +214,7 @@ chmod 755 "$work/bin/"*
 
 ienv="$work/inst-env/investing.env"
 reset_install() { # [env file INVESTING_BIND port, or nothing for no env file]
-  rm -rf "${work:?}/inst" "$work/inst-data" "$work/inst-env" "${work:?}/home" "$work/launchctl.log" "$work/lsof.count"
+  rm -rf "${work:?}/inst" "$work/inst-data" "$work/inst-env" "${work:?}/home" "$work/launchctl.log" "$work/lsof.count" "$work/launchctl.state"
   mkdir -p "$work/home"
   if [ -n "${1:-}" ]; then
     mkdir -p "$work/inst-env"
@@ -203,7 +227,7 @@ run_install() { # <LSOF_MODE> [NAME=value ...]: install.sh output; its exit code
   local mode=$1 rc=0
   shift
   env -i PATH="$work/bin:/usr/bin:/bin:/usr/sbin:/sbin" HOME="$work/home" TMPDIR="$work" \
-    LAUNCHCTL_LOG="$work/launchctl.log" LSOF_COUNT="$work/lsof.count" LSOF_MODE="$mode" \
+    LAUNCHCTL_LOG="$work/launchctl.log" LAUNCHCTL_STATE="$work/launchctl.state" LSOF_COUNT="$work/lsof.count" LSOF_MODE="$mode" \
     INVESTING_LABEL=com.menganto.investing.test INVESTING_INSTALL_ROOT="$work/inst" \
     INVESTING_ENV_FILE="$ienv" INVESTING_DATA_DIR="$work/inst-data" SKIP_BUILD=1 \
     "$@" bash "$repo/deploy/install.sh" >"$work/out" 2>&1 || rc=$?
@@ -217,6 +241,21 @@ only_print_calls() { ! grep -qvE '^print ' "$work/launchctl.log" 2>/dev/null; }
 env_unchanged() { cmp -s "$ienv" "$work/env.before"; }
 label_refused() { [ "$(cat "$work/rc")" != 0 ] && grep -q "INVESTING_LABEL" "$work/out" && [ ! -e "$work/inst" ] && [ ! -e "$work/launchctl.log" ]; }
 has_current_bin() { [ -x "$work/inst/current/bin/investing-app" ]; }
+seed_current() { # <release id>: an existing install root whose current is that release
+  release_stage "$work/inst" "$1" "$build/investing-app" "$build/web/dist" "$here/run.sh" seed 2>/dev/null &&
+    release_activate "$work/inst" "$1"
+}
+bootstrap_tried_3() {
+  [ "$(grep -c '^bootstrap ' "$work/launchctl.log")" = 3 ] &&
+    grep -q 'try 3 of 3): Bootstrap failed: 5: Input/output error' "$work/out"
+}
+hint_is_runbook() { grep -qF 'RUNBOOK §1 "First install with the install root"' "$work/out" && ! grep -q -- '--rollback' "$work/out"; }
+hint_is_rollback() { grep -q 'launchctl bootstrap failed; roll back: ./deploy/install.sh --rollback' "$work/out"; }
+warned_previous() { grep -q 'WARN: previous was not updated' "$work/out" && grep -q 'launchctl bootstrap failed' "$work/out"; }
+current_not_old1() { [ "$(readlink "$work/inst/current")" != releases/old1 ]; }
+prints_between_bootout_and_bootstrap() { # <n>
+  [ "$(awk '/^bootout /{on=1; n=0; next} on && /^print /{n++} on && /^bootstrap /{print n; exit}' "$work/launchctl.log")" = "$1" ]
+}
 
 reset_install 18799
 run_install always
@@ -250,7 +289,7 @@ done
 # Port free: the install gets as far as launchctl (fake, fails), so the switch and the plist are
 # exercised: current is the new release, the plist is in place, bootstrap was called with it.
 reset_install 18799
-run_install never
+run_install never LAUNCHCTL_LINGER=3
 check "port free: runs to launchctl bootstrap (fake, fails)" refused_with "launchctl bootstrap failed"
 check "  current is the new release" has_current_bin
 check "  plist in LaunchAgents with the test label" \
@@ -259,6 +298,29 @@ check "  plist points the packs at the checkout" \
   grep -q "<string>$repo/research/packs</string>" "$work/home/Library/LaunchAgents/com.menganto.investing.test.plist"
 check "  bootstrap was called with that plist" \
   grep -qF "bootstrap gui/$UID $work/home/Library/LaunchAgents/com.menganto.investing.test.plist" "$work/launchctl.log"
+check "  bootstrap only after launchctl print says the old job is gone (3 lingering prints)" \
+  prints_between_bootout_and_bootstrap 4
+check "  bootstrap tried 3 times, launchctl's error shown" bootstrap_tried_3
+check "  no previous release: points to the RUNBOOK first-install note, not --rollback" hint_is_runbook
+
+# A second install (an older release is current): the hint is --rollback.
+reset_install 18799
+seed_current old1
+run_install never
+check "with a previous release: the failure hint is --rollback" hint_is_rollback
+check "  previous is the release that was current" same "$(release_link "$work/inst" previous)" old1
+
+# `previous` cannot be set (here: a read-only directory in its place) after `current` moved: the
+# install goes on with the new release, and the EXIT trap must not delete what `current` points at.
+reset_install 18799
+seed_current old1
+mkdir "$work/inst/previous"
+chmod 555 "$work/inst/previous"
+run_install never
+chmod 755 "$work/inst/previous"
+check "previous not settable: warns and keeps going" warned_previous
+check "  current is the new release and it still exists" has_current_bin
+check "  current is not the old release" current_not_old1
 
 # --- release ids --------------------------------------------------------------------------------
 check "release_id is <UTC ts>-<short sha>[-dirty]" \

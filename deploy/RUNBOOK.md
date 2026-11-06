@@ -67,7 +67,10 @@ re-renders the plist to start `current/run.sh` and restarts the service. The bin
 a new path, so expect the Documents prompt above once more. Check with the `ps` line in §2. There is
 no `previous` yet, so `--rollback` refuses after this first install; going back to the old layout is
 `git checkout <old sha> && ./deploy/install.sh` (the old installer renders the old plist), after
-which `~/.local/opt/investing-app` can be deleted.
+which `~/.local/opt/investing-app` can be deleted. If this first install stops with `launchctl bootstrap failed`
+(it already waits for the old job to unload and tries three times), the job is not loaded: run the
+`launchctl bootstrap` command the message prints, then the §2 checks; if that fails too, go back to
+the old layout as above.
 
 Parity is order-sensitive: run §3.4 step 5 once, in order, on a fresh snapshot (step 2). Re-running `parity.sh` after `writes.sh` shows timestamp-only `DIFF`s from the writes themselves, not a real difference.
 

@@ -74,13 +74,18 @@ _release_point() {
 }
 
 # release_activate <root> <id>: current -> id; the old current becomes previous.
+# Returns 1 when `current` did not move, and 2 when it moved but `previous` could not be set: then
+# `current` is the new release, so a caller must not delete it.
 release_activate() {
   local root="$1" id="$2" old
   [ -d "$root/releases/$id" ] || { echo "release activate: no release $id" >&2; return 1; }
   old="$(release_link "$root" current)"
   _release_point "$root" current "$id" || return 1
   if [ -n "$old" ] && [ "$old" != "$id" ] && [ -d "$root/releases/$old" ]; then
-    _release_point "$root" previous "$old" || return 1
+    _release_point "$root" previous "$old" || {
+      echo "release activate: current -> $id, but previous could not be set to $old" >&2
+      return 2
+    }
   fi
 }
 
