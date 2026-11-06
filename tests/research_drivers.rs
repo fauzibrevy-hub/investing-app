@@ -203,10 +203,14 @@ async fn every_sourced_driver_is_fetched_stored_and_recorded() {
     let f = fetcher(&base);
     let store = Store::open_memory().unwrap();
     let now = Utc.with_ymd_and_hms(2026, 10, 23, 12, 0, 0).unwrap();
+    // `HttpDrivers` dates a backfill from the wall clock, not from `now`: read the clock on both
+    // sides of the fetches, so the expected start holds on any day, across midnight UTC too.
+    let clock_before = Utc::now().date_naive();
     for spec in drivers::sourced() {
         let n = drivers::ingest(&store, &f, spec, now).await.unwrap();
         assert!(n > 0, "{}", spec.id);
     }
+    let clock_after = Utc::now().date_naive();
     let summaries = store.driver_summaries().unwrap();
     let ids: Vec<&str> = summaries.iter().map(|s| s.series.as_str()).collect();
     assert_eq!(
@@ -237,19 +241,24 @@ async fn every_sourced_driver_is_fetched_stored_and_recorded() {
     assert_eq!(cpi, vec![("2026-09-01".to_string(), 138.2123)]);
     assert_eq!(store.driver_series("usd_idr", None).unwrap().len(), 60);
     assert_eq!(summaries[0].source, "BIS SDMX WS_CBPOL M.ID");
-    // A backfill asks for ten years; the next run asks from a month before the last row.
+    // A backfill asks for ten years before the wall-clock date (monthly sources by month); the
+    // next run asks from a month before the last row.
     let urls = mock.urls.lock().unwrap().clone();
+    let starts = [clock_before, clock_after].map(drivers::ten_years_before);
     assert!(
-        urls.iter()
-            .any(|u| u.starts_with("bis/WS_CBPOL/M.ID?Some(\"2016-10\")")),
-        "{urls:?}"
+        urls.iter().any(|u| starts.iter().any(|d| {
+            u.starts_with(&format!(
+                "bis/WS_CBPOL/M.ID?Some(\"{}\")",
+                d.format("%Y-%m")
+            ))
+        })),
+        "{urls:?} {starts:?}"
     );
-    // The backfill start is ten years before the wall-clock date.
-    let ten_years_ago = drivers::ten_years_before(Utc::now().date_naive());
     assert!(
-        urls.iter()
-            .any(|u| *u == format!("fred?id=PCOALAUUSDM&cosd=Some(\"{ten_years_ago}\")")),
-        "{urls:?}"
+        urls.iter().any(|u| starts
+            .iter()
+            .any(|d| *u == format!("fred?id=PCOALAUUSDM&cosd=Some(\"{d}\")"))),
+        "{urls:?} {starts:?}"
     );
     drivers::ingest(&store, &f, drivers::spec("newcastle").unwrap(), now)
         .await
