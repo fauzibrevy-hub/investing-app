@@ -119,8 +119,13 @@ esac
 # what the live job starts, the live env file holds the live token, and run.sh falls back to the live
 # data dir and port when the env file does not name its own. Checked against the account's home, so
 # a trial run with HOME elsewhere may use the defaults under that HOME but never the live paths.
-# Both sides physical (path_canon): '//', '/./', '..' or a symlink are the same file.
-not_live() { [ "$(path_canon "$1")" != "$(path_canon "$2")" ]; }
+# In any spelling: not the same file when both exist (-ef: case, hard link, any link), and not the
+# same path once symlinks, '.', '..' and '//' are resolved (path_canon), compared case-insensitively
+# (APFS), for paths that do not exist yet.
+not_live() { # <path> <live path>
+  if [ -e "$1" ] && [ -e "$2" ] && [ "$1" -ef "$2" ]; then return 1; fi
+  [ "$(path_canon "$1" | tr '[:upper:]' '[:lower:]')" != "$(path_canon "$2" | tr '[:upper:]' '[:lower:]')" ]
+}
 if [ "$LABEL" != "$DEFAULT_LABEL" ]; then
   not_live "$INSTALL_ROOT" "$LIVE_INSTALL_ROOT" || fail "$LABEL needs its own INVESTING_INSTALL_ROOT"
   not_live "$ENV_FILE" "$LIVE_ENV_FILE" || fail "$LABEL needs its own INVESTING_ENV_FILE"

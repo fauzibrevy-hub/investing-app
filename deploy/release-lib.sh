@@ -126,33 +126,30 @@ release_prune() {
   done < <(find "$root/releases" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort -r)
 }
 
-# path_canon <path>: the path with symlinks resolved, '.', '..' and repeated '/' folded, so two
-# spellings of one file compare equal. A symlink at the end is followed (a dangling one too: the
-# file would be written where it points). The part that does not exist yet is folded as written.
+# path_canon <path>: the path the kernel reaches, for comparing two paths. Walked one component at
+# a time: each symlink is replaced by its target (also one reached after '..', and a dangling one at
+# the end: the file would be written where it points); '.', '..' and repeated '/' are folded. A
+# component that does not exist yet is kept as written, the way mkdir -p would create it. Case is
+# kept as written; callers compare case-insensitively (APFS).
 path_canon() {
-  local path="$1" dir rest="" out part to hops=0
-  case "$path" in /*) ;; *) path="$PWD/$path" ;; esac
-  while [ -L "$path" ] && [ "$hops" -lt 16 ]; do
-    to="$(readlink "$path")" || break
-    case "$to" in /*) path="$to" ;; *) path="${path%/*}/$to" ;; esac
-    hops=$((hops + 1))
-  done
-  dir="$path"
-  until [ -d "$dir" ]; do
-    rest="/${dir##*/}$rest"
-    dir="${dir%/*}"
-    dir="${dir:-/}"
-  done
-  out="$(cd -P "$dir" 2>/dev/null && pwd -P)" || out="$dir"
+  local rest="$1" out="" part to hops=0
+  case "$rest" in /*) ;; *) rest="$PWD/$rest" ;; esac
   while [ -n "$rest" ]; do
     rest="${rest#"${rest%%[!/]*}"}" # drop leading '/'
     part="${rest%%/*}"
     rest="${rest#"$part"}"
     case "$part" in
-      "" | .) ;;
-      ..) out="${out%/*}"; out="${out:-/}" ;;
-      *) out="${out%/}/$part" ;;
+      "" | .) continue ;;
+      ..) out="${out%/*}"; continue ;;
     esac
+    # 32 links at most, as the kernel (MAXSYMLINKS): past that it would not resolve the path either.
+    if [ -L "$out/$part" ] && [ "$hops" -lt 32 ] && to="$(readlink "$out/$part")"; then
+      hops=$((hops + 1))
+      case "$to" in /*) out="" ;; esac # an absolute target starts again at /
+      rest="$to$rest"
+      continue
+    fi
+    out="$out/$part"
   done
-  printf '%s\n' "$out"
+  printf '%s\n' "${out:-/}"
 }
