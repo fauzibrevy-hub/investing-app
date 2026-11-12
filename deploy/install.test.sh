@@ -104,6 +104,11 @@ check "no packs dir from plist or env file: warns, runs with embedded packs" \
   same "$(INVESTING_ENV_FILE="$env_file" "$root/current/run.sh" 2>/dev/null | cut -d'|' -f3)" "-"
 if INVESTING_ENV_FILE="$work/missing.env" "$root/current/run.sh" 2>/dev/null; then rc=0; else rc=$?; fi
 check "run.sh exits 78 without an env file" same "$rc" "78"
+mkdir -p "$work/runhome/.secrets"
+cp "$env_file" "$work/runhome/.secrets/investing-app.env"
+if out=$(env -u INVESTING_ENV_FILE HOME="$work/runhome" "$root/current/run.sh" 2>/dev/null); then rc=0; else rc=$?; fi
+check "run.sh without INVESTING_ENV_FILE reads \$HOME/.secrets/investing-app.env" same "$rc:${out%%|*}" \
+  "0:$root/releases/$(id 2)/bin/investing-app"
 
 # Checkout layout: the plist from before this change, and scripts/tools-selftest.sh step 11, run
 # <checkout>/deploy/run.sh. That must still start the checkout's build with the checkout's packs.
@@ -210,11 +215,22 @@ echo "unexpected: $0 $*" >&2
 exit 1
 EOF
 cp "$work/bin/cargo" "$work/bin/npm"
+# The account's passwd entry (id -P) names FAKE_LIVE_HOME as its home, so the paths the staging
+# guard treats as live are temp paths too; every other id call is the real one.
+cat >"$work/bin/id" <<'EOF'
+#!/bin/sh
+if [ "$1" = -P ]; then
+  echo "tester:********:501:20::0:0:Tester:$FAKE_LIVE_HOME:/bin/sh"
+  exit 0
+fi
+exec /usr/bin/id "$@"
+EOF
 chmod 755 "$work/bin/"*
 
 ienv="$work/inst-env/investing.env"
 reset_install() { # [env file INVESTING_BIND port, or nothing for no env file]
-  rm -rf "${work:?}/inst" "$work/inst-data" "$work/inst-env" "${work:?}/home" "$work/launchctl.log" "$work/lsof.count" "$work/launchctl.state"
+  rm -rf "${work:?}/inst" "$work/inst-data" "$work/inst-env" "${work:?}/home" "${work:?}/livehome" \
+    "$work/launchctl.log" "$work/lsof.count" "$work/launchctl.state"
   mkdir -p "$work/home"
   if [ -n "${1:-}" ]; then
     mkdir -p "$work/inst-env"
@@ -224,12 +240,14 @@ reset_install() { # [env file INVESTING_BIND port, or nothing for no env file]
   fi
 }
 run_install() { # <LSOF_MODE> [NAME=value ...]: install.sh output; its exit code in $work/rc
-  local mode=$1 rc=0
+  # INVESTING_ENV_FILE is $ienv, or unset (the default under HOME) with UNSET_ENV_FILE=1.
+  local mode=$1 rc=0 envfile="INVESTING_ENV_FILE=$ienv"
   shift
+  [ "${UNSET_ENV_FILE:-0}" = 1 ] && envfile="UNUSED_BY_INSTALL=1"
   env -i PATH="$work/bin:/usr/bin:/bin:/usr/sbin:/sbin" HOME="$work/home" TMPDIR="$work" \
     LAUNCHCTL_LOG="$work/launchctl.log" LAUNCHCTL_STATE="$work/launchctl.state" LSOF_COUNT="$work/lsof.count" LSOF_MODE="$mode" \
-    INVESTING_LABEL=com.menganto.investing.test INVESTING_INSTALL_ROOT="$work/inst" \
-    INVESTING_ENV_FILE="$ienv" INVESTING_DATA_DIR="$work/inst-data" SKIP_BUILD=1 \
+    FAKE_LIVE_HOME="$work/livehome" INVESTING_LABEL=com.menganto.investing.test INVESTING_INSTALL_ROOT="$work/inst" \
+    "$envfile" INVESTING_DATA_DIR="$work/inst-data" SKIP_BUILD=1 \
     "$@" bash "$repo/deploy/install.sh" >"$work/out" 2>&1 || rc=$?
   echo "$rc" >"$work/rc"
 }
@@ -321,6 +339,52 @@ chmod 755 "$work/inst/previous"
 check "previous not settable: warns and keeps going" warned_previous
 check "  current is the new release and it still exists" has_current_bin
 check "  current is not the old release" current_not_old1
+
+# --- the default env file: $HOME/.secrets/investing-app.env --------------------------------------
+# Staging label, INVESTING_ENV_FILE unset, HOME a temp dir. The account's home (fake id -P) is another
+# temp dir, so the staging guard compares against temp "live" paths too.
+default_env="$work/home/.secrets/investing-app.env"
+out_has() { grep -qF "$1" "$work/out"; }
+write_env() { # <file> <INVESTING_DATA_DIR>
+  mkdir -p "$(dirname "$1")"
+  printf 'INVESTING_APP_TOKEN=x\nPORTFOLIO_SPREADSHEET_ID=x\nINVESTING_BIND=127.0.0.1:18799\nINVESTING_DATA_DIR=%s\n' "$2" >"$1"
+}
+
+reset_install
+write_env "$default_env" "$work/inst-data"
+UNSET_ENV_FILE=1 run_install never
+check "INVESTING_ENV_FILE unset: the plist names \$HOME/.secrets/investing-app.env" \
+  grep -qF "<string>$default_env</string>" "$work/home/Library/LaunchAgents/com.menganto.investing.test.plist"
+check "  runs on to launchctl bootstrap (fake, fails)" out_has "launchctl bootstrap failed"
+
+reset_install
+UNSET_ENV_FILE=1 run_install never
+check "INVESTING_ENV_FILE unset and no file there: refused, names the new path" \
+  refused_with "env file missing: $default_env"
+
+# The staging guard refuses the live install root, env file and data dir under the account's home
+# even when HOME points elsewhere; nothing is created there.
+live_path_refused() { # <message part> [NAME=value ...]
+  local want=$1
+  shift
+  run_install never "$@"
+  [ "$(cat "$work/rc")" != 0 ] && out_has "needs its own $want" && [ ! -e "$work/inst" ] && no_plist
+}
+reset_install 18799
+check "staging with HOME elsewhere: the live env file is refused" \
+  live_path_refused INVESTING_ENV_FILE "INVESTING_ENV_FILE=$work/livehome/.secrets/investing-app.env"
+reset_install 18799
+check "staging with HOME elsewhere: the live install root is refused" \
+  live_path_refused INVESTING_INSTALL_ROOT "INVESTING_INSTALL_ROOT=$work/livehome/.local/opt/investing-app"
+reset_install
+write_env "$ienv" "$work/livehome/investing-app-data"
+check "staging with HOME elsewhere: the live data dir in the env file is refused" \
+  live_path_refused INVESTING_DATA_DIR
+reset_install
+write_env "$default_env" "$work/inst-data"
+UNSET_ENV_FILE=1 run_install never FAKE_LIVE_HOME="$work/home"
+check "staging with HOME = the live home and INVESTING_ENV_FILE unset is refused, as before" \
+  refused_with "needs its own INVESTING_ENV_FILE"
 
 # --- release ids --------------------------------------------------------------------------------
 check "release_id is <UTC ts>-<short sha>[-dirty]" \
