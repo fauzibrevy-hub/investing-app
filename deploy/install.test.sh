@@ -432,6 +432,10 @@ check "path_canon resolves a symlinked directory" same "$(path_canon "$work/pc/d
 check "path_canon follows a symlink at the end, even a dangling one" \
   same "$(path_canon "$work/pc/dangling.env")" "$work/pc/real/new.env"
 check "path_canon of / is /" same "$(path_canon /)" "/"
+check "path_canon resolves a symlinked directory reached after missing/.." \
+  same "$(path_canon "$work/pc/nope/../dirlink/x.env")" "$work/pc/real/x.env"
+check "path_canon follows a symlink at the end reached after missing/.." \
+  same "$(path_canon "$work/pc/nope/../dangling.env")" "$work/pc/real/new.env"
 
 # A live home that exists, with links into it: other spellings of the live paths are refused too,
 # and nothing under the live home changes.
@@ -442,6 +446,8 @@ make_livehome() {
   ln -s ../livehome "$work/links/home"
   ln -s ../livehome/.secrets/investing-app.env "$work/links/live.env"
   ln -s ../livehome/.local/opt/investing-app "$work/links/root"
+  ln -s ../livehome/investing-app-data "$work/links/data"
+  ln "$lh/.secrets/investing-app.env" "$work/links/hard.env"
   livehome_state >"$work/livehome.before"
 }
 livehome_state() { find "$lh" -exec stat -f '%Lp %z %N' {} + | sort; cat "$lh/.secrets/investing-app.env"; }
@@ -452,7 +458,8 @@ other_spelling_refused() { # <NAME> <INVESTING_DATA_DIR in $ienv> [NAME=value ..
   make_livehome
   write_env "$ienv" "$data"
   run_install never "$@"
-  refused_with "needs its own $name" && [ ! -e "$work/inst" ] && no_plist && livehome_state | cmp -s - "$work/livehome.before"
+  refused_with "needs its own $name" && [ ! -e "$work/inst" ] && no_plist && [ ! -e "$work/links/nope" ] &&
+    livehome_state | cmp -s - "$work/livehome.before"
 }
 own="$work/inst-data"
 check "live env file as \$LIVE_HOME//.secrets/…: refused" \
@@ -473,6 +480,34 @@ check "live data dir in the env file through a symlinked directory: refused" \
   other_spelling_refused INVESTING_DATA_DIR "$work/links/home/investing-app-data"
 check "the account home itself through a symlink (live side not canonical): refused" \
   other_spelling_refused INVESTING_ENV_FILE "$own" "FAKE_LIVE_HOME=$work/links/home" "INVESTING_ENV_FILE=$lh/.secrets/investing-app.env"
+# '..' after a directory that does not exist yet, then a symlink to the live path: mkdir -p would
+# create the directory and go through the link. Case: APFS is case-insensitive.
+check "live env file as links/nope/../live.env (a link to it): refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$work/links/nope/../live.env"
+check "live install root as links/nope/../root (a link to it): refused" \
+  other_spelling_refused INVESTING_INSTALL_ROOT "$own" "INVESTING_INSTALL_ROOT=$work/links/nope/../root"
+check "live data dir in the env file as links/nope/../data (a link to it): refused" \
+  other_spelling_refused INVESTING_DATA_DIR "$work/links/nope/../data"
+check "live env file in other case (.SECRETS/Investing-App.env): refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$lh/.SECRETS/Investing-App.env"
+check "live install root in other case (.LOCAL/opt/Investing-App): refused" \
+  other_spelling_refused INVESTING_INSTALL_ROOT "$own" "INVESTING_INSTALL_ROOT=$lh/.LOCAL/opt/Investing-App"
+check "live data dir in the env file in other case (Investing-App-Data): refused" \
+  other_spelling_refused INVESTING_DATA_DIR "$lh/Investing-App-Data"
+check "live env file through a hard link: refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$work/links/hard.env"
+# macOS firmlink: /System/Volumes/Data/<path> is the same file as <path>, though no symlink.
+if [ -d "/System/Volumes/Data$work" ]; then
+  check "live env file through the /System/Volumes/Data firmlink: refused" \
+    other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=/System/Volumes/Data$lh/.secrets/investing-app.env"
+  check "live data dir in the env file through the /System/Volumes/Data firmlink: refused" \
+    other_spelling_refused INVESTING_DATA_DIR "/System/Volumes/Data$lh/investing-app-data"
+else
+  echo "skip  /System/Volumes/Data firmlink checks (no such volume path)"
+fi
+reset_install 18799
+check "live home not there yet, env file in other case: refused" \
+  live_path_refused INVESTING_ENV_FILE "INVESTING_ENV_FILE=$lh/.SECRETS/Investing-App.env"
 reset_install 18799
 check "live home not there yet, env file as \$LIVE_HOME//.secrets/…: refused" \
   live_path_refused INVESTING_ENV_FILE "INVESTING_ENV_FILE=$lh//.secrets/investing-app.env"
