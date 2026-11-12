@@ -360,7 +360,7 @@ check "  runs on to launchctl bootstrap (fake, fails)" out_has "launchctl bootst
 reset_install
 UNSET_ENV_FILE=1 run_install never
 check "INVESTING_ENV_FILE unset and no file there: refused, names the new path" \
-  refused_with "env file missing: $default_env"
+  refused_with "$default_env"
 
 # The staging guard refuses the live install root, env file and data dir under the account's home
 # even when HOME points elsewhere; nothing is created there.

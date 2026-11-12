@@ -2,14 +2,15 @@
 
 The Rust backend and the built UI run as one user LaunchAgent, `com.menganto.investing`, on
 `127.0.0.1:8789` (Tailscale on 8445). Data lives in `~/investing-app-data`; the env file (owner-written,
-mode 600, never committed) is `~/.hermes/secrets/investing-app.env`. Nothing here is run by CI, and
+mode 600, never committed) is `~/.secrets/investing-app.env`. Nothing here is run by CI, and
 none of it touches finance-app's service (`com.menganto.finance`, `:8787`) or its data.
 
 ## 1. Install or update
 
-The env file must exist first (plan.md §3.4 step 1) with at least `INVESTING_APP_TOKEN` and
-`PORTFOLIO_SPREADSHEET_ID`; `INVESTING_BIND` is optional (default `127.0.0.1:8789`). The installer
-never creates or edits it and never prints its values.
+The env file (`~/.secrets/investing-app.env`, or `INVESTING_ENV_FILE`; it moved there on 2026-11-12,
+and the live plist also sets `INVESTING_ENV_FILE` to it) must exist first (plan.md §3.4 step 1) with
+at least `INVESTING_APP_TOKEN` and `PORTFOLIO_SPREADSHEET_ID`; `INVESTING_BIND` is optional (default
+`127.0.0.1:8789`). The installer never creates or edits it and never prints its values.
 
 ```
 cd ~/investing-app && git pull && ./deploy/install.sh
@@ -44,7 +45,7 @@ ending in `-dirty` was built from a checkout with uncommitted changes.
 | --- | --- | --- |
 | `INVESTING_INSTALL_ROOT` | `~/.local/opt/investing-app` | where releases live; absolute path |
 | `INVESTING_LABEL` | `com.menganto.investing` | a spare instance (§2.1): only `com.menganto.investing.<name>` (not `.scraper`); needs its own install root and env file, and that env file its own `INVESTING_DATA_DIR` and `INVESTING_BIND` |
-| `INVESTING_ENV_FILE` | `~/.hermes/secrets/investing-app.env` | a throwaway env file for a trial run |
+| `INVESTING_ENV_FILE` | `~/.secrets/investing-app.env` | a throwaway env file for a trial run |
 | `SKIP_BUILD` | `0` | install the existing `target/release` and `web/dist` as a new release without building |
 
 Research packs are the one thing still read from the checkout, on purpose: the plist sets

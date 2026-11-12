@@ -42,9 +42,16 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 DEFAULT_LABEL="com.menganto.investing"
 DEFAULT_INSTALL_ROOT="$HOME/.local/opt/investing-app"
-DEFAULT_ENV_FILE="$HOME/.hermes/secrets/investing-app.env"
+DEFAULT_ENV_FILE="$HOME/.secrets/investing-app.env"
 DEFAULT_DATA_DIR="$HOME/investing-app-data"
 DEFAULT_BIND="127.0.0.1:8789"
+# The live job's paths are under the account's home, which is $HOME unless HOME was pointed
+# elsewhere for a trial run (id -P prints the passwd entry; its 9th field is the home directory).
+LIVE_HOME="$(id -P 2>/dev/null | cut -d: -f9)"
+LIVE_HOME="${LIVE_HOME:-$HOME}"
+LIVE_INSTALL_ROOT="$LIVE_HOME/.local/opt/investing-app"
+LIVE_ENV_FILE="$LIVE_HOME/.secrets/investing-app.env"
+LIVE_DATA_DIR="$LIVE_HOME/investing-app-data"
 
 APP_ROOT="${INVESTING_APP_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 LABEL="${INVESTING_LABEL:-$DEFAULT_LABEL}"
@@ -101,14 +108,15 @@ case "$INSTALL_ROOT" in
   /*) ;;
   *) fail "INVESTING_INSTALL_ROOT must be an absolute path: $INSTALL_ROOT" ;;
 esac
-# A spare instance must not share anything with the live one: the default install root's `current`
-# is what the live job starts, the default env file holds the live token, and run.sh falls back to
-# the live data dir and port when the env file does not name its own.
+# A spare instance must not share anything with the live one: the live install root's `current` is
+# what the live job starts, the live env file holds the live token, and run.sh falls back to the live
+# data dir and port when the env file does not name its own. Checked against the account's home, so
+# a trial run with HOME elsewhere may use the defaults under that HOME but never the live paths.
 if [ "$LABEL" != "$DEFAULT_LABEL" ]; then
-  [ "$INSTALL_ROOT" != "$DEFAULT_INSTALL_ROOT" ] || fail "$LABEL needs its own INVESTING_INSTALL_ROOT"
-  [ "$ENV_FILE" != "$DEFAULT_ENV_FILE" ] || fail "$LABEL needs its own INVESTING_ENV_FILE"
+  [ "$INSTALL_ROOT" != "$LIVE_INSTALL_ROOT" ] || fail "$LABEL needs its own INVESTING_INSTALL_ROOT"
+  [ "$ENV_FILE" != "$LIVE_ENV_FILE" ] || fail "$LABEL needs its own INVESTING_ENV_FILE"
   spare_data="$(env_value INVESTING_DATA_DIR)"
-  [ -n "$spare_data" ] && [ "${spare_data%/}" != "$DEFAULT_DATA_DIR" ] ||
+  [ -n "$spare_data" ] && [ "${spare_data%/}" != "$LIVE_DATA_DIR" ] ||
     fail "$LABEL needs its own INVESTING_DATA_DIR in $ENV_FILE"
   [ "$(run_bind)" != "$DEFAULT_BIND" ] || fail "$LABEL needs its own INVESTING_BIND in $ENV_FILE"
 fi

@@ -85,7 +85,7 @@ v1 is a **move, not a rewrite**: every number and every write the owner can do i
 | Bind | `127.0.0.1:8787` | `127.0.0.1:8789` (free on 2026-10-27; re-check at install) |
 | Tailnet | `https://<mac>.<tailnet>.ts.net:8443` | `:8445` (443 = Mission Control, 8443 = finance-app, 8444 = finance-app sandbox, 9119 = Hermes dashboard) |
 | Data dir | `~/finance-app-data` | `~/investing-app-data` |
-| Env file | `~/.hermes/secrets/finance-app.env` | `~/.hermes/secrets/investing-app.env` (written by the owner; install scripts never create it) |
+| Env file | `~/.secrets/finance-app.env` | `~/.secrets/investing-app.env` (written by the owner; install scripts never create it) |
 | Token | `FINANCE_APP_TOKEN` | `INVESTING_APP_TOKEN` (new, ≥ 32 chars; never shared with finance-app) |
 | Env prefix | `FINANCE_*` | `INVESTING_*` (same meanings; `PORTFOLIO_SPREADSHEET_ID`, `GOOGLE_APPLICATION_CREDENTIALS` and `MACRO_DISABLE_FRED` keep their names; `FINANCE_SPREADSHEET_ID` is dropped, spending only; D7) |
 | Session cookie | `finance_session` | `investing_session` (cookies are not port-isolated on one host, so the names must differ) |
@@ -172,7 +172,7 @@ Defaults chosen by Hermes after the canon QA; the owner may override any of them
 | Two writers after cutover: finance-app's scheduler, macro watcher or scraper job keeps running | Low | High | Step 4 sets both finance-app flags off, removes finance-app's scraper plist from `~/Library/LaunchAgents` (a bootout alone is undone at next login), installs investing-app's scraper only then; L4 never installs a scraper (D5) |
 | Sandbox drifts from the snapshot (scheduler, macro watcher) and parity stays red | Medium | Low | Both off from the first start (D4); parity against a second finance-app instance on the same snapshot, not live `:8787` (D2) |
 | A copy taken while finance-app writes is torn (DB and log disagree) | Medium | Medium | `sqlite3 .backup` for the DB; final copy with both services stopped (D3) |
-| An env path left pointing into `~/finance-app-data` makes investing-app write finance-app's live files | Low | High | §6 rule; plan.md §3.4 step 1 check `grep -c finance-app-data ~/.hermes/secrets/investing-app.env` = 0 |
+| An env path left pointing into `~/finance-app-data` makes investing-app write finance-app's live files | Low | High | §6 rule; plan.md §3.4 step 1 check `grep -c finance-app-data ~/.secrets/investing-app.env` = 0 |
 | Copy misses a file the build or runtime needs (untracked asset, pack TOML, fixture, deploy file read by tests) | Medium | Medium | Exact copy list in plan.md §3.1; L1/L2 done only when a fresh clone passes `scripts/check.sh` |
 | Cookie or service-worker cross-talk between the two apps on one host | Medium | Medium: unlock loops, stale shell | Different cookie name and CSRF header; different port = different origin for the service worker and storage; tested on the iPhone at L4 |
 | Parity diff stays red because of request-time or per-checkout fields | High | Low | Named jq drops with reasons (§8 A1); anything else that differs is a bug |
