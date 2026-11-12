@@ -125,3 +125,34 @@ release_prune() {
     fi
   done < <(find "$root/releases" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort -r)
 }
+
+# path_canon <path>: the path with symlinks resolved, '.', '..' and repeated '/' folded, so two
+# spellings of one file compare equal. A symlink at the end is followed (a dangling one too: the
+# file would be written where it points). The part that does not exist yet is folded as written.
+path_canon() {
+  local path="$1" dir rest="" out part to hops=0
+  case "$path" in /*) ;; *) path="$PWD/$path" ;; esac
+  while [ -L "$path" ] && [ "$hops" -lt 16 ]; do
+    to="$(readlink "$path")" || break
+    case "$to" in /*) path="$to" ;; *) path="${path%/*}/$to" ;; esac
+    hops=$((hops + 1))
+  done
+  dir="$path"
+  until [ -d "$dir" ]; do
+    rest="/${dir##*/}$rest"
+    dir="${dir%/*}"
+    dir="${dir:-/}"
+  done
+  out="$(cd -P "$dir" 2>/dev/null && pwd -P)" || out="$dir"
+  while [ -n "$rest" ]; do
+    rest="${rest#"${rest%%[!/]*}"}" # drop leading '/'
+    part="${rest%%/*}"
+    rest="${rest#"$part"}"
+    case "$part" in
+      "" | .) ;;
+      ..) out="${out%/*}"; out="${out:-/}" ;;
+      *) out="${out%/}/$part" ;;
+    esac
+  done
+  printf '%s\n' "$out"
+}

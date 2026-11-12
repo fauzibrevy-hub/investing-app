@@ -47,8 +47,15 @@ DEFAULT_DATA_DIR="$HOME/investing-app-data"
 DEFAULT_BIND="127.0.0.1:8789"
 # The live job's paths are under the account's home, which is $HOME unless HOME was pointed
 # elsewhere for a trial run (id -P prints the passwd entry; its 9th field is the home directory).
-LIVE_HOME="$(id -P 2>/dev/null | cut -d: -f9)"
-LIVE_HOME="${LIVE_HOME:-$HOME}"
+# When id -P fails or names no absolute path, the guard below falls back to $HOME, and says so.
+LIVE_HOME="$( { id -P 2>/dev/null || true; } | cut -d: -f9)"
+case "$LIVE_HOME" in
+  /*) ;;
+  *)
+    LIVE_HOME=$HOME
+    warn "cannot read the account home (id -P); the live-path guard uses \$HOME"
+    ;;
+esac
 LIVE_INSTALL_ROOT="$LIVE_HOME/.local/opt/investing-app"
 LIVE_ENV_FILE="$LIVE_HOME/.secrets/investing-app.env"
 LIVE_DATA_DIR="$LIVE_HOME/investing-app-data"
@@ -112,12 +119,14 @@ esac
 # what the live job starts, the live env file holds the live token, and run.sh falls back to the live
 # data dir and port when the env file does not name its own. Checked against the account's home, so
 # a trial run with HOME elsewhere may use the defaults under that HOME but never the live paths.
+# Both sides physical (path_canon): '//', '/./', '..' or a symlink are the same file.
+not_live() { [ "$(path_canon "$1")" != "$(path_canon "$2")" ]; }
 if [ "$LABEL" != "$DEFAULT_LABEL" ]; then
-  [ "$INSTALL_ROOT" != "$LIVE_INSTALL_ROOT" ] || fail "$LABEL needs its own INVESTING_INSTALL_ROOT"
-  [ "$ENV_FILE" != "$LIVE_ENV_FILE" ] || fail "$LABEL needs its own INVESTING_ENV_FILE"
+  not_live "$INSTALL_ROOT" "$LIVE_INSTALL_ROOT" || fail "$LABEL needs its own INVESTING_INSTALL_ROOT"
+  not_live "$ENV_FILE" "$LIVE_ENV_FILE" || fail "$LABEL needs its own INVESTING_ENV_FILE"
   spare_data="$(env_value INVESTING_DATA_DIR)"
-  [ -n "$spare_data" ] && [ "${spare_data%/}" != "$LIVE_DATA_DIR" ] ||
-    fail "$LABEL needs its own INVESTING_DATA_DIR in $ENV_FILE"
+  [ -n "$spare_data" ] || fail "$LABEL needs its own INVESTING_DATA_DIR in $ENV_FILE"
+  not_live "$spare_data" "$LIVE_DATA_DIR" || fail "$LABEL needs its own INVESTING_DATA_DIR in $ENV_FILE"
   [ "$(run_bind)" != "$DEFAULT_BIND" ] || fail "$LABEL needs its own INVESTING_BIND in $ENV_FILE"
 fi
 

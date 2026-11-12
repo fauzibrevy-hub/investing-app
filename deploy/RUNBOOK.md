@@ -101,7 +101,9 @@ worktree (`~/dev-worktrees/investing-app/<slug>`), not from `~/investing-app`. I
 plist, logs, port 8799, env file with dummy values, data dir and install root, and its env file keeps
 the vault, the scraper paths and the credentials away from the real ones; never copy the real env file.
 `install.sh` refuses any label outside `com.menganto.investing.*` (and the scraper's), and a
-non-default label that shares the live install root, env file, data dir or port. Always finish with
+non-default label that shares the live install root, env file, data dir or port: the live paths under
+the account's home (`id -P`; `$HOME` with a WARN when that fails), compared after symlinks, `//`,
+`/./` and `..` are resolved. Always finish with
 step 5: a plist left in `~/Library/LaunchAgents` has `RunAtLoad` and starts again at the next login.
 
 ```bash
