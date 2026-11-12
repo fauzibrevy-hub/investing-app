@@ -104,6 +104,11 @@ check "no packs dir from plist or env file: warns, runs with embedded packs" \
   same "$(INVESTING_ENV_FILE="$env_file" "$root/current/run.sh" 2>/dev/null | cut -d'|' -f3)" "-"
 if INVESTING_ENV_FILE="$work/missing.env" "$root/current/run.sh" 2>/dev/null; then rc=0; else rc=$?; fi
 check "run.sh exits 78 without an env file" same "$rc" "78"
+mkdir -p "$work/runhome/.secrets"
+cp "$env_file" "$work/runhome/.secrets/investing-app.env"
+if out=$(env -u INVESTING_ENV_FILE HOME="$work/runhome" "$root/current/run.sh" 2>/dev/null); then rc=0; else rc=$?; fi
+check "run.sh without INVESTING_ENV_FILE reads \$HOME/.secrets/investing-app.env" same "$rc:${out%%|*}" \
+  "0:$root/releases/$(id 2)/bin/investing-app"
 
 # Checkout layout: the plist from before this change, and scripts/tools-selftest.sh step 11, run
 # <checkout>/deploy/run.sh. That must still start the checkout's build with the checkout's packs.
@@ -210,11 +215,28 @@ echo "unexpected: $0 $*" >&2
 exit 1
 EOF
 cp "$work/bin/cargo" "$work/bin/npm"
+# The account's passwd entry (id -P) names FAKE_LIVE_HOME as its home, so the paths the staging
+# guard treats as live are temp paths too; every other id call is the real one. FAKE_ID_MODE=fail
+# makes id -P fail, =empty leaves the home field empty, =garbage prints a line that is no entry.
+cat >"$work/bin/id" <<'EOF'
+#!/bin/sh
+if [ "$1" = -P ]; then
+  case "${FAKE_ID_MODE:-}" in
+    fail) exit 1 ;;
+    empty) echo "tester:********:501:20::0:0:Tester::/bin/sh" ;;
+    garbage) echo "garbage" ;;
+    *) echo "tester:********:501:20::0:0:Tester:$FAKE_LIVE_HOME:/bin/sh" ;;
+  esac
+  exit 0
+fi
+exec /usr/bin/id "$@"
+EOF
 chmod 755 "$work/bin/"*
 
 ienv="$work/inst-env/investing.env"
 reset_install() { # [env file INVESTING_BIND port, or nothing for no env file]
-  rm -rf "${work:?}/inst" "$work/inst-data" "$work/inst-env" "${work:?}/home" "$work/launchctl.log" "$work/lsof.count" "$work/launchctl.state"
+  rm -rf "${work:?}/inst" "$work/inst-data" "$work/inst-env" "${work:?}/home" "${work:?}/livehome" \
+    "$work/links" "$work/launchctl.log" "$work/lsof.count" "$work/launchctl.state"
   mkdir -p "$work/home"
   if [ -n "${1:-}" ]; then
     mkdir -p "$work/inst-env"
@@ -224,13 +246,16 @@ reset_install() { # [env file INVESTING_BIND port, or nothing for no env file]
   fi
 }
 run_install() { # <LSOF_MODE> [NAME=value ...]: install.sh output; its exit code in $work/rc
-  local mode=$1 rc=0
+  # INVESTING_ENV_FILE is $ienv, or unset (the default under HOME) with UNSET_ENV_FILE=1.
+  # INSTALL_ARG=--rollback runs a rollback.
+  local mode=$1 rc=0 envfile="INVESTING_ENV_FILE=$ienv"
   shift
+  [ "${UNSET_ENV_FILE:-0}" = 1 ] && envfile="UNUSED_BY_INSTALL=1"
   env -i PATH="$work/bin:/usr/bin:/bin:/usr/sbin:/sbin" HOME="$work/home" TMPDIR="$work" \
     LAUNCHCTL_LOG="$work/launchctl.log" LAUNCHCTL_STATE="$work/launchctl.state" LSOF_COUNT="$work/lsof.count" LSOF_MODE="$mode" \
-    INVESTING_LABEL=com.menganto.investing.test INVESTING_INSTALL_ROOT="$work/inst" \
-    INVESTING_ENV_FILE="$ienv" INVESTING_DATA_DIR="$work/inst-data" SKIP_BUILD=1 \
-    "$@" bash "$repo/deploy/install.sh" >"$work/out" 2>&1 || rc=$?
+    FAKE_LIVE_HOME="$work/livehome" INVESTING_LABEL=com.menganto.investing.test INVESTING_INSTALL_ROOT="$work/inst" \
+    "$envfile" INVESTING_DATA_DIR="$work/inst-data" SKIP_BUILD=1 \
+    "$@" bash "$repo/deploy/install.sh" ${INSTALL_ARG:+"$INSTALL_ARG"} >"$work/out" 2>&1 || rc=$?
   echo "$rc" >"$work/rc"
 }
 refused_with() { [ "$(cat "$work/rc")" != 0 ] && grep -qF "$1" "$work/out"; }
@@ -321,6 +346,171 @@ chmod 755 "$work/inst/previous"
 check "previous not settable: warns and keeps going" warned_previous
 check "  current is the new release and it still exists" has_current_bin
 check "  current is not the old release" current_not_old1
+
+# --- the default env file: $HOME/.secrets/investing-app.env --------------------------------------
+# Staging label, INVESTING_ENV_FILE unset, HOME a temp dir. The account's home (fake id -P) is another
+# temp dir, so the staging guard compares against temp "live" paths too.
+default_env="$work/home/.secrets/investing-app.env"
+out_has() { grep -qF "$1" "$work/out"; }
+write_env() { # <file> <INVESTING_DATA_DIR>
+  mkdir -p "$(dirname "$1")"
+  printf 'INVESTING_APP_TOKEN=x\nPORTFOLIO_SPREADSHEET_ID=x\nINVESTING_BIND=127.0.0.1:18799\nINVESTING_DATA_DIR=%s\n' "$2" >"$1"
+}
+
+reset_install
+write_env "$default_env" "$work/inst-data"
+UNSET_ENV_FILE=1 run_install never
+check "INVESTING_ENV_FILE unset: the plist names \$HOME/.secrets/investing-app.env" \
+  grep -qF "<string>$default_env</string>" "$work/home/Library/LaunchAgents/com.menganto.investing.test.plist"
+check "  runs on to launchctl bootstrap (fake, fails)" out_has "launchctl bootstrap failed"
+
+reset_install
+UNSET_ENV_FILE=1 run_install never
+check "INVESTING_ENV_FILE unset and no file there: refused, names the new path" \
+  refused_with "$default_env"
+
+# The staging guard refuses the live install root, env file and data dir under the account's home
+# even when HOME points elsewhere; nothing is created there.
+live_path_refused() { # <message part> [NAME=value ...]
+  local want=$1
+  shift
+  run_install never "$@"
+  [ "$(cat "$work/rc")" != 0 ] && out_has "needs its own $want" && [ ! -e "$work/inst" ] && no_plist
+}
+reset_install 18799
+check "staging with HOME elsewhere: the live env file is refused" \
+  live_path_refused INVESTING_ENV_FILE "INVESTING_ENV_FILE=$work/livehome/.secrets/investing-app.env"
+reset_install 18799
+check "staging with HOME elsewhere: the live install root is refused" \
+  live_path_refused INVESTING_INSTALL_ROOT "INVESTING_INSTALL_ROOT=$work/livehome/.local/opt/investing-app"
+reset_install
+write_env "$ienv" "$work/livehome/investing-app-data"
+check "staging with HOME elsewhere: the live data dir in the env file is refused" \
+  live_path_refused INVESTING_DATA_DIR
+reset_install
+write_env "$default_env" "$work/inst-data"
+UNSET_ENV_FILE=1 run_install never FAKE_LIVE_HOME="$work/home"
+check "staging with HOME = the live home and INVESTING_ENV_FILE unset is refused, as before" \
+  refused_with "needs its own INVESTING_ENV_FILE"
+
+# --- id -P cannot name the account's home ---------------------------------------------------------
+# install.sh must not stop silently (set -e with pipefail): it warns once and the guard compares with
+# the paths under $HOME, as before id -P was used. Every mode: staging, the live label, --rollback.
+id_warned() { [ "$(grep -c '^WARN: cannot read the account home (id -P)' "$work/out")" = 1 ]; }
+warned_and_ran_on() { id_warned && out_has "launchctl bootstrap failed"; }
+warned_and_rollback_refused() { id_warned && refused_with "missing; run ./deploy/install.sh first"; }
+id_fallback_refuses() { # <FAKE_ID_MODE>
+  reset_install
+  write_env "$default_env" "$work/inst-data"
+  UNSET_ENV_FILE=1 run_install never FAKE_ID_MODE="$1"
+  refused_with "needs its own INVESTING_ENV_FILE" && id_warned && [ ! -e "$work/inst" ]
+}
+for mode in fail empty garbage; do
+  check "id -P $mode: one WARN, the guard uses \$HOME (the default env file is refused)" \
+    id_fallback_refuses "$mode"
+done
+reset_install 18799
+run_install never FAKE_ID_MODE=fail
+check "id -P fails, staging with its own paths: WARN, runs on to launchctl bootstrap (fake, fails)" \
+  warned_and_ran_on
+reset_install 18799
+run_install never FAKE_ID_MODE=fail INVESTING_LABEL=com.menganto.investing
+check "id -P fails, the live label (temp paths): WARN, runs on to launchctl bootstrap (fake, fails)" \
+  warned_and_ran_on
+reset_install 18799
+INSTALL_ARG=--rollback run_install never FAKE_ID_MODE=fail
+check "id -P fails, --rollback: WARN, then its own refusal (no plist installed yet)" \
+  warned_and_rollback_refused
+
+# --- the guard compares physical paths ------------------------------------------------------------
+check "path_canon folds //, /./ and .. in a path that does not exist" \
+  same "$(path_canon "$work//no/./such/../path/")" "$work/no/path"
+mkdir -p "$work/pc/real"
+ln -s real "$work/pc/dirlink"
+ln -s real/new.env "$work/pc/dangling.env"
+check "path_canon resolves a symlinked directory" same "$(path_canon "$work/pc/dirlink/x.env")" "$work/pc/real/x.env"
+check "path_canon follows a symlink at the end, even a dangling one" \
+  same "$(path_canon "$work/pc/dangling.env")" "$work/pc/real/new.env"
+check "path_canon of / is /" same "$(path_canon /)" "/"
+check "path_canon resolves a symlinked directory reached after missing/.." \
+  same "$(path_canon "$work/pc/nope/../dirlink/x.env")" "$work/pc/real/x.env"
+check "path_canon follows a symlink at the end reached after missing/.." \
+  same "$(path_canon "$work/pc/nope/../dangling.env")" "$work/pc/real/new.env"
+
+# A live home that exists, with links into it: other spellings of the live paths are refused too,
+# and nothing under the live home changes.
+lh="$work/livehome"
+make_livehome() {
+  mkdir -p "$lh/.local/opt/investing-app" "$lh/investing-app-data" "$work/links"
+  write_env "$lh/.secrets/investing-app.env" "$lh/investing-app-data"
+  ln -s ../livehome "$work/links/home"
+  ln -s ../livehome/.secrets/investing-app.env "$work/links/live.env"
+  ln -s ../livehome/.local/opt/investing-app "$work/links/root"
+  ln -s ../livehome/investing-app-data "$work/links/data"
+  ln "$lh/.secrets/investing-app.env" "$work/links/hard.env"
+  livehome_state >"$work/livehome.before"
+}
+livehome_state() { find "$lh" -exec stat -f '%Lp %z %N' {} + | sort; cat "$lh/.secrets/investing-app.env"; }
+other_spelling_refused() { # <NAME> <INVESTING_DATA_DIR in $ienv> [NAME=value ...]
+  local name=$1 data=$2
+  shift 2
+  reset_install
+  make_livehome
+  write_env "$ienv" "$data"
+  run_install never "$@"
+  refused_with "needs its own $name" && [ ! -e "$work/inst" ] && no_plist && [ ! -e "$work/links/nope" ] &&
+    livehome_state | cmp -s - "$work/livehome.before"
+}
+own="$work/inst-data"
+check "live env file as \$LIVE_HOME//.secrets/…: refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$lh//.secrets/investing-app.env"
+check "live env file as \$LIVE_HOME/./.secrets/…: refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$lh/./.secrets/investing-app.env"
+check "live env file through a symlinked directory: refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$work/links/home/.secrets/investing-app.env"
+check "live env file through a symlink to the file: refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$work/links/live.env"
+check "live install root through a symlink: refused" \
+  other_spelling_refused INVESTING_INSTALL_ROOT "$own" "INVESTING_INSTALL_ROOT=$work/links/root"
+check "live install root with a trailing /: refused" \
+  other_spelling_refused INVESTING_INSTALL_ROOT "$own" "INVESTING_INSTALL_ROOT=$lh/.local/opt/investing-app/"
+check "live data dir in the env file as \$LIVE_HOME/x/../investing-app-data: refused" \
+  other_spelling_refused INVESTING_DATA_DIR "$lh/x/../investing-app-data"
+check "live data dir in the env file through a symlinked directory: refused" \
+  other_spelling_refused INVESTING_DATA_DIR "$work/links/home/investing-app-data"
+check "the account home itself through a symlink (live side not canonical): refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "FAKE_LIVE_HOME=$work/links/home" "INVESTING_ENV_FILE=$lh/.secrets/investing-app.env"
+# '..' after a directory that does not exist yet, then a symlink to the live path: mkdir -p would
+# create the directory and go through the link. Case: APFS is case-insensitive.
+check "live env file as links/nope/../live.env (a link to it): refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$work/links/nope/../live.env"
+check "live install root as links/nope/../root (a link to it): refused" \
+  other_spelling_refused INVESTING_INSTALL_ROOT "$own" "INVESTING_INSTALL_ROOT=$work/links/nope/../root"
+check "live data dir in the env file as links/nope/../data (a link to it): refused" \
+  other_spelling_refused INVESTING_DATA_DIR "$work/links/nope/../data"
+check "live env file in other case (.SECRETS/Investing-App.env): refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$lh/.SECRETS/Investing-App.env"
+check "live install root in other case (.LOCAL/opt/Investing-App): refused" \
+  other_spelling_refused INVESTING_INSTALL_ROOT "$own" "INVESTING_INSTALL_ROOT=$lh/.LOCAL/opt/Investing-App"
+check "live data dir in the env file in other case (Investing-App-Data): refused" \
+  other_spelling_refused INVESTING_DATA_DIR "$lh/Investing-App-Data"
+check "live env file through a hard link: refused" \
+  other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=$work/links/hard.env"
+# macOS firmlink: /System/Volumes/Data/<path> is the same file as <path>, though no symlink.
+if [ -d "/System/Volumes/Data$work" ]; then
+  check "live env file through the /System/Volumes/Data firmlink: refused" \
+    other_spelling_refused INVESTING_ENV_FILE "$own" "INVESTING_ENV_FILE=/System/Volumes/Data$lh/.secrets/investing-app.env"
+  check "live data dir in the env file through the /System/Volumes/Data firmlink: refused" \
+    other_spelling_refused INVESTING_DATA_DIR "/System/Volumes/Data$lh/investing-app-data"
+else
+  echo "skip  /System/Volumes/Data firmlink checks (no such volume path)"
+fi
+reset_install 18799
+check "live home not there yet, env file in other case: refused" \
+  live_path_refused INVESTING_ENV_FILE "INVESTING_ENV_FILE=$lh/.SECRETS/Investing-App.env"
+reset_install 18799
+check "live home not there yet, env file as \$LIVE_HOME//.secrets/…: refused" \
+  live_path_refused INVESTING_ENV_FILE "INVESTING_ENV_FILE=$lh//.secrets/investing-app.env"
 
 # --- release ids --------------------------------------------------------------------------------
 check "release_id is <UTC ts>-<short sha>[-dirty]" \

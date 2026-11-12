@@ -125,3 +125,31 @@ release_prune() {
     fi
   done < <(find "$root/releases" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort -r)
 }
+
+# path_canon <path>: the path the kernel reaches, for comparing two paths. Walked one component at
+# a time: each symlink is replaced by its target (also one reached after '..', and a dangling one at
+# the end: the file would be written where it points); '.', '..' and repeated '/' are folded. A
+# component that does not exist yet is kept as written, the way mkdir -p would create it. Case is
+# kept as written; callers compare case-insensitively (APFS).
+path_canon() {
+  local rest="$1" out="" part to hops=0
+  case "$rest" in /*) ;; *) rest="$PWD/$rest" ;; esac
+  while [ -n "$rest" ]; do
+    rest="${rest#"${rest%%[!/]*}"}" # drop leading '/'
+    part="${rest%%/*}"
+    rest="${rest#"$part"}"
+    case "$part" in
+      "" | .) continue ;;
+      ..) out="${out%/*}"; continue ;;
+    esac
+    # 32 links at most, as the kernel (MAXSYMLINKS): past that it would not resolve the path either.
+    if [ -L "$out/$part" ] && [ "$hops" -lt 32 ] && to="$(readlink "$out/$part")"; then
+      hops=$((hops + 1))
+      case "$to" in /*) out="" ;; esac # an absolute target starts again at /
+      rest="$to$rest"
+      continue
+    fi
+    out="$out/$part"
+  done
+  printf '%s\n' "${out:-/}"
+}

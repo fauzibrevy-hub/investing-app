@@ -65,7 +65,7 @@ hygiene() {
 
   out=$(printf '%s\n' "$paths" | LC_ALL=C grep -n '[^ -~]' || true)
   if [ -n "$out" ]; then echo "$out"; bad "non-ASCII path (rename it; tooling and greps mis-handle it)"; fi
-  path_hits ".env file tracked (secrets stay in ~/.hermes/secrets)" '(^|/)(\.env(\..+)?|[^/]+\.env|\.envrc)$' '(^|/)\.env\.example$'
+  path_hits ".env file tracked (secrets stay in ~/.secrets)" '(^|/)(\.env(\..+)?|[^/]+\.env|\.envrc)$' '(^|/)\.env\.example$'
   path_hits "key or credential file tracked" '\.(p12|pfx|pem|key)$|service-account[^/]*\.json$|(^|/)id_(rsa|ecdsa|ed25519)$'
   path_hits "database file tracked (live data stays in the data dir)" '\.(sqlite3?|db)(-(wal|shm|journal)|\.bak)?$'
   out=$(printf '%s\n' "$listing" | awk -F'\t' '$1 ~ /^[0-9]+$/ && $1 > 1048576 && $2 !~ /^web\/public\/icons\// { print $1 "\t" $2 }')
