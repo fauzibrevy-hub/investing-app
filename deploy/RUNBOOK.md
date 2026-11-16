@@ -2,14 +2,15 @@
 
 The Rust backend and the built UI run as one user LaunchAgent, `com.menganto.investing`, on
 `127.0.0.1:8789` (Tailscale on 8445). Data lives in `~/investing-app-data`; the env file (owner-written,
-mode 600, never committed) is `~/.hermes/secrets/investing-app.env`. Nothing here is run by CI, and
+mode 600, never committed) is `~/.secrets/investing-app.env`. Nothing here is run by CI, and
 none of it touches finance-app's service (`com.menganto.finance`, `:8787`) or its data.
 
 ## 1. Install or update
 
-The env file must exist first (plan.md §3.4 step 1) with at least `INVESTING_APP_TOKEN` and
-`PORTFOLIO_SPREADSHEET_ID`; `INVESTING_BIND` is optional (default `127.0.0.1:8789`). The installer
-never creates or edits it and never prints its values.
+The env file (`~/.secrets/investing-app.env`, or `INVESTING_ENV_FILE`; it moved there on 2026-11-12,
+and the live plist also sets `INVESTING_ENV_FILE` to it) must exist first (plan.md §3.4 step 1) with
+at least `INVESTING_APP_TOKEN` and `PORTFOLIO_SPREADSHEET_ID`; `INVESTING_BIND` is optional (default
+`127.0.0.1:8789`). The installer never creates or edits it and never prints its values.
 
 ```
 cd ~/investing-app && git pull && ./deploy/install.sh
@@ -44,7 +45,7 @@ ending in `-dirty` was built from a checkout with uncommitted changes.
 | --- | --- | --- |
 | `INVESTING_INSTALL_ROOT` | `~/.local/opt/investing-app` | where releases live; absolute path |
 | `INVESTING_LABEL` | `com.menganto.investing` | a spare instance (§2.1): only `com.menganto.investing.<name>` (not `.scraper`); needs its own install root and env file, and that env file its own `INVESTING_DATA_DIR` and `INVESTING_BIND` |
-| `INVESTING_ENV_FILE` | `~/.hermes/secrets/investing-app.env` | a throwaway env file for a trial run |
+| `INVESTING_ENV_FILE` | `~/.secrets/investing-app.env` | a throwaway env file for a trial run |
 | `SKIP_BUILD` | `0` | install the existing `target/release` and `web/dist` as a new release without building |
 
 Research packs are the one thing still read from the checkout, on purpose: the plist sets
@@ -100,7 +101,10 @@ worktree (`~/dev-worktrees/investing-app/<slug>`), not from `~/investing-app`. I
 plist, logs, port 8799, env file with dummy values, data dir and install root, and its env file keeps
 the vault, the scraper paths and the credentials away from the real ones; never copy the real env file.
 `install.sh` refuses any label outside `com.menganto.investing.*` (and the scraper's), and a
-non-default label that shares the live install root, env file, data dir or port. Always finish with
+non-default label that shares the live install root, env file, data dir or port: the live paths under
+the account's home (`id -P`; `$HOME` with a WARN when that fails), in any spelling: the same file
+(`-ef`: other case, a hard link, a firmlink), or the same path once symlinks, `//`, `/./` and `..`
+are resolved, compared without regard to case. Always finish with
 step 5: a plist left in `~/Library/LaunchAgents` has `RunAtLoad` and starts again at the next login.
 
 ```bash

@@ -14,7 +14,7 @@
 # research packs directory, on purpose: the plist carries it (rendered by install.sh).
 set -euo pipefail
 
-ENV_FILE="${INVESTING_ENV_FILE:-$HOME/.hermes/secrets/investing-app.env}"
+ENV_FILE="${INVESTING_ENV_FILE:-$HOME/.secrets/investing-app.env}"
 if [ ! -r "$ENV_FILE" ]; then
   echo "investing-app: env file not readable: $ENV_FILE" >&2
   exit 78 # EX_CONFIG
