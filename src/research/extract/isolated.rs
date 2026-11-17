@@ -153,6 +153,7 @@ pub async fn pages(
     if !status.success() {
         // A crash, an abort or the memory watchdog.
         tracing::warn!("extraction child failed: {status}");
+        eprintln!("DIAG extraction child failed: {status:?}"); // TEMPORARY (CI diagnosis)
         return Err(LIMIT);
     }
     match serde_json::from_slice::<Reply>(&out).map_err(|_| FAILED)? {
