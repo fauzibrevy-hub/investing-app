@@ -14,9 +14,7 @@ fn the_child_answers_whatever_its_parent_has_used() {
 
     // The parent (this test process) holds 800 MiB, every page touched.
     let mut big = vec![0u8; 800 << 20];
-    for i in (0..big.len()).step_by(4096) {
-        big[i] = 1;
-    }
+    big.iter_mut().step_by(4096).for_each(|b| *b = 1);
     let mut child = Command::new(env!("CARGO_BIN_EXE_investing-app"))
         .args(["__extract-text", "pdf", "--max-rss-mb", "512"])
         .env_clear()
