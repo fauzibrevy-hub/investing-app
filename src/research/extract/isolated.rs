@@ -109,10 +109,9 @@ pub async fn pages(
         .arg("--max-rss-mb")
         .arg(limits.max_rss_mb.to_string())
         .env_clear()
-        .env("RUST_BACKTRACE", "1") // TEMPORARY (CI diagnosis)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
-        .stderr(Stdio::inherit()) // TEMPORARY (CI diagnosis)
+        .stderr(Stdio::null())
         .kill_on_drop(true)
         .spawn()
         .map_err(|_| DocError::Unavailable("The text extractor could not be started"))?;
@@ -154,7 +153,6 @@ pub async fn pages(
     if !status.success() {
         // A crash, an abort or the memory watchdog.
         tracing::warn!("extraction child failed: {status}");
-        eprintln!("DIAG extraction child failed: {status:?}"); // TEMPORARY (CI diagnosis)
         return Err(LIMIT);
     }
     match serde_json::from_slice::<Reply>(&out).map_err(|_| FAILED)? {
