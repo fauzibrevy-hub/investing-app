@@ -343,6 +343,41 @@ unsafe impl GlobalAlloc for CountingAlloc {
 mod tests {
     use super::*;
 
+    /// Under `cargo test` the running executable is a test harness, and the server binary sits in a directory above
+    /// it: `target/<profile>/deps/<test>` in cargo's classic layout, `target/<profile>/build/investing-app/<hash>/out/
+    /// <test>` in its newer build-dir layout (CI on main went red when the runner's cargo switched, November 2026:
+    /// the harness itself was started as the extractor and rejected `--max-rss-mb`).
+    #[test]
+    fn the_server_binary_is_found_above_a_test_harness_in_either_cargo_layout() {
+        let tmp = tempfile::tempdir().unwrap();
+        let profile = tmp.path().join("target").join("debug");
+        let classic = profile.join("deps").join("research_extract-0a1b");
+        let newer = profile
+            .join("build")
+            .join("investing-app")
+            .join("2c3d")
+            .join("out")
+            .join("research_extract-2c3d");
+        let server = profile.join(format!("investing-app{}", std::env::consts::EXE_SUFFIX));
+        for f in [&classic, &newer, &server] {
+            std::fs::create_dir_all(f.parent().unwrap()).unwrap();
+            std::fs::write(f, b"").unwrap();
+        }
+        assert_eq!(resolve_extractor(&classic), Some(server.clone()));
+        assert_eq!(resolve_extractor(&newer), Some(server.clone()));
+        assert_eq!(
+            resolve_extractor(&server),
+            Some(server.clone()),
+            "the server is its own extractor"
+        );
+        std::fs::remove_file(&server).unwrap();
+        assert_eq!(
+            resolve_extractor(&newer),
+            None,
+            "never the test harness itself"
+        );
+    }
+
     /// The counter is the process-wide one, so this is the only test that touches it.
     #[test]
     fn the_counting_allocator_books_every_byte_and_refuses_past_the_cap() {
