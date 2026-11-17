@@ -23,7 +23,7 @@
 //! `file_unreadable`. The child gets an empty environment (no secrets, no `.env`).
 
 use std::alloc::{GlobalAlloc, Layout, System};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
@@ -74,22 +74,41 @@ const LIMIT: DocError = DocError::Unreadable(
     "The file could not be read safely (it crashed the reader or needed too much time or memory)",
 );
 
-/// The binary to start: `INVESTING_EXTRACT_EXE` when set, else this very executable. Under
-/// `cargo test` the current executable is a test harness in `target/*/deps/`; the server
-/// binary sits one directory up.
+/// The binary to start: `INVESTING_EXTRACT_EXE` when set, else `resolve_extractor` of this
+/// very executable.
 fn extractor_exe() -> Option<PathBuf> {
     if let Some(p) = std::env::var_os("INVESTING_EXTRACT_EXE").map(PathBuf::from) {
         return p.is_file().then_some(p);
     }
-    let me = std::env::current_exe().ok()?;
-    let dir = me.parent()?;
-    if dir.file_name().is_some_and(|n| n == "deps") {
-        let sibling = dir
-            .parent()?
-            .join(format!("investing-app{}", std::env::consts::EXE_SUFFIX));
-        return sibling.is_file().then_some(sibling);
+    resolve_extractor(&std::env::current_exe().ok()?)
+}
+
+/// How deep below `target/<profile>/` cargo puts a test harness (`build/<pkg>/<hash>/out/`).
+const HARNESS_DEPTH: usize = 5;
+
+/// The extractor for an executable at `me`: the server binary is its own; a `cargo test`
+/// harness (an executable under a `deps` or `build` directory of a cargo target tree:
+/// `target/<profile>/deps/<test>`, or `target/<profile>/build/investing-app/<hash>/out/<test>`
+/// in cargo's newer build-dir layout) uses the nearest `investing-app` binary above it, and
+/// never itself (it would reject the subcommand's arguments). Anything else: `me`.
+fn resolve_extractor(me: &Path) -> Option<PathBuf> {
+    let name = format!("investing-app{}", std::env::consts::EXE_SUFFIX);
+    if me.file_name().is_some_and(|n| n == name.as_str()) {
+        return Some(me.to_path_buf());
     }
-    Some(me)
+    let in_target = me
+        .ancestors()
+        .skip(1)
+        .take(HARNESS_DEPTH)
+        .any(|d| d.file_name().is_some_and(|n| n == "deps" || n == "build"));
+    if !in_target {
+        return Some(me.to_path_buf());
+    }
+    me.ancestors()
+        .skip(1)
+        .take(HARNESS_DEPTH)
+        .map(|d| d.join(&name))
+        .find(|c| c.is_file())
 }
 
 /// Text of each page or slide of `bytes`, read by a child process under `limits`.
