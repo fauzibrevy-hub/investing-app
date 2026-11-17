@@ -17,13 +17,14 @@
 //!   (RSS) is not, because macOS compresses idle pages, and under memory pressure a 600 MiB
 //!   flate bomb of spaces peaked at 1.28 GB of memory with an RSS under 512 MiB;
 //! - the child also watches its own peak RSS (memory outside the heap) and exits past the same
-//!   limit, and on Linux gets `RLIMIT_AS`. Best effort: checked every few milliseconds.
+//!   limit, and on Linux gets `RLIMIT_AS`. Best effort: checked every few milliseconds. On Linux
+//!   the peak is the child's own (`VmHWM`), not `ru_maxrss`, which starts at the parent's.
 //!
 //! Every such failure is `DocError::Unreadable`, which the API answers as 422
 //! `file_unreadable`. The child gets an empty environment (no secrets, no `.env`).
 
 use std::alloc::{GlobalAlloc, Layout, System};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
@@ -74,22 +75,41 @@ const LIMIT: DocError = DocError::Unreadable(
     "The file could not be read safely (it crashed the reader or needed too much time or memory)",
 );
 
-/// The binary to start: `INVESTING_EXTRACT_EXE` when set, else this very executable. Under
-/// `cargo test` the current executable is a test harness in `target/*/deps/`; the server
-/// binary sits one directory up.
+/// The binary to start: `INVESTING_EXTRACT_EXE` when set, else `resolve_extractor` of this
+/// very executable.
 fn extractor_exe() -> Option<PathBuf> {
     if let Some(p) = std::env::var_os("INVESTING_EXTRACT_EXE").map(PathBuf::from) {
         return p.is_file().then_some(p);
     }
-    let me = std::env::current_exe().ok()?;
-    let dir = me.parent()?;
-    if dir.file_name().is_some_and(|n| n == "deps") {
-        let sibling = dir
-            .parent()?
-            .join(format!("investing-app{}", std::env::consts::EXE_SUFFIX));
-        return sibling.is_file().then_some(sibling);
+    resolve_extractor(&std::env::current_exe().ok()?)
+}
+
+/// How deep below `target/<profile>/` cargo puts a test harness (`build/<pkg>/<hash>/out/`).
+const HARNESS_DEPTH: usize = 5;
+
+/// The extractor for an executable at `me`: the server binary is its own; a `cargo test`
+/// harness (an executable under a `deps` or `build` directory of a cargo target tree:
+/// `target/<profile>/deps/<test>`, or `target/<profile>/build/investing-app/<hash>/out/<test>`
+/// in cargo's newer build-dir layout) uses the nearest `investing-app` binary above it, and
+/// never itself (it would reject the subcommand's arguments). Anything else: `me`.
+fn resolve_extractor(me: &Path) -> Option<PathBuf> {
+    let name = format!("investing-app{}", std::env::consts::EXE_SUFFIX);
+    if me.file_name().is_some_and(|n| n == name.as_str()) {
+        return Some(me.to_path_buf());
     }
-    Some(me)
+    let in_target = me
+        .ancestors()
+        .skip(1)
+        .take(HARNESS_DEPTH)
+        .any(|d| d.file_name().is_some_and(|n| n == "deps" || n == "build"));
+    if !in_target {
+        return Some(me.to_path_buf());
+    }
+    me.ancestors()
+        .skip(1)
+        .take(HARNESS_DEPTH)
+        .map(|d| d.join(&name))
+        .find(|c| c.is_file())
 }
 
 /// Text of each page or slide of `bytes`, read by a child process under `limits`.
@@ -234,24 +254,71 @@ fn guard(max_rss_mb: u64) {
     }
     std::thread::spawn(move || loop {
         std::thread::sleep(Duration::from_millis(10));
-        // SAFETY: `getrusage` fills the zeroed struct it is given.
-        let peak = unsafe {
-            let mut ru: libc::rusage = std::mem::zeroed();
-            if libc::getrusage(libc::RUSAGE_SELF, &mut ru) != 0 {
-                continue;
-            }
-            // Bytes on macOS, kilobytes elsewhere.
-            if cfg!(target_os = "macos") {
-                ru.ru_maxrss as u64
-            } else {
-                (ru.ru_maxrss as u64).saturating_mul(1024)
-            }
+        let Some(peak) = peak_rss() else {
+            continue;
         };
         if peak > limit_bytes {
             // SAFETY: ends the process at once, as the memory is already gone.
             unsafe { libc::_exit(4) };
         }
     });
+}
+
+/// Peak resident memory of this program, in bytes. Linux: `VmHWM` of /proc/self/status, the peak
+/// of this program's own memory. `getrusage`'s `ru_maxrss` there begins at the peak of the process
+/// before `exec`: the parent's, for a child started with posix_spawn or vfork, so a server that
+/// once held more than the limit would stop every extraction at once. Read without allocating
+/// (the heap may be at its cap).
+#[cfg(target_os = "linux")]
+#[allow(unsafe_code)]
+fn peak_rss() -> Option<u64> {
+    let mut buf = [0u8; 4096];
+    // SAFETY: a NUL-terminated path; `read` writes at most `buf.len()` bytes into `buf`; the
+    // descriptor is closed before returning.
+    let n = unsafe {
+        let fd = libc::open(
+            c"/proc/self/status".as_ptr(),
+            libc::O_RDONLY | libc::O_CLOEXEC,
+        );
+        if fd < 0 {
+            return None;
+        }
+        let n = libc::read(fd, buf.as_mut_ptr().cast(), buf.len());
+        libc::close(fd);
+        n
+    };
+    let text = buf.get(..usize::try_from(n).ok()?)?;
+    let at = text.windows(6).position(|w| w == b"VmHWM:")? + 6;
+    let mut kb: u64 = 0;
+    let mut digits = 0;
+    for b in text[at..]
+        .iter()
+        .skip_while(|b| !b.is_ascii_digit())
+        .take_while(|b| b.is_ascii_digit())
+    {
+        kb = kb.checked_mul(10)?.checked_add(u64::from(b - b'0'))?;
+        digits += 1;
+    }
+    (digits > 0).then(|| kb.saturating_mul(1024))
+}
+
+/// Peak resident memory of this process, in bytes: `getrusage`'s `ru_maxrss` (bytes on macOS,
+/// kilobytes elsewhere).
+#[cfg(not(target_os = "linux"))]
+#[allow(unsafe_code)]
+fn peak_rss() -> Option<u64> {
+    // SAFETY: `getrusage` fills the zeroed struct it is given.
+    unsafe {
+        let mut ru: libc::rusage = std::mem::zeroed();
+        if libc::getrusage(libc::RUSAGE_SELF, &mut ru) != 0 {
+            return None;
+        }
+        Some(if cfg!(target_os = "macos") {
+            ru.ru_maxrss as u64
+        } else {
+            (ru.ru_maxrss as u64).saturating_mul(1024)
+        })
+    }
 }
 
 /// Heap bytes this process holds, and the most it may hold (no cap outside the child).
@@ -342,6 +409,41 @@ unsafe impl GlobalAlloc for CountingAlloc {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Under `cargo test` the running executable is a test harness, and the server binary sits in a directory above
+    /// it: `target/<profile>/deps/<test>` in cargo's classic layout, `target/<profile>/build/investing-app/<hash>/out/
+    /// <test>` in its newer build-dir layout (CI on main went red when the runner's cargo switched, November 2026:
+    /// the harness itself was started as the extractor and rejected `--max-rss-mb`).
+    #[test]
+    fn the_server_binary_is_found_above_a_test_harness_in_either_cargo_layout() {
+        let tmp = tempfile::tempdir().unwrap();
+        let profile = tmp.path().join("target").join("debug");
+        let classic = profile.join("deps").join("research_extract-0a1b");
+        let newer = profile
+            .join("build")
+            .join("investing-app")
+            .join("2c3d")
+            .join("out")
+            .join("research_extract-2c3d");
+        let server = profile.join(format!("investing-app{}", std::env::consts::EXE_SUFFIX));
+        for f in [&classic, &newer, &server] {
+            std::fs::create_dir_all(f.parent().unwrap()).unwrap();
+            std::fs::write(f, b"").unwrap();
+        }
+        assert_eq!(resolve_extractor(&classic), Some(server.clone()));
+        assert_eq!(resolve_extractor(&newer), Some(server.clone()));
+        assert_eq!(
+            resolve_extractor(&server),
+            Some(server.clone()),
+            "the server is its own extractor"
+        );
+        std::fs::remove_file(&server).unwrap();
+        assert_eq!(
+            resolve_extractor(&newer),
+            None,
+            "never the test harness itself"
+        );
+    }
 
     /// The counter is the process-wide one, so this is the only test that touches it.
     #[test]
