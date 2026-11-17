@@ -109,9 +109,10 @@ pub async fn pages(
         .arg("--max-rss-mb")
         .arg(limits.max_rss_mb.to_string())
         .env_clear()
+        .env("RUST_BACKTRACE", "1") // TEMPORARY (CI diagnosis)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
-        .stderr(Stdio::null())
+        .stderr(Stdio::inherit()) // TEMPORARY (CI diagnosis)
         .kill_on_drop(true)
         .spawn()
         .map_err(|_| DocError::Unavailable("The text extractor could not be started"))?;
